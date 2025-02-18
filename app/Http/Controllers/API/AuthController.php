@@ -35,7 +35,7 @@ class AuthController extends Controller
         ]);
 
         $response = [];
-        $response['token']=$user->createToken("MyApp")->accessToken;
+        $response['token']=$user->createToken("client")->accessToken;
         $response['user']=$user->name;
         $response['email']=$user->email;
 
@@ -51,7 +51,7 @@ class AuthController extends Controller
             $user = Auth::user();
 
             $response = [];
-            // $response['token']=$user->createToken("MyApp")->accessToken;
+            $response['token']=$user->createToken("client")->accessToken;
             $response['user']=$user->name;
             $response['email']=$user->email;
 
