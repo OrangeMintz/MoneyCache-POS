@@ -10,8 +10,14 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:api');
 
 Route::post("register", [AuthController::class,"register"]);
-Route::post("login", [AuthController::class,"login"]);
+// Route::post("login", [AuthController::class,"login"]);
+
+Route::get('login', [AuthController::class, 'loginUI'])->name('login');
+
+Route::post('login', [AuthController::class, 'login']);
+
 
 Route::middleware("auth:api",)->group(function(){
     Route::apiResource("sales", SalesController::class);
 });
+
