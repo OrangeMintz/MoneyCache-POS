@@ -165,7 +165,7 @@
 
 
 
-                                     <button type="submit" class="bg-white text-white px-4 py-2 rounded">Submit</button>
+                                     <button type="submit" class="text-white px-4 py-2 rounded">Submit</button>
 
 
 
