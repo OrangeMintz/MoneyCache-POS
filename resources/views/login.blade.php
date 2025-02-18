@@ -12,7 +12,8 @@
                 <main class="flex min-h-[90vh] items-center justify-center mt-[60px] bg-gray-100 dark:bg-gray-900">
                     <div class="w-full max-w-md bg-white p-8 shadow-lg rounded-lg dark:bg-gray-800">
                         <h2 class="text-2xl font-semibold text-center text-gray-900 dark:text-white">Login</h2>
-                        <form class="mt-6">
+                        <form method="POST" action="{{ route('login') }}">
+                            @csrf
                             <div>
                                 <label for="email"
                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
@@ -22,7 +23,7 @@
                             <div class="mt-4">
                                 <label for="password"
                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
-                                <input type="password" id="password" name="password" required minlength="6"
+                                <input type="password" id="password" name="password" required minlength="1"
                                     class="mt-1 w-full p-2 border rounded-lg focus:ring focus:ring-indigo-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                             </div>
                             <button type="submit"
@@ -35,15 +36,8 @@
                     </div>
                 </main>
 
-
-
-
-
-
                 @extends('layoouts.footer')
             </div>
         </div>
     </div>
 </body>
-
-</html>

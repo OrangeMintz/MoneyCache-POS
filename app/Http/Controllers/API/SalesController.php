@@ -11,9 +11,9 @@ class SalesController extends Controller
 
     public function index(Request $request){
 
-        // return response()->json([
-        //     "status" => 1,
-        //     "message" => "This is sales records",
-        // ]);
+        return response()->json([
+            "status" => 1,
+            "message" => "This is sales records",
+        ]);
     }
 }

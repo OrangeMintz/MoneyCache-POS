@@ -18,7 +18,9 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'database'),
+    // 'driver' => env('SESSION_DRIVER', 'database'),
+    'driver' => env('SESSION_DRIVER', 'cookie'),
+    'same_site' => 'lax', // Set to "strict" or "lax"
 
     /*
     |--------------------------------------------------------------------------

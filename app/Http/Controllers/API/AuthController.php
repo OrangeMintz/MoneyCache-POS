@@ -35,7 +35,7 @@ class AuthController extends Controller
         ]);
 
         $response = [];
-        $response['token']=$user->createToken("client")->accessToken;
+        $response['token']=$user->createToken("MyApp")->accessToken;
         $response['user']=$user->name;
         $response['email']=$user->email;
 
@@ -46,25 +46,127 @@ class AuthController extends Controller
         ]);
     }
 
+    // public function login(Request $request){
+    //     if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
+    //         $user = Auth::user();
+    //         $response = [];
+    //         $response['token']=$user->createToken("MyApp")->accessToken;
+    //         $response['user']=$user->name;
+    //         $response['email']=$user->email;
+
+    //         return response()->json([
+    //             "status" => 1,
+    //             "message" => "User Authenticated",
+    //             "data" => $response
+    //         ]);
+    //     }
+    //     return response()->json([
+    //         "status" => 0,
+    //         "message" => "User Unauthenticated",
+    //         "data" => null
+    //     ]);
+    // }
+
+    // public function login(Request $request){
+    //     $credentials = $request->only('email', 'password');
+
+    //     if (!Auth::attempt($credentials)) {
+    //         return response()->json([
+    //             "status" => 0,
+    //             "message" => "Invalid Credentials"
+    //         ], 401);
+    //     }
+
+    //     $user = Auth::user();
+    //     $token = $user->createToken("MyApp")->accessToken;
+
+    //     return response()->json([
+    //         "status" => 1,
+    //         "message" => "User Authenticated",
+    //         "token" => $token
+    //     ]);
+    // }
+
+    // public function login(Request $request){
+    //     $credentials = $request->only('email', 'password');
+
+    //     if (!Auth::attempt($credentials)) {
+    //         return response()->json([
+    //             "status" => 0,
+    //             "message" => "Invalid Credentials"
+    //         ], 401);
+    //     }
+
+    //     $user = Auth::user();
+
+    //     // Generate access and refresh tokens
+    //     $tokenResult = $user->createToken("MyApp");
+    //     $accessToken = $tokenResult->accessToken;
+    //     $refreshToken = $tokenResult->token->id; // Refresh token is stored in DB
+
+    //     return response()->json([
+    //         "status" => 1,
+    //         "message" => "User Authenticated",
+    //         "access_token" => $accessToken,
+    //         "refresh_token" => $refreshToken,
+    //         "token_type" => "Bearer",
+    //     ]);
+    // }
+
+    //  public function login(Request $request){
+    //         $credentials = $request->only('email', 'password');
+
+    //         // Check if credentials are correct
+    //         if (!Auth::attempt($credentials)) {
+    //             return response()->json([
+    //                 "status" => 0,
+    //                 "message" => "Invalid Credentials"
+    //             ], 401);
+    //         }
+
+    //         $user = Auth::user();
+
+    //         // Generate access and refresh tokens using Passport
+    //         $tokenResult = $user->createToken("MyApp");
+    //         $accessToken = $tokenResult->accessToken;
+    //         $refreshToken = $tokenResult->token->id; // Refresh token is stored in DB
+
+    //         return response()->json([
+    //             "status" => 1,
+    //             "message" => "User Authenticated",
+    //             "access_token" => $accessToken,
+    //             "refresh_token" => $refreshToken,
+    //             "token_type" => "Bearer",
+    //         ]);
+    // }
+
     public function login(Request $request){
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
-            $user = Auth::user();
+        $credentials = $request->only('email', 'password');
 
-            $response = [];
-            $response['token']=$user->createToken("MyApp")->accessToken;
-            $response['user']=$user->name;
-            $response['email']=$user->email;
-
+        if (!Auth::attempt($credentials)) {
             return response()->json([
-                "status" => 1,
-                "message" => "User Authenticated",
-                "data" => $response
-            ]);
+                "status" => 0,
+                "message" => "Invalid Credentials"
+            ], 401);
         }
+
+        $user = Auth::user();
+        $tokenResult = $user->createToken("MyApp");
+        $accessToken = $tokenResult->accessToken;
+
+        // Store the token in an HttpOnly cookie
+        $cookie = cookie('access_token', $accessToken, 60, null, null, false, true);
+
         return response()->json([
-            "status" => 0,
-            "message" => "User Unauthenticated",
-            "data" => null
-        ]);
+            "status" => 1,
+            "message" => "User Authenticated"
+        ])->withCookie($cookie);
     }
+
+
+
+    public function loginUI(){
+        return view("login");
+    }
+
 }
