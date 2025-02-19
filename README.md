@@ -42,6 +42,14 @@ Compiles and optimizes frontend assets for production.
 npm run build
 ```
 
+### Passport Key Generate 
+Key is used by Laravel for encryption, including hashing passwords, encrypting data, and securing sessions.
+Compiles and optimizes frontend assets for production.
+```bash
+php artisan key:generate
+```
+
+
 
 ## Learning Laravel
 
