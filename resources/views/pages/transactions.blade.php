@@ -11,12 +11,11 @@
                     <!-- FIRST ROW -->
                     <h2 class="shadow-md font-semibold text-lg mb-4 p-4">Payment Details:</h2>
                     <div class="bg-white mb-4 shadow-md grid grid-cols-3 gap-2 justify-items-start p-4">
-
-                        <div class="w-full col-span-2">
+                        {{-- <div class="w-full col-span-3">
                             <label for="cashier_name" class="block text-sm font-medium">Cashier's Name:</label>
                             <input type="text" id="cashier_name" name="cashier_name"
                                 class="w-full p-2 border border-gray-300 rounded-md" required>
-                        </div>
+                        </div> --}}
 
                         <div class="w-full">
                             <label for="cash" class="block text-sm font-medium">Cash:</label>
@@ -32,37 +31,37 @@
 
                         <div class="w-full">
                             <label for="bpi_credit_card" class="block text-sm font-medium">BPI Credit Card:</label>
-                            <input type="number" id="bpi_credit_card" name="bpi_credit_card"
+                            <input type="number" id="bpi_ccard" name="bpi_ccard"
                                 class="w-full p-2 border border-gray-300 rounded-md" step="0.01">
                         </div>
 
                         <div class="w-full">
                             <label for="bpi_debit_card" class="block text-sm font-medium">BPI Debit Card:</label>
-                            <input type="number" id="bpi_debit_card" name="bpi_debit_card"
+                            <input type="number" id="bpi_dcard" name="bpi_dcard"
                                 class="w-full p-2 border border-gray-300 rounded-md" step="0.01">
                         </div>
 
                         <div class="w-full">
                             <label for="metro_credit_card" class="block text-sm font-medium">Metro Credit Card:</label>
-                            <input type="number" id="metro_credit_card" name="metro_credit_card"
+                            <input type="number" id="metro_ccard" name="metro_ccard"
                                 class="w-full p-2 border border-gray-300 rounded-md" step="0.01">
                         </div>
 
                         <div class="w-full">
                             <label for="metro_debit_card" class="block text-sm font-medium">Metro Debit Card:</label>
-                            <input type="number" id="metro_debit_card" name="metro_debit_card"
+                            <input type="number" id="metro_dcard" name="metro_dcard"
                                 class="w-full p-2 border border-gray-300 rounded-md" step="0.01">
                         </div>
 
                         <div class="w-full">
                             <label for="pay_maya" class="block text-sm font-medium">Pay Maya:</label>
-                            <input type="number" id="pay_maya" name="pay_maya"
+                            <input type="number" id="paymaya" name="paymaya"
                                 class="w-full p-2 border border-gray-300 rounded-md" step="0.01">
                         </div>
 
                         <div class="w-full">
                             <label for="aub_credit_card" class="block text-sm font-medium">AUB Credit Card:</label>
-                            <input type="number" id="aub_credit_card" name="aub_credit_card"
+                            <input type="number" id="aub_ccard" name="aub_ccard"
                                 class="w-full p-2 border border-gray-300 rounded-md" step="0.01">
                         </div>
 
@@ -74,7 +73,31 @@
 
                         <div class="w-full">
                             <label for="food_panda" class="block text-sm font-medium">Food Panda:</label>
-                            <input type="number" id="food_panda" name="food_panda"
+                            <input type="number" id="foodpanda" name="foodpanda"
+                                class="w-full p-2 border border-gray-300 rounded-md" step="0.01">
+                        </div>
+
+                        <div class="w-full">
+                            <label for="food_panda" class="block text-sm font-medium">StreetBy:</label>
+                            <input type="number" id="streetby" name="streetby"
+                                class="w-full p-2 border border-gray-300 rounded-md" step="0.01">
+                        </div>
+
+                        <div class="w-full">
+                            <label for="food_panda" class="block text-sm font-medium">Grab Food:</label>
+                            <input type="number" id="grabfood" name="grabfood"
+                                class="w-full p-2 border border-gray-300 rounded-md" step="0.01">
+                        </div>
+
+                        <div class="w-full">
+                            <label for="food_panda" class="block text-sm font-medium">GC Claimed (Others)</label>
+                            <input type="number" id="gc_claimed_others" name="gc_claimed_others"
+                                class="w-full p-2 border border-gray-300 rounded-md" step="0.01">
+                        </div>
+
+                        <div class="w-full">
+                            <label for="food_panda" class="block text-sm font-medium">GC Claimed (OWN)</label>
+                            <input type="number" id="gc_claimed_own" name="gc_claimed_own"
                                 class="w-full p-2 border border-gray-300 rounded-md" step="0.01">
                         </div>
 
@@ -108,8 +131,8 @@
                         </div>
 
                         <div class="w-full">
-                            <label for="food_change" class="block text-sm font-medium">FOOD CHANGE:</label>
-                            <input type="text" id="food_change" name="food_change"
+                            <label for="food_charge" class="block text-sm font-medium">FOOD CHARGE:</label>
+                            <input type="text" id="food_charge" name="food_charge"
                                 class="w-full p-3 border border-gray-300 rounded-md">
                         </div>
                     </div>
@@ -147,29 +170,71 @@
                             </select>
                         </div>
 
-                        {{-- <div class="w-full">
-            <label for="cashier_name" class="block text-sm font-medium">Cashier's Name:</label>
-            <input type="text" id="cashier_name" name="cashier_name" class="w-full p-2 border border-gray-300 rounded-md" required>
-          </div> --}}
+                        <div class="w-full">
+                            <label for="cashier_name" class="block text-sm font-medium">Cashier's Name:</label>
+                            <input type="text" id="cashier_name" name="cashier_name"
+                                class="w-full p-2 border border-gray-300 rounded-md" required>
+                        </div>
                     </div>
 
                     <h2 class="shadow-md font-semibold text-lg p-4 mb-4">Summary:</h2>
-                    <div class="grid grid-cols-1 gap-2 justify-items-start p-4 mb-2">
-                        <div class="w-full">
-                            <label for="payment-gross" class="block text-sm font-bold">Subtotal Non-Trade POS:</label>
-                            <p id="payment-gross" name="payment-gross"
-                                class="text-md w-full py-2 border-gray-300 rounded-md">
-                                P 107,105.00</p>
-                        </div>
-                        <div class="w-full">
-                            <label for="payment-gross" class="block text-sm font-bold">Subtotal Trade POS:</label>
-                            <p id="payment-gross" name="payment-gross"
-                                class="text-md w-full py-2 border-gray-300 rounded-md">
-                                P 107,105.00</p>
-                        </div>
+                    <div class="w-full">
+                        <label for="payment-gross" class="block text-sm font-bold">Subtotal Trade POS:</label>
+                        <p id="sub_total_trade" class="text-md w-full py-2 border-gray-300 rounded-md">P 0.00</p>
+                    </div>
+                    <div class="w-full">
+                        <label for="payment-gross" class="block text-sm font-bold">Subtotal Non-Trade POS:</label>
+                        <p id="sub_total_non_trade" class="text-md w-full py-2 border-gray-300 rounded-md">P 0.00</p>
+                    </div>
+                    <div class="w-full">
+                        <label for="payment-gross" class="block text-sm font-extrabold">GRAND TOTAL POS:</label>
+                        <p id="grand_total" class="text-md w-full py-2 border-gray-300 rounded-md">P 0.00</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const tradeFields = [
+            "cash", "check", "bpi_ccard", "bpi_dcard", "metro_ccard",
+            "metro_dcard", "paymaya", "aub_ccard", "gcash",
+            "foodpanda", "streetby", "grabfood", "gc_claimed_others", "gc_claimed_own"
+        ];
+
+        const nonTradeFields = [
+            "mm_head_office", "mm_commissary", "mm_rm", "mm_dm", "food_charge"
+        ];
+
+        function calculateTotal(fields) {
+            return fields.reduce((total, id) => {
+                const input = document.getElementById(id);
+                return total + (input && input.value ? parseFloat(input.value) : 0);
+            }, 0);
+        }
+
+        function updateTotals() {
+            const subTotalTrade = calculateTotal(tradeFields);
+            const subTotalNonTrade = calculateTotal(nonTradeFields);
+            const grandTotal = subTotalTrade + subTotalNonTrade;
+
+            document.getElementById("sub_total_trade").textContent =
+                `P ${subTotalTrade.toLocaleString('en-PH', { minimumFractionDigits: 2 })}`;
+            document.getElementById("sub_total_non_trade").textContent =
+                `P ${subTotalNonTrade.toLocaleString('en-PH', { minimumFractionDigits: 2 })}`;
+            document.getElementById("grand_total").textContent =
+                `P ${grandTotal.toLocaleString('en-PH', { minimumFractionDigits: 2 })}`;
+        }
+
+        [...tradeFields, ...nonTradeFields].forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                input.addEventListener("input", updateTotals);
+            }
+        });
+
+        updateTotals();
+    });
+</script>
