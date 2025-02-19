@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Inputs</title>
+    <title>Transactions</title>
     @vite('resources/css/app.css')
 
     <style>
@@ -27,6 +27,19 @@
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        @layer base {
+
+            input[type="number"]::-webkit-inner-spin-button,
+            input[type="number"]::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            input[type="number"] {
+                -moz-appearance: textfield;
+            }
         }
     </style>
 </head>
@@ -50,20 +63,19 @@
 
         <!-- navigation -->
         <nav class="nav font-semibold text-lg">
-            <ul class="flex items-center">
-                <li
-                    class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer active">
-                    <a href="{{ route('transactions') }}">Transaction</a>
-                </li>
-                <li
-                    class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer">
-                    <a href="{{ route('transactions.list') }}">Transaction List</a>
-                </li>
-                <li
-                    class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer">
-                    <a href="">Products</a>
-                </li>
-            </ul>
+            <div class="flex items-center">
+                <a href="{{ route('transactions') }}"
+                    class="p-4 border-b-2 duration-200 cursor-pointer
+                        {{ request()->routeIs('transactions') ? 'border-green-500 text-green-500' : 'border-opacity-0 hover:border-opacity-100 hover:text-green-500' }}">
+                    Transaction
+                </a>
+                <a href="{{ route('transactions.list') }}"
+                    class="p-4 border-b-2 duration-200 cursor-pointer {{ request()->routeIs('transactions.list') ? 'border-green-500 text-green-500' : 'hover:border-opacity-100 hover:text-green-500' }}">Transaction
+                    List
+                </a>
+                <a href=""
+                    class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer">Products</a>
+            </div>
         </nav>
 
         <!-- buttons --->
