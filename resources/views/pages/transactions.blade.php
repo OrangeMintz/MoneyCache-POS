@@ -12,7 +12,7 @@
                     <h2 class="shadow-md font-semibold text-lg mb-4 p-4">Payment Details:</h2>
                     <div class="bg-white mb-4 shadow-md grid grid-cols-3 gap-2 justify-items-start p-4">
 
-                        <div class="w-full col-span-2">
+                        <div class="w-full col-span-3">
                             <label for="cashier_name" class="block text-sm font-medium">Cashier's Name:</label>
                             <input type="text" id="cashier_name" name="cashier_name"
                                 class="w-full p-2 border border-gray-300 rounded-md" required>
@@ -75,6 +75,18 @@
                         <div class="w-full">
                             <label for="food_panda" class="block text-sm font-medium">Food Panda:</label>
                             <input type="number" id="food_panda" name="food_panda"
+                                class="w-full p-2 border border-gray-300 rounded-md" step="0.01">
+                        </div>
+
+                        <div class="w-full">
+                            <label for="food_panda" class="block text-sm font-medium">StreetBy:</label>
+                            <input type="number" id="street_by" name="street_by"
+                                class="w-full p-2 border border-gray-300 rounded-md" step="0.01">
+                        </div>
+
+                        <div class="w-full">
+                            <label for="food_panda" class="block text-sm font-medium">Grab Food:</label>
+                            <input type="number" id="grab_food" name="grab_food"
                                 class="w-full p-2 border border-gray-300 rounded-md" step="0.01">
                         </div>
 
@@ -147,22 +159,30 @@
                             </select>
                         </div>
 
-                        {{-- <div class="w-full">
-            <label for="cashier_name" class="block text-sm font-medium">Cashier's Name:</label>
-            <input type="text" id="cashier_name" name="cashier_name" class="w-full p-2 border border-gray-300 rounded-md" required>
-          </div> --}}
+                        <div class="w-full">
+                            <label for="cashier_name" class="block text-sm font-medium">Cashier's Name:</label>
+                            <input type="text" id="cashier_name" name="cashier_name"
+                                class="w-full p-2 border border-gray-300 rounded-md" required>
+                        </div>
                     </div>
 
                     <h2 class="shadow-md font-semibold text-lg p-4 mb-4">Summary:</h2>
                     <div class="grid grid-cols-1 gap-2 justify-items-start p-4 mb-2">
+                        <div class="w-full">
+                            <label for="payment-gross" class="block text-sm font-bold">Subtotal Trade POS:</label>
+                            <p id="payment-gross" name="payment-gross"
+                                class="text-md w-full py-2 border-gray-300 rounded-md">
+                                P 107,105.00</p>
+                        </div>
                         <div class="w-full">
                             <label for="payment-gross" class="block text-sm font-bold">Subtotal Non-Trade POS:</label>
                             <p id="payment-gross" name="payment-gross"
                                 class="text-md w-full py-2 border-gray-300 rounded-md">
                                 P 107,105.00</p>
                         </div>
+
                         <div class="w-full">
-                            <label for="payment-gross" class="block text-sm font-bold">Subtotal Trade POS:</label>
+                            <label for="payment-gross" class="block text-sm font-extrabold">GRAND TOTAL POS:</label>
                             <p id="payment-gross" name="payment-gross"
                                 class="text-md w-full py-2 border-gray-300 rounded-md">
                                 P 107,105.00</p>
