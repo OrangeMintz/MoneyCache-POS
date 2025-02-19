@@ -21,6 +21,28 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
+## Execute Commands
+Before starting the application, run the following commands to install dependencies and build assets properly. These steps ensure the project runs smoothly with the required packages.
+
+### Composer Installation
+Installs all PHP dependencies listed in composer.json.
+```bash
+composer install
+```
+
+### NPM Installation
+Installs dependencies needed for assets and components.
+```bash
+npm install
+```
+
+### NPM Build
+Compiles and optimizes frontend assets for production.
+```bash
+npm run build
+```
+
+
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
