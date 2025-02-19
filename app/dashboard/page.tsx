@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import api from "../../utils/api"
 
 
 export default function Dashboard() {
@@ -21,7 +22,7 @@ export default function Dashboard() {
         }
   
         try {
-          const response = await axios.get("http://127.0.0.1:8000/api/user", {
+          const response = await api.get("/api/user", {
             headers: {
               Authorization: `Bearer ${token}`, // Send token in Authorization header
               Accept: "application/json",
@@ -31,7 +32,7 @@ export default function Dashboard() {
           console.log("User Data:", response.data);
           setUser(response.data)
         } catch (error: any) {
-            router.push('/login')
+            router.push('/')
           console.error("Error fetching user data:", error.response?.data || error.message);
         }
       };
