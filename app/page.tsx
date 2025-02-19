@@ -8,9 +8,6 @@ import { useRouter } from "next/navigation";
 
 
 export default function Home() {
-
-  
-const [user, setUser] = useState("");
 const [email, setEmail] = useState("");
 const [password, setPassword] =useState("")
 const [error, setError] = useState("")
@@ -19,8 +16,7 @@ const router = useRouter();
 const handleSubmit = async (event: React.FormEvent) => {
   event.preventDefault();
 
-  try {
-    
+  try {    
     const response = await axios.post("http://127.0.0.1:8000/oauth/token",{
       grant_type: "password",
       client_id: process.env.NEXT_PUBLIC_PASSPORT_CLIENT_ID,
@@ -54,6 +50,12 @@ const handleSubmit = async (event: React.FormEvent) => {
     console.log("asdhdsjas")
   } 
 }
+
+useEffect(() => {
+  if(localStorage.getItem("access_token") && localStorage.getItem("refresh_token")){
+    router.push('/dashboard')
+  }
+},[])
 
 
   return (

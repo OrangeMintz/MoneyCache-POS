@@ -4,15 +4,18 @@ import Image from "next/image";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 
 export default function Dashboard() {
     const [user, setUser] = useState<any>(null);
+    const router = useRouter();
 
     const getUser = async () => {
         const token = localStorage.getItem("access_token");
   
         if (!token) {
+            router.push('/')
           console.error("No access token found. Please log in.");
           return;
         }
@@ -28,6 +31,7 @@ export default function Dashboard() {
           console.log("User Data:", response.data);
           setUser(response.data)
         } catch (error: any) {
+            router.push('/login')
           console.error("Error fetching user data:", error.response?.data || error.message);
         }
       };
