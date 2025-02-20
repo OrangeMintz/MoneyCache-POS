@@ -66,4 +66,9 @@ class AuthController extends Controller
             "data" => null
         ]);
     }
+
+    public function getUser(Request $request){
+        $user = Auth::user();
+        return $user;
+    }
 }
