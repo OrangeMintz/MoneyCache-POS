@@ -58,8 +58,6 @@ class TransactionsGrossTotalController extends Controller
 
         $compute = 1 - ($percent/100);
 
-
-
         $netSale = Transactions::sum(DB::raw("$type * $compute"));
 
         return response()->json([
