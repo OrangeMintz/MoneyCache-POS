@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Transactions>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Transaction>
  */
 class TransactionsFactory extends Factory
 {
@@ -18,31 +18,32 @@ class TransactionsFactory extends Factory
     {
         return [
             'cashier' => $this->faker->name,
-            'time' => now(),
-            'cash' => $this->faker->randomFloat(2, 100, 5000),
-            'check' => $this->faker->randomFloat(2, 0, 2000),
-            'bpi_ccard' => $this->faker->randomFloat(2, 0, 3000),
-            'bpi_dcard' => $this->faker->randomFloat(2, 0, 3000),
-            'metro_ccard' => $this->faker->randomFloat(2, 0, 3000),
-            'metro_dcard' => $this->faker->randomFloat(2, 0, 3000),
-            'paymaya' => $this->faker->randomFloat(2, 0, 1500),
-            'aub_ccard' => $this->faker->randomFloat(2, 0, 1500),
-            'gcash' => $this->faker->randomFloat(2, 0, 2000),
-            'food_panda' => $this->faker->randomFloat(2, 0, 1000),
-            'streetby' => $this->faker->randomFloat(2, 0, 1000),
-            'grabfood' => $this->faker->randomFloat(2, 0, 1000),
-            'gc_claimed_others' => $this->faker->randomFloat(2, 0, 500),
-            'gc_claimed_own' => $this->faker->randomFloat(2, 0, 500),
-            'mm_head' => $this->faker->randomFloat(2, 0, 1000),
-            'mm_commissary' => $this->faker->randomFloat(2, 0, 1000),
-            'mm_rm' => $this->faker->randomFloat(2, 0, 1000),
-            'mm_dm' => $this->faker->randomFloat(2, 0, 1000),
-            'mm_km' => $this->faker->randomFloat(2, 0, 1000),
-            'food_charge' => $this->faker->randomFloat(2, 0, 500),
+            'time' => $this->faker->randomElement(["AM", "MID", "PM"]),
+            'cash' => $this->faker->randomFloat(2, 0, 5000),
+            'check' => $this->faker->randomFloat(2, 0, 5000),
+            'bpi_ccard' => $this->faker->randomFloat(2, 0, 5000),
+            'bpi_dcard' => $this->faker->randomFloat(2, 0, 5000),
+            'metro_ccard' => $this->faker->randomFloat(2, 0, 5000),
+            'metro_dcard' => $this->faker->randomFloat(2, 0, 5000),
+            'paymaya' => $this->faker->randomFloat(2, 0, 5000),
+            'aub_ccard' => $this->faker->randomFloat(2, 0, 5000),
+            'gcash' => $this->faker->randomFloat(2, 0, 5000),
+            'food_panda' => $this->faker->randomFloat(2, 0, 5000),
+            'streetby' => $this->faker->randomFloat(2, 0, 5000),
+            'grabfood' => $this->faker->randomFloat(2, 0, 5000),
+            'gc_claimed_others' => $this->faker->randomFloat(2, 0, 5000),
+            'gc_claimed_own' => $this->faker->randomFloat(2, 0, 5000),
+            'mm_head' => $this->faker->optional()->name,
+            'mm_commissary' => $this->faker->optional()->company,
+            'mm_rm' => $this->faker->randomFloat(2, 0, 5000),
+            'mm_dm' => $this->faker->randomFloat(2, 0, 5000),
+            'mm_km' => $this->faker->randomFloat(2, 0, 5000),
+            'food_charge' => $this->faker->randomFloat(2, 0, 5000),
             'z_reading_pos' => $this->faker->randomFloat(2, 0, 5000),
-            'sub_total_trade' => $this->faker->randomFloat(2, 0, 10000),
+            'sub_total_trade' => $this->faker->randomFloat(2, 0, 5000),
             'sub_total_non_trade' => $this->faker->randomFloat(2, 0, 5000),
-            'over_pos' => $this->faker->randomFloat(2, 0, 500),
+            'grand_total' => $this->faker->randomFloat(2, 0, 5000),
+            'over_pos' => $this->faker->randomFloat(2, 0, 5000),
         ];
     }
 }

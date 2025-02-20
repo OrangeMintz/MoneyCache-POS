@@ -18,13 +18,13 @@
         <!-- navigation -->
         <nav class="nav font-semibold text-lg">
             <div class="flex items-center">
-                <a href="{{ route('transactions') }}"
+                <a href="{{ route('transaction') }}"
                     class="p-4 border-b-2 duration-200 cursor-pointer
-                        {{ request()->routeIs('transactions') ? 'border-green-500 text-green-500' : 'border-opacity-0 hover:border-opacity-100 hover:text-green-500' }}">
+                        {{ request()->routeIs('transaction') ? 'border-green-500 text-green-500' : 'border-opacity-0 hover:border-opacity-100 hover:text-green-500' }}">
                     Transaction
                 </a>
-                <a href="{{ route('transactions.list') }}"
-                    class="p-4 border-b-2 duration-200 cursor-pointer {{ request()->routeIs('transactions.list') ? 'border-green-500 text-green-500' : 'hover:border-opacity-100 hover:text-green-500' }}">Transaction
+                <a href="{{ route('transactions') }}"
+                    class="p-4 border-b-2 duration-200 cursor-pointer {{ request()->routeIs('transactions') ? 'border-green-500 text-green-500' : 'hover:border-opacity-100 hover:text-green-500' }}">Transaction
                     List
                 </a>
                 <a href=""
