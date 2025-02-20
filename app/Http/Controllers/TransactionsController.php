@@ -100,4 +100,14 @@ class TransactionsController extends Controller
     {
         //
     }
+
+    public function retrieve()
+    {
+        $transactions = Transactions::all();
+
+        return response()->json([
+            "status" => 1,
+            "transactions" => $transactions,
+        ]);
+    }
 }
