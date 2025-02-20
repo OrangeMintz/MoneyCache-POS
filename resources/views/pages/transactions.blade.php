@@ -105,35 +105,41 @@
 
                     <!-- SECOND ROW -->
                     <h2 class="shadow-md font-semibold text-lg mb-4 p-4">MM Details:</h2>
-                    <div class="bg-white mb-4 shadow-md grid grid-cols-3 gap-2 justify-items-start p-4">
-                        <div class="w-full">
-                            <label for="mm_head_office" class="block text-sm font-medium">MM-HEAD OFFICE:</label>
-                            <input type="text" id="mm_head_office" name="mm_head_office"
-                                class="w-full p-3 border border-gray-300 rounded-md">
+                    <div class="bg-white mb-4 shadow-md p-4">
+                        <!-- First row: Two columns -->
+                        <div class="grid grid-cols-2 gap-2 mb-2">
+                            <div class="w-full">
+                                <label for="mm_head_office" class="block text-sm font-medium">MM-HEAD OFFICE:</label>
+                                <input type="text" id="mm_head_office" name="mm_head_office"
+                                    class="w-full p-3 border border-gray-300 rounded-md">
+                            </div>
+
+                            <div class="w-full">
+                                <label for="mm_commissary" class="block text-sm font-medium">MM-COMMISSARY:</label>
+                                <input type="text" id="mm_commissary" name="mm_commissary"
+                                    class="w-full p-3 border border-gray-300 rounded-md">
+                            </div>
                         </div>
 
-                        <div class="w-full">
-                            <label for="mm_commissary" class="block text-sm font-medium">MM-COMMISSARY:</label>
-                            <input type="text" id="mm_commissary" name="mm_commissary"
-                                class="w-full p-3 border border-gray-300 rounded-md">
-                        </div>
+                        <!-- Second row: Three columns -->
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="w-full">
+                                <label for="mm_rm" class="block text-sm font-medium">MM-RM:</label>
+                                <input type="text" id="mm_rm" name="mm_rm"
+                                    class="w-full p-3 border border-gray-300 rounded-md">
+                            </div>
 
-                        <div class="w-full">
-                            <label for="mm_rm" class="block text-sm font-medium">MM-RM:</label>
-                            <input type="text" id="mm_rm" name="mm_rm"
-                                class="w-full p-3 border border-gray-300 rounded-md">
-                        </div>
+                            <div class="w-full">
+                                <label for="mm_dm" class="block text-sm font-medium">MM-DM:</label>
+                                <input type="text" id="mm_dm" name="mm_dm"
+                                    class="w-full p-3 border border-gray-300 rounded-md">
+                            </div>
 
-                        <div class="w-full">
-                            <label for="mm_dm" class="block text-sm font-medium">MM-DM:</label>
-                            <input type="text" id="mm_dm" name="mm_dm"
-                                class="w-full p-3 border border-gray-300 rounded-md">
-                        </div>
-
-                        <div class="w-full">
-                            <label for="food_charge" class="block text-sm font-medium">FOOD CHARGE:</label>
-                            <input type="text" id="food_charge" name="food_charge"
-                                class="w-full p-3 border border-gray-300 rounded-md">
+                            <div class="w-full">
+                                <label for="food_charge" class="block text-sm font-medium">FOOD CHARGE:</label>
+                                <input type="text" id="food_charge" name="food_charge"
+                                    class="w-full p-3 border border-gray-300 rounded-md">
+                            </div>
                         </div>
                     </div>
 
@@ -181,16 +187,18 @@
 
                     <h2 class="shadow-md font-semibold text-lg p-4 mb-4">Summary:</h2>
                     <div class="w-full">
-                        <label for="payment-gross" class="block text-sm font-bold">Subtotal Trade POS:</label>
-                        <p id="sub_total_trade" class="text-md w-full py-2 border-gray-300 rounded-md">P 0.00</p>
+                        <label for="payment-gross" class="block text-sm font-bold px-4">Subtotal Trade POS:</label>
+                        <p id="sub_total_trade" class="text-md w-full py-2 border-gray-300 rounded-md px-4">P 0.00</p>
                     </div>
                     <div class="w-full">
-                        <label for="payment-gross" class="block text-sm font-bold">Subtotal Non-Trade POS:</label>
-                        <p id="sub_total_non_trade" class="text-md w-full py-2 border-gray-300 rounded-md">P 0.00</p>
+                        <label for="payment-gross" class="block text-sm font-bold px-4">Subtotal Non-Trade
+                            POS:</label>
+                        <p id="sub_total_non_trade" class="text-md w-full py-2 border-gray-300 rounded-md px-4">P 0.00
+                        </p>
                     </div>
                     <div class="w-full">
-                        <label for="payment-gross" class="block text-sm font-extrabold">GRAND TOTAL POS:</label>
-                        <p id="grand_total" class="text-md w-full py-2 border-gray-300 rounded-md">P 0.00</p>
+                        <label for="payment-gross" class="block text-sm font-extrabold px-4">GRAND TOTAL POS:</label>
+                        <p id="grand_total" class="text-md w-full py-2 border-gray-300 rounded-md px-4">P 0.00</p>
                     </div>
                 </div>
             </div>
@@ -207,7 +215,7 @@
         ];
 
         const nonTradeFields = [
-            "mm_head_office", "mm_commissary", "mm_rm", "mm_dm", "food_charge"
+            "mm_rm", "mm_dm", "food_charge"
         ];
 
         function calculateTotal(fields) {
