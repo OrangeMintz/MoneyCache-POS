@@ -2,9 +2,42 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
+
+    
     const [open, setOpen] = useState(false);
+    const router = useRouter();
+
+    const logout = async (event: React.FormEvent) => {
+        event.preventDefault();
+  
+        try {
+          const token = localStorage.getItem("access_token");
+  
+          const response = await axios.post("http://127.0.0.1:8000/api/logout",{},{
+            headers: {
+              Authorization: `Bearer ${token}`, 
+              Accept: "application/json",
+            },
+          })
+  
+          console.log(response.data)
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('refresh_token');
+  
+          router.push('/')
+    
+          if (!token) {
+            console.error("No access token found.");
+            return;
+          }
+        } catch (error) {
+          console.error("Error logging out: ", error)
+        }
+      }
 
     return (
         <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
@@ -35,12 +68,13 @@ export default function Navbar() {
                     </div>
                     <div className="hidden sm:flex sm:items-center sm:ms-6">
                         <div className="relative">
-                        <Link href="#">
-                                <span className="block h-9 mt-3 w-auto fill-current text-lg text-gray-800 dark:text-gray-200">
-
-                              Logout
-                                </span>
-                            </Link>
+                            <form onSubmit={logout}>
+                                <button type='submit' className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md text-gray-500 dark:text-gray-200 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
+                                    <span className="block h-9 mt-3 w-auto fill-current text-lg text-gray-800 dark:text-gray-200">
+                                        Logout
+                                    </span>
+                                </button>
+                            </form>
                         </div>
                     </div>
                     <div className="-me-2 flex items-center sm:hidden">
