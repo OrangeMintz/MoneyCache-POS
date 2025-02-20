@@ -1,5 +1,5 @@
 
-<header class="header sticky top-0 bg-white shadow-md flex items-center justify-between px-8 py-02">
+<header class="z-50 header sticky top-0 bg-white shadow-md flex items-center justify-between px-8 py-02">
     <!-- logo -->
     <h1 class="w-3/12">
         <a href="">
