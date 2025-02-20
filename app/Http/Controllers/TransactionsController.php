@@ -29,28 +29,27 @@ class TransactionsController extends Controller
         $validated = $request->validate([
             'cashier' => 'required|string',
             'time' => 'required|string',
-            'cash' => 'numeric',
-            'check' => 'numeric',
-            'bpi_ccard' => 'numeric',
-            'bpi_dcard' => 'numeric',
-            'metro_ccard' => 'numeric',
-            'metro_dcard' => 'numeric',
-            'paymaya' => 'numeric',
-            'aub_ccard' => 'numeric',
-            'gcash' => 'numeric',
-            'food_panda' => 'numeric',
-            'streetby' => 'numeric',
-            'grabfood' => 'numeric',
-            'gc_claimed_others' => 'numeric',
-            'gc_claimed_own' => 'numeric',
+            'cash' => 'numeric|nullable',
+            'check' => 'numeric|nullable',
+            'bpi_ccard' => 'numeric|nullable',
+            'bpi_dcard' => 'numeric|nullable',
+            'metro_ccard' => 'numeric|nullable',
+            'metro_dcard' => 'numeric|nullable',
+            'paymaya' => 'numeric|nullable',
+            'aub_ccard' => 'numeric|nullable',
+            'gcash' => 'numeric|nullable',
+            'food_panda' => 'numeric|nullable',
+            'streetby' => 'numeric|nullable',
+            'grabfood' => 'numeric|nullable',
+            'gc_claimed_others' => 'numeric|nullable',
+            'gc_claimed_own' => 'numeric|nullable',
             'mm_head' => 'string|nullable',
             'mm_commissary' => 'string|nullable',
-            'mm_rm' => 'numeric',
-            'mm_dm' => 'numeric',
-            'mm_km' => 'numeric',
-            'food_charge' => 'numeric',
-            'z_reading_pos' => 'numeric',
-            'over_pos' => 'numeric'
+            'mm_rm' => 'numeric|nullable',
+            'mm_dm' => 'numeric|nullable',
+            'mm_km' => 'numeric|nullable',
+            'food_charge' => 'numeric|nullable',
+            'z_reading_pos' => 'numeric|nullable',
         ]);
 
         // Compute subtotals
@@ -65,7 +64,7 @@ class TransactionsController extends Controller
 
         $subtotal_non_trade =
             ($validated['mm_rm'] ?? 0) + ($validated['mm_dm'] ?? 0) +
-            ($validated['mm_km'] ?? 0);
+            ($validated['mm_km'] ?? 0) + ($validated['food_charge'] ?? 0);
 
         $grand_total = $subtotal_trade + $subtotal_non_trade;
 
