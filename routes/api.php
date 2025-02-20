@@ -14,7 +14,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::prefix('transactions')->group(function () {
         Route::get('/', [TransactionsController::class, 'retrieve']);
         Route::get('/gross/{type}', [TransactionsGrossTotalController::class, 'gross']);
-        
+        Route::get('/net/{type}', [TransactionsGrossTotalController::class, 'net']);
     });
 });
 
