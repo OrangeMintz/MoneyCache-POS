@@ -20,9 +20,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // TRANSACTIONS
-    Route::get('/transactions', [TransactionsController::class, 'index'])->name('transactions');
-    Route::get('/transactions-list', [TransactionsController::class, 'list'])->name('transactions.list');
+    Route::get('/transaction', [TransactionsController::class, 'index'])->name('transaction');
+    Route::get('/transactions', [TransactionsController::class, 'list'])->name('transactions');
 
 });
+
+    Route::post('/transaction', [TransactionsController::class, 'store'])->name('transaction.store');
 
 require __DIR__.'/auth.php';

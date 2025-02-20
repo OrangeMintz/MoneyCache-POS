@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->string('cashier');
-            $table->timestamp('time')->nullable();
+            $table->string('time');
             $table->decimal('cash', 10, 2)->default(0);
             $table->decimal('check', 10, 2)->default(0);
             $table->decimal('bpi_ccard', 10, 2)->default(0);
@@ -29,8 +29,8 @@ return new class extends Migration
             $table->decimal('grabfood', 10, 2)->default(0);
             $table->decimal('gc_claimed_others', 10, 2)->default(0);
             $table->decimal('gc_claimed_own', 10, 2)->default(0);
-            $table->decimal('mm_head', 10, 2)->default(0);
-            $table->decimal('mm_commissary', 10, 2)->default(0);
+            $table->string('mm_head')->nullable();
+            $table->string('mm_commissary')->nullable();
             $table->decimal('mm_rm', 10, 2)->default(0);
             $table->decimal('mm_dm', 10, 2)->default(0);
             $table->decimal('mm_km', 10, 2)->default(0);
@@ -38,6 +38,7 @@ return new class extends Migration
             $table->decimal('z_reading_pos', 10, 2)->default(0);
             $table->decimal('sub_total_trade', 10, 2)->default(0);
             $table->decimal('sub_total_non_trade', 10, 2)->default(0);
+            $table->decimal('grand_total', 10, 2)->nullable();;
             $table->decimal('over_pos', 10, 2)->default(0);
             $table->timestamps();
         });
