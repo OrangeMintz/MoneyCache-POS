@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\TransactionsGrossTotal;
+use App\Models\Transactions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
 class TransactionsGrossTotalController extends Controller
 {
@@ -61,5 +63,26 @@ class TransactionsGrossTotalController extends Controller
     public function destroy(TransactionsGrossTotal $transactionsGrossTotal)
     {
         //
+    }
+
+    public function gross($type)
+    {
+        $particulars = Config::get('transactions.valid_columns');
+
+        if(!in_array($type, $particulars)){
+            return response()->json([
+                "status" => 0,
+                "message" => "Invalid Particular!"
+            ]);
+        }
+
+        $sum = Transactions::sum($type);
+
+        return response()->json([
+            "status" => 1,
+            "particular" => $type,
+            "gross_total" => $sum
+        ]);
+       
     }
 }
