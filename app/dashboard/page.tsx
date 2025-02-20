@@ -1,10 +1,10 @@
 'use client';
 
 import Navbar from "@/app/components/header";
+import TransactionForm from "@/app/components/transaction";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
-
 export default function Dashboard() {
     const [user, setUser] = useState<any>(null);
     const router = useRouter();
@@ -57,8 +57,10 @@ export default function Dashboard() {
     //   </main>
     // </div>
 
+
+<main>
 <Navbar/>
-
-
+<TransactionForm/>
+</main>
   );
 }
