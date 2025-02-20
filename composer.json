@@ -10,6 +10,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "components/jquery": "^3.7",
+        "datatables.net/datatables.net-dt": "^2.2",
+        "datatables.net/datatables.net-responsive-dt": "^3.0",
         "laravel/framework": "^11.31",
         "laravel/passport": "^12.4",
         "laravel/tinker": "^2.9",
