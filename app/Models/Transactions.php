@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
 class Transactions extends Model
 {
     /** @use HasFactory<\Database\Factories\TransactionsFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
         protected $fillable = ['cashier','time','cash','check','bpi_ccard','bpi_dcard',
         'metro_ccard','metro_dcard','paymaya','aub_ccard','gcash','food_panda','streetby',
