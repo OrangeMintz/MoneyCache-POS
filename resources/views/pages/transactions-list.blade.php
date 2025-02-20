@@ -8,7 +8,7 @@
                 <h5 class="title font-semibold text-[26px]">Recent Transactions</h5>
               </div>
               <div class="card-body">
-                <div class="">
+                <div class="overflow-x-auto">
                   <table id="example" class="display table table-striped datatable" style="width:100%">
                       <thead>
                           <tr>
