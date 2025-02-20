@@ -161,6 +161,12 @@
                     <h2 class="shadow-md font-semibold text-lg mb-4 p-4">Shift Time:</h2>
                     <div class="grid grid-cols-1 gap-2 justify-items-start p-4 mb-8">
                         <div class="w-full">
+                            <label for="cashier_name" class="block text-sm font-medium">Cashier's Name:</label>
+                            <input type="text" id="cashier_name" name="cashier_name"
+                                class="w-full p-2 border border-gray-300 rounded-md" required>
+                        </div>
+                        
+                        <div class="w-full">
                             <label for="shift_time" class="block text-sm font-medium">Shift Time:</label>
                             <select id="shift_time" name="shift_time"
                                 class="w-full p-2 border border-gray-300 rounded-md">
@@ -170,11 +176,7 @@
                             </select>
                         </div>
 
-                        <div class="w-full">
-                            <label for="cashier_name" class="block text-sm font-medium">Cashier's Name:</label>
-                            <input type="text" id="cashier_name" name="cashier_name"
-                                class="w-full p-2 border border-gray-300 rounded-md" required>
-                        </div>
+
                     </div>
 
                     <h2 class="shadow-md font-semibold text-lg p-4 mb-4">Summary:</h2>
