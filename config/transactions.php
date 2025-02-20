@@ -27,5 +27,33 @@ return [
         'sub_total_non_trade',
         'grand_total',
         'over_pos'
+    ],
+
+    'fees' => [
+        'cash' => 0,
+        'check' => 0,
+        'bpi_ccard' => 2.8,
+        'bpi_dcard' => 2.8,
+        'metro_ccard' => 2.8,
+        'metro_dcard' => 2.8,
+        'paymaya' => 2.25,
+        'aub_ccard' => 2.8,
+        'gcash' => 1.5,
+        'food_panda' => 25,
+        'streetby' => 25,
+        'grabfood' => 25,
+        'gc_claimed_others' => 5,
+        'gc_claimed_own' => 5,
+        'mm_head' => 0,
+        'mm_commissary' => 0,
+        'mm_rm' => 0,
+        'mm_dm' => 0,
+        'mm_km' => 0,
+        'food_charge' => 0,
+        'z_reading_pos' => 0,
+        'sub_total_trade' => 1.31,
+        'sub_total_non_trade' => 0,
+        'grand_total' => 1.31,
+        'over_pos' => 0
     ]
 ];
