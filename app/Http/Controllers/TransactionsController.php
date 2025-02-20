@@ -110,4 +110,5 @@ class TransactionsController extends Controller
             "transactions" => $transactions,
         ]);
     }
+
 }
