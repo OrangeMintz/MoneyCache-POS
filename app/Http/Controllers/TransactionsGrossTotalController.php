@@ -67,5 +67,49 @@ class TransactionsGrossTotalController extends Controller
         ]);
     }
 
+    public function grossAll()
+    {
+        $particulars = Config::get('transactions.valid_columns'); // Get all valid columns
+        $grossTotals = [];
+
+        foreach ($particulars as $particular) {
+            // Group by date and get sum for each particular
+            $safeColumn = "`$particular`";
+            $grossTotals[$particular] = Transactions::select(
+                    DB::raw("DATE(created_at) as date"),
+                    DB::raw("SUM($safeColumn) as total")
+                )
+                ->groupBy('date')
+                ->orderBy('date', 'desc')
+                ->get();
+        }
+
+        return response()->json([
+            "status" => 1,
+            "gross_totals" => $grossTotals
+        ]);
+    }
+
+    public function netAll()
+    {
+        // $particulars = Config::get('transactions.valid_columns'); 
+        // $fees = Config::get('transactions.fees'); 
+        // $netSales = [];
+
+        // foreach ($particulars as $particular) {
+            
+        //     $percent = $fees[$particular] ?? 0;
+        //     $compute = 1 - ($percent / 100); 
+
+        //     $netSales[$particular] = Transactions::sum(DB::raw("$particular * $compute"));
+        // }
+
+        // return response()->json([
+        //     "status" => 1,
+        //     "net_sales" => $netSales
+        // ]);
+    }
+
+
     
 }
