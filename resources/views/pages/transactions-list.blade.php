@@ -53,8 +53,13 @@
                                             <td class="border border-gray-300 px-4 py-2 flex gap-2">
                                                 <button
                                                     class="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">Edit</button>
-                                                <button class="px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600"
-                                                    onclick="confirmation(event)">Delete</button>
+                                                <form action="{{ route('transactions.softDelete', $transaction->id) }}"
+                                                    method="POST" onsubmit="return confirmation(event)">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600">Delete</button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -69,18 +74,18 @@
     </div>
 </main>
 <script>
-    function confirmation(e) {
-        event.preventDefault(); // Prevent default behavior
+    function confirmation(event) {
+        event.preventDefault();
         swal({
-                title: "Are you sure you want to delete this ",
-                text: "You won't be able to revert this delete ",
+                title: "Are you sure you want to delete this?",
+                text: "You won't be able to revert this action!",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,
             })
-            .then((willCancel) => {
-                if (willCancel) {
-                    window.location.href = urlToRedirect;
+            .then((willDelete) => {
+                if (willDelete) {
+                    event.target.closest("form").submit(); // Submit the form
                 }
             });
     }

@@ -95,9 +95,11 @@ class TransactionsController extends Controller
         //
     }
 
-    public function destroy(string $id)
+    public function softDelete(string $id)
     {
-        //
+        $transaction = Transactions::findOrFail($id);
+        $transaction->delete();
+        return redirect()->route('transactions')->with('success', 'Transaction deleted successfully.');
     }
 
     public function retrieve()
