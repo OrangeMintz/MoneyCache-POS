@@ -1,8 +1,6 @@
 @include('layouts.header')
-<body>
-  @include('layouts.navigation')
-    <main>
-      <div class="font-sans bg-gray-100 p-6">
+<main>
+    <div class="font-sans bg-gray-100 p-6">
         <div class="bg-white p-4 mb-4">
           <div class="container py-6">
             <div class="card">
@@ -96,8 +94,8 @@
                 </div>
               </div>
 
+                </div>
             </div>
-          </div>
         </div>
         
       </div>
@@ -224,10 +222,11 @@
         }
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
 
     {{-- Initialize datatable --}}
     <script type="text/javascript">

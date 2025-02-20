@@ -20,8 +20,8 @@ class TransactionsController extends Controller
      */
     public function list()
     {
-        return view('pages.transactions-list');
-
+        $transactions = Transactions::all(); // Fetch all transactions
+        return view('pages.transactions-list', compact('transactions'));
     }
 
     public function store(Request $request)
@@ -95,9 +95,11 @@ class TransactionsController extends Controller
         //
     }
 
-    public function destroy(string $id)
+    public function softDelete(string $id)
     {
-        //
+        $transaction = Transactions::findOrFail($id);
+        $transaction->delete();
+        return redirect()->route('transactions')->with('success', 'Transaction deleted successfully.');
     }
 
     public function retrieve()

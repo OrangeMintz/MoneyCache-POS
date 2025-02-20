@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionsController;
+use App\Http\Controllers\TransactionsGrossTotalController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,11 +21,18 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // TRANSACTIONS
-    Route::get('/transaction', [TransactionsController::class, 'index'])->name('transaction');
-    Route::get('/transactions', [TransactionsController::class, 'list'])->name('transactions');
+    Route::prefix('transaction')->group(function () {
+        Route::get('/', [TransactionsController::class, 'index'])->name('transaction');
+        Route::post('/', [TransactionsController::class, 'store'])->name('transaction.store');
+        Route::get('/gross/{type}', [TransactionsGrossTotalController::class, 'gross']);
+        Route::get('/net/{type}', [TransactionsGrossTotalController::class, 'net']);
+    });
+    Route::prefix('transactions')->group(function () {
+        Route::get('/', [TransactionsController::class, 'list'])->name('transactions');
+        Route::delete('/{id}', [TransactionsController::class, 'softDelete'])->name('transactions.softDelete');
+    });
 
 });
 
-    Route::post('/transaction', [TransactionsController::class, 'store'])->name('transaction.store');
 
 require __DIR__.'/auth.php';
