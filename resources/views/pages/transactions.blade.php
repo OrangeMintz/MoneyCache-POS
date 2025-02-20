@@ -1,57 +1,18 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Transactions</title>
-    @vite('resources/css/app.css')
-
-    <style>
-        /* Styling for the layout to create 3 columns */
-        .container-transaction {
-            display: grid;
-            grid-template-columns: minmax(300px, 3fr) 1fr;
-            gap: 10px;
-            /* margin: 0 auto; */
-        }
-        .form-column {
-            grid-column: span 1;
-        }
-        .total-column {
-            grid-column: span 1;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        @layer base {
-
-            input[type="number"]::-webkit-inner-spin-button,
-            input[type="number"]::-webkit-outer-spin-button {
-                -webkit-appearance: none;
-                margin: 0;
-            }
-            input[type="number"] {
-                -moz-appearance: textfield;
-            }
-        }
-    </style>
-  </head>
-
+@include('layouts.header')
 <body>
-  @include('layouts.header')
+  @include('layouts.navigation')
   <main>
       <div class="font-sans bg-gray-100 p-6">
           <div class="bg-white p-4">
               <div class="container-transaction mx-auto">
-
+  
                   {{-- First column for Cashier Form --}}
                   <div class="bg-white rounded-lg shadow-md">
-                    <form method="POST" action="{{ route('transaction.store') }}">
-                        @csrf
+                      <form method="POST" action="{{ route('transaction.store') }}">
+                          @csrf
                           <!-- FIRST ROW -->
                           <h2 class="shadow-md font-semibold text-lg mb-4 p-4">Payment Details:</h2>
                           <div class="bg-white mb-4 shadow-md grid grid-cols-3 gap-2 justify-items-start p-4">
@@ -82,13 +43,13 @@
                               </div>
                               <div class="w-full">
                                   <label for="metro_credit_card" class="block text-sm font-medium">Metro Credit
-                                    Card:</label>
+                                      Card:</label>
                                   <input type="number" id="metro_ccard" name="metro_ccard"
                                       class="w-full p-2 border border-gray-300 rounded-md" step="0.01">
                               </div>
                               <div class="w-full">
                                   <label for="metro_debit_card" class="block text-sm font-medium">Metro Debit
-                                    Card:</label>
+                                      Card:</label>
                                   <input type="number" id="metro_dcard" name="metro_dcard"
                                       class="w-full p-2 border border-gray-300 rounded-md" step="0.01">
                               </div>
@@ -133,7 +94,7 @@
                                       class="w-full p-2 border border-gray-300 rounded-md" step="0.01">
                               </div>
                           </div>
-
+  
                           <!-- SECOND ROW -->
                           <h2 class="shadow-md font-semibold text-lg mb-4 p-4">MM Details:</h2>
                           <div class="bg-white mb-4 shadow-md p-4">
@@ -141,19 +102,19 @@
                               <div class="grid grid-cols-2 gap-2 mb-2">
                                   <div class="w-full">
                                       <label for="mm_head_office" class="block text-sm font-medium">MM-HEAD
-                                        OFFICE:</label>
+                                          OFFICE:</label>
                                       <input type="text" id="mm_head_office" name="mm_head_office"
                                           class="w-full p-3 border border-gray-300 rounded-md">
                                   </div>
-
+  
                                   <div class="w-full">
                                       <label for="mm_commissary"
-                                        class="block text-sm font-medium">MM-COMMISSARY:</label>
+                                          class="block text-sm font-medium">MM-COMMISSARY:</label>
                                       <input type="text" id="mm_commissary" name="mm_commissary"
                                           class="w-full p-3 border border-gray-300 rounded-md">
                                   </div>
                               </div>
-
+  
                               <!-- Second row: Three columns -->
                               <div class="grid grid-cols-3 gap-2">
                                   <div class="w-full">
@@ -173,7 +134,7 @@
                                   </div>
                               </div>
                           </div>
-
+  
                           <!-- THIRD ROW -->
                           <h2 class="shadow-md font-semibold text-lg mb-4 p-4">Z Reading POS:</h2>
                           <div class="bg-white mb-4 shadow-md grid grid-cols-3 gap-2 justify-items-start p-4">
@@ -183,29 +144,22 @@
                                       class="w-full p-3 border border-gray-300 rounded-md">
                               </div>
                           </div>
-
-
-                </div>
-                      <div class="flex items-center justify-start m-4">
-                          <button type="submit"
-                              class="py-3 px-6 bg-green-600 text-white rounded-md hover:bg-green-500 transition">Submit</button>
-                      </div>
-
-                  </form>
-
-
+  
+  
+                  </div>
+  
                   <!-- Second column for Gross Total (now placed in 3rd column) -->
                   <div class="bg-white rounded-lg shadow-md">
-                      <h2 class="shadow-md font-semibold text-lg mb-4 p-4">Cashier's Details:</h2>
+                      <h2 class="shadow-md font-semibold text-lg mb-4 p-4">Shift Time:</h2>
                       <div class="grid grid-cols-1 gap-2 justify-items-start p-4 mb-8">
                           <div class="w-full">
                               <label for="cashier" class="block text-sm font-medium">Cashier's
-                                Name:</label>
+                                  Name:</label>
                               <input type="text" id="cashier" name="cashier"
-                                value="{{ auth()->user()->name ?? '' }}"
+                                  value="{{ auth()->user()->name ?? '' }}"
                                   class="w-full p-2 border border-gray-300 rounded-md" required>
                           </div>
-                            <div class="w-full">
+                          <div class="w-full">
                               <label for="time" class="block text-sm font-medium">Shift Time:</label>
                               <select id="time" name="time"
                                   class="w-full p-2 border border-gray-300 rounded-md">
@@ -214,14 +168,14 @@
                                   <option value="PM">PM</option>
                               </select>
                           </div>
-                    </div>
-                    <div class="flex items-center justify-start m-4">
-                        <button type="submit"
-                            class="py-3 px-6 bg-green-600 text-white rounded-md hover:bg-green-500 transition">Submit</button>
                       </div>
-                    </form>
-
-                    {{-- TOTAL --}}
+                      <div class="flex items-center justify-start m-4">
+                          <button type="submit"
+                              class="py-3 px-6 bg-green-600 text-white rounded-md hover:bg-green-500 transition">Submit</button>
+                      </div>
+                      </form>
+  
+                      {{-- TOTAL --}}
                       <h2 class="shadow-md font-semibold text-lg p-4 mb-4">Summary:</h2>
                       <div class="w-full">
                           <label for="payment-gross" class="block text-sm font-bold px-4">Subtotal Trade POS:</label>
@@ -242,7 +196,7 @@
           </div>
       </div>
   </main>
-
+  
   <script>
       document.addEventListener("DOMContentLoaded", function() {
           const tradeFields = [
@@ -250,23 +204,23 @@
               "metro_dcard", "paymaya", "aub_ccard", "gcash",
               "foodpanda", "streetby", "grabfood", "gc_claimed_others", "gc_claimed_own"
           ];
-
+  
           const nonTradeFields = [
               "mm_rm", "mm_dm", "food_charge"
           ];
-
+  
           function calculateTotal(fields) {
               return fields.reduce((total, id) => {
                   const input = document.getElementById(id);
                   return total + (input && input.value ? parseFloat(input.value) : 0);
               }, 0);
           }
-
+  
           function updateTotals() {
               const subTotalTrade = calculateTotal(tradeFields);
               const subTotalNonTrade = calculateTotal(nonTradeFields);
               const grandTotal = subTotalTrade + subTotalNonTrade;
-
+  
               document.getElementById("sub_total_trade").textContent =
                   `P ${subTotalTrade.toLocaleString('en-PH', { minimumFractionDigits: 2 })}`;
               document.getElementById("sub_total_non_trade").textContent =
@@ -274,16 +228,17 @@
               document.getElementById("grand_total").textContent =
                   `P ${grandTotal.toLocaleString('en-PH', { minimumFractionDigits: 2 })}`;
           }
-
+  
           [...tradeFields, ...nonTradeFields].forEach(id => {
               const input = document.getElementById(id);
               if (input) {
                   input.addEventListener("input", updateTotals);
               }
           });
-
+  
           updateTotals();
       });
   </script>
+
 </body>
 </html>
