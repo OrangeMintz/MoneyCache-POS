@@ -1,28 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Show Transactions</title>
-    @vite('resources/css/app.css')
-    {{-- sweet alert cdn --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
-        integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    {{-- bootstrap css --}}
-    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/> --}}
-
-    {{-- datatable css --}}
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" />
-    <style>
-    </style>
-</head>
-
+@include('layouts.header')
 <body>
-  @include('layouts.header')
+  @include('layouts.navigation')
     <main>
       <div class="font-sans bg-gray-100 p-6">
         <div class="bg-white p-4 mb-4">
@@ -75,7 +56,7 @@
                             <td class="border">45</td>
                             <td class="border border-gray-300 px-4 py-2 flex gap-2">
                               <button class="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">Edit</button>
-                              <button class="px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600">Delete</button>
+                              <button class="px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600" onclick="confirmation(event)">Delete</button>
                             </td>
                           </tr>
                           <tr>
@@ -97,7 +78,7 @@
                             <td class="border"></td>
                             <td class="border border-gray-300 px-4 py-2 flex gap-2">
                               <button class="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">Edit</button>
-                              <button class="px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600">Delete</button>
+                              <button class="px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600" onclick="confirmation(event)">Delete</button>
                             </td>
                           </tr>
                           <tr>
@@ -119,7 +100,7 @@
                             <td class="border">55</td>
                             <td class="border border-gray-300 px-4 py-2 flex gap-2">
                               <button class="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">Edit</button>
-                              <button class="px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600">Delete</button>
+                              <button class="px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600" onclick="confirmation(event)">Delete</button>
                             </td>
                           </tr>
                       </tbody>
@@ -130,53 +111,14 @@
             </div>
           </div>
         </div>
-        {{-- <div class="bg-white p-4">
-          <div class="container py-6">
-            <div class="card">
-              <div class="card-header">
-                <h5 class="title font-semibold text-[26px]">MM Details</h5>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table id="example" class="display table table-striped datatable" style="width:100%">
-                      <thead>
-                          <tr>
-                              <th>MM Head Office</th>
-                              <th>MM-COMMISSARY</th>
-                              <th>MM-RM</th>
-                              <th>MM-DM</th>
-                              <th>Food Charge</th>
-                              <th>Action</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr>
-                              <td>Tiger Nixon</td>
-                              <td>AM</td>
-                              <td>Edinburgh</td>
-                              <td>61as</td>
-                              <td>61as</td>
-                              <td class="border border-gray-300 px-4 py-2 flex gap-2">
-                                  <button class="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">Edit</button>
-                                  <button class="px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600">Delete</button>
-                              </td>
-                          </tr>
-                          
-                      </tbody>
-                  </table>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div> --}}
+        
       </div>
     </main>
     <script>
       
-
-
       function confirmation(e) {
+
+        event.preventDefault(); // Prevent default behavior
 
             swal({
                     title: "Are you sure you want to delete this ",
