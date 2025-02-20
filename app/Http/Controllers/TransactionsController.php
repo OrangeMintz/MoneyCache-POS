@@ -20,8 +20,8 @@ class TransactionsController extends Controller
      */
     public function list()
     {
-        return view('pages.transactions-list');
-
+        $transactions = Transactions::all(); // Fetch all transactions
+        return view('pages.transactions-list', compact('transactions'));
     }
 
     public function store(Request $request)

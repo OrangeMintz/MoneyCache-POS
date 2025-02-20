@@ -13,9 +13,11 @@
             gap: 10px;
             /* margin: 0 auto; */
         }
+
         .form-column {
             grid-column: span 1;
         }
+
         .total-column {
             grid-column: span 1;
             padding: 20px;
@@ -23,6 +25,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
+
         @layer base {
 
             input[type="number"]::-webkit-inner-spin-button,
@@ -30,6 +33,7 @@
                 -webkit-appearance: none;
                 margin: 0;
             }
+
             input[type="number"] {
                 -moz-appearance: textfield;
             }
@@ -41,6 +45,9 @@
 
     {{-- sweet alert cdn --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
-    integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  </head>
+        integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+    @include('layouts.navigation')

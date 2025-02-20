@@ -83,6 +83,6 @@ class TransactionsGrossTotalController extends Controller
             "particular" => $type,
             "gross_total" => $sum
         ]);
-       
+
     }
 }
