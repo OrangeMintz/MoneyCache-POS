@@ -8,7 +8,9 @@
     <title>Show Transactions</title>
     @vite('resources/css/app.css')
     {{-- sweet alert cdn --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
+        integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </head>
 
@@ -38,7 +40,7 @@
                         <td class="p-3 px-5 text-center">
                             <select value="AM" class="bg-transparent text-center">
                                 <option value="am">AM</option>
-                                <option value="mid">Mid</option>
+                                <option value="mid">MID</option>
                                 <option value="pm">PM</option>
                             </select>
                         </td>
@@ -49,7 +51,8 @@
                         <td class="p-3 px-5 text-center flex justify-center"><button type="button"
                                 class="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Save</button><button
                                 type="button"
-                                class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline" onclick="confirmation(event)">Delete</button>
+                                class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+                                onclick="confirmation(event)">Delete</button>
                         </td>
                     </tr>
                     <tr class="border-b hover:bg-green-100">
@@ -69,7 +72,8 @@
                         <td class="p-3 px-5 text-center flex justify-center"><button type="button"
                                 class="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Save</button><button
                                 type="button"
-                                class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline" onclick="confirmation(event)">Delete</button>
+                                class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+                                onclick="confirmation(event)">Delete</button>
                         </td>
                     </tr>
 
@@ -90,7 +94,8 @@
                         <td class="p-3 px-5 text-center flex justify-center"><button type="button"
                                 class="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Save</button><button
                                 type="button"
-                                class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline" onclick="confirmation(event)">Delete</button>
+                                class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+                                onclick="confirmation(event)">Delete</button>
                         </td>
                     </tr>
                     <tr class="border-b hover:bg-green-100 bg-gray-100">
@@ -170,7 +175,8 @@
                         <td class="p-3 px-5 text-center flex justify-center"><button type="button"
                                 class="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Save</button><button
                                 type="button"
-                                class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline" onclick="confirmation(event)">Delete</button>
+                                class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+                                onclick="confirmation(event)">Delete</button>
                         </td>
                     </tr>
                 </tbody>
@@ -180,26 +186,26 @@
 
 
     <script>
-      function confirmation(e) {
-        e.preventDefault();
+        function confirmation(e) {
+            e.preventDefault();
 
-        let urlToRedirect = e.currentTarget.getAttribute('href');
+            let urlToRedirect = e.currentTarget.getAttribute('href');
 
-        console.log(urlToRedirect);
+            console.log(urlToRedirect);
 
-        swal({
-        title: "Are you sure you want to delete this ", 
-        text: "You won't be able to revert this delete ",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-        })
-        .then((willCancel) => {
-        if(willCancel) {
-            window.location.href = urlToRedirect;
+            swal({
+                    title: "Are you sure you want to delete this ",
+                    text: "You won't be able to revert this delete ",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willCancel) => {
+                    if (willCancel) {
+                        window.location.href = urlToRedirect;
+                    }
+                });
         }
-        });
-      }
     </script>
 </body>
 
