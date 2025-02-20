@@ -34,30 +34,39 @@ export default function Dashboard() {
         }
       };
 
+    const logout = async (event: React.FormEvent) => {
+      event.preventDefault();
+
+      try {
+        const token = localStorage.getItem("access_token");
+
+        const response = await axios.post("http://127.0.0.1:8000/api/logout",{},{
+          headers: {
+            Authorization: `Bearer ${token}`, 
+            Accept: "application/json",
+          },
+        })
+
+        console.log(response.data)
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+
+        router.push('/')
+  
+        if (!token) {
+          console.error("No access token found.");
+          return;
+        }
+      } catch (error) {
+        console.error("Error logging out: ", error)
+      }
+    }
+
     useEffect(()=>{
         getUser();
     },[])
 
   return (
-    // <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-    //   <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-    //   <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-    //           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-    //             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-    //               Hello React, from Laravel Backend!
-    //             </h1>
-
-    //             {user ? <div>
-    //                         <p>{user.name}</p>
-    //                         <p>{user.email}</p>
-    //                     </div>: ''}
-                
-    //           </div>
-    //         </div>
-    //   </main>
-    // </div>
-
-
 <main>
 <Navbar/>
 <TransactionForm/>
