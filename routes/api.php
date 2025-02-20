@@ -16,7 +16,7 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('/gross/{type}', [TransactionsGrossTotalController::class, 'gross']);
         Route::get('/net/{type}', [TransactionsGrossTotalController::class, 'net']);
         Route::get('/gross-all', [TransactionsGrossTotalController::class, 'grossAll']);
-        // Route::get('/net-all', [TransactionsGrossTotalController::class, 'netAll']);
+        Route::get('/net-all', [TransactionsGrossTotalController::class, 'netAll']);
 
     });
 });
