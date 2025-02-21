@@ -27,10 +27,10 @@ class TransactionsController extends Controller
 
     public function list(Request $request)
     {
-    if ($request->ajax()) {
-        $transactions = Transactions::all();
-        return response()->json(['data' => $transactions]);
-    }
+        if ($request->ajax()) {
+            $transactions = Transactions::with('cashier:id,name')->get();
+            return response()->json(['data' => $transactions]);
+        }
         return view('pages.transactions-list');
     }
 
@@ -61,7 +61,7 @@ class TransactionsController extends Controller
             'food_charge' => 'numeric|nullable|min:0',
             'z_reading_pos' => 'numeric|nullable|min:0',
         ]);
-        
+
 
         // Compute subtotals
         $subtotal_trade =
@@ -128,7 +128,7 @@ class TransactionsController extends Controller
             'food_charge' => 'numeric|nullable|min:0',
             'z_reading_pos' => 'numeric|nullable|min:0',
         ]);
-        
+
 
         // Compute subtotals
         $subtotal_trade =
