@@ -11,11 +11,6 @@
                         <!-- FIRST ROW -->
                         <h2 class="shadow-md font-semibold text-lg mb-4 p-4">Payment Details:</h2>
                         <div class="bg-white mb-4 shadow-md grid grid-cols-3 gap-2 justify-items-start p-4">
-                            {{-- <div class="w-full col-span-3">
-                              <label for="cashier_name" class="block text-sm font-medium">Cashier's Name:</label>
-                              <input type="text" id="cashier_name" name="cashier_name"
-                                  class="w-full p-2 border border-gray-300 rounded-md" required>
-                          </div> --}}
                             <div class="w-full">
                                 <label for="cash" class="block text-sm font-medium">Cash:</label>
                                 <input type="number" id="cash" name="cash"
@@ -151,8 +146,6 @@
                                     class="w-full p-3 border border-gray-300 rounded-md">
                             </div>
                         </div>
-
-
                 </div>
 
                 <!-- Second column for Gross Total (now placed in 3rd column) -->
@@ -160,11 +153,9 @@
                     <h2 class="shadow-md font-semibold text-lg mb-4 p-4">Shift Time:</h2>
                     <div class="grid grid-cols-1 gap-2 justify-items-start p-4 mb-8">
                         <div class="w-full">
-                            <label for="cashier" class="block text-sm font-medium">Cashier's
-                                Name:</label>
-                            <input type="text" id="cashier" name="cashier"
-                                value="{{ auth()->user()->name ?? '' }}"
-                                class="w-full p-2 border border-gray-300 rounded-md" required>
+                            {{-- <label for="cashier" class="block text-sm font-medium">Cashier's
+                                Name:</label> --}}
+                            <input type="hidden" id="cashier" name="cashier" value="{{ auth()->user()->id }}">
                         </div>
                         <div class="w-full">
                             <label for="time" class="block text-sm font-medium">Shift Time:</label>

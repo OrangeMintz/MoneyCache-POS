@@ -18,12 +18,8 @@ class Transactions extends Model
         'mm_dm','mm_km','food_charge','z_reading_pos','sub_total_trade',
         'sub_total_non_trade','grand_total', 'over_pos'];
 
-    
     public function cashier()
     {
-        return $this->belongsTo(User::class, 'cashier');
+        return $this->belongsTo(User::class, 'cashier', 'id');
     }
-
-    
-
 }

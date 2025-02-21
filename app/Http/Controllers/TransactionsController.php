@@ -15,10 +15,23 @@ class TransactionsController extends Controller
         return view('pages.transactions');
     }
 
+    // public function test(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $transactions = Transactions::get();
+    //         return response()->json(['data' => $transactions]);
+    //     }
+
+    //     return view('pages.test');
+    // }
+
     public function list(Request $request)
     {
-        $transactions = Transactions::all(); // Fetch all transactions
-        return view('pages.transactions-list', compact('transactions'));
+    if ($request->ajax()) {
+        $transactions = Transactions::all();
+        return response()->json(['data' => $transactions]);
+    }
+        return view('pages.transactions-list');
     }
 
     public function store(Request $request)
