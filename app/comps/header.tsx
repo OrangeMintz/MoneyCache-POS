@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
-import { useState } from 'react';
 import axios from 'axios';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function Navbar() {
 
@@ -40,13 +40,13 @@ export default function Navbar() {
       }
 
     return (
-        <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+        <nav className="bg-gray-600 dark:bg-gray-800 border- dark:border-gray-700">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
                     <div className="flex">
                         <div className="shrink-0 flex items-center">
                             <Link href="#">
-                                <span className="block h-9 mt-3 w-auto fill-current text-lg text-gray-800 dark:text-gray-200">
+                                <span className="block h-9 mt-3 w-auto fill-current text-lg text-white dark:text-gray-200">
 
                               Bading App
                                 </span>
@@ -55,13 +55,13 @@ export default function Navbar() {
                     </div>
                     <div className="hidden sm:flex sm:items-center sm:ms-6">
                         <div className="relative">
-                           <Link href="/dashboard"> <button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md text-gray-500  dark:text-gray-200 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
+                           <Link href="/dashboard"> <button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md text-white  dark:text-gray-200 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
                                 <span>Transaction</span>
                             </button></Link>
-                           <Link href="/transactionlist"> <button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md text-gray-500 dark:text-gray-200 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
+                           <Link href="/transactionlist"> <button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md  text-white  dark:text-gray-200 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
                                 <span>Transaction List</span>
                             </button></Link>
-                            <button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md text-gray-500 dark:text-gray-200 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
+                            <button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md  text-white  dark:text-gray-200 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
                                 <span>Product</span>
                             </button>
                         </div>
@@ -69,8 +69,8 @@ export default function Navbar() {
                     <div className="hidden sm:flex sm:items-center sm:ms-6">
                         <div className="relative">
                             <form onSubmit={logout}>
-                                <button type='submit' className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md text-gray-500 dark:text-gray-200 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
-                                    <span className="block h-9 mt-3 w-auto fill-current text-lg text-gray-800 dark:text-gray-200">
+                                <button type='submit' className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md  text-white  dark:text-gray-200  dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
+                                    <span className="block h-9 mt-3 w-auto fill-current text-lg  text-white  dark:text-gray-200">
                                         Logout
                                     </span>
                                 </button>
