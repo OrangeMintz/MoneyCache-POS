@@ -1,6 +1,7 @@
 'use client';
 import api from "../../utils/api";
 import { useState } from "react";
+import Toast from 'typescript-toastify';
 
 type Cashier = {
   id: number;
@@ -42,6 +43,8 @@ export default function CashierForm({cashier}:TransactionFormProps) {
         z_reading_pos: null,
       });
 
+      const [disable, setDisable] = useState(false);
+
     const hanldeInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({
             ...formData,
@@ -52,18 +55,62 @@ export default function CashierForm({cashier}:TransactionFormProps) {
 
     const handleFormSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        // console.log(formData)
 
-        const token = localStorage.getItem('access_token')
+        const token = localStorage.getItem('access_token');
+    
+        try {
+            const response = await api.post("/api/transactions", { ...formData }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                },
+            });
+    
+            console.log("Store Data:", response.data);
+    
+            if (response.data.status === 'success') {
+                setDisable(true)
+                new Toast({
+                    position: "top-right",
+                    onClose: () => { window.location.reload() },
+                    toastMsg: "Successfully stored transaction!",
+                    autoCloseTime: 2000,
+                    canClose: true,
+                    showProgress: true,
+                    pauseOnHover: true,
+                    pauseOnFocusLoss: true,
+                    type: "success",
+                    theme: 'dark',
+                });
+            } 
+        } catch (error: any) {
+            console.error("Error storing transaction:", error);
+    
+            let errorMessage = "An unexpected error occurred!";
+            if (error.response) {
+                errorMessage = error.response.data.message || "Failed to store transaction!";
+            } else if (error.request) {
+                errorMessage = "No response from server. Please try again!";
+            } else {
+                errorMessage = error.message;
+            }
+    
+            new Toast({
+                position: "top-right",
+                toastMsg: errorMessage,
+                autoCloseTime: 2000,
+                canClose: true,
+                showProgress: true,
+                pauseOnHover: true,
+                pauseOnFocusLoss: true,
+                type: "error",
+                theme: 'dark',
+            });
+        }
+    };
+    
 
-        const response = await api.post("/api/transactions",{...formData},
-            {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: "application/json",
-            },
-        });
-    }
+    
     
 
     return (
@@ -205,7 +252,7 @@ export default function CashierForm({cashier}:TransactionFormProps) {
                         </div>
 
                         <div className="flex items-center justify-start m-4">
-                            <button type="submit" className="py-3 px-6 bg-green-600 text-white rounded-md hover:bg-green-500 transition">
+                            <button type="submit" className="py-3 px-6 bg-green-600 text-white rounded-md hover:bg-green-500 transition" disabled={disable}>
                                 Submit
                             </button>
                         </div>
