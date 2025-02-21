@@ -24,8 +24,8 @@
                 {{-- <button data-modal-target="crud-modal" data-modal-toggle="crud-modal"
                     class="w-20 px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600" type="button">
                     Edit
-                </button>
-                <button class="w-20 px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600"
+                </button> --}}
+                {{-- <button class="w-20 px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600"
                     onclick="confirmation(event)">
                     Delete
                 </button> --}}
@@ -126,13 +126,16 @@
                 // <button class="delete-btn px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600" onclick="return confirmation(event)" data-id="${data}">Delete</button>
                 render: function(data, type, row) {
                     return `
-                    <div class"flex gap-2" style="display: flex; gap: 0.5rem; justify-content: center;">
-                    <button class="w-20 px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600" onclick="console.log('Hello World')" data-id="${data}">Edit</button>
-                    <form method="POST" class="delete-form" action="/transactions/${data}" onsubmit="return confirmation(event)">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="w-20 px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600">Delete</button>
-                    </form>
+                    <div style="display: flex; gap: 0.5rem; justify-content: center;">
+                        <button data-modal-target="crud-modal"  class="w-20 px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600" 
+                            onclick="openModal('${data}')"
+                            data-id="${data}"
+                            data-modal-toggle="crud-modal">Edit</button>
+                        <form method="POST" class="delete-form" action="/transactions/${data}" onsubmit="return confirmation(event)">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="w-20 px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600">Delete</button>
+                        </form>
                     </div>
 
                 `;
@@ -164,6 +167,7 @@
     let transactionId = "${data}";
     form.action = "{{ route('transactions.softDelete', '__id__') }}".replace('__id__', transactionId);
     });
+
 </script>
 
 <script>
@@ -182,5 +186,40 @@
                 }
             });
     }
+</script>
+
+{{--  --}}
+<script>
+
+    
+// Function to open the modal
+function openModal(transactionId) {
+    console.log("Opening modal for ID:", transactionId);
+    const modal = document.getElementById("crud-modal");
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+}
+
+// Function to close the modal when clicking outside or close button
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("[data-modal-toggle]").forEach(button => {
+        button.addEventListener("click", function () {
+            const modal = document.getElementById("crud-modal");
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+        });
+    });
+
+    // Close modal when clicking outside modal content
+    document.getElementById("crud-modal").addEventListener("click", function (e) {
+        if (e.target === this) {
+            this.classList.add("hidden");
+            this.classList.remove("flex");
+        }
+    });
+});
+
+
+
 </script>
 </body>
