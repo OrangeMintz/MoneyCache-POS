@@ -20,7 +20,7 @@ class TransactionsController extends Controller
      */
     public function list()
     {
-        $transactions = Transactions::all(); // Fetch all transactions
+        $transactions = Transactions::with(); // Fetch all transactions
         return view('pages.transactions-list', compact('transactions'));
     }
 
@@ -29,28 +29,29 @@ class TransactionsController extends Controller
         $validated = $request->validate([
             'cashier' => 'required|exists:users,id',
             'time' => 'required|string|in:AM,MID,PM',
-            'cash' => 'numeric|nullable',
-            'check' => 'numeric|nullable',
-            'bpi_ccard' => 'numeric|nullable',
-            'bpi_dcard' => 'numeric|nullable',
-            'metro_ccard' => 'numeric|nullable',
-            'metro_dcard' => 'numeric|nullable',
-            'paymaya' => 'numeric|nullable',
-            'aub_ccard' => 'numeric|nullable',
-            'gcash' => 'numeric|nullable',
-            'food_panda' => 'numeric|nullable',
-            'streetby' => 'numeric|nullable',
-            'grabfood' => 'numeric|nullable',
-            'gc_claimed_others' => 'numeric|nullable',
-            'gc_claimed_own' => 'numeric|nullable',
+            'cash' => 'numeric|nullable|min:0',
+            'check' => 'numeric|nullable|min:0',
+            'bpi_ccard' => 'numeric|nullable|min:0',
+            'bpi_dcard' => 'numeric|nullable|min:0',
+            'metro_ccard' => 'numeric|nullable|min:0',
+            'metro_dcard' => 'numeric|nullable|min:0',
+            'paymaya' => 'numeric|nullable|min:0',
+            'aub_ccard' => 'numeric|nullable|min:0',
+            'gcash' => 'numeric|nullable|min:0',
+            'food_panda' => 'numeric|nullable|min:0',
+            'streetby' => 'numeric|nullable|min:0',
+            'grabfood' => 'numeric|nullable|min:0',
+            'gc_claimed_others' => 'numeric|nullable|min:0',
+            'gc_claimed_own' => 'numeric|nullable|min:0',
             'mm_head' => 'string|nullable',
             'mm_commissary' => 'string|nullable',
-            'mm_rm' => 'numeric|nullable',
-            'mm_dm' => 'numeric|nullable',
-            'mm_km' => 'numeric|nullable',
-            'food_charge' => 'numeric|nullable',
-            'z_reading_pos' => 'numeric|nullable',
+            'mm_rm' => 'numeric|nullable|min:0',
+            'mm_dm' => 'numeric|nullable|min:0',
+            'mm_km' => 'numeric|nullable|min:0',
+            'food_charge' => 'numeric|nullable|min:0',
+            'z_reading_pos' => 'numeric|nullable|min:0',
         ]);
+        
 
         // Compute subtotals
         $subtotal_trade =
@@ -104,7 +105,7 @@ class TransactionsController extends Controller
 
     public function retrieve()
     {
-        $transactions = Transactions::all();
+        $transactions = Transactions::with('cashier')->get();
 
         return response()->json([
             "status" => 1,

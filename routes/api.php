@@ -23,6 +23,8 @@ Route::middleware(['auth:api'])->group(function () {
     });
 });
 
+Route::get('/csv', [CsvController::class, 'csv']);
+
 Route::post("register", [AuthController::class,"register"]);
 Route::post('login', [AuthController::class, 'login']);
 
