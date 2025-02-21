@@ -15,25 +15,29 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import * as React from 'react';
+import { useEffect, useState } from 'react';
+import api from "../../utils/api";
 
-function createData(name, calories, fat, carbs, protein, price) {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-    price,
-    history: [
-      { date: '2020-01-05', customerId: '11091700', amount: 3 },
-      { date: '2020-01-02', customerId: 'Anonymous', amount: 1 },
-    ],
-  };
+async function fetchData() {
+  try {
+    const token = localStorage.getItem('access_token');
+    const response = await api.get("/api/transactions", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
+    return response.data.transactions || [];
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return [];
+  }
 }
 
 function Row({ row }) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  
   return (
     <>
       <TableRow>
@@ -42,69 +46,140 @@ function Row({ row }) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell>{row.name}</TableCell>
-        <TableCell align="right">{row.calories}</TableCell>
-        <TableCell align="right">{row.fat}</TableCell>
-        <TableCell align="right">{row.carbs}</TableCell>
-        <TableCell align="right">{row.protein}</TableCell>
+        <TableCell>{row.id}</TableCell>
+        <TableCell>{row.cashier?.name || 'Unknown'}</TableCell>
+        <TableCell align="right">{row.time}</TableCell>
+        <TableCell align="right">{row.sub_total_trade}</TableCell>
+        <TableCell align="right">{row.sub_total_non_trade}</TableCell>
+        <TableCell align="right">{row.grand_total}</TableCell>
         <TableCell align="right">
           <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">EDIT</button>
           <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition ml-2">DELETE</button>
         </TableCell>
       </TableRow>
+      {/** Expanded row for future details (if needed) */}
       <TableRow>
-        <TableCell colSpan={7} style={{ paddingBottom: 0, paddingTop: 0 }}>
+        <TableCell colSpan={15} style={{ paddingBottom: 0, paddingTop: 0 }}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box>
-              <Typography variant="h6">History</Typography>
+          <div className='flex'>
+             <Box style={{ paddingBottom: 10, paddingTop: 0 }}>
+              <Typography variant="h6">Trade Transaction</Typography>
               <Table size="small">
-                <TableBody>
-                  <TableRow><TableCell>Trade Transaction:</TableCell><TableCell>{row.history.map(h => h.date).join(', ')}</TableCell></TableRow>
-                  <TableRow><TableCell>Non Trade Transaction:</TableCell><TableCell>{row.history.map(h => h.customerId).join(', ')}</TableCell></TableRow>
-                  <TableRow><TableCell>MM-Head Office:</TableCell><TableCell>{row.history.map(h => h.amount).join(', ')}</TableCell></TableRow>
-                  <TableRow><TableCell>MM-Comissionary:</TableCell><TableCell>{row.history.map(h => h.amount).join(', ')}</TableCell></TableRow>
-                  <TableRow><TableCell>MM-RM:</TableCell><TableCell>{row.history.map(h => h.amount).join(', ')}</TableCell></TableRow>
-                </TableBody>
+              <TableBody>
+                {[
+                  { key: "cash", label: "Cash" },
+                  { key: "check", label: "Check" },
+                  { key: "bpi_ccard", label: "BPI Credit Card" },
+                  { key: "bpi_dcard", label: "BPI Debit Card" },
+                  { key: "metro_ccard", label: "Metro Credit Card" },
+                  { key: "metro_dcard", label: "Metro Debit Card" },
+                  { key: "paymaya", label: "PayMaya" },
+                  { key: "aub_ccard", label: "AUB Credit Card" },
+                  { key: "gcash", label: "GCash" },
+                  { key: "food_panda", label: "Food Panda" },
+                  { key: "streetby", label: "StreetBy" },
+                  { key: "grabfood", label: "GrabFood" },
+                  { key: "gc_claimed_others", label: "GC Claimed (Others)" },
+                  { key: "gc_claimed_own", label: "GC Claimed (Own)" },
+                  { key: "mm_head", label: "MM-Head Office" },
+                  { key: "mm_commissary", label: "MM-Commissary" },
+                  { key: "mm_rm", label: "MM-RM" },
+                  { key: "mm_dm", label: "MM-DM" },
+                  { key: "mm_km", label: "MM-KM" },
+                  { key: "food_charge", label: "Food Charge" },
+                  { key: "z_reading_pos", label: "Z Reading POS" },
+                  { key: "over_pos", label: "Over POS" }
+                ].map(({ key, label }) =>
+                  row[key] !== null && row[key] !== undefined ? (
+                    <TableRow key={key}>
+                      <TableCell>{label}:</TableCell>
+                      <TableCell>{row[key]}</TableCell>
+                    </TableRow>
+                  ) : null
+                )}
+              </TableBody>
               </Table>
             </Box>
+            
+            <Box style={{ paddingBottom: 10, paddingTop: 0 }}>
+              <Typography variant="h6">Trade Transaction</Typography>
+              <Table size="small">
+              <TableBody>
+                {[
+                  { key: "cash", label: "Cash" },
+                  { key: "check", label: "Check" },
+                  { key: "bpi_ccard", label: "BPI Credit Card" },
+                  { key: "bpi_dcard", label: "BPI Debit Card" },
+                  { key: "metro_ccard", label: "Metro Credit Card" },
+                  { key: "metro_dcard", label: "Metro Debit Card" },
+                  { key: "paymaya", label: "PayMaya" },
+                  { key: "aub_ccard", label: "AUB Credit Card" },
+                  { key: "gcash", label: "GCash" },
+                  { key: "food_panda", label: "Food Panda" },
+                  { key: "streetby", label: "StreetBy" },
+                  { key: "grabfood", label: "GrabFood" },
+                  { key: "gc_claimed_others", label: "GC Claimed (Others)" },
+                  { key: "gc_claimed_own", label: "GC Claimed (Own)" },
+                  { key: "mm_head", label: "MM-Head Office" },
+                  { key: "mm_commissary", label: "MM-Commissary" },
+                  { key: "mm_rm", label: "MM-RM" },
+                  { key: "mm_dm", label: "MM-DM" },
+                  { key: "mm_km", label: "MM-KM" },
+                  { key: "food_charge", label: "Food Charge" },
+                  { key: "z_reading_pos", label: "Z Reading POS" },
+                  { key: "over_pos", label: "Over POS" }
+                ].map(({ key, label }) =>
+                  row[key] !== null && row[key] !== undefined ? (
+                    <TableRow key={key}>
+                      <TableCell>{label}:</TableCell>
+                      <TableCell>{row[key]}</TableCell>
+                    </TableRow>
+                  ) : null
+                )}
+              </TableBody>
+              </Table>
+            </Box>
+            
+          </div>
+           
           </Collapse>
+
         </TableCell>
       </TableRow>
     </>
   );
 }
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0, 3.99),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3, 4.99),
-  createData('Eclair', 262, 16.0, 24, 6.0, 3.79),
-  createData('Cupcake', 305, 3.7, 67, 4.3, 2.5),
-  createData('Gingerbread', 356, 16.0, 49, 3.9, 1.5),
-  createData('Brownie', 320, 10.0, 50, 5.0, 2.5),
-  createData('Cheesecake', 250, 8.0, 30, 6.0, 4.0),
-];
-
 export default function CollapsibleTable() {
-  const [searchTerm, setSearchTerm] = React.useState('');
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(6);
+  const [data, setData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(6);
 
-  const handleChangePage = (event, newPage) => setPage(newPage);
+  useEffect(() => {
+    fetchData().then(setData);
+  }, []);
+
+  const handleChangePage = (_event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const filteredRows = rows.filter(row => row.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  // Ensure safe access to cashier's name
+  const filteredRows = data.filter(row => 
+    row.cashier?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const paginatedRows = filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
     <>
       <Navbar />
-      <Box sx={{ border: '1px solid black', borderRadius: '8px', padding: '16px', marginTop: '16px' }}>
+      <Box sx={{ borderRadius: '8px', padding: '16px', marginTop: '16px' }}>
         <input
           type="text"
-          placeholder="Search by Dessert..."
+          placeholder="Search by Cashier..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="mb-4 p-2 border rounded w-30px"
@@ -114,16 +189,17 @@ export default function CollapsibleTable() {
             <TableHead>
               <TableRow>
                 <TableCell />
-                <TableCell>Cashier </TableCell>
+                <TableCell>ID</TableCell>
+                <TableCell>Cashier</TableCell>
                 <TableCell align="right">Time</TableCell>
-                <TableCell align="right">Sub-Total</TableCell>
+                <TableCell align="right">Sub-Total Trade</TableCell>
                 <TableCell align="right">Sub-Total Non Trade</TableCell>
                 <TableCell align="right">Grand Total</TableCell>
                 <TableCell align="right">Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {paginatedRows.map((row) => <Row key={row.name} row={row} />)}
+              {paginatedRows.map((row) => <Row key={row.id} row={row} />)}
             </TableBody>
           </Table>
         </TableContainer>
