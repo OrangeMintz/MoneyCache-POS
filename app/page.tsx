@@ -1,10 +1,8 @@
 'use client';
 
-import Image from "next/image";
-import React, { useEffect } from "react";
-import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 
 export default function Home() {
@@ -30,8 +28,8 @@ const handleSubmit = async (event: React.FormEvent) => {
     })
 
     console.log(response.data);
-    let accessToken = response.data.access_token;
-    let refreshToken = response.data.refresh_token
+    const accessToken = response.data.access_token;
+    const refreshToken = response.data.refresh_token
     localStorage.setItem("access_token", accessToken);
     localStorage.setItem("refresh_token", refreshToken);
     

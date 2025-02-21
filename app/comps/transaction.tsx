@@ -1,14 +1,32 @@
+
 export default function CashierForm() {
     return (
         <main className="font-sans bg-gray-100 p-6 text-black">
             <div className="bg-white p-4">
+                
                 <div className="container mx-auto">
 
 
                     {/* payment Details ni */}
                     <form method="POST" className="bg-white rounded-lg shadow-md p-4">
-                    <h2 className="shadow-md font-semibold text-lg mb-4 p-4">Payment Methods:</h2>
+                    <div className="grid grid-cols-1 gap-4 p-4 mb-8">
+                    <h2 className="shadow-md font-semibold text-lg mb-4 p-4">Shift Time:</h2>
+                            <div className="w-full">
+                                <label className="block text-sm font-medium">Cashier&apos;s Name:</label>
+                                <input type="text" className="w-full p-2 border border-gray-300 rounded-md" name="cashier_name" required />
+                            </div>
+                            <div className="w-full">
+                                <label className="block text-sm font-medium">Shift Time:</label>
+                                <select className="w-full p-2 border  border-gray-300 rounded-md" name="shift_time">
+                                    <option value="AM">AM</option>
+                                    <option value="MID">MID</option>
+                                    <option value="PM">PM</option>
+                                </select>
+                            </div>
+                        </div>
+                        <h2 className="shadow-md font-semibold text-lg mb-4 p-4">Payment Methods:</h2>
                         <div className="bg-white mb-4 shadow-md grid md:grid-cols-3 sm:grid-cols-2 gap-4 p-4">
+                           
                             <div className="w-full">
                                 <label className="block text-sm font-medium">Cash:</label>
                                 <input type="number" name="cash" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" />
@@ -125,22 +143,6 @@ export default function CashierForm() {
 
 
                     <div className="bg-white rounded-lg shadow-md p-4 mt-6">
-                        <h2 className="shadow-md font-semibold text-lg mb-4 p-4">Shift Time:</h2>
-                        <div className="grid grid-cols-1 gap-4 p-4 mb-8">
-                            <div className="w-full">
-                                <label className="block text-sm font-medium">Shift Time:</label>
-                                <select className="w-full p-2 border  border-gray-300 rounded-md" name="shift_time">
-                                    <option value="AM">AM</option>
-                                    <option value="MID">MID</option>
-                                    <option value="PM">PM</option>
-                                </select>
-                            </div>
-                            <div className="w-full">
-                                <label className="block text-sm font-medium">Cashier&apos;s Name:</label>
-                                <input type="text" className="w-full p-2 border border-gray-300 rounded-md" name="cashier_name" required />
-                            </div>
-                        </div>
-
                         <h2 className="shadow-md font-semibold text-lg p-4 mb-4">Summary:</h2>
                         <div className="w-full p-4">
                             {["Subtotal Trade POS", "Subtotal Non-Trade POS", "GRAND TOTAL POS"].map((label, index) => (

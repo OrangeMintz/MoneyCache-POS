@@ -1,10 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Navbar() {
     const [open, setOpen] = useState(false);
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src = "https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css";
+        script.async = true;
+        document.body.appendChild(script);
+      }, []);
 
     return (
         <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
@@ -22,12 +28,12 @@ export default function Navbar() {
                     </div>
                     <div className="hidden sm:flex sm:items-center sm:ms-6">
                         <div className="relative">
-                            <button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md text-gray-500  dark:text-gray-200 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
+                           <Link href="/dashboard"> <button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md text-gray-500  dark:text-gray-200 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
                                 <span>Transaction</span>
-                            </button>
-                            <button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md text-gray-500 dark:text-gray-200 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
+                            </button></Link>
+                           <Link href="/transactionlist"> <button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md text-gray-500 dark:text-gray-200 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
                                 <span>Transaction List</span>
-                            </button>
+                            </button></Link>
                             <button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md text-gray-500 dark:text-gray-200 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
                                 <span>Product</span>
                             </button>
@@ -55,20 +61,16 @@ export default function Navbar() {
             </div>
             <div className={open ? 'block sm:hidden' : 'hidden sm:hidden'}>
                 <div className="pt-2 pb-3 ml-4 space-y-1">
-                    <Link href="/Dashboard" className="text-gray-800 dark:text-gray-200">
+                    <Link href="/dashboard" className="text-gray-800 dark:text-gray-200">
                       Transaction
                     </Link>
                 </div>
                 <div className="pt-2 pb-3 ml-4 space-y-1">
-                    <Link href="/Dashboard" className="text-gray-800 dark:text-gray-200">
+                    <Link href="/transactionlist" className="text-gray-800 dark:text-gray-200">
                       Transaction List
                     </Link>
                 </div>
-                <div className="pt-2 pb-3 ml-4 space-y-1">
-                    <Link href="/Dashboard" className="text-gray-800 dark:text-gray-200">
-                      Products
-                    </Link>
-                </div>
+               
                 <div className="pt-2 pb-3 ml-4 space-y-1">
                     <Link href="/Dashboard" className="text-gray-800 dark:text-gray-200">
                       Logout
