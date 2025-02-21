@@ -31,7 +31,7 @@ export default function Dashboard() {
                 },
             });
   
-            console.log("User Data:", response.data);
+            // console.log("User Data:", response.data);
             setUser(response.data);
         } catch (error: any) {
             router.push('/')
@@ -52,7 +52,7 @@ export default function Dashboard() {
     return (
         <main>
             <Navbar />
-            <TransactionForm />
+            <TransactionForm cashier={user}/>
         </main>
     );
 }
