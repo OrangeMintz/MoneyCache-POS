@@ -15,8 +15,13 @@ class TransactionsController extends Controller
         return view('pages.transactions');
     }
 
-    public function test()
+    public function test(Request $request)
     {
+        if ($request->ajax()) {
+            $transactions = Transactions::all();
+            return response()->json(['data' => $transactions]);
+        }
+
         return view('pages.test');
     }
 
