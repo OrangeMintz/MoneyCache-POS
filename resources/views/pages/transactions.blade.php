@@ -204,7 +204,7 @@
         const tradeFields = [
             "cash", "check", "bpi_ccard", "bpi_dcard", "metro_ccard",
             "metro_dcard", "paymaya", "aub_ccard", "gcash",
-            "foodpanda", "streetby", "grabfood", "gc_claimed_others", "gc_claimed_own"
+            "food_panda", "streetby", "grabfood", "gc_claimed_others", "gc_claimed_own"
         ];
 
         const nonTradeFields = [
