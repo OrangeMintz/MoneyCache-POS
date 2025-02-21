@@ -15,6 +15,11 @@ class TransactionsController extends Controller
         return view('pages.transactions');
     }
 
+    public function test()
+    {
+        return view('pages.test');
+    }
+
     /**
      * Show the form for creating a new resource.
      */
