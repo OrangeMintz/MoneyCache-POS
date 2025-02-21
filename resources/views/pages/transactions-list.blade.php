@@ -63,6 +63,8 @@
         };
 
         let nonTradeFields = {
+            "MM Head Office": d.mm_head,
+            "MM Commissary": d.mm_commissary,
             "MM RM": d.mm_rm,
             "MM DM": d.mm_dm,
             "MM KM": d.mm_km,
@@ -100,7 +102,8 @@
                 defaultContent: ''
             },
             {
-                data: 'cashier'
+                data: 'cashier.name'
+
             },
             {
                 data: 'time'

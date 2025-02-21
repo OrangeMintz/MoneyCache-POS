@@ -27,10 +27,5 @@ Route::middleware(['auth:api'])->group(function () {
     });
 
 });
-
 Route::post("register", [AuthController::class,"register"]);
 Route::post('login', [AuthController::class, 'login']);
-
-// Route::post('/transaction', [TransactionsController::class, 'store'])->name('transaction.store');
-
-
