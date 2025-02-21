@@ -21,6 +21,11 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('/net-all', [TransactionsGrossTotalController::class, 'netAll']);
         Route::post('/csv', [CsvController::class, 'csv']);
     });
+    Route::prefix('transaction')->group(function () {
+    Route::post('/', [TransactionsController::class, 'store'])->name('api.transaction.store');
+    Route::put('/{id}', [TransactionsController::class, 'update'])->name('api.transaction.update');
+    });
+
 });
 
 Route::get('/csv', [CsvController::class, 'csv']);
@@ -28,5 +33,6 @@ Route::get('/csv', [CsvController::class, 'csv']);
 Route::post("register", [AuthController::class,"register"]);
 Route::post('login', [AuthController::class, 'login']);
 
+// Route::post('/transaction', [TransactionsController::class, 'store'])->name('transaction.store');
 
 
