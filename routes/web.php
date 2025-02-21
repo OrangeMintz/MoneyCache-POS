@@ -31,7 +31,6 @@ Route::middleware('auth')->group(function () {
     Route::prefix('transactions')->group(function () {
         Route::get('/', [TransactionsController::class, 'list'])->name('transactions');
         Route::delete('/{id}', [TransactionsController::class, 'softDelete'])->name('transactions.softDelete');
-        Route::get('/test', [TransactionsController::class, 'test'])->name('test');
     });
 
 });
