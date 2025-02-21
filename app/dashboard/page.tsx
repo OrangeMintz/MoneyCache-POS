@@ -6,6 +6,7 @@ import TransactionForm from "@/app/comps/transaction";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
+import axios from "axios";
 
 export default function Dashboard() {
     const [user, setUser] = useState<any>(null);
@@ -40,29 +41,7 @@ export default function Dashboard() {
         }
     };
 
-    const logout = async (event: React.FormEvent) => {
-        event.preventDefault();
-
-        try {
-            const token = localStorage.getItem("access_token");
-
-            const response = await axios.post("http://127.0.0.1:8000/api/logout", {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    Accept: "application/json",
-                },
-            });
-
-            console.log(response.data);
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('refresh_token');
-            router.push('/');
-        } catch (error) {
-            console.error("Error logging out: ", error);
-        }
-    };
-
-    useEffect(() => {
+    useEffect(()=>{
         getUser();
     }, []);
 
