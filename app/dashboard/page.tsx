@@ -6,7 +6,6 @@ import TransactionForm from "@/app/comps/transaction";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
-import axios from "axios";
 
 export default function Dashboard() {
     const [user, setUser] = useState<any>(null);

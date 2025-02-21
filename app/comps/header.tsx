@@ -61,9 +61,9 @@ export default function Navbar() {
                            <Link href="/transactionlist"> <button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md  text-white  dark:text-gray-200 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
                                 <span>Transaction List</span>
                             </button></Link>
-                            <button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md  text-white  dark:text-gray-200 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
+                            <Link href="Product"><button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md  text-white  dark:text-gray-200 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
                                 <span>Product</span>
-                            </button>
+                            </button></Link>
                         </div>
                     </div>
                     <div className="hidden sm:flex sm:items-center sm:ms-6">
