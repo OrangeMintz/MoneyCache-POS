@@ -1,0 +1,44 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "name": "Legion Commander",
+      "time": "AM",
+      "sub_total": "50",
+      "sub_total_non_trade": "50",
+      "grand_total": "100",
+      "cash": "1",
+      "check": "5421",
+      "bpi_ccard": "1",
+      "bpi_dcard": "1",
+      "metro_ccard": "22",
+      "metro_dcard": "22",
+      "paymaya": "3",
+      "sub_ccard": "4",
+      "gcash": "5",
+      "food_panda": "6",
+      "streetby": "7",
+      "grabfood": "8",
+      "gc_claimed_others": "9",
+      "gc_claimed_own": "10"
+    },
+    {
+      "id": "2",
+      "name": "Anti Mage",
+      "time": "PM",
+      "sub_total": "50",
+      "sub_total_non_trade": "50",
+      "grand_total": "100",
+      "extn": "5421"
+    },
+    {
+      "id": "3",
+      "name": "Naix",
+      "time": "Mid",
+      "sub_total": "20",
+      "sub_total_non_trade": "80",
+      "grand_total": "100",
+      "extn": "5421"
+    }
+  ]
+}
