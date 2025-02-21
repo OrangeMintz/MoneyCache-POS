@@ -1,4 +1,5 @@
 @include('layouts.header')
+@include('components.modals.edit')
 <main>
     <div class="font-sans bg-gray-100 p-6">
         <div class="bg-white p-4 mb-4">
@@ -17,22 +18,19 @@
                             <th>Grand total</th>
                         </tr>
                     </thead>
-                    {{-- <tfoot>
-                <tr>
-                    <th></th>
-                    <th>Name</th>
-                    <th>Time</th>
-                    <th>Sub-Total</th>
-                    <th>Sub-Total Non Trade</th>
-                    <th>Grand total</th>
-                </tr>
-              </tfoot> --}}
                 </table>
+
+                {{-- <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="w-20 px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600" type="button">
+                    Edit
+                </button>
+                <button class="w-20 px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600" onclick="confirmation(event)">
+                    Delete
+                </button> --}}
+
             </div>
         </div>
     </div>
 </main>
-
 
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -134,6 +132,31 @@
         }
     });
 </script>
+
+
+<script>
+    //delete button modal
+    function confirmation(e) {
+      e.preventDefault();
+
+      let urlToRedirect = e.currentTarget.getAttribute('href');
+
+      console.log(urlToRedirect);
+
+      swal({
+      title: "Are you sure you want to delete this ", 
+      text: "You won't be able to revert this delete ",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+      })
+      .then((willCancel) => {
+      if(willCancel) {
+          window.location.href = urlToRedirect;
+      }
+      });
+    }
+  </script>
 
 </body>
 
