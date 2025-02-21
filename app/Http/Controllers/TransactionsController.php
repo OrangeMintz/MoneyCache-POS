@@ -32,8 +32,8 @@ class TransactionsController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'cashier' => 'required|string',
-            'time' => 'required|string',
+            'cashier' => 'required|exists:users,id',
+            'time' => 'required|string|in:AM,MID,PM',
             'cash' => 'numeric|nullable',
             'check' => 'numeric|nullable',
             'bpi_ccard' => 'numeric|nullable',

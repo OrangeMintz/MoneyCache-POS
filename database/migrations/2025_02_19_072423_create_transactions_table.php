@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('cashier');
-            // $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            // $table->string('cashier');
+            $table->foreignId('cashier')->constrained('users')->onDelete('cascade');
             $table->string('time');
             $table->decimal('cash', 10, 2)->nullable();
             $table->decimal('check', 10, 2)->nullable();
