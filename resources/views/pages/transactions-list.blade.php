@@ -35,11 +35,8 @@
     </div>
 </main>
 
-
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
-
-
 
 <script>
     // Formatting function for row details - modify as you need
@@ -122,14 +119,11 @@
 
             {
                 data: 'id',
-                // <button class="delete-btn px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600" data-id="">Delete</button>
-                // <button class="delete-btn px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600" onclick="return confirmation(event)" data-id="${data}">Delete</button>
                 render: function(data, type, row) {
                     return `
                     <div style="display: flex; gap: 0.5rem; justify-content: center;">
-                        <button data-modal-target="crud-modal"  class="w-20 px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600" 
+                        <button data-modal-target="crud-modal"  class="w-20 px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600"
                             onclick="openModal('${data}')"
-                            data-id="${data}"
                             data-modal-toggle="crud-modal">Edit</button>
                         <form method="POST" class="delete-form" action="/transactions/${data}" onsubmit="return confirmation(event)">
                             @csrf
@@ -162,6 +156,7 @@
     });
 </script>
 
+{{-- DELETE FUNCTIONS --}}
 <script>
     document.querySelectorAll('.delete-form').forEach(form => {
     let transactionId = "${data}";
@@ -188,10 +183,8 @@
     }
 </script>
 
-{{--  --}}
+{{-- CALCULATE TOTAL --}}
 <script>
-
-    
 // Function to open the modal
 function openModal(transactionId) {
     console.log("Opening modal for ID:", transactionId);
@@ -218,8 +211,48 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+</script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const tradeFields = [
+            "cash", "check", "bpi_ccard", "bpi_dcard", "metro_ccard",
+            "metro_dcard", "paymaya", "aub_ccard", "gcash",
+            "food_panda", "streetby", "grabfood", "gc_claimed_others", "gc_claimed_own"
+        ];
 
+        const nonTradeFields = [
+            "mm_rm", "mm_dm", "mm_km", "food_charge"
+        ];
 
+        function calculateTotal(fields) {
+            return fields.reduce((total, id) => {
+                const input = document.getElementById(id);
+                return total + (input && input.value ? parseFloat(input.value) : 0);
+            }, 0);
+        }
+
+        function updateTotals() {
+            const subTotalTrade = calculateTotal(tradeFields);
+            const subTotalNonTrade = calculateTotal(nonTradeFields);
+            const grandTotal = subTotalTrade + subTotalNonTrade;
+
+            document.getElementById("sub_total_trade").textContent =
+                `P ${subTotalTrade.toLocaleString('en-PH', { minimumFractionDigits: 2 })}`;
+            document.getElementById("sub_total_non_trade").textContent =
+                `P ${subTotalNonTrade.toLocaleString('en-PH', { minimumFractionDigits: 2 })}`;
+            document.getElementById("grand_total").textContent =
+                `P ${grandTotal.toLocaleString('en-PH', { minimumFractionDigits: 2 })}`;
+        }
+
+        [...tradeFields, ...nonTradeFields].forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                input.addEventListener("input", updateTotals);
+            }
+        });
+
+        updateTotals();
+    });
 </script>
 </body>

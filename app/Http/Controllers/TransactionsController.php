@@ -101,6 +101,11 @@ class TransactionsController extends Controller
         //
     }
 
+    public function populateEdit($id){
+        $transaction = Transactions::findOrFail($id);
+        return response()->json($transaction);
+    }
+
     public function update(Request $request, string $id)
     {
         $validated = $request->validate([

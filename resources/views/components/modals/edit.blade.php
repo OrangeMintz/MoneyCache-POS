@@ -6,7 +6,7 @@
           <!-- Modal header -->
           <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
               <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                  Update the Transaction
+                  UPDATE TRANSACTION
               </h3>
               <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
                   <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -17,13 +17,12 @@
           </div>
           <!-- Modal body -->
 
-
           <div class="bg-white p-4">
             <div class="container-transaction mx-auto">
 
                 {{-- First column for Cashier Form --}}
                 <div class="bg-white rounded-lg shadow-md">
-                    <form method="POST" action="{{ route('transaction.store') }}">
+                    <form method="POST" action="{{ route('transaction.update') }}">
                         @csrf
                         <!-- FIRST ROW -->
                         <h2 class="shadow-md font-semibold text-lg mb-4 p-4">Payment Details:</h2>
@@ -183,10 +182,10 @@
                                 <option value="PM">PM</option>
                             </select>
                         </div>
-                    </div>    
+                    </div>
                   <div class="flex items-center justify-start m-4">
 
-                  
+
                     <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                       Update
                     </button>
@@ -219,7 +218,46 @@
       </div>
 
   </div>
-</div> 
+</div>
+
+<script>
+    function openModal(transactionId) {
+        fetch(`/transaction/edit/${transactionId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    // Populate fields if data exists
+                    document.getElementById('cash').value = data.cash ?? '';
+                    document.getElementById('check').value = data.check ?? '';
+                    document.getElementById('bpi_ccard').value = data.bpi_ccard ?? '';
+                    document.getElementById('bpi_dcard').value = data.bpi_dcard ?? '';
+                    document.getElementById('metro_ccard').value = data.metro_ccard ?? '';
+                    document.getElementById('metro_dcard').value = data.metro_dcard ?? '';
+                    document.getElementById('paymaya').value = data.paymaya ?? '';
+                    document.getElementById('aub_ccard').value = data.aub_ccard ?? '';
+                    document.getElementById('gcash').value = data.gcash ?? '';
+                    document.getElementById('food_panda').value = data.food_panda ?? '';
+                    document.getElementById('streetby').value = data.streetby ?? '';
+                    document.getElementById('grabfood').value = data.grabfood ?? '';
+                    document.getElementById('gc_claimed_others').value = data.gc_claimed_others ?? '';
+                    document.getElementById('gc_claimed_own').value = data.gc_claimed_own ?? '';
+                    document.getElementById('mm_head').value = data.mm_head ?? '';
+                    document.getElementById('mm_commissary').value = data.mm_commissary ?? '';
+                    document.getElementById('mm_rm').value = data.mm_rm ?? '';
+                    document.getElementById('mm_dm').value = data.mm_dm ?? '';
+                    document.getElementById('mm_km').value = data.mm_km ?? '';
+                    document.getElementById('food_charge').value = data.food_charge ?? '';
+                    document.getElementById('z_reading_pos').value = data.z_reading_pos ?? '';
+                    document.getElementById('time').value = data.time ?? 'AM';
+                    document.getElementById('sub_total_trade').textContent = `P ${data.sub_total_trade ?? '0.00'}`;
+                    document.getElementById('sub_total_non_trade').textContent = `P ${data.sub_total_non_trade ?? '0.00'}`;
+                    document.getElementById('grand_total').textContent = `P ${data.grand_total ?? '0.00'}`;
+                    document.getElementById('crud-modal').classList.remove('hidden');
+                }
+            })
+            .catch(error => console.error('Error fetching transaction:', error));
+    }
+</script>
 
 {{-- edit modal toggle --}}
 <script>
