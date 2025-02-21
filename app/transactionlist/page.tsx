@@ -46,8 +46,6 @@ async function getData(): Promise<Payment[]> {
     setTimeout(() => {
       resolve([
         { id: "728ed52f", amount: 100, status: "pending", email: "m@example.com" },
-        { id: "728ed52z", amount: 100, status: "success", email: "d@example.com" },
-        { id: "728ed52m", amount: 100, status: "failed", email: "n@example.com" },
       ]);
     }, 2000) // Simulate API delay
   );
