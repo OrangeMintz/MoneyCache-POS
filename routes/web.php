@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\TransactionsGrossTotalController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CsvController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -35,5 +38,6 @@ Route::middleware('auth')->group(function () {
 
 });
 
+// Route::get('/pdf', [PDFController::class, 'pdf']);
 
 require __DIR__.'/auth.php';
