@@ -10,16 +10,39 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { MenuIcon } from "lucide-react";
-import { useState } from "react";
+import api from "../../utils/api";
+import { useEffect, useState } from "react";
 
 
 
 export default function DenseTable() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [date, setDate] = useState( () => {
+    const today = new Date().toISOString().split("T")[0];
+    return today;
+  })
 
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
   };
+
+
+  const hanldeDateChange = async (event: React.FormEvent) => {
+    event.preventDefault()
+    setDate(event.target.value)
+
+    console.log(event.target.value)
+  }
+
+  const fetchTotals = async () => {
+    try {
+        
+    } catch (error) {
+        console.error("Error fetching totals: ",error)
+    }
+  }
+
+
   return (
     <main className="min-h-screen ">
       <Navbar />
@@ -34,6 +57,12 @@ export default function DenseTable() {
         >
           Download
         </Button>
+
+
+        <div className="w-full">
+                <label className="block text-sm font-medium">Input date:</label>
+                <input value={date} type="date" name="bpi_dcard" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={hanldeDateChange}/>
+         </div>
       </div>
     <TableContainer component={Paper} className="mt-6 md:mr-6">
       <Table sx={{ minWidth: 650,  }} size="small" aria-label="a dense table">
