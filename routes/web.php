@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionsController;
+use App\Http\Controllers\TransactionsGrossTotalController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CsvController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,9 +24,22 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // TRANSACTIONS
-    Route::get('/transactions', [TransactionsController::class, 'index'])->name('transactions');
-    Route::get('/transactions-list', [TransactionsController::class, 'list'])->name('transactions.list');
+    Route::prefix('transaction')->group(function () {
+        Route::get('/', [TransactionsController::class, 'index'])->name('transaction');
+        Route::post('/', [TransactionsController::class, 'store'])->name('transaction.store');
+        Route::put('/{id}', [TransactionsController::class, 'update'])->name('transaction.update');
+        Route::get('/edit/{id}', [TransactionsController::class, 'populateEdit']);
+        Route::get('/gross/{type}', [TransactionsGrossTotalController::class, 'gross']);
+        Route::get('/net/{type}', [TransactionsGrossTotalController::class, 'net']);
+    });
+    Route::prefix('transactions')->group(function () {
+        Route::get('/', [TransactionsController::class, 'list'])->name('transactions');
+        Route::delete('/{id}', [TransactionsController::class, 'softDelete'])->name('transactions.softDelete');
+
+    });
 
 });
+
+// Route::get('/pdf', [PDFController::class, 'pdf']);
 
 require __DIR__.'/auth.php';

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -64,6 +65,27 @@ class AuthController extends Controller
             "status" => 0,
             "message" => "Invalid Credentials",
             "data" => null
+        ]);
+    }
+
+    public function getUser(Request $request){
+        $user = Auth::user();
+        return $user;
+    }
+
+    public function logout(Request $request){
+
+        $user = Auth::user();
+
+        $user->token()->revoke();
+
+        $refresh = DB::table('oauth_refresh_tokens')
+        ->where('access_token_id', $user->token()->id)
+        ->update(['revoked' => true]);
+
+        return response()->json([
+            "status" => 1,
+            "message" => "Logged Out Successfully",
         ]);
     }
 }
