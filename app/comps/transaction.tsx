@@ -1,7 +1,7 @@
 'use client';
-import api from "../../utils/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Toast from 'typescript-toastify';
+import api from "../../utils/api";
 
 type Cashier = {
   id: number;
@@ -16,8 +16,7 @@ type TransactionFormProps = {
     cashier: Cashier;
 }
 
-export default function CashierForm({cashier}:TransactionFormProps) {
-
+export default function CashierForm({cashier}: TransactionFormProps) {
     const [formData, setFormData] = useState({
         cashier: cashier.id,
         time: "AM",
@@ -41,23 +40,62 @@ export default function CashierForm({cashier}:TransactionFormProps) {
         mm_dm: null,
         food_charge: null,
         z_reading_pos: null,
-      });
+    });
 
-      const [disable, setDisable] = useState(false);
+    const [subtotalTradePOS, setSubtotalTradePOS] = useState(0);
+    const [subtotalNonTradePOS, setSubtotalNonTradePOS] = useState(0);
+    const [grandTotalPOS, setGrandTotalPOS] = useState(0);
 
-    const hanldeInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const [disable, setDisable] = useState(false);
+
+    // Calculate totals whenever formData changes
+    useEffect(() => {
+        const tradeFields = [
+            formData.cash,
+            formData.check,
+            formData.bpi_ccard,
+            formData.bpi_dcard,
+            formData.metro_ccard,
+            formData.metro_dcard,
+            formData.paymaya,
+            formData.aub_ccard,
+            formData.gcash,
+            formData.food_panda,
+            formData.streetby,
+            formData.grabfood,
+            formData.gc_claimed_others,
+            formData.gc_claimed_own,    
+        ];
+
+        const nonTradeFields = [
+            formData.mm_head,
+            formData.mm_commissary,
+            formData.mm_rm,
+            formData.mm_dm,
+            formData.food_charge,
+        ];
+
+        const tradeTotal = tradeFields.reduce((sum, value) => sum + (value || 0), 0);
+        const nonTradeTotal = nonTradeFields.reduce((sum, value) => sum + (value || 0), 0);
+
+        setSubtotalTradePOS(tradeTotal);
+        setSubtotalNonTradePOS(nonTradeTotal);
+        setGrandTotalPOS(tradeTotal + nonTradeTotal);
+    }, [formData]);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
         setFormData({
             ...formData,
-            [e.target.name] : e.target.value
-        })
-    }
-    
+            [name]: parseFloat(value) || 0, // Ensure the value is a number
+        });
+    };
 
     const handleFormSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
         const token = localStorage.getItem('access_token');
-    
+
         try {
             const response = await api.post("/api/transactions", { ...formData }, {
                 headers: {
@@ -65,14 +103,14 @@ export default function CashierForm({cashier}:TransactionFormProps) {
                     Accept: "application/json",
                 },
             });
-    
+
             console.log("Store Data:", response.data);
-    
+
             if (response.data.status === 'success') {
-                setDisable(true)
+                setDisable(true);
                 new Toast({
                     position: "top-right",
-                    onClose: () => { window.location.reload() },
+                    onClose: () => { window.location.href = "/transactionlist"; },
                     toastMsg: "Successfully stored transaction!",
                     autoCloseTime: 2000,
                     canClose: true,
@@ -82,10 +120,10 @@ export default function CashierForm({cashier}:TransactionFormProps) {
                     type: "success",
                     theme: 'dark',
                 });
-            } 
+            }
         } catch (error: any) {
             console.error("Error storing transaction:", error);
-    
+
             let errorMessage = "An unexpected error occurred!";
             if (error.response) {
                 errorMessage = error.response.data.message || "Failed to store transaction!";
@@ -94,7 +132,7 @@ export default function CashierForm({cashier}:TransactionFormProps) {
             } else {
                 errorMessage = error.message;
             }
-    
+
             new Toast({
                 position: "top-right",
                 toastMsg: errorMessage,
@@ -108,168 +146,163 @@ export default function CashierForm({cashier}:TransactionFormProps) {
             });
         }
     };
-    
-
-    
-    
 
     return (
-        <main className="font-sans bg-gray-100 p-6 text-black">
-            <div className="bg-white p-4">
-                
-                <div className="container mx-auto">
+        <main className="bg-gray-100 p-6 text-black">
+            <div className="relative bg-white p-4 w-full">
+                <div className="flex flex-col lg:flex-row gap-6 w-full">
+                    {/* Form Container */}
+                    <div className="flex-1">
+                        <form method="POST" className="bg-white rounded-lg shadow-md p-4 w-full" onSubmit={handleFormSubmit}>
+                                      <div className="grid md:grid-cols-3 gap-3">
+                                            {/* Shift Time Section */}
+                                            <div className="bg-white rounded-lg shadow-md p-2">
+    <h1 className="font-semibold text-xl mb-2">SHIFT TIME:</h1>
+    <div className="w-full mb-1">
+        <label className="block text-sm font-medium">Cashier&apos;s Name:</label>
+        <input type="text" className="w-full p-1 border border-gray-300 rounded-md" name="cashier" disabled value={cashier.name} />
+    </div>
+    <div className="w-full">
+        <label className="block text-sm font-medium">Shift Time:</label>
+        <select className="w-full p-1 border border-gray-300 rounded-md" name="time" onChange={handleInputChange}>
+            <option value="AM">AM</option>
+            <option value="MID">MID</option>
+            <option value="PM">PM</option>
+        </select>
+    </div>
+</div>
+
+{/* Summary Section */}
+<div className="bg-white rounded-lg shadow-md p-2">
+    <h2 className="font-semibold text-xl mb-2">Summary:</h2>
+    <div className="w-full">
+        <div className="mb-1">
+            <label className="block text-sm font-bold">Subtotal Trade POS:</label>
+            <p className="text-md w-full py-1 border-gray-300 rounded-md">
+                P {subtotalTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </p>
+        </div>
+        <div className="mb-1">
+            <label className="block text-sm font-bold">Subtotal Non-Trade POS:</label>
+            <p className="text-md w-full py-1 border-gray-300 rounded-md">
+                P {subtotalNonTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </p>
+        </div>
+        <div className="mb-1">
+            <label className="block text-sm font-bold">GRAND TOTAL POS:</label>
+            <p className="text-md w-full py-1 border-gray-300 rounded-md">
+                P {grandTotalPOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </p>
+        </div>
+    </div>
+</div>
+
+                                            {/* MM Details Section */}
+                                            <div className="bg-white shadow-md p-6">
+                                                <h2 className="font-semibold text-3xl mb-4">MM Details:</h2>
+                                                <div className="grid md:grid-cols-2 gap-4">
+                                                    <div className="w-full">
+                                                        <label className="block text-sm font-medium">MM-HEAD OFFICE:</label>
+                                                        <input type="text" className="w-full p-3 border border-gray-300 rounded-md" name="mm_head" onChange={handleInputChange}/>
+                                                    </div>
+                                                    <div className="w-full">
+                                                        <label className="block text-sm font-medium">MM-COMMISSARY:</label>
+                                                        <input type="text" className="w-full p-3 border border-gray-300 rounded-md"  name="mm_commissary" onChange={handleInputChange}/>
+                                                    </div>
+                                                    <div className="w-full">
+                                                        <label className="block text-sm font-medium">MM-RM:</label>
+                                                        <input type="text" className="w-full p-3 border border-gray-300 rounded-md"  name="mm_rm" onChange={handleInputChange}/>
+                                                    </div>
+                                                    <div className="w-full">
+                                                        <label className="block text-sm font-medium">MM-DM:</label>
+                                                        <input type="text" className="w-full p-3 border border-gray-300 rounded-md" name="mm_dm" onChange={handleInputChange}/>
+                                                    </div>
+                                                    <div className="w-full">
+                                                        <label className="block text-sm font-medium">MM-KM:</label>
+                                                        <input type="text" className="w-full p-3 border border-gray-300 rounded-md" name="mm_km" onChange={handleInputChange}/>
+                                                    </div>
+                                                    <div className="w-full">
+                                                        <label className="block text-sm font-medium">FOOD CHARGE:</label>
+                                                        <input type="text" className="w-full p-3 border border-gray-300 rounded-md"  name="food_charge" onChange={handleInputChange}/>
+                                                    </div>
+                                                </div>
+                                                <div className="grid md:grid-cols-2 gap-4 mt-4">
+                                            <div className="border ">
+                                                <div className="bg-white shadow-md p-4">
+                                                    <label className="block text-sm font-medium">Z READING POS:</label>
+                                                    <input type="text" className="w-full p-4 border border-gray-300 rounded-md" name="z_reading_pos" onChange={handleInputChange} />
+                                                </div>
+                                                <button type="submit" className="py-3 px-[109px] bg-green-600 mt-2 text-white rounded-md hover:bg-green-500 transition" disabled={disable}>
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        </div>
+                                            </div>
+                                        </div>
 
 
-                    {/* payment Details ni */}
-                    <form method="POST" className="bg-white rounded-lg shadow-md p-4" onSubmit={handleFormSubmit}>
-                    <div className="grid grid-cols-1 gap-4 p-4 mb-8">
-                    <h2 className="shadow-md font-semibold text-lg mb-4 p-4">Shift Time:</h2>
-                            <div className="w-full">
-                                <label className="block text-sm font-medium">Cashier&apos;s Name:</label>
-                                <input type="text" className="w-full p-2 border border-gray-300 rounded-md" name="cashier" disabled value={cashier.name} />
-                            </div>
-                            <div className="w-full">
-                                <label className="block text-sm font-medium">Shift Time:</label>
-                                <select className="w-full p-2 border  border-gray-300 rounded-md" name="time" onChange={hanldeInputChange}>
-                                    <option value="AM">AM</option>
-                                    <option value="MID">MID</option>
-                                    <option value="PM">PM</option>
-                                </select>
-                            </div>
-                        </div>
-                        <h2 className="shadow-md font-semibold text-lg mb-4 p-4">Payment Methods:</h2>
-                        <div className="bg-white mb-4 shadow-md grid md:grid-cols-3 sm:grid-cols-2 gap-4 p-4">
-                           
-                            <div className="w-full">
-                                <label className="block text-sm font-medium">Cash:</label>
-                                <input type="number" name="cash" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={hanldeInputChange}/>
-                            </div>
 
-                            <div className="w-full">
-                                <label className="block text-sm font-medium">Check:</label>
-                                <input type="number"  name="check" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={hanldeInputChange} />
-                            </div>
-
-                            <div className="w-full">
-                                <label className="block text-sm font-medium">BPI Credit Card:</label>
-                                <input type="number" name="bpi_ccard" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={hanldeInputChange} />
-                            </div>
-
-                            <div className="w-full">
-                                <label className="block text-sm font-medium">BPI Debit Card:</label>
-                                <input type="number" name="bpi_dcard" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={hanldeInputChange} />
-                            </div>
-
-                            <div className="w-full">
-                                <label className="block text-sm font-medium">Metro Credit Card:</label>
-                                <input type="number" name="metro_ccard" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={hanldeInputChange}/>
-                            </div>
-
-                            <div className="w-full">
-                                <label className="block text-sm font-medium">Metro Debit Card:</label>
-                                <input type="number" name="metro_dcard" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={hanldeInputChange}/>
-                            </div>
-
-                            <div className="w-full">
-                                <label className="block text-sm font-medium">Pay Maya:</label>
-                                <input type="number" name="paymaya" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={hanldeInputChange}/>
-                            </div>
-
-                            <div className="w-full">
-                                <label className="block text-sm font-medium">AUB Credit Card:</label>
-                                <input type="number" name="aub_ccard" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={hanldeInputChange}/>
-                            </div>
-
-                            <div className="w-full">
-                                <label className="block text-sm font-medium">GCash:</label>
-                                <input type="number" name="gcash" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={hanldeInputChange}/>
-                            </div>
-
-                            <div className="w-full">
-                                <label className="block text-sm font-medium">Food Panda:</label>
-                                <input type="number" name="food_panda" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={hanldeInputChange}/>
-                            </div>
-
-                            <div className="w-full">
-                                <label className="block text-sm font-medium">StreetBy:</label>
-                                <input type="number" name="streetby" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={hanldeInputChange}/>
-                            </div>
-
-                            <div className="w-full">
-                                <label className="block text-sm font-medium">Grab Food:</label>
-                                <input type="number" name="grabfood" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={hanldeInputChange}/>
-                            </div>
-
-                            <div className="w-full">
-                                <label className="block text-sm font-medium">GC Claimed (Others):</label>
-                                <input type="number" name="gc_claimed_others" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={hanldeInputChange}/>
-                            </div>
-
-                            <div className="w-full">
-                                <label className="block text-sm font-medium">GC Claimed (OWN):</label>
-                                <input type="number" name="gc_claimed_own" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={hanldeInputChange}/>
-                            </div>
-                        </div>
-
-                        <h2 className="shadow-md font-semibold text-lg mb-4 p-4">MM Details:</h2>
-                            <div className="bg-white mb-4 shadow-md p-4 grid md:grid-cols-2 gap-4">
+                            <h2 className="shadow-md font-semibold text-3xl mb-4 p-4">PAYMENT METHODS:</h2>
+                            <div className="bg-white mb-4 shadow-md grid md:grid-cols-3 sm:grid-cols-2 gap-4 p-4">
                                 <div className="w-full">
-                                    <label className="block text-sm font-medium">MM-HEAD OFFICE:</label>
-                                    <input type="text" className="w-full p-3 border  border-gray-300 rounded-md" name="mm_head" onChange={hanldeInputChange}/>
+                                    <label className="block text-sm font-medium">Cash:</label>
+                                    <input type="number" name="cash" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={handleInputChange}/>
                                 </div>
-
                                 <div className="w-full">
-                                    <label className="block text-sm font-medium">MM-COMMISSARY:</label>
-                                    <input type="text" className="w-full p-3 border border-gray-300 rounded-md"  name="mm_commissary" onChange={hanldeInputChange}/>
+                                    <label className="block text-sm font-medium">Check:</label>
+                                    <input type="number"  name="check" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={handleInputChange} />
                                 </div>
-
                                 <div className="w-full">
-                                    <label className="block text-sm font-medium">MM-RM:</label>
-                                    <input type="text" className="w-full p-3 border border-gray-300 rounded-md"  name="mm_rm" onChange={hanldeInputChange}/>
+                                    <label className="block text-sm font-medium">BPI Credit Card:</label>
+                                    <input type="number" name="bpi_ccard" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={handleInputChange} />
                                 </div>
-
                                 <div className="w-full">
-                                    <label className="block text-sm font-medium">MM-DM:</label>
-                                    <input type="text" className="w-full p-3 border border-gray-300 rounded-md" name="mm_dm" onChange={hanldeInputChange}/>
+                                    <label className="block text-sm font-medium">BPI Debit Card:</label>
+                                    <input type="number" name="bpi_dcard" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={handleInputChange} />
                                 </div>
-
                                 <div className="w-full">
-                                    <label className="block text-sm font-medium">MM-KM:</label>
-                                    <input type="text" className="w-full p-3 border border-gray-300 rounded-md" name="mm_km" onChange={hanldeInputChange}/>
+                                    <label className="block text-sm font-medium">Metro Credit Card:</label>
+                                    <input type="number" name="metro_ccard" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={handleInputChange}/>
                                 </div>
-
                                 <div className="w-full">
-                                    <label className="block text-sm font-medium">FOOD CHARGE:</label>
-                                    <input type="text" className="w-full p-3 border border-gray-300 rounded-md"  name="food_charge"onChange={hanldeInputChange}/>
+                                    <label className="block text-sm font-medium">Metro Debit Card:</label>
+                                    <input type="number" name="metro_dcard" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={handleInputChange}/>
+                                </div>
+                                <div className="w-full">
+                                    <label className="block text-sm font-medium">Pay Maya:</label>
+                                    <input type="number" name="paymaya" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={handleInputChange}/>
+                                </div>
+                                <div className="w-full">
+                                    <label className="block text-sm font-medium">AUB Credit Card:</label>
+                                    <input type="number" name="aub_ccard" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={handleInputChange}/>
+                                </div>
+                                <div className="w-full">
+                                    <label className="block text-sm font-medium">GCash:</label>
+                                    <input type="number" name="gcash" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={handleInputChange}/>
+                                </div>
+                                <div className="w-full">
+                                    <label className="block text-sm font-medium">Food Panda:</label>
+                                    <input type="number" name="food_panda" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={handleInputChange}/>
+                                </div>
+                                <div className="w-full">
+                                    <label className="block text-sm font-medium">StreetBy:</label>
+                                    <input type="number" name="streetby" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={handleInputChange}/>
+                                </div>
+                                <div className="w-full">
+                                    <label className="block text-sm font-medium">Grab Food:</label>
+                                    <input type="number" name="grabfood" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={handleInputChange}/>
+                                </div>
+                                <div className="w-full">
+                                    <label className="block text-sm font-medium">GC Claimed (Others):</label>
+                                    <input type="number" name="gc_claimed_others" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={handleInputChange}/>
+                                </div>
+                                <div className="w-full">
+                                    <label className="block text-sm font-medium">GC Claimed (OWN):</label>
+                                    <input type="number" name="gc_claimed_own" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={handleInputChange}/>
                                 </div>
                             </div>
 
-
-                        <h2 className="shadow-md font-semibold text-lg mb-4 p-4">Z Reading POS:</h2>
-                        <div className="bg-white mb-4 shadow-md p-4">
-                            <label className="block text-sm font-medium">Z READING POS:</label>
-                            <input type="text" className="w-full p-3 border border-gray-300 rounded-md" name="z_reading_pos" onChange={hanldeInputChange} />
-                        </div>
-
-                        <div className="flex items-center justify-start m-4">
-                            <button type="submit" className="py-3 px-6 bg-green-600 text-white rounded-md hover:bg-green-500 transition" disabled={disable}>
-                                Submit
-                            </button>
-                        </div>
-                    </form>
-                        {/* End payment Details ni */}
-
-
-                    <div className="bg-white rounded-lg shadow-md p-4 mt-6">
-                        <h2 className="shadow-md font-semibold text-lg p-4 mb-4">Summary:</h2>
-                        <div className="w-full p-4">
-                            {["Subtotal Trade POS", "Subtotal Non-Trade POS", "GRAND TOTAL POS"].map((label, index) => (
-                                <div key={index} className="mb-2">
-                                    <label className="block text-sm font-bold">{label}:</label>
-                                    <p className="text-md w-full py-2 border-gray-300 rounded-md">P 0.00</p>
-                                </div>
-                            ))}
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -10,8 +10,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { MenuIcon } from "lucide-react";
-import api from "../../utils/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 
 
@@ -60,20 +59,20 @@ export default function DenseTable() {
 
 
         <div className="w-full">
-                <label className="block text-sm font-medium">Input date:</label>
-                <input value={date} type="date" name="bpi_dcard" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={hanldeDateChange}/>
+                <label className="block text-sm font-medium ml-6">Input date:</label>
+                <input value={date} type="date" name="bpi_dcard" className="w-15 ml-6 p-2 border border-gray-300 rounded-md" step="0.01" onChange={hanldeDateChange}/>
          </div>
       </div>
     <TableContainer component={Paper} className="mt-6 md:mr-6">
-      <Table sx={{ minWidth: 650,  }} size="small" aria-label="a dense table">
+      <Table sx={{ minWidth: 650,  }} size="large" aria-label="a dense table">
         <TableHead>
           <TableRow  sx={{ '&:last-child td, &:last-child th': { border: 1 } }}>
             <TableCell><strong>PARTICULARS</strong></TableCell>
-            <TableCell align="center">AM</TableCell>
-            <TableCell align="center">MID</TableCell>
-            <TableCell align="center">PM</TableCell>
-            <TableCell align="center">GROSS TOTAL</TableCell>
-            <TableCell align="center">NET TOTAL</TableCell>
+            <TableCell align="center"><strong>AM</strong></TableCell>
+            <TableCell align="center"><strong>MID</strong></TableCell>
+            <TableCell align="center"><strong>PM</strong></TableCell>
+            <TableCell align="center"><strong>GROSS TOTAL</strong></TableCell>
+            <TableCell align="center"><strong>NET TOTAL</strong></TableCell>
           </TableRow>
         </TableHead>
 

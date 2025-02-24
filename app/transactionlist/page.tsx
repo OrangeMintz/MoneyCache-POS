@@ -34,7 +34,6 @@ async function fetchData() {
     return [];
   }
 }
-
 function Row({ row }) {
   const [open, setOpen] = useState(false);
   
