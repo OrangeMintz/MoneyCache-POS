@@ -112,42 +112,18 @@ export default function DenseTable() {
             const amTransact = transactions.find((d) => d.time === "AM");
             const midTransact = transactions.find((d) => d.time === "MID");
             const pmTransact = transactions.find((d) => d.time === "PM");
-
-            console.log(totals)
         
             return (
-                <tr key={key}>
+                <tr key={key} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
                 <td className="border border-gray-300 p-2 font-bold">{label}</td>
-                <td className="border border-gray-300 p-2">{amTransact ? amTransact[key] : ""}</td>
-                <td className="border border-gray-300 p-2">{midTransact ? midTransact[key] : ""}</td>
-                <td className="border border-gray-300 p-2">{pmTransact ? pmTransact[key] : ""}</td>
-                <td className="border border-gray-300 p-2">{totals[key] ? totals[key].gross : ""}</td>
-                <td className="border border-gray-300 p-2"></td>
+                <td className="border border-gray-300 p-2">{key == "cashier" ? (amTransact ? amTransact['cashier'].name : "") : (amTransact ? amTransact[key] : "")}</td>
+                <td className="border border-gray-300 p-2">{key == "cashier" ? (midTransact ? midTransact['cashier'].name : "") : (midTransact ? midTransact[key] : "")}</td>
+                <td className="border border-gray-300 p-2">{key == "cashier" ? (pmTransact ? pmTransact['cashier'].name : "") : (pmTransact ? pmTransact[key] : "")}</td>
+                <td className="border border-gray-300 p-2">{totals[key] ? (totals[key].gross || totals[key].gross != 0) : ""}</td>
+                <td className="border border-gray-300 p-2">{totals[key] ? (totals[key].net || totals[key].net != 0) : ""}</td>
                 </tr>
             );
         })}
-
-            
-            <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Microsoft Surface Pro
-                </th>
-                <td className="px-6 py-4">
-                    White
-                </td>
-                <td className="px-6 py-4">
-                    Laptop PC
-                </td>
-                <td className="px-6 py-4">
-                    $1999
-                </td>
-                <td className="px-6 py-4">
-                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-                <td className="px-6 py-4">
-                    $1999
-                </td>
-            </tr>           
             
         </tbody>
     </table>

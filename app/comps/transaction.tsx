@@ -84,12 +84,11 @@ export default function CashierForm({cashier}: TransactionFormProps) {
     }, [formData]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
         setFormData({
             ...formData,
-            [name]: parseFloat(value) || 0, // Ensure the value is a number
-        });
-    };
+            [e.target.name] : e.target.value
+        })
+    }
 
     const handleFormSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
