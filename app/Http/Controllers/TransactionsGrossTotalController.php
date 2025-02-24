@@ -118,6 +118,56 @@ class TransactionsGrossTotalController extends Controller
         ]);
     }
 
+    public function getGrossNetByDate(Request $request)
+    {
+        $request->validate([
+            'date' => 'required|date',
+            'type' => 'required|string'
+        ]);
+    
+        $date = $request->input('date');
+        $type = $request->type;
+        $particulars = Config::get('transactions.valid_columns');
+        $totals = [];
+    
+        foreach ($particulars as $particular) {
+            // Bug fix
+            $safeColumn = "`$particular`";
+
+            switch ($type) {
+                case 'gross':
+                        $totals[$particular] = Transactions::whereDate('created_at', $date)
+                        ->sum($particular);
+                    break;
+
+                case 'net':
+                        $fees = Config::get('transactions.fees');
+                        $percent = $fees[$particular];
+
+                        $compute = 1 - ($percent/100);
+                        $totals[$particular] = Transactions::whereDate('created_at', $date)
+                        ->sum(DB::raw("$safeColumn * $compute"));
+                    break;
+                
+                default:
+                     return response()->json([
+                        "status" => 0,
+                        "message" => "Invalid Type!"
+                    ]);
+                    break;
+            }
+           
+        }
+    
+        return response()->json([
+            "status" => 1,
+            "date" => $date,
+            "type" => $type,
+            "totals" => $totals
+        ]);
+    }
+    
+
 
     
 }

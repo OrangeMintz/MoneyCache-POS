@@ -180,4 +180,20 @@ class TransactionsController extends Controller
         ]);
     }
 
+    public function getByDate(Request $request){
+        $request->validate([
+            "date" => "required|date|date_format:Y-m-d",
+        ]);
+
+        $date = $request->date;
+
+        $transactions = Transactions::with('cashier')->whereDate('created_at', $date)->get();
+
+        return response()->json([
+            "status" => 1,
+            "message" => "Here are the transactions for: ". $date,
+            "transactions" => $transactions,
+        ]);
+    }
+
 }

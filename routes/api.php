@@ -19,6 +19,8 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('/net/{type}', [TransactionsGrossTotalController::class, 'net']);
         Route::get('/gross-all', [TransactionsGrossTotalController::class, 'grossAll']);
         Route::get('/net-all', [TransactionsGrossTotalController::class, 'netAll']);
+        Route::post('/get-by-date', [TransactionsController::class, 'getByDate']);
+        Route::post('/get-by-date/totals', [TransactionsGrossTotalController::class, 'getGrossNetByDate']);
         Route::post('/csv', [CsvController::class, 'csv']);
     });
     Route::prefix('transaction')->group(function () {
