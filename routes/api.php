@@ -20,6 +20,7 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('/gross-all', [TransactionsGrossTotalController::class, 'grossAll']);
         Route::get('/net-all', [TransactionsGrossTotalController::class, 'netAll']);
         Route::post('/csv', [CsvController::class, 'csv']);
+        Route::delete('/{id}', [TransactionsController::class, 'softDelete'])->name('transactions.softDelete');
     });
     Route::prefix('transaction')->group(function () {
     Route::post('/', [TransactionsController::class, 'store'])->name('api.transaction.store');

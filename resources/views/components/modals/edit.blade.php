@@ -22,7 +22,6 @@
 
                 {{-- First column for Cashier Form --}}
                 <div class="bg-white rounded-lg shadow-md">
-                    {{-- <form method="POST" action="route('transaction.update', $id)" id="editForm"> --}}
                     {{-- <form method="POST" action="{{ route('transaction.update', $id) }}" id="editForm"> --}}
                     <form method="POST" action="" id="editForm">
                     @csrf
@@ -221,7 +220,7 @@
   </div>
 </div>
 
-{{-- <script>
+<script>
     function openModal(transactionId) {
         fetch(`/transaction/edit/${transactionId}`)
             .then(response => response.json())
@@ -258,11 +257,11 @@
             })
             .catch(error => console.error('Error fetching transaction:', error));
     }
-</script> --}}
+</script>
 
 {{-- edit modal toggle --}}
 
-{{-- <script>
+<script>
   document.addEventListener("DOMContentLoaded", function () {
       document.querySelectorAll("[data-modal-toggle]").forEach(button => {
           button.addEventListener("click", function () {
@@ -275,4 +274,4 @@
           });
       });
   });
-</script> --}}
+</script>
