@@ -1,5 +1,6 @@
+'use client';
 export const particulars = [
-    { key: "cashier_name", label: "Cashier’s Name" },
+    // { key: "cashier", label: "Cashier’s Name" },
     { key: "cash", label: "Cash" },
     { key: "check", label: "Check" },
     { key: "bpi_ccard", label: "BPI Credit Card" },

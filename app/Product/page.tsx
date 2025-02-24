@@ -40,7 +40,6 @@ export default function DenseTable() {
         )
 
         const transactions = response.data.transactions;
-        console.log(transactions[1])
         setTransactions(transactions)
 
         if(transactions)
@@ -108,10 +107,25 @@ export default function DenseTable() {
             </tr>
         </thead>
         <tbody>
-        {/* {transactions.flatMap((transaction) => (
-                (transaction)
-            ) 
-        )} */}
+        {particulars.map(({ key, label }) => {
+            // SORT BY TIME
+            const amTransact = transactions.find((d) => d.time === "AM");
+            const midTransact = transactions.find((d) => d.time === "MID");
+            const pmTransact = transactions.find((d) => d.time === "PM");
+
+            console.log(totals)
+        
+            return (
+                <tr key={key}>
+                <td className="border border-gray-300 p-2 font-bold">{label}</td>
+                <td className="border border-gray-300 p-2">{amTransact ? amTransact[key] : ""}</td>
+                <td className="border border-gray-300 p-2">{midTransact ? midTransact[key] : ""}</td>
+                <td className="border border-gray-300 p-2">{pmTransact ? pmTransact[key] : ""}</td>
+                <td className="border border-gray-300 p-2">{totals[key] ? totals[key].gross : ""}</td>
+                <td className="border border-gray-300 p-2"></td>
+                </tr>
+            );
+        })}
 
             
             <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
