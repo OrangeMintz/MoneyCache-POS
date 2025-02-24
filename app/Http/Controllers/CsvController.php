@@ -9,13 +9,13 @@ use Illuminate\Support\Facades\Config;
 
 class CsvController extends Controller
 {
-    public function csv(){
+    public function csv(Request $request){
 
-        // $request->validate([
-        //     "date" => "required|date|date_format:Y-m-d"
-        // ]);
+        $request->validate([
+            "date" => "required|date"
+        ]);
 
-        $date = "2025-02-20";
+        $date = $request->input('date');
 
         $transactions = Transactions::whereDate('created_at', $date)->get();
         $fees = Config::get('transactions.fees');
