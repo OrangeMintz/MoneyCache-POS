@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('transaction')->group(function () {
         Route::get('/', [TransactionsController::class, 'index'])->name('transaction');
         Route::post('/', [TransactionsController::class, 'store'])->name('transaction.store');
-        Route::put('/', [TransactionsController::class, 'update'])->name('transaction.update');
+        Route::put('/{id}', [TransactionsController::class, 'update'])->name('transaction.update');
         Route::get('/edit/{id}', [TransactionsController::class, 'populateEdit']);
         Route::get('/gross/{type}', [TransactionsGrossTotalController::class, 'gross']);
         Route::get('/net/{type}', [TransactionsGrossTotalController::class, 'net']);
