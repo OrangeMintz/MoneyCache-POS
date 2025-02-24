@@ -16,10 +16,9 @@ export default function Dashboard() {
         const token = localStorage.getItem("access_token");
   
         if (!token) {
-            router.push('/')
-            console.error("No access token found. Please log in.");
-            setLoading(false);
-            return;
+            // console.error("No access token found. Please log in.");
+            router.push('/');
+            return; //
         }
   
         try {
