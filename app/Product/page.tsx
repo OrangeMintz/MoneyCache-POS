@@ -1,21 +1,11 @@
 
 "use client"
 import Navbar from "@/app/comps/header";
-import { Button } from "@mui/material";
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import { MenuIcon } from "lucide-react";
-import { useState } from "react";
-
-
+import { useEffect, useState } from "react";
+import api from "../../utils/api";
+import {particulars} from "../../utils/particulars";
 
 export default function DenseTable() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [totals, setTotals] = useState([]);
   const [date, setDate] = useState( () => {
@@ -37,7 +27,7 @@ export default function DenseTable() {
 
         if (!token) {
             console.error("No access token found. Please log in.");
-            return; //
+            return; 
         }
 
         const response = await api.post('/api/transactions/get-by-date',{date: date},
@@ -50,11 +40,22 @@ export default function DenseTable() {
         )
 
         const transactions = response.data.transactions;
+        console.log(transactions[1])
         setTransactions(transactions)
 
-        // if(transactions){
+        if(transactions)
+        {
+            const totals = await api.post('/api/transactions/get-by-date/totals',{date: date},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: "application/json",
+                    }
+                }
+            )
 
-        // }
+            setTotals(totals.data.totals)
+        }
         
     } catch (error) {
         console.error("Error fetching totals: ",error)
@@ -64,7 +65,6 @@ export default function DenseTable() {
   useEffect(() => {
     fetchTotals();
   },[])
-
 
   return (
     <main className="min-h-screen ">
@@ -108,23 +108,12 @@ export default function DenseTable() {
             </tr>
         </thead>
         <tbody>
-            <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Apple MacBook Pro 17"
-                </th>
-                <td className="px-6 py-4">
-                    Silver
-                </td>
-                <td className="px-6 py-4">
-                    Laptop
-                </td>
-                <td className="px-6 py-4">
-                    $2999
-                </td>
-                <td className="px-6 py-4">
-                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-            </tr>
+        {/* {transactions.flatMap((transaction) => (
+                (transaction)
+            ) 
+        )} */}
+
+            
             <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     Microsoft Surface Pro
