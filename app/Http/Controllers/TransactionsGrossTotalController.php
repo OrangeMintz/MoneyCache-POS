@@ -119,53 +119,33 @@ class TransactionsGrossTotalController extends Controller
     }
 
     public function getGrossNetByDate(Request $request)
-    {
-        $request->validate([
-            'date' => 'required|date',
-            'type' => 'required|string'
-        ]);
-    
-        $date = $request->input('date');
-        $type = $request->type;
-        $particulars = Config::get('transactions.valid_columns');
-        $totals = [];
-    
-        foreach ($particulars as $particular) {
-            // Bug fix
-            $safeColumn = "`$particular`";
+{
+    $request->validate([
+        'date' => 'required|date'
+    ]);
 
-            switch ($type) {
-                case 'gross':
-                        $totals[$particular] = Transactions::whereDate('created_at', $date)
-                        ->sum($particular);
-                    break;
+    $date = $request->input('date');
+    $particulars = Config::get('transactions.valid_columns');
+    $fees = Config::get('transactions.fees');
+    $totals = [];
 
-                case 'net':
-                        $fees = Config::get('transactions.fees');
-                        $percent = $fees[$particular];
+    foreach ($particulars as $particular) {
+        $gross = Transactions::whereDate('created_at', $date)->sum($particular);
+        $compute = isset($fees[$particular]) ? 1 - ($fees[$particular] / 100) : 1;
+        $net = Transactions::whereDate('created_at', $date)->sum(DB::raw("`$particular` * $compute"));
 
-                        $compute = 1 - ($percent/100);
-                        $totals[$particular] = Transactions::whereDate('created_at', $date)
-                        ->sum(DB::raw("$safeColumn * $compute"));
-                    break;
-                
-                default:
-                     return response()->json([
-                        "status" => 0,
-                        "message" => "Invalid Type!"
-                    ]);
-                    break;
-            }
-           
-        }
-    
-        return response()->json([
-            "status" => 1,
-            "date" => $date,
-            "type" => $type,
-            "totals" => $totals
-        ]);
+        $totals[$particular] = [
+            'gross' => $gross,
+            'net' => $net
+        ];
     }
+
+    return response()->json([
+        "status" => 1,
+        "date" => $date,
+        "totals" => $totals
+    ]);
+}
     
 
 
