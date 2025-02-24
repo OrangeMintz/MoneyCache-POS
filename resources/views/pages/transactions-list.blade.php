@@ -13,6 +13,7 @@
                         <tr>
                             <th></th>
                             <th>Name</th>
+                            <th>Date</th>
                             <th>Time</th>
                             <th>Sub-Total</th>
                             <th>Sub-Total Non Trade</th>
@@ -93,6 +94,16 @@
             },
             {
                 data: 'cashier.name'
+
+            },
+                        {
+                data: 'created_at',
+                render: function(data, type, row) {
+                    if (!data) return '';
+                    let date = new Date(data);
+                    let options = { year: 'numeric', month: 'long', day: 'numeric' };
+                    return date.toLocaleDateString('en-US', options);
+                }
 
             },
             {
