@@ -62,6 +62,15 @@ class TransactionsController extends Controller
             'z_reading_pos' => 'numeric|nullable|min:0',
         ]);
 
+        // Check if a transaction already exists for the same user, time, and day
+        $existingTransaction = Transactions::where('cashier', $validated['cashier'])
+            ->where('time', $validated['time'])
+            ->whereDate('created_at', now()->toDateString())
+            ->exists();
+
+        if ($existingTransaction) {
+            return response()->json(['status' => 'error', 'message' => 'A transaction for this user and time already exists today.'], 422);
+        }
 
         // Compute subtotals
         $subtotal_trade =
@@ -86,10 +95,9 @@ class TransactionsController extends Controller
             'grand_total' => $grand_total,
         ]));
 
-        // return redirect()->back()->with('success', 'Transaction stored successfully.');
         return response()->json(['status' => 'success', 'message' => 'Transaction stored successfully.']);
-
     }
+
 
     public function show(string $id)
     {
