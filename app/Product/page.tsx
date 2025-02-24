@@ -16,15 +16,12 @@ import { useState } from "react";
 
 export default function DenseTable() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [transactions, setTransactions] = useState([]);
+  const [totals, setTotals] = useState([]);
   const [date, setDate] = useState( () => {
     const today = new Date().toISOString().split("T")[0];
     return today;
   })
-
-  const handleMenuToggle = () => {
-    setMenuOpen(!menuOpen);
-  };
-
 
   const hanldeDateChange = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -35,27 +32,48 @@ export default function DenseTable() {
 
   const fetchTotals = async () => {
     try {
+
+        const token = localStorage.getItem('access_token')
+
+        if (!token) {
+            console.error("No access token found. Please log in.");
+            return; //
+        }
+
+        const response = await api.post('/api/transactions/get-by-date',{date: date},
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                }
+            }
+        )
+
+        const transactions = response.data.transactions;
+        setTransactions(transactions)
+
+        // if(transactions){
+
+        // }
         
     } catch (error) {
         console.error("Error fetching totals: ",error)
     }
   }
 
+  useEffect(() => {
+    fetchTotals();
+  },[])
+
 
   return (
     <main className="min-h-screen ">
       <Navbar />
-      <div className="border  mr-6 ml-6">
+      <div className="-6 ml-6">
       <div className="flex justify-start mb-4 mt-6 px-4 md:px-6">
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<MenuIcon />}
-          onClick={handleMenuToggle}
-          className="flex items-center"
-        >
-          Download
-        </Button>
+        <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+            Button
+        </button>
 
 
         <div className="w-full">
@@ -63,272 +81,75 @@ export default function DenseTable() {
                 <input value={date} type="date" name="bpi_dcard" className="w-15 ml-6 p-2 border border-gray-300 rounded-md" step="0.01" onChange={hanldeDateChange}/>
          </div>
       </div>
-    <TableContainer component={Paper} className="mt-6 md:mr-6">
-      <Table sx={{ minWidth: 650,  }} size="large" aria-label="a dense table">
-        <TableHead>
-          <TableRow  sx={{ '&:last-child td, &:last-child th': { border: 1 } }}>
-            <TableCell><strong>PARTICULARS</strong></TableCell>
-            <TableCell align="center"><strong>AM</strong></TableCell>
-            <TableCell align="center"><strong>MID</strong></TableCell>
-            <TableCell align="center"><strong>PM</strong></TableCell>
-            <TableCell align="center"><strong>GROSS TOTAL</strong></TableCell>
-            <TableCell align="center"><strong>NET TOTAL</strong></TableCell>
-          </TableRow>
-        </TableHead>
+    
 
+<div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" className="px-6 py-3">
+                    Particulars
+                </th>
+                <th scope="col" className="px-6 py-3">
+                    AM
+                </th>
+                <th scope="col" className="px-6 py-3">
+                    MID
+                </th>
+                <th scope="col" className="px-6 py-3">
+                    PM
+                </th>
+                <th scope="col" className="px-6 py-3">
+                    Gross Total
+                </th>
+                <th scope="col" className="px-6 py-3">
+                    Net Total
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
+                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    Apple MacBook Pro 17"
+                </th>
+                <td className="px-6 py-4">
+                    Silver
+                </td>
+                <td className="px-6 py-4">
+                    Laptop
+                </td>
+                <td className="px-6 py-4">
+                    $2999
+                </td>
+                <td className="px-6 py-4">
+                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                </td>
+            </tr>
+            <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
+                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    Microsoft Surface Pro
+                </th>
+                <td className="px-6 py-4">
+                    White
+                </td>
+                <td className="px-6 py-4">
+                    Laptop PC
+                </td>
+                <td className="px-6 py-4">
+                    $1999
+                </td>
+                <td className="px-6 py-4">
+                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                </td>
+                <td className="px-6 py-4">
+                    $1999
+                </td>
+            </tr>           
+            
+        </tbody>
+    </table>
+</div>
 
-        <TableBody sx={{ '&:last-child td, &:last-child th': { border: 1 } }}>     
-        <TableRow>
-            <TableCell>Cashier&apos; s Name</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Cash</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Check</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>BPI Credit Card</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>BPI Debit Card</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Metro Credit Card</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Metro Debit Card</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Pay Maya</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>AUB Credit Card</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Gcash</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Food Panda</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Street By</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Grab Food</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>GC Claimed(Others)</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>GC Claimed(Owned)</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>A/R_________</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>A/R_________</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-          </TableRow>
-          <TableRow >
-            <TableCell><strong>SUB-TOTAL TRADE POS</strong></TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>MM-HEAD OFFICE</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            </TableRow>
-            <TableRow>
-            <TableCell>MM-COMISSARY</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            </TableRow>
-            <TableRow>
-            <TableCell>MM-________</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            </TableRow>
-            <TableRow>
-            <TableCell>MM-RM</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            </TableRow>
-            <TableRow>
-            <TableCell>MM-DM</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            </TableRow>
-            <TableRow>
-            <TableCell>MM-KM</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            </TableRow>
-            <TableRow>
-            <TableCell>FOOD CHARGE</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            </TableRow>
-          <TableRow>
-          <TableCell><strong>SUB-TOTAL NONTRADE POS</strong></TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            </TableRow>
-            <TableRow>
-            <TableCell><strong>GRAND TOTAL POS</strong></TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            </TableRow>
-            <TableRow>
-            <TableCell>Z READING POS</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            </TableRow>
-            <TableRow>
-            <TableCell></TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            </TableRow>
-            <TableRow>
-            <TableCell></TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            </TableRow>
-            <TableRow>
-            <TableCell><strong> <i>SHORT/OVER POS</i></strong></TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            <TableCell align="center">Amiel</TableCell>
-            </TableRow>
-        </TableBody>
-      </Table>
-    </TableContainer>
     </div>
     </main>
   );

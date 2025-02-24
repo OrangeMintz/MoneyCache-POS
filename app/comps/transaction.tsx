@@ -97,7 +97,7 @@ export default function CashierForm({cashier}: TransactionFormProps) {
         const token = localStorage.getItem('access_token');
 
         try {
-            const response = await api.post("/api/transactions", { ...formData }, {
+            const response = await api.post("/api/transaction", { ...formData }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     Accept: "application/json",
