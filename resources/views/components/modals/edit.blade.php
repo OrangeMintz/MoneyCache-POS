@@ -22,8 +22,10 @@
 
                 {{-- First column for Cashier Form --}}
                 <div class="bg-white rounded-lg shadow-md">
-                    <form method="POST" action="{{ route('transaction.update') }}">
-                        @csrf
+                    {{-- <form method="POST" action="{{ route('transaction.update', $id) }}" id="editForm"> --}}
+                    <form method="POST" action="" id="editForm">
+                    @csrf
+                    @method('PUT')
                         <!-- FIRST ROW -->
                         <h2 class="shadow-md font-semibold text-lg mb-4 p-4">Payment Details:</h2>
                         <div class="bg-white mb-4 shadow-md grid grid-cols-3 gap-2 justify-items-start p-4">
@@ -185,7 +187,6 @@
                     </div>
                   <div class="flex items-center justify-start m-4">
 
-
                     <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                       Update
                     </button>
@@ -216,7 +217,6 @@
             </div>
           </div>
       </div>
-
   </div>
 </div>
 
@@ -260,6 +260,7 @@
 </script>
 
 {{-- edit modal toggle --}}
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
       document.querySelectorAll("[data-modal-toggle]").forEach(button => {

@@ -21,15 +21,6 @@
                         </tr>
                     </thead>
                 </table>
-                {{-- <button data-modal-target="crud-modal" data-modal-toggle="crud-modal"
-                    class="w-20 px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600" type="button">
-                    Edit
-                </button> --}}
-                {{-- <button class="w-20 px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600"
-                    onclick="confirmation(event)">
-                    Delete
-                </button> --}}
-
             </div>
         </div>
     </div>
@@ -186,11 +177,49 @@
 {{-- CALCULATE TOTAL --}}
 <script>
 // Function to open the modal
-function openModal(transactionId) {
-    console.log("Opening modal for ID:", transactionId);
+
+function openModal(id) {
+    console.log("Opening modal for ID:", id);
     const modal = document.getElementById("crud-modal");
     modal.classList.remove("hidden");
     modal.classList.add("flex");
+
+    // Update form action dynamically
+    document.getElementById('editForm').action = `/transaction/${id}`;
+
+    // Fetch transaction data via AJAX
+    fetch(`/transaction/edit/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data) {
+                document.getElementById('cash').value = data.cash ?? '';
+                document.getElementById('check').value = data.check ?? '';
+                document.getElementById('bpi_ccard').value = data.bpi_ccard ?? '';
+                document.getElementById('bpi_dcard').value = data.bpi_dcard ?? '';
+                document.getElementById('metro_ccard').value = data.metro_ccard ?? '';
+                document.getElementById('metro_dcard').value = data.metro_dcard ?? '';
+                document.getElementById('paymaya').value = data.paymaya ?? '';
+                document.getElementById('aub_ccard').value = data.aub_ccard ?? '';
+                document.getElementById('gcash').value = data.gcash ?? '';
+                document.getElementById('food_panda').value = data.food_panda ?? '';
+                document.getElementById('streetby').value = data.streetby ?? '';
+                document.getElementById('grabfood').value = data.grabfood ?? '';
+                document.getElementById('gc_claimed_others').value = data.gc_claimed_others ?? '';
+                document.getElementById('gc_claimed_own').value = data.gc_claimed_own ?? '';
+                document.getElementById('mm_head').value = data.mm_head ?? '';
+                document.getElementById('mm_commissary').value = data.mm_commissary ?? '';
+                document.getElementById('mm_rm').value = data.mm_rm ?? '';
+                document.getElementById('mm_dm').value = data.mm_dm ?? '';
+                document.getElementById('mm_km').value = data.mm_km ?? '';
+                document.getElementById('food_charge').value = data.food_charge ?? '';
+                document.getElementById('z_reading_pos').value = data.z_reading_pos ?? '';
+                document.getElementById('time').value = data.time ?? 'AM';
+                document.getElementById('sub_total_trade').textContent = `P ${data.sub_total_trade ?? '0.00'}`;
+                document.getElementById('sub_total_non_trade').textContent = `P ${data.sub_total_non_trade ?? '0.00'}`;
+                document.getElementById('grand_total').textContent = `P ${data.grand_total ?? '0.00'}`;
+            }
+        })
+        .catch(error => console.error('Error fetching transaction:', error));
 }
 
 // Function to close the modal when clicking outside or close button
