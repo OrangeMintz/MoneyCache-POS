@@ -11,10 +11,16 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/user', [AuthController::class, 'getUser']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
+    // Specific Transactions API
+    Route::prefix('transaction')->group(function () {
+    Route::post('/', [TransactionsController::class, 'store'])->name('api.transaction.store');
+    Route::put('/{id}', [TransactionsController::class, 'update'])->name('api.transaction.update');
+    Route::delete('/{id}', [TransactionsController::class, 'softDelete'])->name('api.transactions.softDelete');
+    });
+
     // Transactions/Totals API
     Route::prefix('transactions')->group(function () {
         Route::get('/', [TransactionsController::class, 'retrieve']);
-        // Route::post('/', [TransactionsController::class, 'store']);
         Route::get('/gross/{type}', [TransactionsGrossTotalController::class, 'gross']);
         Route::get('/net/{type}', [TransactionsGrossTotalController::class, 'net']);
         Route::get('/gross-all', [TransactionsGrossTotalController::class, 'grossAll']);
@@ -23,15 +29,8 @@ Route::middleware(['auth:api'])->group(function () {
         Route::post('/get-by-date/totals', [TransactionsGrossTotalController::class, 'getGrossNetByDate']);
         Route::post('/csv', [CsvController::class, 'csv']);
     });
-
-    // Specific Transactions API
-    Route::prefix('transaction')->group(function () {
-    Route::post('/', [TransactionsController::class, 'store'])->name('api.transaction.store');
-    Route::put('/{id}', [TransactionsController::class, 'update'])->name('api.transaction.update');
-    Route::delete('/{id}', [TransactionsController::class, 'softDelete'])->name('transactions.softDelete');
-    });
-
 });
 
 // Route::post("register", [AuthController::class,"register"]);
 // Route::post('login', [AuthController::class, 'login']);
+
