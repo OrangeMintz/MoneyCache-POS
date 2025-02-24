@@ -157,45 +157,45 @@ export default function CashierForm({cashier}: TransactionFormProps) {
                                       <div className="grid md:grid-cols-3 gap-3">
                                             {/* Shift Time Section */}
                                             <div className="bg-white rounded-lg shadow-md p-2">
-    <h1 className="font-semibold text-xl mb-2">SHIFT TIME:</h1>
-    <div className="w-full mb-1">
-        <label className="block text-sm font-medium">Cashier&apos;s Name:</label>
-        <input type="text" className="w-full p-1 border border-gray-300 rounded-md" name="cashier" disabled value={cashier.name} />
-    </div>
-    <div className="w-full">
-        <label className="block text-sm font-medium">Shift Time:</label>
-        <select className="w-full p-1 border border-gray-300 rounded-md" name="time" onChange={handleInputChange}>
-            <option value="AM">AM</option>
-            <option value="MID">MID</option>
-            <option value="PM">PM</option>
-        </select>
-    </div>
-</div>
+                                                    <h1 className="font-semibold text-xl mb-2">SHIFT TIME:</h1>
+                                                    <div className="w-full mb-1">
+                                                        <label className="block text-sm font-medium">Cashier&apos;s Name:</label>
+                                                        <input type="text" className="w-full p-1 border border-gray-300 rounded-md" name="cashier" disabled value={cashier.name} />
+                                                    </div>
+                                                    <div className="w-full">
+                                                        <label className="block text-sm font-medium">Shift Time:</label>
+                                                        <select className="w-full p-1 border border-gray-300 rounded-md" name="time" onChange={handleInputChange}>
+                                                            <option value="AM">AM</option>
+                                                            <option value="MID">MID</option>
+                                                            <option value="PM">PM</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
 
-{/* Summary Section */}
-<div className="bg-white rounded-lg shadow-md p-2">
-    <h2 className="font-semibold text-xl mb-2">Summary:</h2>
-    <div className="w-full">
-        <div className="mb-1">
-            <label className="block text-sm font-bold">Subtotal Trade POS:</label>
-            <p className="text-md w-full py-1 border-gray-300 rounded-md">
-                P {subtotalTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </p>
-        </div>
-        <div className="mb-1">
-            <label className="block text-sm font-bold">Subtotal Non-Trade POS:</label>
-            <p className="text-md w-full py-1 border-gray-300 rounded-md">
-                P {subtotalNonTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </p>
-        </div>
-        <div className="mb-1">
-            <label className="block text-sm font-bold">GRAND TOTAL POS:</label>
-            <p className="text-md w-full py-1 border-gray-300 rounded-md">
-                P {grandTotalPOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </p>
-        </div>
-    </div>
-</div>
+                                                {/* Summary Section */}
+                                                <div className="bg-white rounded-lg shadow-md p-2">
+                                                    <h2 className="font-semibold text-xl mb-2">Summary:</h2>
+                                                    <div className="w-full">
+                                                        <div className="mb-1">
+                                                            <label className="block text-sm font-bold">Subtotal Trade POS:</label>
+                                                            <p className="text-md w-full py-1 border-gray-300 rounded-md">
+                                                                P {subtotalTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                            </p>
+                                                        </div>
+                                                        <div className="mb-1">
+                                                            <label className="block text-sm font-bold">Subtotal Non-Trade POS:</label>
+                                                            <p className="text-md w-full py-1 border-gray-300 rounded-md">
+                                                                P {subtotalNonTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                            </p>
+                                                        </div>
+                                                        <div className="mb-1">
+                                                            <label className="block text-sm font-bold">GRAND TOTAL POS:</label>
+                                                            <p className="text-md w-full py-1 border-gray-300 rounded-md">
+                                                                P {grandTotalPOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
                                             {/* MM Details Section */}
                                             <div className="bg-white shadow-md p-6">
