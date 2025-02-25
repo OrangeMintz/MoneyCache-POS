@@ -1,4 +1,5 @@
 @include('layouts.header')
+
 <main>
     <div class="font-sans bg-gray-100 p-6">
         <div class="bg-white p-4">
@@ -199,6 +200,8 @@
         </div>
     </div>
 </main>
+@include('layouts.footer')
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
