@@ -5,7 +5,7 @@
     <div class="font-sans bg-gray-100 p-6">
         <div class="bg-white p-4 mb-4">
             <div class="card-header">
-                <h5 class="title font-semibold text-[26px]">Test Transactions</h5>
+                <h5 class="title font-semibold text-[26px]">Transactions</h5>
             </div>
             <div class="overflow-x-auto">
                 <table id="example" class="display" style="width:100%">
@@ -26,6 +26,7 @@
         </div>
     </div>
 </main>
+@include('layouts.footer')
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
