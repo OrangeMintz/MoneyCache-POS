@@ -37,9 +37,9 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', [TransactionsController::class, 'softDelete'])->name('transactions.softDelete');
 
     });
-
+    
+    Route::get('/pdf', [PDFController::class, 'pdf'])->name('pdf');
 });
 
-// Route::get('/pdf', [PDFController::class, 'pdf']);
 
 require __DIR__.'/auth.php';
