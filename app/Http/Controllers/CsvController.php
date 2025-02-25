@@ -26,14 +26,30 @@ class CsvController extends Controller
 
         $particulars = array_keys($fees);
         foreach ($particulars as $particular) {
-            $am = $transactions->where('time', 'AM')->sum($particular);
-            $mid = $transactions->where('time', 'MID')->sum($particular);
-            $pm = $transactions->where('time', 'PM')->sum($particular);
-    
-            $grossTotal = $am + $mid + $pm;
-            $netTotal = $grossTotal * (1 - ($fees[$particular] / 100)); // Deduct fee
-    
-            $csvData[] = [$particular, $am, $mid, $pm, $grossTotal, $netTotal];
+            $amValues = $transactions->where('time', 'AM')->pluck($particular)->toArray();
+            $midValues = $transactions->where('time', 'MID')->pluck($particular)->toArray();
+            $pmValues = $transactions->where('time', 'PM')->pluck($particular)->toArray();
+
+            // Extract numeric values for summation
+            $amNumeric = array_sum(array_filter($amValues, 'is_numeric')) ?: ''; 
+            $midNumeric = array_sum(array_filter($midValues, 'is_numeric')) ?: '';
+            $pmNumeric = array_sum(array_filter($pmValues, 'is_numeric')) ?: '';
+
+            // Extract text values separately
+            $amText = implode(', ', array_filter($amValues, fn($v) => !is_numeric($v)));
+            $midText = implode(', ', array_filter($midValues, fn($v) => !is_numeric($v)));
+            $pmText = implode(', ', array_filter($pmValues, fn($v) => !is_numeric($v)));
+
+            // Preserve text values if they exist
+            $am = $amText ?: $amNumeric;
+            $mid = $midText ?: $midNumeric;
+            $pm = $pmText ?: $pmNumeric;
+
+            // Compute totals only for numeric values
+            $grossTotal = ($amNumeric ?: 0) + ($midNumeric ?: 0) + ($pmNumeric ?: 0);
+            $netTotal = $grossTotal * (1 - ($fees[$particular] / 100)); 
+
+    $csvData[] = [$particular, $am, $mid, $pm, $grossTotal ?: '', $netTotal ?: ''];
         }
     
 
