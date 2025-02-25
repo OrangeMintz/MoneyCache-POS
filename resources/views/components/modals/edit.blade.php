@@ -22,7 +22,6 @@
 
                 {{-- First column for Cashier Form --}}
                 <div class="bg-white rounded-lg shadow-md">
-                    {{-- <form method="POST" action="route('transaction.update', $id)" id="editForm"> --}}
                     {{-- <form method="POST" action="{{ route('transaction.update', $id) }}" id="editForm"> --}}
                     <form method="POST" action="" id="editForm">
                     @csrf
@@ -172,9 +171,10 @@
                     <h2 class="shadow-md font-semibold text-lg mb-4 p-4">Shift Time:</h2>
                     <div class="grid grid-cols-1 gap-2 justify-items-start p-4 mb-8">
                         <div class="w-full">
-                            {{-- <label for="cashier" class="block text-sm font-medium">Cashier's
-                                Name:</label> --}}
+                            <label for="cashier" class="block text-sm font-medium">Cashier's
+                                Name:</label>
                             <input type="hidden" id="cashier" name="cashier" value="{{ auth()->user()->id }}">
+                            <input type="text" value="{{ auth()->user()->name }}" disabled  class="w-full p-3 border border-gray-300 rounded-md">
                         </div>
                         <div class="w-full">
                             <label for="time" class="block text-sm font-medium">Shift Time:</label>
@@ -220,59 +220,3 @@
       </div>
   </div>
 </div>
-
-{{-- <script>
-    function openModal(transactionId) {
-        fetch(`/transaction/edit/${transactionId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data) {
-                    // Populate fields if data exists
-                    document.getElementById('cash').value = data.cash ?? '';
-                    document.getElementById('check').value = data.check ?? '';
-                    document.getElementById('bpi_ccard').value = data.bpi_ccard ?? '';
-                    document.getElementById('bpi_dcard').value = data.bpi_dcard ?? '';
-                    document.getElementById('metro_ccard').value = data.metro_ccard ?? '';
-                    document.getElementById('metro_dcard').value = data.metro_dcard ?? '';
-                    document.getElementById('paymaya').value = data.paymaya ?? '';
-                    document.getElementById('aub_ccard').value = data.aub_ccard ?? '';
-                    document.getElementById('gcash').value = data.gcash ?? '';
-                    document.getElementById('food_panda').value = data.food_panda ?? '';
-                    document.getElementById('streetby').value = data.streetby ?? '';
-                    document.getElementById('grabfood').value = data.grabfood ?? '';
-                    document.getElementById('gc_claimed_others').value = data.gc_claimed_others ?? '';
-                    document.getElementById('gc_claimed_own').value = data.gc_claimed_own ?? '';
-                    document.getElementById('mm_head').value = data.mm_head ?? '';
-                    document.getElementById('mm_commissary').value = data.mm_commissary ?? '';
-                    document.getElementById('mm_rm').value = data.mm_rm ?? '';
-                    document.getElementById('mm_dm').value = data.mm_dm ?? '';
-                    document.getElementById('mm_km').value = data.mm_km ?? '';
-                    document.getElementById('food_charge').value = data.food_charge ?? '';
-                    document.getElementById('z_reading_pos').value = data.z_reading_pos ?? '';
-                    document.getElementById('time').value = data.time ?? 'AM';
-                    document.getElementById('sub_total_trade').textContent = `P ${data.sub_total_trade ?? '0.00'}`;
-                    document.getElementById('sub_total_non_trade').textContent = `P ${data.sub_total_non_trade ?? '0.00'}`;
-                    document.getElementById('grand_total').textContent = `P ${data.grand_total ?? '0.00'}`;
-                    document.getElementById('crud-modal').classList.remove('hidden');
-                }
-            })
-            .catch(error => console.error('Error fetching transaction:', error));
-    }
-</script> --}}
-
-{{-- edit modal toggle --}}
-
-{{-- <script>
-  document.addEventListener("DOMContentLoaded", function () {
-      document.querySelectorAll("[data-modal-toggle]").forEach(button => {
-          button.addEventListener("click", function () {
-              const modalId = this.getAttribute("data-modal-toggle");
-              const modal = document.getElementById(modalId);
-              if (modal) {
-                  modal.classList.toggle("hidden");
-                  modal.classList.toggle("flex"); // Ensures proper display
-              }
-          });
-      });
-  });
-</script> --}}

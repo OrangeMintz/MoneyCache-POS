@@ -62,6 +62,15 @@ class TransactionsController extends Controller
             'z_reading_pos' => 'numeric|nullable|min:0',
         ]);
 
+        // Check if a transaction already exists for the same user, time, and day
+        $existingTransaction = Transactions::where('cashier', $validated['cashier'])
+            ->where('time', $validated['time'])
+            ->whereDate('created_at', now()->toDateString())
+            ->exists();
+
+        if ($existingTransaction) {
+            return response()->json(['status' => 'error', 'message' => 'A transaction for this user and time already exists today.'], 422);
+        }
 
         // Compute subtotals
         $subtotal_trade =
@@ -86,10 +95,9 @@ class TransactionsController extends Controller
             'grand_total' => $grand_total,
         ]));
 
-        // return redirect()->back()->with('success', 'Transaction stored successfully.');
         return response()->json(['status' => 'success', 'message' => 'Transaction stored successfully.']);
-
     }
+
 
     public function show(string $id)
     {
@@ -110,8 +118,8 @@ class TransactionsController extends Controller
     public function update(Request $request, string $id)
     {
         $validated = $request->validate([
-            'cashier' => 'required|string',
-            'time' => 'required|string',
+            'cashier' => 'string|nullable',
+            'time' => 'string|in:AM,MID,PM',
             'cash' => 'numeric|nullable',
             'check' => 'numeric|nullable',
             'bpi_ccard' => 'numeric|nullable',
@@ -135,6 +143,19 @@ class TransactionsController extends Controller
             'z_reading_pos' => 'numeric|nullable|min:0',
         ]);
 
+        // Find the existing transaction
+        $transaction = Transactions::findOrFail($id);
+
+        // Check if another transaction exists with the same user, time, and date (excluding the current one)
+        $existingTransaction = Transactions::where('cashier', $validated['cashier'])
+            ->where('time', $validated['time'])
+            ->whereDate('created_at', $transaction->created_at->toDateString())
+            ->where('id', '!=', $id) // Exclude the current transaction being updated
+            ->exists();
+
+        if ($existingTransaction) {
+            return response()->json(['status' => 'error', 'message' => 'Another transaction for this user with the same date already exists.'], 422);
+        }
 
         // Compute subtotals
         $subtotal_trade =
@@ -152,8 +173,7 @@ class TransactionsController extends Controller
 
         $grand_total = $subtotal_trade + $subtotal_non_trade;
 
-        // Find and update transaction
-        $transaction = Transactions::findOrFail($id);
+        // Update transaction
         $transaction->update(array_merge($validated, [
             'sub_total_trade' => $subtotal_trade,
             'sub_total_non_trade' => $subtotal_non_trade,
@@ -162,6 +182,7 @@ class TransactionsController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'Transaction updated successfully.']);
     }
+
 
 
     public function softDelete(string $id)
@@ -177,6 +198,22 @@ class TransactionsController extends Controller
 
         return response()->json([
             "status" => 1,
+            "transactions" => $transactions,
+        ]);
+    }
+
+    public function getByDate(Request $request){
+        $request->validate([
+            "date" => "required|date|date_format:Y-m-d",
+        ]);
+
+        $date = $request->date;
+
+        $transactions = Transactions::with('cashier')->whereDate('created_at', $date)->get();
+
+        return response()->json([
+            "status" => 1,
+            "message" => "Here are the transactions for: ". $date,
             "transactions" => $transactions,
         ]);
     }
