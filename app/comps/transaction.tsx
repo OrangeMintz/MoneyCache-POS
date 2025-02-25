@@ -68,8 +68,6 @@ export default function CashierForm({cashier}: TransactionFormProps) {
         ];
 
         const nonTradeFields = [
-            formData.mm_head,
-            formData.mm_commissary,
             formData.mm_rm,
             formData.mm_dm,
             formData.food_charge,
@@ -151,99 +149,97 @@ export default function CashierForm({cashier}: TransactionFormProps) {
         <main className="bg-gray-100 p-6 text-black">
             <div className="relative bg-white p-4 w-full">
                 <div className="flex flex-col lg:flex-row gap-6 w-full">
-                    {/* Form Container */}
                     <div className="flex-1">
                         <form method="POST" className="bg-white rounded-lg shadow-md p-4 w-full" onSubmit={handleFormSubmit}>
-                                      <div className="grid md:grid-cols-3 gap-3">
-                                            {/* Shift Time Section */}
-                                            <div className="bg-white rounded-lg shadow-md p-2">
-                                                    <h1 className="font-semibold text-xl mb-2">SHIFT TIME:</h1>
-                                                    <div className="w-full mb-1">
-                                                        <label className="block text-sm font-medium">Cashier&apos;s Name:</label>
-                                                        <input type="text" className="w-full p-1 border border-gray-300 rounded-md" name="cashier" disabled value={cashier.name} />
-                                                    </div>
-                                                    <div className="w-full">
-                                                        <label className="block text-sm font-medium">Shift Time:</label>
-                                                        <select className="w-full p-1 border border-gray-300 rounded-md" name="time" onChange={handleInputChange}>
-                                                            <option value="AM">AM</option>
-                                                            <option value="MID">MID</option>
-                                                            <option value="PM">PM</option>
-                                                        </select>
-                                                    </div>
+                        <div className="grid md:grid-cols-3 gap-3">
+                                    {/* Summary Section */}
+                                    {/* MM Details Section */}
+                                    <div className="bg-white rounded-lg shadow-md p-2 h-60">
+                                            <h2 className="font-semibold text-xl mb-2">MM Details:</h2>
+                                            <div className="grid md:grid-cols-2 gap-2">
+                                                <div className="w-full">
+                                                    <label className="block text-sm font-medium">MM-HEAD OFFICE:</label>
+                                                    <input type="text" className="w-full p-1 border border-gray-300 rounded-md" name="mm_head" onChange={handleInputChange}/>
                                                 </div>
-
-                                                {/* Summary Section */}
-                                                <div className="bg-white rounded-lg shadow-md p-2">
-                                                    <h2 className="font-semibold text-xl mb-2">Summary:</h2>
-                                                    <div className="w-full">
-                                                        <div className="mb-1">
-                                                            <label className="block text-sm font-bold">Subtotal Trade POS:</label>
-                                                            <p className="text-md w-full py-1 border-gray-300 rounded-md">
-                                                                P {subtotalTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                                            </p>
-                                                        </div>
-                                                        <div className="mb-1">
-                                                            <label className="block text-sm font-bold">Subtotal Non-Trade POS:</label>
-                                                            <p className="text-md w-full py-1 border-gray-300 rounded-md">
-                                                                P {subtotalNonTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                                            </p>
-                                                        </div>
-                                                        <div className="mb-1">
-                                                            <label className="block text-sm font-bold">GRAND TOTAL POS:</label>
-                                                            <p className="text-md w-full py-1 border-gray-300 rounded-md">
-                                                                P {grandTotalPOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                                            </p>
-                                                        </div>
-                                                    </div>
+                                                <div className="w-full">
+                                                    <label className="block text-sm font-medium">MM-COMMISSARY:</label>
+                                                    <input type="text" className="w-full p-1 border border-gray-300 rounded-md"  name="mm_commissary" onChange={handleInputChange}/>
                                                 </div>
-
-                                            {/* MM Details Section */}
-                                            <div className="bg-white shadow-md p-6">
-                                                <h2 className="font-semibold text-3xl mb-4">MM Details:</h2>
-                                                <div className="grid md:grid-cols-2 gap-4">
-                                                    <div className="w-full">
-                                                        <label className="block text-sm font-medium">MM-HEAD OFFICE:</label>
-                                                        <input type="text" className="w-full p-3 border border-gray-300 rounded-md" name="mm_head" onChange={handleInputChange}/>
-                                                    </div>
-                                                    <div className="w-full">
-                                                        <label className="block text-sm font-medium">MM-COMMISSARY:</label>
-                                                        <input type="text" className="w-full p-3 border border-gray-300 rounded-md"  name="mm_commissary" onChange={handleInputChange}/>
-                                                    </div>
-                                                    <div className="w-full">
-                                                        <label className="block text-sm font-medium">MM-RM:</label>
-                                                        <input type="text" className="w-full p-3 border border-gray-300 rounded-md"  name="mm_rm" onChange={handleInputChange}/>
-                                                    </div>
-                                                    <div className="w-full">
-                                                        <label className="block text-sm font-medium">MM-DM:</label>
-                                                        <input type="text" className="w-full p-3 border border-gray-300 rounded-md" name="mm_dm" onChange={handleInputChange}/>
-                                                    </div>
-                                                    <div className="w-full">
-                                                        <label className="block text-sm font-medium">MM-KM:</label>
-                                                        <input type="text" className="w-full p-3 border border-gray-300 rounded-md" name="mm_km" onChange={handleInputChange}/>
-                                                    </div>
-                                                    <div className="w-full">
-                                                        <label className="block text-sm font-medium">FOOD CHARGE:</label>
-                                                        <input type="text" className="w-full p-3 border border-gray-300 rounded-md"  name="food_charge" onChange={handleInputChange}/>
-                                                    </div>
+                                                <div className="w-full">
+                                                    <label className="block text-sm font-medium">MM-RM:</label>
+                                                    <input type="text" className="w-full p-1 border border-gray-300 rounded-md"  name="mm_rm" onChange={handleInputChange}/>
                                                 </div>
-                                                <div className="grid md:grid-cols-2 gap-4 mt-4">
-                                            <div className="border ">
-                                                <div className="bg-white shadow-md p-4">
-                                                    <label className="block text-sm font-medium">Z READING POS:</label>
-                                                    <input type="text" className="w-full p-4 border border-gray-300 rounded-md" name="z_reading_pos" onChange={handleInputChange} />
+                                                <div className="w-full">
+                                                    <label className="block text-sm font-medium">MM-DM:</label>
+                                                    <input type="text" className="w-full p-1 border border-gray-300 rounded-md" name="mm_dm" onChange={handleInputChange}/>
                                                 </div>
-                                                <button type="submit" className="py-3 px-[109px] bg-green-600 mt-2 text-white rounded-md hover:bg-green-500 transition" disabled={disable}>
-                                                    Submit
-                                                </button>
+                                                <div className="w-full">
+                                                    <label className="block text-sm font-medium">MM-KM:</label>
+                                                    <input type="text" className="w-full p-1 border border-gray-300 rounded-md" name="mm_km" onChange={handleInputChange}/>
+                                                </div>
+                                                <div className="w-full">
+                                                    <label className="block text-sm font-medium">FOOD CHARGE:</label>
+                                                    <input type="text" className="w-full p-1 border border-gray-300 rounded-md"  name="food_charge" onChange={handleInputChange}/>
+                                                </div>
+                                             
                                             </div>
                                         </div>
+                                        <div className="bg-white rounded-lg shadow-md p-2 h-60"> {/* Added h-fit */}
+                                        <h2 className="font-semibold text-xl mb-2">Summary:</h2>
+                                        <div className="w-full">
+                                            <div className="mb-1">
+                                                <label className="block text-sm font-bold">Subtotal Trade POS:</label>
+                                                <p className="text-md w-full py-1 border-gray-300 rounded-md">
+                                                    P {subtotalTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                </p>
+                                            </div>
+                                            <div className="mb-1">
+                                                <label className="block text-sm font-bold">Subtotal Non-Trade POS:</label>
+                                                <p className="text-md w-full py-1 border-gray-300 rounded-md">
+                                                    P {subtotalNonTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                </p>
+                                            </div>
+                                            <div className="mb-1">
+                                                <label className="block text-sm font-bold">GRAND TOTAL POS:</label>
+                                                <p className="text-md w-full py-1 border-gray-300 rounded-md">
+                                                    P {grandTotalPOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                </p>
                                             </div>
                                         </div>
+                                    </div>
+                                        
+                                    <div className="bg-white rounded-lg shadow-md p-1 h-60 flex flex-col justify-between">
+    <h1 className="font-semibold text-md mb-1">SHIFT TIME:</h1>
+
+    <div className="w-full mb-1">
+        <label className="block text-xs font-medium">Cashier's Name:</label>
+        <input type="text" className="w-full p-0.5 border border-gray-300 rounded-md text-sm h-7" name="cashier" disabled value={cashier.name} />
+    </div>
+
+    <div className="w-full mb-1">
+        <label className="block text-xs font-medium">Shift Time:</label>
+        <select className="w-full p-0.5 border border-gray-300 rounded-md text-sm h-7" name="time" onChange={handleInputChange}>
+            <option value="AM">AM</option>
+            <option value="MID">MID</option>
+            <option value="PM">PM</option>
+        </select>
+    </div>
+
+    <div className="w-full mb-1">
+        <label className="block text-xs font-medium">Z READING POS:</label>
+        <input type="text" className="w-full p-0.5 border border-gray-300 rounded-md text-sm h-7" name="z_reading_pos" onChange={handleInputChange} />
+    </div>
+
+    <button type="submit" className="py-1 px-6 bg-green-600 w-50 text-white rounded-md text-sm justify-center hover:bg-green-500 transition" disabled={disable}>
+        Submit
+    </button>
+</div>
+
+                                </div>
 
 
-
-                            <h2 className="shadow-md font-semibold text-3xl mb-4 p-4">PAYMENT METHODS:</h2>
-                            <div className="bg-white mb-4 shadow-md grid md:grid-cols-3 sm:grid-cols-2 gap-4 p-4">
+                            <h2 className="shadow-md mt-7 font-semibold text-lg mb-4  mt-0 p-4 ">PAYMENT METHODS:</h2>
+                            <div className="bg-white mb-4 shadow-md grid  md:grid-cols-3 sm:grid-cols-3 gap-2 p-4">
                                 <div className="w-full">
                                     <label className="block text-sm font-medium">Cash:</label>
                                     <input type="number" name="cash" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={handleInputChange}/>
@@ -301,7 +297,6 @@ export default function CashierForm({cashier}: TransactionFormProps) {
                                     <input type="number" name="gc_claimed_own" className="w-full p-2 border border-gray-300 rounded-md" step="0.01" onChange={handleInputChange}/>
                                 </div>
                             </div>
-
                         </form>
                     </div>
                 </div>

@@ -38,7 +38,6 @@ async function fetchData() {
   }
 }
 
-// Modal Component
 function EditModal({ open, handleClose, row, handleSave }) {
   
   const [formData, setFormData] = useState({
@@ -116,84 +115,90 @@ function EditModal({ open, handleClose, row, handleSave }) {
 
   return (
     <Modal open={open} onClose={handleClose}>
-  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/5 bg-white p-6 shadow-lg rounded-md">
-    <h2 className="text-lg font-semibold mb-4">Edit Transaction</h2>
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="w-[90vw] max-w-screen-lg h-[100vh] bg-white p-6 shadow-lg rounded-md overflow-hidden">
+      <h2 className="text-lg font-semibold">Edit Transaction</h2>
 
-     <form onSubmit={handleSubmit} className="space-y-6 p-4">
-      {/* Shift Details */}
-      <div className="border p-4 rounded-md shadow-sm bg-gray-50">
-        <h2 className="text-lg font-semibold mb-2">Shift Details</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium">Cashier's Name:</label>
-            <input type="text" name="cashier" value="Dick" disabled className="w-full p-2 border border-gray-300 rounded-md" />
+      <form onSubmit={handleSubmit} className="space-y-4 h-full flex flex-col">
+        <div className="flex-1 overflow-hidden">
+          {/* Shift Details */}
+          <div className="border p-4 rounded-md shadow-sm bg-gray-50">
+            <h2 className="text-lg font-semibold mb-2">Shift Details</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium">Cashier's Name:</label>
+                <input type="text" name="cashier" value="Dick" disabled className="w-full p-2 border border-gray-300 rounded-md" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium">Shift Time:</label>
+                <select name="time" value={formData.time || 'AM'} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md">
+                  <option value="AM">AM</option>
+                  <option value="MID">MID</option>
+                  <option value="PM">PM</option>
+                </select>
+              </div>
+            </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium">Shift Time:</label>
-            <select name="time" value={formData.time || 'AM'} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md">
-              <option value="AM">AM</option>
-              <option value="MID">MID</option>
-              <option value="PM">PM</option>
-            </select>
+
+          {/* MM Details */}
+          <div className="border p-4 rounded-md shadow-sm bg-gray-50">
+            <h2 className="text-lg font-semibold mb-2">MM Details</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input type="number" name="mm_head" value={formData.mm_head || ''} onChange={handleChange} placeholder="MM Head" className="w-full p-2 border border-gray-300 rounded-md" />
+              <input type="number" name="mm_commissary" value={formData.mm_commissary || ''} onChange={handleChange} placeholder="MM Commissary" className="w-full p-2 border border-gray-300 rounded-md" />
+              <input type="number" name="mm_rm" value={formData.mm_rm || ''} onChange={handleChange} placeholder="MM RM" className="w-full p-2 border border-gray-300 rounded-md" />
+              <input type="number" name="mm_dm" value={formData.mm_dm || ''} onChange={handleChange} placeholder="MM DM" className="w-full p-2 border border-gray-300 rounded-md" />
+              <input type="number" name="mm_km" value={formData.mm_km || ''} onChange={handleChange} placeholder="MM KM" className="w-full p-2 border border-gray-300 rounded-md" />
+              <input type="number" name="food_charge" value={formData.food_charge || ''} onChange={handleChange} placeholder="Food Charge" className="w-full p-2 border border-gray-300 rounded-md" />
+            </div>
+          </div>
+
+          {/* Payment Details */}
+          <div className="border p-4 rounded-md shadow-sm bg-gray-50">
+            <h2 className="text-lg font-semibold mb-2">Payment Details</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input type="number" name="cash" value={formData.cash || ''} onChange={handleChange} placeholder="Cash" className="w-full p-2 border border-gray-300 rounded-md" />
+              <input type="number" name="check" value={formData.check || ''} onChange={handleChange} placeholder="Check" className="w-full p-2 border border-gray-300 rounded-md" />
+              <input type="number" name="bpi_ccard" value={formData.bpi_ccard || ''} onChange={handleChange} placeholder="BPI Credit Card" className="w-full p-2 border border-gray-300 rounded-md" />
+              <input type="number" name="bpi_dcard" value={formData.bpi_dcard || ''} onChange={handleChange} placeholder="BPI Debit Card" className="w-full p-2 border border-gray-300 rounded-md" />
+              <input type="number" name="metro_ccard" value={formData.metro_ccard || ''} onChange={handleChange} placeholder="Metro Credit Card" className="w-full p-2 border border-gray-300 rounded-md" />
+              <input type="number" name="metro_dcard" value={formData.metro_dcard || ''} onChange={handleChange} placeholder="Metro Debit Card" className="w-full p-2 border border-gray-300 rounded-md" />
+            </div>
+          </div>
+
+          {/* Summary */}
+          <div className="bg-white rounded-lg shadow-md p-4">
+            <h2 className="font-semibold text-xl mb-2">Summary:</h2>
+            <div className="w-full">
+              <div className="mb-2">
+                <label className="block text-sm font-bold">Subtotal Trade POS:</label>
+                <p className="text-md w-full py-1 border-gray-300 rounded-md">
+                  P {subtotalTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </p>
+              </div>
+              <div className="mb-2">
+                <label className="block text-sm font-bold">Subtotal Non-Trade POS:</label>
+                <p className="text-md w-full py-1 border-gray-300 rounded-md">
+                  P {subtotalNonTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </p>
+              </div>
+              <div className="mb-2">
+                <label className="block text-sm font-bold">GRAND TOTAL POS:</label>
+                <p className="text-md w-full py-1 border-gray-300 rounded-md">
+                  P {grandTotalPOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* MM Details */}
-      <div className="border p-4 rounded-md shadow-sm bg-gray-50">
-        <h2 className="text-lg font-semibold mb-2">MM Details</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input type="number" name="mm_head" value={formData.mm_head || ''} onChange={handleChange} placeholder="MM Head" className="w-full p-2 border border-gray-300 rounded-md" />
-          <input type="number" name="mm_commissary" value={formData.mm_commissary || ''} onChange={handleChange} placeholder="MM Commissary" className="w-full p-2 border border-gray-300 rounded-md" />
-          <input type="number" name="mm_rm" value={formData.mm_rm || ''} onChange={handleChange} placeholder="MM RM" className="w-full p-2 border border-gray-300 rounded-md" />
-          <input type="number" name="mm_dm" value={formData.mm_dm || ''} onChange={handleChange} placeholder="MM DM" className="w-full p-2 border border-gray-300 rounded-md" />
-          <input type="number" name="mm_km" value={formData.mm_km || ''} onChange={handleChange} placeholder="MM KM" className="w-full p-2 border border-gray-300 rounded-md" />
-          <input type="number" name="food_charge" value={formData.food_charge || ''} onChange={handleChange} placeholder="Food Charge" className="w-full p-2 border border-gray-300 rounded-md" />
+        {/* Buttons */}
+        <div className="mt-2 flex justify-end">
+          <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">Save</button>
+          <button type="button" onClick={handleClose} className="ml-2 px-4 py-2 bg-gray-400 text-white rounded-md">Cancel</button>
         </div>
-      </div>
-
-      {/* Payment Details */}
-      <div className="border p-4 rounded-md shadow-sm bg-gray-50">
-        <h2 className="text-lg font-semibold mb-2">Payment Details</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input type="number" name="cash" value={formData.cash || ''} onChange={handleChange} placeholder="Cash" className="w-full p-2 border border-gray-300 rounded-md" />
-          <input type="number" name="check" value={formData.check || ''} onChange={handleChange} placeholder="Check" className="w-full p-2 border border-gray-300 rounded-md" />
-          <input type="number" name="bpi_ccard" value={formData.bpi_ccard || ''} onChange={handleChange} placeholder="BPI Credit Card" className="w-full p-2 border border-gray-300 rounded-md" />
-          <input type="number" name="bpi_dcard" value={formData.bpi_dcard || ''} onChange={handleChange} placeholder="BPI Debit Card" className="w-full p-2 border border-gray-300 rounded-md" />
-          <input type="number" name="metro_ccard" value={formData.metro_ccard || ''} onChange={handleChange} placeholder="Metro Credit Card" className="w-full p-2 border border-gray-300 rounded-md" />
-          <input type="number" name="metro_dcard" value={formData.metro_dcard || ''} onChange={handleChange} placeholder="Metro Debit Card" className="w-full p-2 border border-gray-300 rounded-md" />
-        </div>
-      </div>
-      <div className="bg-white rounded-lg shadow-md p-2">
-                                                    <h2 className="font-semibold text-xl mb-2">Summary:</h2>
-                                                    <div className="w-full">
-                                                        <div className="mb-1">
-                                                            <label className="block text-sm font-bold">Subtotal Trade POS:</label>
-                                                            <p className="text-md w-full py-1 border-gray-300 rounded-md">
-                                                                P {subtotalTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                                            </p>
-                                                        </div>
-                                                        <div className="mb-1">
-                                                            <label className="block text-sm font-bold">Subtotal Non-Trade POS:</label>
-                                                            <p className="text-md w-full py-1 border-gray-300 rounded-md">
-                                                                P {subtotalNonTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                                            </p>
-                                                        </div>
-                                                        <div className="mb-1">
-                                                            <label className="block text-sm font-bold">GRAND TOTAL POS:</label>
-                                                            <p className="text-md w-full py-1 border-gray-300 rounded-md">
-                                                                P {grandTotalPOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-        </div>
-
-      {/* Buttons */}
-      <div className="mt-6 flex justify-end">
-        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">Save</button>
-        <button type="button" onClick={handleClose} className="ml-2 px-4 py-2 bg-gray-400 text-white rounded-md">Cancel</button>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </Modal>
 
@@ -221,7 +226,7 @@ function Row({ row, handleSave }) {
         </TableCell>
         <TableCell>{row.id}</TableCell>
         <TableCell>{row.cashier?.name || 'Unknown'}</TableCell>
-        <TableCell align="right">{row.created_at}</TableCell>
+        <TableCell align="center">{row.created_at}</TableCell>
         <TableCell align="right">{row.time}</TableCell>
         <TableCell align="right">{row.sub_total_trade}</TableCell>
         <TableCell align="right">{row.sub_total_non_trade}</TableCell>
@@ -361,7 +366,7 @@ export default function CollapsibleTable() {
                 <TableCell />
                 <TableCell>ID</TableCell>
                 <TableCell>Cashier</TableCell>
-                <TableCell>Date</TableCell>
+                <TableCell align="center">Date</TableCell>
                 <TableCell align="right">Time</TableCell>
                 <TableCell align="right">Sub-Total Trade</TableCell>
                 <TableCell align="right">Sub-Total Non Trade</TableCell>
