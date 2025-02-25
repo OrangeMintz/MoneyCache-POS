@@ -109,14 +109,13 @@ function EditModal({ open, handleClose, row, handleSave }) {
     setSubtotalTradePOS(tradeTotal);
     setSubtotalNonTradePOS(nonTradeTotal);
     setGrandTotalPOS(tradeTotal + nonTradeTotal);
-    localStorage.removeItem('selected_date')
 }, [formData]);
 
 
   return (
     <Modal open={open} onClose={handleClose}>
   <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div className="w-[90vw] max-w-screen-lg h-[100vh] bg-white p-6 shadow-lg rounded-md overflow-hidden">
+    <div className="w-[90vw] max-w-screen-lg h-[vh] bg-white p-6 shadow-lg rounded-md overflow-hidden">
       <h2 className="text-lg font-semibold">Edit Transaction</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4 h-full flex flex-col">

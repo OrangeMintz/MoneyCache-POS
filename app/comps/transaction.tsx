@@ -230,7 +230,7 @@ export default function CashierForm({cashier}: TransactionFormProps) {
         <input type="text" className="w-full p-0.5 border border-gray-300 rounded-md text-sm h-7" name="z_reading_pos" onChange={handleInputChange} />
     </div>
 
-    <button type="submit" className="py-1 px-6 bg-green-600 w-50 text-white rounded-md text-sm justify-center hover:bg-green-500 transition" disabled={disable}>
+    <button type="submit" className="py-1 p-6 px-6 bg-green-600 w-50 text-white rounded-md text-sm justify-center hover:bg-green-500 transition" disabled={disable}>
         Submit
     </button>
 </div>
