@@ -1,4 +1,5 @@
 @include('layouts.header')
+
 <main>
     <div class="font-sans bg-gray-100 p-6">
         <div class="bg-white p-4">
@@ -201,6 +202,8 @@
 </main>
 {{-- toaster for update notification --}}
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+@include('layouts.footer')
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
