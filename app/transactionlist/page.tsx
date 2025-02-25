@@ -114,12 +114,11 @@ function EditModal({ open, handleClose, row, handleSave }) {
 
   return (
     <Modal open={open} onClose={handleClose}>
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div className="w-[90vw] max-w-screen-lg h-[vh] bg-white p-6 shadow-lg rounded-md overflow-hidden">
-      <h2 className="text-lg font-semibold">Edit Transaction</h2>
-
-      <form onSubmit={handleSubmit} className="space-y-4 h-full flex flex-col">
-        <div className="flex-1 overflow-hidden">
+    <div className="fixed inset-0 flex items-center justify-center p-4">
+      <div className="bg-white p-6 shadow-lg rounded-md max-w-screen-lg w-full max-h-screen overflow-auto">
+        <h2 className="text-lg font-semibold">Edit Transaction</h2>
+  
+        <form onSubmit={handleSubmit} className="space-y-6 p-4">
           {/* Shift Details */}
           <div className="border p-4 rounded-md shadow-sm bg-gray-50">
             <h2 className="text-lg font-semibold mb-2">Shift Details</h2>
@@ -138,7 +137,7 @@ function EditModal({ open, handleClose, row, handleSave }) {
               </div>
             </div>
           </div>
-
+  
           {/* MM Details */}
           <div className="border p-4 rounded-md shadow-sm bg-gray-50">
             <h2 className="text-lg font-semibold mb-2">MM Details</h2>
@@ -151,7 +150,7 @@ function EditModal({ open, handleClose, row, handleSave }) {
               <input type="number" name="food_charge" value={formData.food_charge || ''} onChange={handleChange} placeholder="Food Charge" className="w-full p-2 border border-gray-300 rounded-md" />
             </div>
           </div>
-
+  
           {/* Payment Details */}
           <div className="border p-4 rounded-md shadow-sm bg-gray-50">
             <h2 className="text-lg font-semibold mb-2">Payment Details</h2>
@@ -164,24 +163,24 @@ function EditModal({ open, handleClose, row, handleSave }) {
               <input type="number" name="metro_dcard" value={formData.metro_dcard || ''} onChange={handleChange} placeholder="Metro Debit Card" className="w-full p-2 border border-gray-300 rounded-md" />
             </div>
           </div>
-
+  
           {/* Summary */}
           <div className="bg-white rounded-lg shadow-md p-4">
             <h2 className="font-semibold text-xl mb-2">Summary:</h2>
             <div className="w-full">
-              <div className="mb-2">
+              <div className="mb-1">
                 <label className="block text-sm font-bold">Subtotal Trade POS:</label>
                 <p className="text-md w-full py-1 border-gray-300 rounded-md">
                   P {subtotalTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </p>
               </div>
-              <div className="mb-2">
+              <div className="mb-1">
                 <label className="block text-sm font-bold">Subtotal Non-Trade POS:</label>
                 <p className="text-md w-full py-1 border-gray-300 rounded-md">
                   P {subtotalNonTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </p>
               </div>
-              <div className="mb-2">
+              <div className="mb-1">
                 <label className="block text-sm font-bold">GRAND TOTAL POS:</label>
                 <p className="text-md w-full py-1 border-gray-300 rounded-md">
                   P {grandTotalPOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -189,18 +188,16 @@ function EditModal({ open, handleClose, row, handleSave }) {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Buttons */}
-        <div className="mt-2 flex justify-end">
-          <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">Save</button>
-          <button type="button" onClick={handleClose} className="ml-2 px-4 py-2 bg-gray-400 text-white rounded-md">Cancel</button>
-        </div>
-      </form>
+  
+          {/* Buttons */}
+          <div className="mt-4 flex justify-end">
+            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">Save</button>
+            <button type="button" onClick={handleClose} className="ml-2 px-4 py-2 bg-gray-400 text-white rounded-md">Cancel</button>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
-</Modal>
-
+  </Modal>
   
   );
 }
