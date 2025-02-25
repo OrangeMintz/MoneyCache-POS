@@ -236,6 +236,7 @@ function openModal(id) {
         .catch(error => console.error('Error fetching transaction:', error));
 }
 
+
 // Function to close the modal when clicking outside or close button
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll("[data-modal-toggle]").forEach(button => {
@@ -255,6 +256,32 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
+
+{{-- toaster for update notification --}}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+ @if(Session::has('message'))
+ var type = "{{ Session::get('alert-type','info') }}"
+ switch(type){
+    case 'info':
+    toastr.info(" {{ Session::get('message') }} ");
+    break;
+
+    case 'success':
+    toastr.success(" {{ Session::get('message') }} ");
+    break;
+
+    case 'warning':
+    toastr.warning(" {{ Session::get('message') }} ");
+    break;
+
+    case 'error':
+    toastr.error(" {{ Session::get('message') }} ");
+    break; 
+ }
+ @endif 
+</script>
+{{-- end of toaster for update notif --}}
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {

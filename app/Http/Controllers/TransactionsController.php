@@ -180,7 +180,13 @@ class TransactionsController extends Controller
             'grand_total' => $grand_total,
         ]));
 
-        return response()->json(['status' => 'success', 'message' => 'Transaction updated successfully.']);
+        $notification = array ( //toaster notif when updated
+            'message' => 'Updated Successfully',
+            'alert-type' => 'success',
+        );
+
+        return redirect()->back()->with($notification);
+
     }
 
 
