@@ -220,3 +220,58 @@
       </div>
   </div>
 </div>
+
+{{-- validation: no negative, atleast one field is filled--}}
+<script>   
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("editForm");
+
+    form.addEventListener("submit", function (event) {
+      let isValid = true;
+      let hasValidPayment = false;
+      const paymentFields = ["cash", "check", "bpi_ccard", "bpi_dcard", "metro_ccard", "metro_dcard", "paymaya", "aub_ccard", "gcash", "food_panda", "streetby", "grabfood", "gc_claimed_others", "gc_claimed_own"];
+
+      paymentFields.forEach((field) => {
+        let input = document.getElementById(field);
+        let value = input.value.trim();
+        let errorElement = input.nextElementSibling;
+
+        if (!errorElement || !errorElement.classList.contains("error-message")) {
+          errorElement = document.createElement("div");
+          errorElement.classList.add("error-message");
+          errorElement.style.color = "red";
+          errorElement.style.fontSize = "12px";
+          input.after(errorElement);
+        }
+
+        //if value is filled
+        if (value !== "") {
+          if (isNaN(value) || Number(value) <= 0) {
+            errorElement.textContent = "Please enter a positive number.";
+            input.classList.add("border-red-500");
+            isValid = false;  // Keeps track of any invalid fields
+          } else {
+            errorElement.textContent = "";
+            input.classList.remove("border-red-500");
+            hasValidPayment = true; // At least one valid input exists
+          }
+        } else {
+          errorElement.textContent = "";
+          input.classList.remove("border-red-500");
+        }
+      });
+
+      // Show Toastr error ONLY IF all fields are empty
+      if (!hasValidPayment) {
+        event.preventDefault(); // Stop form submission
+        toastr.error("Please enter at least one valid payment amount.");
+      }
+
+      // Prevent submission if there are any invalid inputs
+      if (!isValid) {
+        event.preventDefault();
+      }
+    });
+  });
+
+</script>

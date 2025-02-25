@@ -45,7 +45,7 @@
             <td>CASHIER'S NAME</td>
             <td>cherry</td>
             <td></td>
-            <td>criste</td>
+            <td>lou</td>
             <td></td>
             <td></td>
         </tr>

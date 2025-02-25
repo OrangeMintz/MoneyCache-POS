@@ -135,8 +135,8 @@ class TransactionsGrossTotalController extends Controller
         $net = Transactions::whereDate('created_at', $date)->sum(DB::raw("`$particular` * $compute"));
 
         $totals[$particular] = [
-            'gross' => $gross,
-            'net' => $net
+            'gross' => round($gross, 2),
+            'net' => round($net, 2)
         ];
     }
 
