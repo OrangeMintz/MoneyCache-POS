@@ -110,6 +110,7 @@ function EditModal({ open, handleClose, row, handleSave }) {
     setSubtotalTradePOS(tradeTotal);
     setSubtotalNonTradePOS(nonTradeTotal);
     setGrandTotalPOS(tradeTotal + nonTradeTotal);
+    localStorage.removeItem('selected_date')
 }, [formData]);
 
 
