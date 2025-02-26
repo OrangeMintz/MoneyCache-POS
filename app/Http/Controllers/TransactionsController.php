@@ -99,7 +99,14 @@ class TransactionsController extends Controller
         );
 
         //redirects to transactions-list
-        return redirect()->route('transactions')->with($notification);
+        if ($request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Transaction store successfully'
+            ]);
+        }else{
+            return redirect()->route('transactions')->with($notification);
+        }
     }
 
     public function populateEdit($id)
@@ -185,11 +192,14 @@ class TransactionsController extends Controller
             'alert-type' => 'success',
         );
 
-        // return redirect()->back()->with($notification);
-        return response()->json([
-            'status' => 'success',
-            'messafe' => 'Transaction updated successfully'
-        ]);
+        if ($request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Transaction updated successfully'
+            ]);
+        }else{
+            return redirect()->back()->with($notification);
+        }
     }
 
 
