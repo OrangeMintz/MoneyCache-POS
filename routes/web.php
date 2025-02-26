@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', [TransactionsController::class, 'softDelete'])->name('transactions.softDelete');
 
     });
+
     // CURRENTLY WORKING
     Route::get('/export', [TransactionsController::class, 'export'])->name('transactions.export');
     Route::get('/pdf', [PDFController::class, 'pdf'])->name('pdf');

@@ -210,7 +210,7 @@ class TransactionsController extends Controller
     {
         $transaction = Transactions::findOrFail($id);
         $transaction->delete();
-        
+
         if ($request->wantsJson()) {
             return response()->json([
                 'status' => 'success',
@@ -246,22 +246,27 @@ class TransactionsController extends Controller
         ]);
     }
 
-    public function export()
+    // public function export()
+    // {
+    //     return view('pages.transactions-export');
+    // }
+
+    public function export(Request $request)
     {
-        return view('pages.transactions-export');
+        $selectedDate = $request->input('date'); // Get 'date' from query parameters
+
+        if (!$selectedDate) {
+            return response()->json(['error' => 'No date selected.'], 400);
+        }
+
+        $transactions = Transactions::with('cashier')
+            ->whereDate('created_at', $selectedDate)
+            ->get();
+
+        // return response()->json(['selectedDate' => $selectedDate, 'transactions' => $transactions]);
+        return view('pages.transactions-export', compact('transactions', 'selectedDate'));
+
     }
 
-    // public function export($date)
-    // {
-    // Convert date from MM-DD-YYYY to YYYY-MM-DD format for database query
-    //     $formattedDate = Carbon::createFromFormat('m-d-Y', $date)->format('Y-m-d');
 
-    // Fetch transactions for that date
-    //     $transactions = Transactions::whereDate('created_at', $formattedDate)->get();
-
-    // Return as JSON
-    // return response()->json($transactions);
-    // return view('pages.transactions');
-    //     return view('pages.transactions-export', compact('transactions'));
-    // }
 }
