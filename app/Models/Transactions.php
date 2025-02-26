@@ -20,6 +20,6 @@ class Transactions extends Model
 
     public function cashier()
     {
-        return $this->belongsTo(User::class, 'cashier', 'id');
+        return $this->belongsTo(User::class, 'cashier');
     }
 }
