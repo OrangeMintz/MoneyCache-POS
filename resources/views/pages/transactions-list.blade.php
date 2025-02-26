@@ -11,6 +11,7 @@
                         class="bg-emerald-700 hover:bg-emerald-900 rounded-lg text-white text-md text-center self-center px-3 py-2 my-2 mx-2">Download
                         as PDF <i class="fas fa-file-pdf ml-1"></i></a>
                 </div>
+                >>>>>>> b629d79daba956d894c2d38fc1f8253b1110391f
             </div>
             <div class="overflow-x-auto">
                 <table id="example" class="display" style="width:100%">
@@ -32,9 +33,6 @@
     </div>
 </main>
 @include('layouts.footer')
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
 
 <script>
     // Formatting function for row details - modify as you need

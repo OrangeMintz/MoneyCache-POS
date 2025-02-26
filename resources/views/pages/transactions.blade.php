@@ -200,8 +200,7 @@
         </div>
     </div>
 </main>
-{{-- toaster for update notification --}}
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 @include('layouts.footer')
 
 
@@ -249,104 +248,62 @@
 </script>
 
 
-{{-- validation: no negative, atleast one field is filled--}}
+{{-- EDIT validation: no negative, atleast one field is filled--}}
 <script>   
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("storeForm");
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("storeForm");
 
-    form.addEventListener("submit", function (event) {
-        let isValid = true;
-        let hasValidPayment = false;
-        const paymentFields = [
-            "cash", "check", "bpi_ccard", "bpi_dcard", "metro_ccard",
-            "metro_dcard", "paymaya", "aub_ccard", "gcash",
-            "food_panda", "streetby", "grabfood", "gc_claimed_others", "gc_claimed_own"
-        ];
+        form.addEventListener("submit", function (event) {
+            let isValid = true;
+            let hasValidPayment = false;
+            const paymentFields = [
+                "cash", "check", "bpi_ccard", "bpi_dcard", "metro_ccard", "metro_dcard", "paymaya", "aub_ccard", "gcash", "food_panda", "streetby", "grabfood", "gc_claimed_others", "gc_claimed_own"];
 
-        console.log("Form submitted, checking fields...");
+            paymentFields.forEach((field) => {
+                let input = document.getElementById(field);
+                let value = input.value.trim();
+                let errorElement = input.nextElementSibling;
 
-        paymentFields.forEach((field) => {
-            let input = document.getElementById(field);
-            let value = input.value.trim();
-            let errorElement = input.nextElementSibling;
+                if (!errorElement || !errorElement.classList.contains("error-message")) {
+                    errorElement = document.createElement("div");
+                    errorElement.classList.add("error-message");
+                    errorElement.style.color = "red";
+                    errorElement.style.fontSize = "12px";
+                    input.after(errorElement);
+                }
 
-            if (!errorElement || !errorElement.classList.contains("error-message")) {
-                errorElement = document.createElement("div");
-                errorElement.classList.add("error-message");
-                errorElement.style.color = "red";
-                errorElement.style.fontSize = "12px";
-                input.after(errorElement);
-            }
-
-            if (value !== "") {
-                if (isNaN(value) || Number(value) <= 0) {
-                    errorElement.textContent = "Please enter a positive number.";
-                    input.classList.add("border-red-500");
-                    isValid = false;
+                //if value is filled
+                if (value !== "") {
+                    if (isNaN(value) || Number(value) <= 0) {
+                        errorElement.textContent = "Please enter a positive number.";
+                        input.classList.add("border-red-500");
+                        isValid = false;
+                    } else {
+                        errorElement.textContent = "";
+                        input.classList.remove("border-red-500");
+                        hasValidPayment = true;
+                    }
                 } else {
                     errorElement.textContent = "";
                     input.classList.remove("border-red-500");
-                    hasValidPayment = true;
                 }
-            } else {
-                errorElement.textContent = "";
-                input.classList.remove("border-red-500");
+            });
+
+            if (!hasValidPayment) {
+                event.preventDefault(); // Stop form submission
+                toastr.error("Please enter at least one valid payment amount.");
+            }
+
+            // If there are any invalid inputs, stop form submission
+            if (!isValid) {
+                event.preventDefault();
             }
         });
-
-        // If no valid payment field is filled, show alert error
-        // Check if at least one valid payment is entered
-        // if (!hasValidPayment) {
-        //     alert("Please enter at least one valid payment amount.");
-        //     isValid = false;
-        // }
-
-        // Toaster for 'atleast one valid payment' Still not working. . .
-        // Show Toastr error ONLY IF all fields are empty
-
-        if (!hasValidPayment) {
-            event.preventDefault(); // Stop form submission
-            toastr.error("Please enter at least one valid payment amount.");
-        }
-
-        // If there are any invalid inputs, stop form submission
-        if (!isValid) {
-            event.preventDefault();
-            console.log("Invalid input detected, form submission stopped.");
-        }
     });
-});
-
-
-
 </script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-{{-- toaster for update notification --}}
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<script>
- @if(Session::has('message'))
- var type = "{{ Session::get('alert-type','info') }}"
- switch(type){
-    case 'info':
-    toastr.info(" {{ Session::get('message') }} ");
-    break;
 
-    case 'success':
-    toastr.success(" {{ Session::get('message') }} ");
-    break;
 
-    case 'warning':
-    toastr.warning(" {{ Session::get('message') }} ");
-    break;
-
-    case 'error':
-    toastr.error(" {{ Session::get('message') }} ");
-    break; 
- }
- @endif 
-</script>
-{{-- end of toaster for update notif --}}
 
 
 </body>
