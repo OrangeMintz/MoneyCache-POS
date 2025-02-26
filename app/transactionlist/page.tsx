@@ -8,7 +8,6 @@ import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -134,7 +133,7 @@ const [summary, setSummary] = useState({
         </TableCell>
         <TableCell>{row.id}</TableCell>
         <TableCell>{row.cashier?.name || 'Unknown'}</TableCell>
-        <TableCell align="right">{row.created_at}</TableCell>
+        <TableCell align="center">{row.created_at}</TableCell>
         <TableCell align="right">{row.time}</TableCell>
         <TableCell align="right">{row.sub_total_trade}</TableCell>
         <TableCell align="right">{row.sub_total_non_trade}</TableCell>
@@ -188,19 +187,19 @@ const [summary, setSummary] = useState({
                                                     <div className="w-full">
                                                         <div className="mb-1 flex w-full ">
                                                             <label className="block text-xs font-bold w-full">Subtotal Trade POS:</label>
-                                                            <p className="text-xs w-full py-1 border-gray-300 rounded-md w-full">
+                                                            <p className="text-xs w-full py-1 overflow-hidden border-gray-300 rounded-md w-full">
                                                                 P {summary.trade.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                             </p>
                                                         </div>
                                                         <div className="mb-1 flex w-full ">
                                                             <label className="block text-xs font-bold w-full">Subtotal Non-Trade POS:</label>
-                                                            <p className="text-xs w-full py-1 border-gray-300 rounded-md">
+                                                            <p className="text-xs w-full py-1 overflow-hidden border-gray-300 rounded-md">
                                                                 P {summary.non_trade.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                             </p>
                                                         </div>
                                                         <div className="mb-1 flex w-full ">
                                                             <label className="block w-full text-xs font-bold">GRAND TOTAL POS:</label>
-                                                            <p className="text-xs w-full py-1 border-gray-300 rounded-md">
+                                                            <p className="text-xs w-full py-1 overflow-hidden border-gray-300 rounded-md">
                                                                 P {(summary.trade + summary.non_trade).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                             </p>
                                                         </div>
@@ -474,7 +473,7 @@ export default function CollapsibleTable() {
                 <TableCell />
                 <TableCell>ID</TableCell>
                 <TableCell>Cashier</TableCell>
-                <TableCell>Date</TableCell>
+                <TableCell align="center">Date</TableCell>
                 <TableCell align="right">Time</TableCell>
                 <TableCell align="right">Sub-Total Trade</TableCell>
                 <TableCell align="right">Sub-Total Non Trade</TableCell>
