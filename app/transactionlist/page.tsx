@@ -17,6 +17,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
+import Toast from 'typescript-toastify';
 import api from "../../utils/api";
 
 
@@ -50,7 +51,7 @@ function Row({ row, handleSave }) {
     width: "70%",
     bgcolor: "background.paper",
     boxShadow: 24,
-  p: 6
+    p: 6
   }
   const [editFormData, setEditFormData] = useState({
     cashier: row.cashier?.id || 0,
@@ -76,9 +77,9 @@ function Row({ row, handleSave }) {
     mm_dm: row.mm_dm || 0,
     food_charge: row.food_charge || 0,
     z_reading_pos: row.z_reading_pos || 0,
-});
+  });
 
-const [summary, setSummary] = useState({
+  const [summary, setSummary] = useState({
     trade: 0,
     non_trade: 0,
     grand_total: 0,
@@ -89,19 +90,77 @@ const [summary, setSummary] = useState({
   };
 
   const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      setEditFormData({
-        ...editFormData,
-        [e.target.name] : e.target.value
-      })
+    setEditFormData({
+      ...editFormData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleEditFormSubmit = async (event: React.FormEvent) => {
+    event.preventDefault()
+    const token = localStorage.getItem('access_token');
+
+    try {
+
+      const response = await api.post(`/api/transaction/${row.id}`, { ...editFormData }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      });
+
+      console.log(response.data)
+
+      if (response.data.status === 'success') {
+        new Toast({
+          position: "top-right",
+          onClose: () => { window.location.href = "/transactionlist"; },
+          toastMsg: "Successfully stored transaction!",
+          autoCloseTime: 1000,
+          canClose: true,
+          showProgress: true,
+          pauseOnHover: true,
+          pauseOnFocusLoss: true,
+          type: "success",
+          theme: 'dark',
+        });
+      } else {
+        new Toast({
+          position: "top-right",
+          toastMsg: response.data.message,
+          autoCloseTime: 1000,
+          canClose: true,
+          showProgress: true,
+          pauseOnHover: true,
+          pauseOnFocusLoss: true,
+          type: "error",
+          theme: 'dark',
+        });
+      }
+
+    } catch (error) {
+      console.error("Error updating transaction: ", error)
+      new Toast({
+        position: "top-right",
+        toastMsg: "Error updating transaction",
+        autoCloseTime: 1000,
+        canClose: true,
+        showProgress: true,
+        pauseOnHover: true,
+        pauseOnFocusLoss: true,
+        type: "error",
+        theme: 'dark',
+      });
+    }
   }
 
   useEffect(() => {
 
-      const nonTradeTotal = Number(editFormData.mm_rm || 0) + Number(editFormData.mm_km || 0) + Number(editFormData.mm_dm || 0) + Number(editFormData.food_charge || 0);
-      const tradeTotal = 
-      Number(editFormData.cash || 0) + 
-      Number(editFormData.check || 0) + 
-      Number(editFormData.bpi_ccard || 0) + 
+    const nonTradeTotal = Number(editFormData.mm_rm || 0) + Number(editFormData.mm_km || 0) + Number(editFormData.mm_dm || 0) + Number(editFormData.food_charge || 0);
+    const tradeTotal =
+      Number(editFormData.cash || 0) +
+      Number(editFormData.check || 0) +
+      Number(editFormData.bpi_ccard || 0) +
       Number(editFormData.bpi_dcard || 0) +
       Number(editFormData.metro_ccard || 0) +
       Number(editFormData.metro_dcard || 0) +
@@ -112,15 +171,15 @@ const [summary, setSummary] = useState({
       Number(editFormData.streetby || 0) +
       Number(editFormData.grabfood || 0) +
       Number(editFormData.gc_claimed_others || 0) +
-      Number(editFormData.gc_claimed_own || 0) 
+      Number(editFormData.gc_claimed_own || 0)
 
-      setSummary((prevSummary) => ({
-        ...prevSummary,
-        trade: tradeTotal,
-        non_trade: nonTradeTotal,
-      }));
+    setSummary((prevSummary) => ({
+      ...prevSummary,
+      trade: tradeTotal,
+      non_trade: nonTradeTotal,
+    }));
 
-  },[editFormData])
+  }, [editFormData])
 
 
   return (
@@ -152,34 +211,34 @@ const [summary, setSummary] = useState({
           {/* Modal for EDIT */}
           <Modal
             open={modalOpen}
-            onClose={() => {setModalOpen(false)}}
+            onClose={() => { setModalOpen(false) }}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
             <Box sx={modalStyle}>
-                <h2 className="text-sm font-semibold mb-4">Edit Transaction</h2>
+              <h2 className="text-sm font-semibold mb-4">Edit Transaction</h2>
 
-                <form className="space-y-6 p-4">
+              <form className="space-y-6 p-4" onSubmit={handleEditFormSubmit}>
 
-                  <div className='flex gap-4'>
-                    {/* Shift Details */}
-                    <div className="border p-4 rounded-md shadow-sm bg-gray-50 w-full">
-                      <h2 className="text-sm font-semibold mb-2">Shift Details</h2>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-xs font-medium">Cashier's Name:</label>
-                          <input type="text" name="cashier" value={row.cashier?.name} disabled className="text-xs w-full p-2 border border-gray-300 rounded-md" />
-                        </div>
-                        <div>
-                          <label className="block text-xs font-medium">Shift Time:</label>
-                          <select name="time" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={editFormData.time} onChange={handleEditChange}>
-                            <option value="AM">AM</option>
-                            <option value="MID">MID</option>
-                            <option value="PM">PM</option>
-                          </select>
-                        </div>
+                <div className='flex gap-4'>
+                  {/* Shift Details */}
+                  <div className="border p-4 rounded-md shadow-sm bg-gray-50 w-full">
+                    <h2 className="text-sm font-semibold mb-2">Shift Details</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-medium">Cashier's Name:</label>
+                        <input type="text" name="cashier" value={row.cashier?.name} disabled className="text-xs w-full p-2 border border-gray-300 rounded-md" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium">Shift Time:</label>
+                        <select name="time" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={editFormData.time} disabled>
+                          <option value="AM">AM</option>
+                          <option value="MID">MID</option>
+                          <option value="PM">PM</option>
+                        </select>
                       </div>
                     </div>
+                  </div>
 
                     {/* Summary */}
                     <div className="border p-4 rounded-md shadow-sm bg-gray-50 w-full">
@@ -205,155 +264,145 @@ const [summary, setSummary] = useState({
                                                         </div>
                                                     </div>
                   </div>
-                  </div>
-                  
-                  <div className='flex gap-4'>
-                      {/* MM Details */}
-                      <div className="border p-4 rounded-md shadow-sm bg-gray-50 w-2/5">
-                        <h2 className="text-sm font-semibold mb-2">MM Details</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                </div>
 
-                          <div>
-                            <label className="block text-xs font-medium">MM head:</label>
-                            <input type="text" name="mm_head"  placeholder="MM Head" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_head)?editFormData.mm_head:""} onChange={handleEditChange} />
-                          </div>
+                <div className='flex gap-4'>
+                  {/* MM Details */}
+                  <div className="border p-4 rounded-md shadow-sm bg-gray-50 w-2/5">
+                    <h2 className="text-sm font-semibold mb-2">MM Details</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                          <div>
-                            <label className="block text-xs font-medium">MM Commissary:</label>
-                            <input type="text" name="mm_commissary" placeholder="MM Commissary" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_commissary)?editFormData.mm_commissary:""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">MM RM:</label>
-                            <input type="number" name="mm_rm" placeholder="MM RM" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_rm)?editFormData.mm_rm:""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">MM DM:</label>
-                            <input type="number" name="mm_dm" placeholder="MM DM" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_dm)?editFormData.mm_dm:""} onChange={handleEditChange} /> 
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">MM KM:</label>
-                            <input type="number" name="mm_km" placeholder="MM KM" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_km)?editFormData.mm_km:""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">Food Charge:</label>
-                            <input type="number" name="food_charge" placeholder="Food Charge" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.food_charge)?editFormData.food_charge:""} onChange={handleEditChange}  />
-                          </div>
-                          
-                        </div>
+                      <div>
+                        <label className="block text-xs font-medium">MM head:</label>
+                        <input type="text" name="mm_head" placeholder="MM Head" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_head) ? editFormData.mm_head : ""} onChange={handleEditChange} />
                       </div>
 
-                        {/* Payment Details */}
-                    <div className="border p-4 rounded-md shadow-sm bg-gray-50 w-3/5">
-                      <h2 className="text-sm font-semibold mb-2">Payment Details</h2>
-                      <div className='flex gap-4'>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-1/2">
-
-                          <div>
-                            <label className="block text-xs font-medium">Cash:</label>
-                            <input type="number" name="cash"  placeholder="Cash" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.cash)?editFormData.cash:""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">Check:</label>
-                            <input type="number" name="check" placeholder="Check" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.check)?editFormData.check:""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">BPI Credit:</label>
-                            <input type="number" name="bpi_ccard" placeholder="BPI Credit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.bpi_ccard)?editFormData.bpi_ccard:""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">BPI Debit:</label>
-                            <input type="number" name="bpi_dcard" placeholder="BPI Debit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.bpi_dcard)?editFormData.bpi_dcard:""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">Metro Credit:</label>
-                            <input type="number" name="metro_ccard" placeholder="Metro Credit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.metro_ccard)?editFormData.metro_ccard:""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">Metro Debit:</label>
-                            <input type="number" name="metro_dcard" placeholder="Metro Debit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.metro_dcard)?editFormData.metro_dcard:""} onChange={handleEditChange}/>
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">AUB Credit:</label>
-                            <input type="number" name="aub_ccard" placeholder="Aub Credit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.aub_ccard)?editFormData.aub_ccard:""} onChange={handleEditChange}/>
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">Paymaya:</label>
-                            <input type="number" name="paymaya" placeholder="Paymaya" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.paymaya)?editFormData.paymaya:""} onChange={handleEditChange}/>
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-1/2">
-                          <div>
-                            <label className="block text-xs font-medium">Gcash:</label>
-                            <input type="number" name="gcash"  placeholder="GCash" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.gcash)?editFormData.gcash:""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">Foodpanda:</label>
-                            <input type="number" name="food_panda" placeholder="Foodpanda" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.food_panda)?editFormData.food_panda:""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">Street By:</label>
-                            <input type="number" name="streetby" placeholder="Street By" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.streetby)?editFormData.streetby:""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">Grab Food:</label>
-                            <input type="number" name="grabfood" placeholder="Grab Food" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.grabfood)?editFormData.grabfood:""} onChange={handleEditChange} />
-                          </div>
-                          
-                          <div>
-                            <label className="block text-xs font-medium">GC Others:</label>
-                            <input type="number" name="gc_claimed_others" placeholder="GC Others" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.gc_claimed_others)?editFormData.gc_claimed_others:""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">GC Own:</label>
-                            <input type="number" name="gc_claimed_own" placeholder="GC Own" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.gc_claimed_own)?editFormData.gc_claimed_own:""} onChange={handleEditChange}/>
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">Z Reading POS:</label>
-                            <input type="number" name="z_reading_pos" placeholder="Z Reading POS" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.z_reading_pos)?editFormData.z_reading_pos:""} onChange={handleEditChange}/>
-                          </div>
-                        </div>
-
+                      <div>
+                        <label className="block text-xs font-medium">MM Commissary:</label>
+                        <input type="text" name="mm_commissary" placeholder="MM Commissary" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_commissary) ? editFormData.mm_commissary : ""} onChange={handleEditChange} />
                       </div>
-                      
 
-                      
+                      <div>
+                        <label className="block text-xs font-medium">MM RM:</label>
+                        <input type="number" name="mm_rm" placeholder="MM RM" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_rm) ? editFormData.mm_rm : ""} onChange={handleEditChange} />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-medium">MM DM:</label>
+                        <input type="number" name="mm_dm" placeholder="MM DM" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_dm) ? editFormData.mm_dm : ""} onChange={handleEditChange} />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-medium">MM KM:</label>
+                        <input type="number" name="mm_km" placeholder="MM KM" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_km) ? editFormData.mm_km : ""} onChange={handleEditChange} />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-medium">Food Charge:</label>
+                        <input type="number" name="food_charge" placeholder="Food Charge" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.food_charge) ? editFormData.food_charge : ""} onChange={handleEditChange} />
+                      </div>
+
                     </div>
-
                   </div>
-                 
 
-                  
-                  
+                  {/* Payment Details */}
+                  <div className="border p-4 rounded-md shadow-sm bg-gray-50 w-3/5">
+                    <h2 className="text-sm font-semibold mb-2">Payment Details</h2>
+                    <div className='flex gap-4'>
 
-                  {/* Buttons */}
-                  <div className="mt-6 flex justify-end">
-                    <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">Save</button>
-                    <button type="button" onClick={() => {setModalOpen(false)}} className="ml-2 px-4 py-2 bg-gray-400 text-white rounded-md">Cancel</button>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-1/2">
+
+                        <div>
+                          <label className="block text-xs font-medium">Cash:</label>
+                          <input type="number" name="cash" placeholder="Cash" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.cash) ? editFormData.cash : ""} onChange={handleEditChange} />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium">Check:</label>
+                          <input type="number" name="check" placeholder="Check" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.check) ? editFormData.check : ""} onChange={handleEditChange} />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium">BPI Credit:</label>
+                          <input type="number" name="bpi_ccard" placeholder="BPI Credit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.bpi_ccard) ? editFormData.bpi_ccard : ""} onChange={handleEditChange} />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium">BPI Debit:</label>
+                          <input type="number" name="bpi_dcard" placeholder="BPI Debit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.bpi_dcard) ? editFormData.bpi_dcard : ""} onChange={handleEditChange} />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium">Metro Credit:</label>
+                          <input type="number" name="metro_ccard" placeholder="Metro Credit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.metro_ccard) ? editFormData.metro_ccard : ""} onChange={handleEditChange} />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium">Metro Debit:</label>
+                          <input type="number" name="metro_dcard" placeholder="Metro Debit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.metro_dcard) ? editFormData.metro_dcard : ""} onChange={handleEditChange} />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium">AUB Credit:</label>
+                          <input type="number" name="aub_ccard" placeholder="Aub Credit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.aub_ccard) ? editFormData.aub_ccard : ""} onChange={handleEditChange} />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium">Paymaya:</label>
+                          <input type="number" name="paymaya" placeholder="Paymaya" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.paymaya) ? editFormData.paymaya : ""} onChange={handleEditChange} />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-1/2">
+                        <div>
+                          <label className="block text-xs font-medium">Gcash:</label>
+                          <input type="number" name="gcash" placeholder="GCash" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.gcash) ? editFormData.gcash : ""} onChange={handleEditChange} />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium">Foodpanda:</label>
+                          <input type="number" name="food_panda" placeholder="Foodpanda" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.food_panda) ? editFormData.food_panda : ""} onChange={handleEditChange} />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium">Street By:</label>
+                          <input type="number" name="streetby" placeholder="Street By" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.streetby) ? editFormData.streetby : ""} onChange={handleEditChange} />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium">Grab Food:</label>
+                          <input type="number" name="grabfood" placeholder="Grab Food" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.grabfood) ? editFormData.grabfood : ""} onChange={handleEditChange} />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium">GC Others:</label>
+                          <input type="number" name="gc_claimed_others" placeholder="GC Others" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.gc_claimed_others) ? editFormData.gc_claimed_others : ""} onChange={handleEditChange} />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium">GC Own:</label>
+                          <input type="number" name="gc_claimed_own" placeholder="GC Own" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.gc_claimed_own) ? editFormData.gc_claimed_own : ""} onChange={handleEditChange} />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium">Z Reading POS:</label>
+                          <input type="number" name="z_reading_pos" placeholder="Z Reading POS" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.z_reading_pos) ? editFormData.z_reading_pos : ""} onChange={handleEditChange} />
+                        </div>
+                      </div>
+
+                    </div>
                   </div>
-                </form>
-
+                </div>
+                {/* Buttons */}
+                <div className="mt-6 flex justify-end">
+                  <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">Save</button>
+                  <button type="button" onClick={() => { setModalOpen(false) }} className="ml-2 px-4 py-2 bg-gray-400 text-white rounded-md">Cancel</button>
+                </div>
+              </form>
             </Box>
           </Modal>
 
-          
+
         </TableCell>
       </TableRow>
       <TableRow>

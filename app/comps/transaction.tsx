@@ -4,19 +4,19 @@ import Toast from 'typescript-toastify';
 import api from "../../utils/api";
 
 type Cashier = {
-  id: number;
-  name: string;
-  email: string;
-  created_at: string;
-  updated_at: string;
-  email_verified_at: string | null;
+    id: number;
+    name: string;
+    email: string;
+    created_at: string;
+    updated_at: string;
+    email_verified_at: string | null;
 };
 
 type TransactionFormProps = {
     cashier: Cashier;
 }
 
-export default function CashierForm({cashier}: TransactionFormProps) {
+export default function CashierForm({ cashier }: TransactionFormProps) {
     const [formData, setFormData] = useState({
         cashier: cashier.id,
         time: "AM",
@@ -64,7 +64,7 @@ export default function CashierForm({cashier}: TransactionFormProps) {
             formData.streetby,
             formData.grabfood,
             formData.gc_claimed_others,
-            formData.gc_claimed_own,    
+            formData.gc_claimed_own,
         ];
 
         const nonTradeFields = [
@@ -85,13 +85,13 @@ export default function CashierForm({cashier}: TransactionFormProps) {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-    
+
         setFormData(prevState => ({
             ...prevState,
             [name]: name === "mm" ? value : value === "" ? null : !isNaN(Number(value)) ? Number(value) : value,
         }));
     };
-    
+
 
     const handleFormSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
