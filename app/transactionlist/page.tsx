@@ -258,7 +258,7 @@ function Row({ row, handleSave }) {
         </TableCell>
         <TableCell>{row.id}</TableCell>
         <TableCell>{row.cashier?.name || 'Unknown'}</TableCell>
-        <TableCell align="center">{row.created_at}</TableCell>
+        <TableCell align="center">{new Date(row.created_at).toISOString().split("T")[0]}</TableCell>
         <TableCell align="right">{row.time}</TableCell>
         <TableCell align="right">{row.sub_total_trade}</TableCell>
         <TableCell align="right">{row.sub_total_non_trade}</TableCell>

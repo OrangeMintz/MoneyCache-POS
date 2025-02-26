@@ -38,6 +38,7 @@ export default function CashierForm({ cashier }: TransactionFormProps) {
         mm_commissary: null,
         mm_rm: null,
         mm_dm: null,
+        mm_km: null,
         food_charge: null,
         z_reading_pos: null,
     });
@@ -68,10 +69,11 @@ export default function CashierForm({ cashier }: TransactionFormProps) {
         ];
 
         const nonTradeFields = [
-            formData.mm_head,
-            formData.mm_commissary,
+            // formData.mm_head,
+            // formData.mm_commissary,
             formData.mm_rm,
             formData.mm_dm,
+            formData.mm_km,
             formData.food_charge,
         ];
 
@@ -150,175 +152,183 @@ export default function CashierForm({ cashier }: TransactionFormProps) {
     };
 
     return (
-<main className="bg-gray-100 w-full text-black min-h-screen">
-    <div className="relative bg-white w-full">
-        <div className="flex flex-col lg:flex-row gap-6 w-full max-w-full overflow-x-hidden">
-            <div className="flex-1">
-                <form method="POST" className="bg-white rounded-lg shadow-md p-6 w-full" onSubmit={handleFormSubmit}>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-7">
-                        {/* Left Column */}
-                        <div className="space-y-6">
-                            {/* Payment Methods Section */}
-                            <div className="w-full">
-                                <h2 className="font-semibold mt-0 text-lg mb-4 p-6 border-2 rounded-lg shadow-md">PAYMENT METHODS:</h2>
-                                <div className="bg-white shadow-md grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 rounded-lg border-2 gap-6 p-6">
-                                    <div className="w-full mb-3">
-                                        <label className="block text-sm font-medium">Cash:</label>
-                                        <input type="number" name="cash" placeholder="Enter your Cash..." className="w-full mb-4 appearance-none block p-6 bg-gray-200 text-gray-700 border rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange}/>
+        <main className="bg-gray-100 w-full text-black min-h-screen">
+            <div className="relative  w-full">
+                <div className="flex flex-col lg:flex-row gap-6 w-full max-w-full overflow-x-hidden">
+                    <div className="flex-1">
+                        <form method="POST" className=" rounded-lg shadow-md p-6 w-full" onSubmit={handleFormSubmit}>
+
+                            <div className="bg-white p-6 flex w-full grid grid-cols-1 lg:grid-cols-7 rounded-md gap-2">
+                                {/* Left Column */}
+                                <div className="  flex gap-2 grid grid-cols-1 lg:grid-cols-5 col-span-5">
+                                    <div className="col-span-1 lg:col-span-3 ">
+                                        <h2 className="bg-gray-100 font-semibold tracking-wide mt-0 text-lg p-5 border-2 rounded-t-md shadow-md">PAYMENT DETAILS:</h2>
+                                        <div className="bg-white shadow-md grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 rounded-b-lg border-2 gap-6 p-6 mb-2">
+                                            <div className="w-full">
+                                                <label className="block text-xs font-medium">Cash:</label>
+                                                <input type="number" name="cash" placeholder="Enter your Cash..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange} />
+                                            </div>
+                                            <div className="w-full">
+                                                <label className="block text-xs font-medium">Check:</label>
+                                                <input type="number" name="check" placeholder="Enter your Check..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange} />
+                                            </div>
+                                            <div className="w-full">
+                                                <label className="block text-xs font-medium">BPI Credit Card:</label>
+                                                <input type="number" name="bpi_ccard" placeholder="Enter Credit ..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange} />
+                                            </div>
+                                            <div className="w-full">
+                                                <label className="block text-xs font-medium">BPI Debit Card:</label>
+                                                <input type="number" name="bpi_dcard" placeholder="Enter value..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange} />
+                                            </div>
+                                            <div className="w-full">
+                                                <label className="block text-xs font-medium">Metro Credit Card:</label>
+                                                <input type="number" name="metro_ccard" placeholder="Enter a value..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange} />
+                                            </div>
+                                            <div className="w-full">
+                                                <label className="block text-xs font-medium">Metro Debit Card:</label>
+                                                <input type="number" name="metro_dcard" placeholder="Enter a value..." className="text-xs w-full appearance-none block p-3  bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange} />
+                                            </div>
+                                            <div className="w-full">
+                                                <label className="block text-xs font-medium">Pay Maya:</label>
+                                                <input type="number" name="paymaya" placeholder="Enter a value..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange} />
+                                            </div>
+                                            <div className="w-full">
+                                                <label className="block text-xs font-medium">AUB Credit Card:</label>
+                                                <input type="number" name="aub_ccard" placeholder="Enter a value..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange} />
+                                            </div>
+                                            <div className="w-full">
+                                                <label className="block text-xs font-medium">GCash:</label>
+                                                <input type="number" name="gcash" placeholder="Enter a value..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange} />
+                                            </div>
+                                            <div className="w-full">
+                                                <label className="block text-xs font-medium">Food Panda:</label>
+                                                <input type="number" name="food_panda" placeholder="Enter a value..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange} />
+                                            </div>
+                                            <div className="w-full">
+                                                <label className="block text-xs font-medium">StreetBy:</label>
+                                                <input type="number" name="streetby" placeholder="Enter a value..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange} />
+                                            </div>
+                                            <div className="w-full">
+                                                <label className="block text-xs font-medium">Grab Food:</label>
+                                                <input type="number" name="grabfood" placeholder="Enter a value..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange} />
+                                            </div>
+                                            <div className="w-full">
+                                                <label className="block text-xs font-medium">GC Claimed (Others):</label>
+                                                <input type="number" name="gc_claimed_others" placeholder="Enter a value..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange} />
+                                            </div>
+                                            <div className="w-full">
+                                                <label className="block text-xs font-medium">GC Claimed (OWN):</label>
+                                                <input type="number" name="gc_claimed_own" placeholder="Enter a value..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange} />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="w-full">
-                                        <label className="block text-sm font-medium">Check:</label>
-                                        <input type="number" name="check" placeholder="Enter your Check..." className="w-full appearance-none mb-4 block p-6 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange} />
+
+                                    <div className="col-span-1 lg:col-span-2">
+                                        <h2 className="bg-gray-100 font-semibold tracking-wide mt-0 text-lg p-5 border-2 rounded-t-md shadow-md">MM DETAILS:</h2>
+                                        <div className="bg-white shadow-md  rounded-b-lg border-2 ">
+                                            <div className="w-full grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-2 gap-6 p-6">
+                                                <div className="w-full">
+                                                    <label className="block mb-1 text-xs font-medium text-gray-900">Head Office:</label>
+                                                    <input type="text" placeholder="Enter a Name..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="mm_head" onChange={handleInputChange} />
+                                                </div>
+                                                <div className="w-full">
+                                                    <label className="block mb-1 text-xs font-medium text-gray-900">Commissary:</label>
+                                                    <input type="text" placeholder="Enter a Name..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="mm_commissary" onChange={handleInputChange} />
+                                                </div>
+                                                <div className="w-full">
+                                                    <label className="block mb-1 text-xs font-medium text-gray-900">MM-RM:</label>
+                                                    <input type="number" placeholder="Enter a value..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="mm_rm" onChange={handleInputChange} />
+                                                </div>
+                                                <div className="w-full">
+                                                    <label className="block mb-1 text-xs font-medium text-gray-900">MM-DM:</label>
+                                                    <input type="number" placeholder="Enter a value..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="mm_dm" onChange={handleInputChange} />
+                                                </div>
+                                                <div className="w-full">
+                                                    <label className="block mb-1 text-xs font-medium text-gray-900">MM-KM:</label>
+                                                    <input type="number" placeholder="Enter a value..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="mm_km" onChange={handleInputChange} />
+                                                </div>
+                                                <div className="w-full">
+                                                    <label className="block mb-1 text-xs font-medium text-gray-900">FOOD CHARGE:</label>
+                                                    <input type="number" placeholder="Enter a value..." className="text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="food_charge" onChange={handleInputChange} />
+                                                </div>
+                                            </div>
+
+                                            <div className="w-full p-6">
+                                                <label className="block text-sm font-semibold">Z READING POS:</label>
+                                                <input type="number" placeholder="Enter a value..." className=" text-xs w-full appearance-none block p-3 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="z_reading_pos" onChange={handleInputChange} />
+                                            </div>
+
+
+
+                                        </div>
+
+
+
                                     </div>
-                                    <div className="w-full">
-                                        <label className="block text-sm font-medium">BPI Credit Card:</label>
-                                        <input type="number" name="bpi_ccard"  placeholder="Enter Credit ..." className="w-full appearance-none mb-4 block p-6 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange} />
+                                </div>
+
+                                {/* Right Column */}
+                                <div className="col-span-1 lg:col-span-2">
+                                    <h2 className="bg-gray-100 font-semibold tracking-wide mt-0 text-lg p-5 border-2 rounded-t-md shadow-md">SHIFT TIME:</h2>
+                                    <div className="bg-white shadow-md rounded-b-lg border-2 gap-6 p-6">
+                                        <div className="w-full mb-3">
+                                            <label className="block text-sm font-medium">Cashier's Name:</label>
+                                            <input type="text" className="text-sm w-full appearance-none block p-3 bg-gray-200 text-gray-700 border rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="cashier" disabled value={cashier.name} />
+                                        </div>
+                                        <div className="w-full">
+                                            <label className="block text-sm font-medium">Shift Time:</label>
+                                            <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="time" onChange={handleInputChange}>
+                                                <option>Choose Time...</option>
+                                                <option value="AM">AM</option>
+                                                <option value="MID">MID</option>
+                                                <option value="PM">PM</option>
+                                            </select>
+                                        </div>
+
+
+                                        {/* Summary Section */}
+                                        <h2 className="font-semibold tracking-wider text-lg mt-5 mb-3 pt-6">SUMMARY:</h2>
+                                        <div className="border p-4 rounded-md shadow-sm bg-green-100 w-full">
+                                            <div className="w-full">
+                                                <div className="flex w-full mb-2">
+                                                    <label className="block text-sm font-regular w-2/5">Subtotal POS:</label>
+                                                    <p className="text-sm overflow-hidden border-gray-300 rounded-md w-3/5">
+                                                        P {subtotalTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                    </p>
+                                                </div>
+                                                <div className="flex w-full items-end mb-2">
+                                                    <label className="block text-sm font-regular w-2/5">Subtotal Non-POS:</label>
+                                                    <p className="text-sm overflow-hidden border-gray-300 rounded-md w-3/5">
+                                                        P {subtotalNonTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                    </p>
+                                                </div>
+                                                <div className="flex w-full items-end">
+                                                    <label className="block text-sm font-regular w-2/5">Grand Total:</label>
+                                                    <p className="text-sm overflow-hidden border-gray-300 rounded-md w-3/5">
+                                                        P {grandTotalPOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button
+                                            type="submit"
+                                            className="w-full py-3 bg-green-600 text-white rounded-md text-sm mt-6 hover:bg-green-500 transition-all duration-300 hover:scale-105"
+                                            disabled={disable}
+                                        >
+                                            Submit
+                                        </button>
+
                                     </div>
-                                    <div className="w-full">
-                                        <label className="block text-sm font-medium">BPI Debit Card:</label>
-                                        <input type="number" name="bpi_dcard" placeholder="Enter value..." className="w-full appearance-none block mb-4 p-6 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange} />
-                                    </div>
-                                    <div className="w-full">
-                                        <label className="block text-sm font-medium">Metro Credit Card:</label>
-                                        <input type="number" name="metro_ccard" placeholder="Enter a value..." className="w-full appearance-none block mb-4 p-6 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange}/>
-                                    </div>
-                                    <div className="w-full">
-                                        <label className="block text-sm font-medium">Metro Debit Card:</label>
-                                        <input type="number" name="metro_dcard" placeholder="Enter a value..." className="w-full appearance-none block p-6 mb-4  bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange}/>
-                                    </div>
-                                    <div className="w-full">
-                                        <label className="block text-sm font-medium">Pay Maya:</label>
-                                        <input type="number" name="paymaya" placeholder="Enter a value..." className="w-full appearance-none mb-4 block p-6 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange}/>
-                                    </div>
-                                    <div className="w-full">
-                                        <label className="block text-sm font-medium">AUB Credit Card:</label>
-                                        <input type="number" name="aub_ccard" placeholder="Enter a value..." className="w-full appearance-none mb-4 block p-6 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange}/>
-                                    </div>
-                                    <div className="w-full">
-                                        <label className="block text-sm font-medium">GCash:</label>
-                                        <input type="number" name="gcash" placeholder="Enter a value..." className="w-full appearance-none block mb-4 p-6 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange}/>
-                                    </div>
-                                    <div className="w-full">
-                                        <label className="block text-sm font-medium">Food Panda:</label>
-                                        <input type="number" name="food_panda" placeholder="Enter a value..." className="w-full appearance-none mb-4 block p-6 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange}/>
-                                    </div>
-                                    <div className="w-full">
-                                        <label className="block text-sm font-medium">StreetBy:</label>
-                                        <input type="number" name="streetby" placeholder="Enter a value..." className="w-full appearance-none mb-4 block p-6 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange}/>
-                                    </div>
-                                    <div className="w-full">
-                                        <label className="block text-sm font-medium">Grab Food:</label>
-                                        <input type="number" name="grabfood" placeholder="Enter a value..." className="w-full appearance-none mb-4 block p-6 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange}/>
-                                    </div>
-                                    <div className="w-full">
-                                        <label className="block text-sm font-medium">GC Claimed (Others):</label>
-                                        <input type="number" name="gc_claimed_others"  placeholder="Enter a value..." className="w-full mb-4 appearance-none block p-6 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange}/>
-                                    </div>
-                                    <div className="w-full">
-                                        <label className="block text-sm font-medium">GC Claimed (OWN):</label>
-                                        <input type="number" name="gc_claimed_own" placeholder="Enter a value..." className="w-full mb-4 appearance-none block p-6 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" step="0.01" onChange={handleInputChange}/>
-                                    </div>
+
+
+
                                 </div>
                             </div>
 
-                            {/* MM Details Section */}
-                            <h2 className="font-semibold text-lg mb-4 p-6 border-2 rounded-lg w-full shadow-md">MM DETAILS:</h2>
-                            <div className="bg-white rounded-lg w-full rounded-lg border-2 shadow-md p-6">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-                                    <div className="w-full">
-                                        <label className="block mb-1 text-sm font-medium text-gray-900">MM-HEAD OFFICE:</label>
-                                        <input type="text" placeholder="Enter a Name..." className="w-full appearance-none mb-4 block p-6 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="mm_head" onChange={handleInputChange}/>
-                                    </div>
-                                    <div className="w-full">
-                                        <label className="block mb-1 text-sm font-medium text-gray-900">MM-COMMISSARY:</label>
-                                        <input type="text" placeholder="Enter a Name..." className="w-full appearance-none mb-4 block p-6 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="mm_commissary" onChange={handleInputChange}/>
-                                    </div>
-                                    <div className="w-full">
-                                        <label className="block mb-1 text-sm font-medium text-gray-900">MM-RM:</label>
-                                        <input type="text" placeholder="Enter a value..." className="w-full appearance-none mb-4 block p-6 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="mm_rm" onChange={handleInputChange}/>
-                                    </div>
-                                    <div className="w-full">
-                                        <label className="block mb-1 text-sm font-medium text-gray-900">MM-DM:</label>
-                                        <input type="text" placeholder="Enter a value..." className="w-full appearance-none mb-4 block p-6 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="mm_dm" onChange={handleInputChange}/>
-                                    </div>
-                                    <div className="w-full">
-                                        <label className="block mb-1 text-sm font-medium text-gray-900">MM-KM:</label>
-                                        <input type="text" placeholder="Enter a value..." className="w-full appearance-none mb-4 block p-6 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="mm_km" onChange={handleInputChange}/>
-                                    </div>
-                                    <div className="w-full">
-                                        <label className="block mb-1 text-sm font-medium text-gray-900">FOOD CHARGE:</label>
-                                        <input type="text" placeholder="Enter a value..." className="w-full appearance-none mb-4 block p-6 bg-gray-200 text-gray-700 border  rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="food_charge" onChange={handleInputChange}/>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Z Reading POS Section */}
-                            <h2 className="font-semibold text-lg mb-4 p-6 w-full border-2 shadow-md rounded-lg">Z READING POS</h2>
-                            <div className="w-full">
-                                <div className="bg-white mb-4 rounded-lg border-2 shadow-md p-6">
-                                    <label className="block text-sm font-medium">Z READING POS:</label>
-                                    <input type="text" className="w-full appearance-none mb-4 block p-6 bg-gray-200 text-gray-700 border rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="z_reading_pos" onChange={handleInputChange} />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Right Column */}
-                        <div className="space-y-7">
-                            {/* Shift Time Section */}
-                            <div className="bg-white mb-5 p-6 border-2 rounded-lg shadow-md w-full lg:ml-auto">
-                                <h2 className="font-semibold text-lg mb-4 p-4 border-2 shadow-md">SHIFT TIME:</h2>
-                                <div className="w-full mb-3">
-                                    <label className="block p-1 text-sm font-medium">Cashier's Name:</label>
-                                    <input type="text" className="w-full appearance-none mb-4 block p-4 bg-gray-200 text-gray-700 border rounded-xl shadow-md leading-tight focus:outline-none focus:bg-white" name="cashier" disabled value={cashier.name} />
-                                </div>
-                                <div className="w-full">
-                                    <label className="block text-sm font-medium">Shift Time:</label>
-                                    <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="time" onChange={handleInputChange}>
-                                        <option>Choose Time...</option>
-                                        <option value="AM">AM</option>
-                                        <option value="MID">MID</option>
-                                        <option value="PM">PM</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            {/* Summary Section */}
-                            <div className="bg-white rounded-lg w-full lg:ml-auto border-2 shadow-md p-4">
-                                <h2 className="font-semibold text-xl mb-3 p-4">Summary:</h2>
-                                <div className="w-full mb-10 px-4">
-                                    <div className="mb-2">
-                                        <label className="block text-sm font-bold">Subtotal Trade POS:</label>
-                                        <p className="text-md w-full py-1 border-gray-300 rounded-md">
-                                            P {subtotalTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                        </p>
-                                    </div>
-                                    <div className="mb-2">
-                                        <label className="block text-sm font-bold">Subtotal Non-Trade POS:</label>
-                                        <p className="text-md w-full py-1 border-gray-300 rounded-md">
-                                            P {subtotalNonTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                        </p>
-                                    </div>
-                                    <div className="mb-2">
-                                        <label className="block text-sm font-bold">GRAND TOTAL POS:</label>
-                                        <p className="text-md w-full py-1 border-gray-300 rounded-md">
-                                            P {grandTotalPOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                        </p>
-                                    </div>
-                                </div>
-                                <button
-                                    type="submit"
-                                    className="p-4 w-60 py-3 bg-green-600 text-white rounded-md text-sm mb-4 mx-4 hover:bg-green-500 transition-all duration-300 hover:scale-110"
-                                    disabled={disable}
-                                >
-                                    Submit
-                                </button>
-                            </div>
-                        </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
-        </div>
-    </div>
-</main>
+        </main>
     );
 }

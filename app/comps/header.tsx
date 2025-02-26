@@ -6,41 +6,41 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function Navbar() {
-    
+
     const [open, setOpen] = useState(false);
     const router = useRouter();
 
     const logout = async (event: React.FormEvent) => {
         event.preventDefault();
-  
+
         try {
-          const token = localStorage.getItem("access_token");
-  
-          const response = await axios.post("http://127.0.0.1:8000/api/logout",{},{
-            headers: {
-              Authorization: `Bearer ${token}`, 
-              Accept: "application/json",
-            },
-          })
-  
-          console.log(response.data)
-          localStorage.removeItem('access_token');
-          localStorage.removeItem('refresh_token');
-          localStorage.removeItem('selected_date')
-  
-          router.push('/')
-    
-          if (!token) {
-            console.error("No access token found.");
-            return;
-          }
+            const token = localStorage.getItem("access_token");
+
+            const response = await axios.post("http://127.0.0.1:8000/api/logout", {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                },
+            })
+
+            console.log(response.data)
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            localStorage.removeItem('selected_date')
+
+            router.push('/')
+
+            if (!token) {
+                console.error("No access token found.");
+                return;
+            }
         } catch (error) {
-          console.error("Error logging out: ", error)
+            console.error("Error logging out: ", error)
         }
-      }
+    }
 
     return (
-        <nav className="bg-gray-600 dark:bg-gray-800 border- dark:border-gray-700 ">
+        <nav className="bg-gray-600 dark:bg-gray-800 border- dark:border-gray-700">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
                     <div className="flex">
@@ -54,10 +54,10 @@ export default function Navbar() {
                     </div>
                     <div className="hidden sm:flex sm:items-center sm:ms-6">
                         <div className="relative">
-                           <Link href="/dashboard"> <button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md text-white  dark:text-gray-200 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
+                            <Link href="/dashboard"> <button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md text-white  dark:text-gray-200 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
                                 <span>Transaction</span>
                             </button></Link>
-                           <Link href="/transactionlist"> <button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md  text-white  dark:text-gray-200 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
+                            <Link href="/transactionlist"> <button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md  text-white  dark:text-gray-200 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
                                 <span>Transaction List</span>
                             </button></Link>
                             <Link href="Product"><button className="inline-flex items-center px-3 py-2 border border-transparent text-lg leading-4 font-medium rounded-md  text-white  dark:text-gray-200 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-opacity duration-300 hover:opacity-40">
@@ -89,21 +89,21 @@ export default function Navbar() {
             <div className={open ? 'block sm:hidden' : 'hidden sm:hidden'}>
                 <div className="pt-2 pb-3 ml-4 space-y-1">
                     <Link href="/dashboard" className="text-gray-800 dark:text-gray-200">
-                      Transaction
+                        Transaction
                     </Link>
                 </div>
                 <div className="pt-2 pb-3 ml-4 space-y-1">
                     <Link href="/transactionlist" className="text-gray-800 dark:text-gray-200">
-                      Transaction List
+                        Transaction List
                     </Link>
                 </div>
-               
+
                 <div className="pt-2 pb-3 ml-4 space-y-1">
                     <Link href="/Dashboard" className="text-gray-800 dark:text-gray-200">
-                      Logout
+                        Logout
                     </Link>
                 </div>
-              
+
             </div>
         </nav>
     );
