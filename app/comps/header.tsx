@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function Navbar() {
-
     
     const [open, setOpen] = useState(false);
     const router = useRouter();
@@ -41,15 +40,14 @@ export default function Navbar() {
       }
 
     return (
-        <nav className="bg-gray-600 dark:bg-gray-800 border- dark:border-gray-700">
+        <nav className="bg-gray-600 dark:bg-gray-800 border- dark:border-gray-700 sticky top-0 z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
                     <div className="flex">
                         <div className="shrink-0 flex items-center">
                             <Link href="#">
                                 <span className="block h-9 mt-3 w-auto fill-current text-lg text-white dark:text-gray-200">
-
-                              Bading App
+                                    Bading App
                                 </span>
                             </Link>
                         </div>

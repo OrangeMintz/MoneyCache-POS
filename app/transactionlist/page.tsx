@@ -40,6 +40,8 @@ async function fetchData() {
 
 function EditModal({ open, handleClose, row, handleSave }) {
   
+
+  
   const [formData, setFormData] = useState({
     time: "AM",
     cash: null,
