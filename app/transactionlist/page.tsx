@@ -16,7 +16,7 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import Toast from 'typescript-toastify';
 import api from "../../utils/api";
 
@@ -42,8 +42,11 @@ async function fetchData() {
 // Row Component
 function Row({ row, handleSave }) {
   const [open, setOpen] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const modalStyle = {
+  const [editModalOpen, seteditModalOpen] = useState(false);
+  const [deleteModalOpen, setdeleteModalOpen] = useState(false);
+  const [successIcon, setSuccessIcon] = useState('none')
+
+  const ediModalStyle = {
     position: "absolute" as "absolute",
     top: "50%",
     left: "50%",
@@ -53,6 +56,18 @@ function Row({ row, handleSave }) {
     boxShadow: 24,
     p: 6
   }
+
+  const deleteModalStyle = {
+    position: "absolute" as "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "30%",
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    p: 6
+  }
+
   const [editFormData, setEditFormData] = useState({
     cashier: row.cashier?.id || 0,
     time: row.time || "",
@@ -86,7 +101,11 @@ function Row({ row, handleSave }) {
   })
 
   const handleEditClick = () => {
-    setModalOpen(true);
+    seteditModalOpen(true);
+  };
+
+  const handleDeleteClick = () => {
+    setdeleteModalOpen(true);
   };
 
   const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -96,13 +115,59 @@ function Row({ row, handleSave }) {
     })
   }
 
+  const handleDeletSubmit = async (event: React.FormEvent) => {
+    event.preventDefault()
+    const token = localStorage.getItem('access_token')
+
+    try {
+      const response = await api.delete(`/api/transaction/${row.id}`, {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      console.log(response.data)
+
+      if (response.data.status === 'success') {
+        setSuccessIcon('')
+        new Toast({
+          position: "top-right",
+          onClose: () => { window.location.href = "/transactionlist"; },
+          toastMsg: "Successfully deleted transaction!",
+          autoCloseTime: 1000,
+          canClose: true,
+          showProgress: true,
+          pauseOnHover: true,
+          pauseOnFocusLoss: true,
+          type: "success",
+          theme: 'dark',
+        });
+      } else {
+        new Toast({
+          position: "top-right",
+          toastMsg: response.data.message,
+          autoCloseTime: 1000,
+          canClose: true,
+          showProgress: true,
+          pauseOnHover: true,
+          pauseOnFocusLoss: true,
+          type: "error",
+          theme: 'dark',
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting transaction: ", error)
+    }
+  }
+
   const handleEditFormSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
     const token = localStorage.getItem('access_token');
 
     try {
 
-      const response = await api.post(`/api/transaction/${row.id}`, { ...editFormData }, {
+      const response = await api.put(`/api/transaction/${row.id}`, { ...editFormData }, {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -112,6 +177,7 @@ function Row({ row, handleSave }) {
       console.log(response.data)
 
       if (response.data.status === 'success') {
+        setSuccessIcon('')
         new Toast({
           position: "top-right",
           onClose: () => { window.location.href = "/transactionlist"; },
@@ -204,19 +270,60 @@ function Row({ row, handleSave }) {
           >
             EDIT
           </button>
-          <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition ml-2">
+          <button onClick={handleDeleteClick} className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition ml-2">
             DELETE
           </button>
 
-          {/* Modal for EDIT */}
+          {/* Delete Modal */}
           <Modal
-            open={modalOpen}
-            onClose={() => { setModalOpen(false) }}
+            open={deleteModalOpen}
+            onClose={() => { setdeleteModalOpen(false) }}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
-            <Box sx={modalStyle}>
-              <h2 className="text-sm font-semibold mb-4">Edit Transaction</h2>
+            <Box sx={deleteModalStyle}>
+
+              <div className="relative p-4 text-center bg-white dark:bg-gray-800 sm:p-5">
+                <button onClick={() => setdeleteModalOpen(false)} type="button" className="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                  <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                  <span className="sr-only">Close modal</span>
+                </button>
+                <svg className="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
+                <p className="mb-4 text-gray-500 dark:text-gray-300">Are you sure you want to delete transaction {row.id}?</p>
+                <div className="flex justify-center items-center space-x-4">
+                  <button onClick={() => { setdeleteModalOpen(false) }} data-modal-toggle="deleteModal" type="button" className="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                    No, cancel
+                  </button>
+                  <form onSubmit={handleDeletSubmit}>
+                    <button type="submit" className="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
+                      Yes, I'm sure
+                    </button>
+                  </form>
+
+                </div>
+              </div>
+            </Box>
+          </Modal>
+
+          {/* Modal for EDIT */}
+          <Modal
+            open={editModalOpen}
+            onClose={() => { seteditModalOpen(false) }}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={ediModalStyle}>
+              <div className='flex w-full'>
+                <div className='w-5/6'>
+                  <h2 className="text-sm font-semibold mb-4">Edit Transaction {row.id}</h2>
+                </div>
+
+
+                <div className="w-7 h-7 rounded-full bg-green-600 dark:bg-green-500 p-2 flex items-center justify-center mx-auto mb-3.5" style={{ display: `${successIcon}` }}>
+                  <svg aria-hidden="true" className="w-11 h-11 text-green-100 dark:text-green-100" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
+                  <span className="sr-only">Success</span>
+                </div>
+              </div>
 
               <form className="space-y-6 p-4" onSubmit={handleEditFormSubmit}>
 
@@ -240,29 +347,29 @@ function Row({ row, handleSave }) {
                     </div>
                   </div>
 
-                    {/* Summary */}
-                    <div className="border p-4 rounded-md shadow-sm bg-gray-50 w-full">
-                                                    <h2 className="font-semibold text-sm mb-2">Summary:</h2>
-                                                    <div className="w-full">
-                                                        <div className="mb-1 flex w-full ">
-                                                            <label className="block text-xs font-bold w-full">Subtotal Trade POS:</label>
-                                                            <p className="text-xs w-full py-1 overflow-hidden border-gray-300 rounded-md w-full">
-                                                                P {summary.trade.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                                            </p>
-                                                        </div>
-                                                        <div className="mb-1 flex w-full ">
-                                                            <label className="block text-xs font-bold w-full">Subtotal Non-Trade POS:</label>
-                                                            <p className="text-xs w-full py-1 overflow-hidden border-gray-300 rounded-md">
-                                                                P {summary.non_trade.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                                            </p>
-                                                        </div>
-                                                        <div className="mb-1 flex w-full ">
-                                                            <label className="block w-full text-xs font-bold">GRAND TOTAL POS:</label>
-                                                            <p className="text-xs w-full py-1 overflow-hidden border-gray-300 rounded-md">
-                                                                P {(summary.trade + summary.non_trade).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                                            </p>
-                                                        </div>
-                                                    </div>
+                  {/* Summary */}
+                  <div className="border p-4 rounded-md shadow-sm bg-gray-50 w-full">
+                    <h2 className="font-semibold text-sm mb-2">Summary:</h2>
+                    <div className="w-full">
+                      <div className="mb-1 flex w-full ">
+                        <label className="block text-xs font-bold w-full">Subtotal Trade POS:</label>
+                        <p className="text-xs w-full py-1 overflow-hidden border-gray-300 rounded-md w-full">
+                          P {summary.trade.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </p>
+                      </div>
+                      <div className="mb-1 flex w-full ">
+                        <label className="block text-xs font-bold w-full">Subtotal Non-Trade POS:</label>
+                        <p className="text-xs w-full py-1 overflow-hidden border-gray-300 rounded-md">
+                          P {summary.non_trade.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </p>
+                      </div>
+                      <div className="mb-1 flex w-full ">
+                        <label className="block w-full text-xs font-bold">GRAND TOTAL POS:</label>
+                        <p className="text-xs w-full py-1 overflow-hidden border-gray-300 rounded-md">
+                          P {(summary.trade + summary.non_trade).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -396,7 +503,7 @@ function Row({ row, handleSave }) {
                 {/* Buttons */}
                 <div className="mt-6 flex justify-end">
                   <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">Save</button>
-                  <button type="button" onClick={() => { setModalOpen(false) }} className="ml-2 px-4 py-2 bg-gray-400 text-white rounded-md">Cancel</button>
+                  <button type="button" onClick={() => { seteditModalOpen(false) }} className="ml-2 px-4 py-2 bg-gray-400 text-white rounded-md">Cancel</button>
                 </div>
               </form>
             </Box>
