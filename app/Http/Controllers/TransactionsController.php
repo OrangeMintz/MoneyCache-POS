@@ -255,7 +255,11 @@ class TransactionsController extends Controller
             'alert-type' => 'success',
         );
 
-        return redirect()->back()->with($notification);
+        // return redirect()->back()->with($notification);
+        return response()->json([
+            'status' => 'success',
+            'messafe' => 'Transaction updated successfully'
+        ]);
     }
 
 
