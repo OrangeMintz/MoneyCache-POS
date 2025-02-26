@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transactions;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TransactionsController extends Controller
@@ -113,7 +114,6 @@ class TransactionsController extends Controller
     public function update(Request $request, string $id)
     {
         $validated = $request->validate([
-            'cashier' => 'string|nullable',
             'time' => 'string|in:AM,MID,PM',
             'cash' => 'numeric|nullable',
             'check' => 'numeric|nullable',
@@ -196,7 +196,6 @@ class TransactionsController extends Controller
     public function retrieve()
     {
         $transactions = Transactions::with('cashier')->get();
-
         return response()->json([
             "status" => 1,
             "transactions" => $transactions,
@@ -219,4 +218,22 @@ class TransactionsController extends Controller
         ]);
     }
 
+    public function export()
+    {
+        return view('pages.transactions-export');
+    }
+
+    // public function export($date)
+    // {
+    //     // Convert date from MM-DD-YYYY to YYYY-MM-DD format for database query
+    //     $formattedDate = Carbon::createFromFormat('m-d-Y', $date)->format('Y-m-d');
+
+    //     // Fetch transactions for that date
+    //     $transactions = Transactions::whereDate('created_at', $formattedDate)->get();
+
+    //     // Return as JSON
+    //     // return response()->json($transactions);
+    //     // return view('pages.transactions');
+    //     return view('pages.transactions-export', compact('transactions'));
+    // }
 }
