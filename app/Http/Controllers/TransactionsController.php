@@ -206,11 +206,19 @@ class TransactionsController extends Controller
 
 
 
-    public function softDelete(string $id)
+    public function softDelete(Request $request, string $id)
     {
         $transaction = Transactions::findOrFail($id);
         $transaction->delete();
-        return redirect()->route('transactions')->with('success', 'Transaction deleted successfully.');
+        
+        if ($request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Transaction deleted successfully'
+            ]);
+        }else{
+            return redirect()->route('transactions')->with('success', 'Transaction deleted successfully.');
+        }
     }
 
     public function retrieve()
