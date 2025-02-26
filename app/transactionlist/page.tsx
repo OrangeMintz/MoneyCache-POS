@@ -18,6 +18,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
+import Toast from 'typescript-toastify';
 import api from "../../utils/api";
 
 
@@ -96,6 +97,28 @@ const [summary, setSummary] = useState({
       })
   }
 
+  const handleEditFormSubmit = async (event: React.FormEvent) => {
+    event.preventDefault()
+    const token = localStorage.getItem('access_token');
+
+    try {
+      
+      const response = await api.put(`/api/transaction/${row.id}`,{ ...editFormData},
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+
+      console.log(response.data)
+
+    } catch (error) {
+      console.error("Error updating transaction: ", error)
+    }
+  }
+
   useEffect(() => {
 
       const nonTradeTotal = Number(editFormData.mm_rm || 0) + Number(editFormData.mm_km || 0) + Number(editFormData.mm_dm || 0) + Number(editFormData.food_charge || 0);
@@ -160,7 +183,7 @@ const [summary, setSummary] = useState({
             <Box sx={modalStyle}>
                 <h2 className="text-sm font-semibold mb-4">Edit Transaction</h2>
 
-                <form className="space-y-6 p-4">
+                <form className="space-y-6 p-4" onSubmit={handleEditFormSubmit}>
 
                   <div className='flex gap-4'>
                     {/* Shift Details */}
@@ -333,24 +356,14 @@ const [summary, setSummary] = useState({
                         </div>
 
                       </div>
-                      
-
-                      
                     </div>
-
                   </div>
-                 
-
-                  
-                  
-
                   {/* Buttons */}
                   <div className="mt-6 flex justify-end">
                     <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">Save</button>
                     <button type="button" onClick={() => {setModalOpen(false)}} className="ml-2 px-4 py-2 bg-gray-400 text-white rounded-md">Cancel</button>
                   </div>
                 </form>
-
             </Box>
           </Modal>
 
