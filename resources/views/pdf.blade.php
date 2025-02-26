@@ -28,7 +28,6 @@
     </style>
 </head>
 <body>
-
 <table>
     <thead>
         <tr>
@@ -41,29 +40,30 @@
         </tr>
     </thead>
     <tbody>
+        @foreach($transactions as $transaction)
         <tr>
             <td>CASHIER'S NAME</td>
-            <td>cherry</td>
-            <td></td>
-            <td>lou</td>
+            <td>{{ $transaction->cashier->name ?? 'null'}}</td>
+            <td>{{ $transaction->cashier->name ?? 'null'}}</td>
+            <td>{{ $transaction->cashier->name ?? 'null'}}</td>
             <td></td>
             <td></td>
         </tr>
         <tr>
             <td>Cash</td>
-            <td>63,608.00</td>
+            <td>{{$transaction->cash}}</td>
             <td></td>
-            <td>38,168.00</td>
-            <td>101,776.00</td>
-            <td>101,776.00</td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
         <tr>
             <td>Check</td>
-            <td>63,608.00</td>
+            <td>{{$transaction->check}}</td>
             <td></td>
-            <td>38,168.00</td>
-            <td>101,776.00</td>
-            <td>101,776.00</td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
         <tr>
             <td>BPI Credit Card</td>
@@ -242,7 +242,9 @@
             <td>4,279.13</td>
             <td>2,347.37</td>
         </tr>
+        @endforeach
     </tbody>
+
 </table>
 
 </body>

@@ -85,9 +85,14 @@ class TransactionsController extends Controller
             'grand_total' => $grand_total,
         ]));
 
-        return response()->json(['status' => 'success', 'message' => 'Transaction stored successfully.']);
-    }
+        $notification = array ( //toaster notif when updated
+            'message' => 'Added Successfully',
+            'alert-type' => 'success',
+        );
 
+        //redirects to transactions-list
+        return redirect()->route('transactions')->with($notification);
+    }
 
     public function show(string $id)
     {

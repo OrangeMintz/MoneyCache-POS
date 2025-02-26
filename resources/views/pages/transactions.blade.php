@@ -7,7 +7,7 @@
 
                 {{-- First column for Cashier Form --}}
                 <div class="bg-white rounded-lg shadow-md">
-                    <form method="POST" action="{{ route('transaction.store') }}">
+                    <form method="POST" action="{{ route('transaction.store') }}" id="storeForm">
                         @csrf
                         <!-- FIRST ROW -->
                         <h2 class="shadow-md font-semibold text-lg mb-4 p-4">Payment Details:</h2>
@@ -200,6 +200,7 @@
         </div>
     </div>
 </main>
+
 @include('layouts.footer')
 
 
@@ -245,6 +246,65 @@
         updateTotals();
     });
 </script>
+
+
+{{-- EDIT validation: no negative, atleast one field is filled--}}
+<script>   
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("storeForm");
+
+        form.addEventListener("submit", function (event) {
+            let isValid = true;
+            let hasValidPayment = false;
+            const paymentFields = [
+                "cash", "check", "bpi_ccard", "bpi_dcard", "metro_ccard", "metro_dcard", "paymaya", "aub_ccard", "gcash", "food_panda", "streetby", "grabfood", "gc_claimed_others", "gc_claimed_own"];
+
+            paymentFields.forEach((field) => {
+                let input = document.getElementById(field);
+                let value = input.value.trim();
+                let errorElement = input.nextElementSibling;
+
+                if (!errorElement || !errorElement.classList.contains("error-message")) {
+                    errorElement = document.createElement("div");
+                    errorElement.classList.add("error-message");
+                    errorElement.style.color = "red";
+                    errorElement.style.fontSize = "12px";
+                    input.after(errorElement);
+                }
+
+                //if value is filled
+                if (value !== "") {
+                    if (isNaN(value) || Number(value) <= 0) {
+                        errorElement.textContent = "Please enter a positive number.";
+                        input.classList.add("border-red-500");
+                        isValid = false;
+                    } else {
+                        errorElement.textContent = "";
+                        input.classList.remove("border-red-500");
+                        hasValidPayment = true;
+                    }
+                } else {
+                    errorElement.textContent = "";
+                    input.classList.remove("border-red-500");
+                }
+            });
+
+            if (!hasValidPayment) {
+                event.preventDefault(); // Stop form submission
+                toastr.error("Please enter at least one valid payment amount.");
+            }
+
+            // If there are any invalid inputs, stop form submission
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+
+
+
+
 
 </body>
 

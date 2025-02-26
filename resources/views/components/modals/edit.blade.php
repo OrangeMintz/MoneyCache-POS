@@ -221,7 +221,7 @@
   </div>
 </div>
 
-{{-- validation: no negative, atleast one field is filled--}}
+{{-- STORE validation: no negative, atleast one field is filled--}}
 <script>   
   document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("editForm");
@@ -267,7 +267,7 @@
         toastr.error("Please enter at least one valid payment amount.");
       }
 
-      // Prevent submission if there are any invalid inputs
+      // If there are any invalid inputs, stop form submission
       if (!isValid) {
         event.preventDefault();
       }
