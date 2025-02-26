@@ -108,7 +108,6 @@ class TransactionsController extends Controller
     public function update(Request $request, string $id)
     {
         $validated = $request->validate([
-            'cashier' => 'string|nullable',
             'time' => 'string|in:AM,MID,PM',
             'cash' => 'numeric|nullable',
             'check' => 'numeric|nullable',
