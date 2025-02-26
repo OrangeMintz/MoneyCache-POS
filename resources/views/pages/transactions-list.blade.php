@@ -4,16 +4,13 @@
 <main>
     <div class="font-sans bg-gray-100 p-6">
         <div class="bg-white p-4 mb-4">
-<<<<<<< HEAD
-            <div class="card-header">
-                <h5 class="title font-semibold text-[26px]">Transactions</h5>
-=======
             <div class="card-header flex justify-between items-center">
                 <h5 class="title font-semibold text-[26px]">Test Transactions</h5>
                 <div class="flex flex-wrap justify-center">
-                    <a href="{{ route('pdf') }}" class="bg-emerald-700 hover:bg-emerald-900 rounded-lg text-white text-md text-center self-center px-3 py-2 my-2 mx-2">Download as PDF <i class="fas fa-file-pdf ml-1"></i></a>
+                    <a href="{{ route('pdf') }}"
+                        class="bg-emerald-700 hover:bg-emerald-900 rounded-lg text-white text-md text-center self-center px-3 py-2 my-2 mx-2">Download
+                        as PDF <i class="fas fa-file-pdf ml-1"></i></a>
                 </div>
->>>>>>> b629d79daba956d894c2d38fc1f8253b1110391f
             </div>
             <div class="overflow-x-auto">
                 <table id="example" class="display" style="width:100%">
@@ -105,12 +102,16 @@
                 data: 'cashier.name'
 
             },
-                        {
+            {
                 data: 'created_at',
                 render: function(data, type, row) {
                     if (!data) return '';
                     let date = new Date(data);
-                    let options = { year: 'numeric', month: 'long', day: 'numeric' };
+                    let options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
                     return date.toLocaleDateString('en-US', options);
                 }
 
@@ -170,10 +171,9 @@
 {{-- DELETE FUNCTIONS --}}
 <script>
     document.querySelectorAll('.delete-form').forEach(form => {
-    let transactionId = "${data}";
-    form.action = "{{ route('transactions.softDelete', '__id__') }}".replace('__id__', transactionId);
+        let transactionId = "${data}";
+        form.action = "{{ route('transactions.softDelete', '__id__') }}".replace('__id__', transactionId);
     });
-
 </script>
 
 <script>
@@ -196,96 +196,97 @@
 
 {{-- CALCULATE TOTAL --}}
 <script>
-// Function to open the modal
+    // Function to open the modal
 
-function openModal(id) {
-    console.log("Opening modal for ID:", id);
-    const modal = document.getElementById("crud-modal");
-    modal.classList.remove("hidden");
-    modal.classList.add("flex");
+    function openModal(id) {
+        console.log("Opening modal for ID:", id);
+        const modal = document.getElementById("crud-modal");
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
 
-    // Update form action dynamically
-    document.getElementById('editForm').action = `/transaction/${id}`;
+        // Update form action dynamically
+        document.getElementById('editForm').action = `/transaction/${id}`;
 
-    // Fetch transaction data via AJAX
-    fetch(`/transaction/edit/${id}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data) {
-                document.getElementById('cash').value = data.cash ?? '';
-                document.getElementById('check').value = data.check ?? '';
-                document.getElementById('bpi_ccard').value = data.bpi_ccard ?? '';
-                document.getElementById('bpi_dcard').value = data.bpi_dcard ?? '';
-                document.getElementById('metro_ccard').value = data.metro_ccard ?? '';
-                document.getElementById('metro_dcard').value = data.metro_dcard ?? '';
-                document.getElementById('paymaya').value = data.paymaya ?? '';
-                document.getElementById('aub_ccard').value = data.aub_ccard ?? '';
-                document.getElementById('gcash').value = data.gcash ?? '';
-                document.getElementById('food_panda').value = data.food_panda ?? '';
-                document.getElementById('streetby').value = data.streetby ?? '';
-                document.getElementById('grabfood').value = data.grabfood ?? '';
-                document.getElementById('gc_claimed_others').value = data.gc_claimed_others ?? '';
-                document.getElementById('gc_claimed_own').value = data.gc_claimed_own ?? '';
-                document.getElementById('mm_head').value = data.mm_head ?? '';
-                document.getElementById('mm_commissary').value = data.mm_commissary ?? '';
-                document.getElementById('mm_rm').value = data.mm_rm ?? '';
-                document.getElementById('mm_dm').value = data.mm_dm ?? '';
-                document.getElementById('mm_km').value = data.mm_km ?? '';
-                document.getElementById('food_charge').value = data.food_charge ?? '';
-                document.getElementById('z_reading_pos').value = data.z_reading_pos ?? '';
-                document.getElementById('time').value = data.time ?? 'AM';
-                document.getElementById('sub_total_trade').textContent = `P ${data.sub_total_trade ?? '0.00'}`;
-                document.getElementById('sub_total_non_trade').textContent = `P ${data.sub_total_non_trade ?? '0.00'}`;
-                document.getElementById('grand_total').textContent = `P ${data.grand_total ?? '0.00'}`;
+        // Fetch transaction data via AJAX
+        fetch(`/transaction/edit/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    document.getElementById('cash').value = data.cash ?? '';
+                    document.getElementById('check').value = data.check ?? '';
+                    document.getElementById('bpi_ccard').value = data.bpi_ccard ?? '';
+                    document.getElementById('bpi_dcard').value = data.bpi_dcard ?? '';
+                    document.getElementById('metro_ccard').value = data.metro_ccard ?? '';
+                    document.getElementById('metro_dcard').value = data.metro_dcard ?? '';
+                    document.getElementById('paymaya').value = data.paymaya ?? '';
+                    document.getElementById('aub_ccard').value = data.aub_ccard ?? '';
+                    document.getElementById('gcash').value = data.gcash ?? '';
+                    document.getElementById('food_panda').value = data.food_panda ?? '';
+                    document.getElementById('streetby').value = data.streetby ?? '';
+                    document.getElementById('grabfood').value = data.grabfood ?? '';
+                    document.getElementById('gc_claimed_others').value = data.gc_claimed_others ?? '';
+                    document.getElementById('gc_claimed_own').value = data.gc_claimed_own ?? '';
+                    document.getElementById('mm_head').value = data.mm_head ?? '';
+                    document.getElementById('mm_commissary').value = data.mm_commissary ?? '';
+                    document.getElementById('mm_rm').value = data.mm_rm ?? '';
+                    document.getElementById('mm_dm').value = data.mm_dm ?? '';
+                    document.getElementById('mm_km').value = data.mm_km ?? '';
+                    document.getElementById('food_charge').value = data.food_charge ?? '';
+                    document.getElementById('z_reading_pos').value = data.z_reading_pos ?? '';
+                    document.getElementById('time').value = data.time ?? 'AM';
+                    document.getElementById('sub_total_trade').textContent = `P ${data.sub_total_trade ?? '0.00'}`;
+                    document.getElementById('sub_total_non_trade').textContent =
+                        `P ${data.sub_total_non_trade ?? '0.00'}`;
+                    document.getElementById('grand_total').textContent = `P ${data.grand_total ?? '0.00'}`;
+                }
+            })
+            .catch(error => console.error('Error fetching transaction:', error));
+    }
+
+
+    // Function to close the modal when clicking outside or close button
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll("[data-modal-toggle]").forEach(button => {
+            button.addEventListener("click", function() {
+                const modal = document.getElementById("crud-modal");
+                modal.classList.add("hidden");
+                modal.classList.remove("flex");
+            });
+        });
+
+        // Close modal when clicking outside modal content
+        document.getElementById("crud-modal").addEventListener("click", function(e) {
+            if (e.target === this) {
+                this.classList.add("hidden");
+                this.classList.remove("flex");
             }
-        })
-        .catch(error => console.error('Error fetching transaction:', error));
-}
-
-
-// Function to close the modal when clicking outside or close button
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll("[data-modal-toggle]").forEach(button => {
-        button.addEventListener("click", function () {
-            const modal = document.getElementById("crud-modal");
-            modal.classList.add("hidden");
-            modal.classList.remove("flex");
         });
     });
-
-    // Close modal when clicking outside modal content
-    document.getElementById("crud-modal").addEventListener("click", function (e) {
-        if (e.target === this) {
-            this.classList.add("hidden");
-            this.classList.remove("flex");
-        }
-    });
-});
 </script>
 
 {{-- toaster for update notification --}}
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script>
- @if(Session::has('message'))
- var type = "{{ Session::get('alert-type','info') }}"
- switch(type){
-    case 'info':
-    toastr.info(" {{ Session::get('message') }} ");
-    break;
+    @if (Session::has('message'))
+        var type = "{{ Session::get('alert-type', 'info') }}"
+        switch (type) {
+            case 'info':
+                toastr.info(" {{ Session::get('message') }} ");
+                break;
 
-    case 'success':
-    toastr.success(" {{ Session::get('message') }} ");
-    break;
+            case 'success':
+                toastr.success(" {{ Session::get('message') }} ");
+                break;
 
-    case 'warning':
-    toastr.warning(" {{ Session::get('message') }} ");
-    break;
+            case 'warning':
+                toastr.warning(" {{ Session::get('message') }} ");
+                break;
 
-    case 'error':
-    toastr.error(" {{ Session::get('message') }} ");
-    break; 
- }
- @endif 
+            case 'error':
+                toastr.error(" {{ Session::get('message') }} ");
+                break;
+        }
+    @endif
 </script>
 {{-- end of toaster for update notif --}}
 
