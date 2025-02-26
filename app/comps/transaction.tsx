@@ -223,7 +223,7 @@ export default function CashierForm({cashier}: TransactionFormProps) {
 
                             {/* MM Details Section */}
                             <h2 className="font-semibold text-lg mb-4 p-6 border-2 rounded-lg md:w-[1220px] shadow-md">MM DETAILS:</h2>
-                            <div className="bg-white rounded-lg md:w-[1220px]  rounded-lg border-2 shadow-md p-6">
+                            <div className="bg-white md:w-[1220px]  rounded-lg border-2 shadow-md p-6">
 
                                 <div className="grid md:grid-cols-3 gap-6 p-6">
                                     <div className="w-full">
