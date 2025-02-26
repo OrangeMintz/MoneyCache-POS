@@ -1,4 +1,4 @@
-
+'use client';
 
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';

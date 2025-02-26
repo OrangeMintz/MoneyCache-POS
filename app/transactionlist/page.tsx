@@ -8,6 +8,7 @@ import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -38,180 +39,89 @@ async function fetchData() {
   }
 }
 
-function EditModal({ open, handleClose, row, handleSave }) {
-  
-
-  
-  const [formData, setFormData] = useState({
-    time: "AM",
-    cash: null,
-    check: null,
-    bpi_ccard: null,
-    bpi_dcard: null,
-    metro_ccard: null,
-    metro_dcard: null,
-    paymaya: null,
-    aub_ccard: null,
-    gcash: null,
-    food_panda: null,
-    streetby: null,
-    grabfood: null,
-    gc_claimed_others: null,
-    gc_claimed_own: null,
-    mm_head: null,
-    mm_commissary: null,
-    mm_rm: null,
-    mm_dm: null,
-    food_charge: null,
-    z_reading_pos: null,
-});
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = () => {
-    handleSave(formData);
-    handleClose();
-  };
-  const [subtotalTradePOS, setSubtotalTradePOS] = useState(0);
-  const [subtotalNonTradePOS, setSubtotalNonTradePOS] = useState(0);
-  const [grandTotalPOS, setGrandTotalPOS] = useState(0);
-
-  useEffect(() => {
-    const tradeFields = [
-        formData.cash,
-        formData.check,
-        formData.bpi_ccard,
-        formData.bpi_dcard,
-        formData.metro_ccard,
-        formData.metro_dcard,
-        formData.paymaya,
-        formData.aub_ccard,
-        formData.gcash,
-        formData.food_panda,
-        formData.streetby,
-        formData.grabfood,
-        formData.gc_claimed_others,
-        formData.gc_claimed_own,    
-    ];
-
-    const nonTradeFields = [
-        formData.mm_head,
-        formData.mm_commissary,
-        formData.mm_rm,
-        formData.mm_dm,
-        formData.food_charge,
-    ];
-
-    const tradeTotal = tradeFields.reduce((sum, value) => sum + (value || 0), 0);
-    const nonTradeTotal = nonTradeFields.reduce((sum, value) => sum + (value || 0), 0);
-
-    setSubtotalTradePOS(tradeTotal);
-    setSubtotalNonTradePOS(nonTradeTotal);
-    setGrandTotalPOS(tradeTotal + nonTradeTotal);
-}, [formData]);
-
-
-  return (
-    <Modal open={open} onClose={handleClose}>
-    <div className="fixed inset-0 flex items-center justify-center p-4">
-      <div className="bg-white p-6 shadow-lg rounded-md max-w-screen-lg w-full max-h-screen overflow-auto">
-        <h2 className="text-lg font-semibold">Edit Transaction</h2>
-  
-        <form onSubmit={handleSubmit} className="space-y-6 p-4">
-          {/* Shift Details */}
-          <div className="border p-4 rounded-md shadow-sm bg-gray-50">
-            <h2 className="text-lg font-semibold mb-2">Shift Details</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium">Cashier's Name:</label>
-                <input type="text" name="cashier" value="Dick" disabled className="w-full p-2 border border-gray-300 rounded-md" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium">Shift Time:</label>
-                <select name="time" value={formData.time || 'AM'} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md">
-                  <option value="AM">AM</option>
-                  <option value="MID">MID</option>
-                  <option value="PM">PM</option>
-                </select>
-              </div>
-            </div>
-          </div>
-  
-          {/* MM Details */}
-          <div className="border p-4 rounded-md shadow-sm bg-gray-50">
-            <h2 className="text-lg font-semibold mb-2">MM Details</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input type="number" name="mm_head" value={formData.mm_head || ''} onChange={handleChange} placeholder="MM Head" className="w-full p-2 border border-gray-300 rounded-md" />
-              <input type="number" name="mm_commissary" value={formData.mm_commissary || ''} onChange={handleChange} placeholder="MM Commissary" className="w-full p-2 border border-gray-300 rounded-md" />
-              <input type="number" name="mm_rm" value={formData.mm_rm || ''} onChange={handleChange} placeholder="MM RM" className="w-full p-2 border border-gray-300 rounded-md" />
-              <input type="number" name="mm_dm" value={formData.mm_dm || ''} onChange={handleChange} placeholder="MM DM" className="w-full p-2 border border-gray-300 rounded-md" />
-              <input type="number" name="mm_km" value={formData.mm_km || ''} onChange={handleChange} placeholder="MM KM" className="w-full p-2 border border-gray-300 rounded-md" />
-              <input type="number" name="food_charge" value={formData.food_charge || ''} onChange={handleChange} placeholder="Food Charge" className="w-full p-2 border border-gray-300 rounded-md" />
-            </div>
-          </div>
-  
-          {/* Payment Details */}
-          <div className="border p-4 rounded-md shadow-sm bg-gray-50">
-            <h2 className="text-lg font-semibold mb-2">Payment Details</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input type="number" name="cash" value={formData.cash || ''} onChange={handleChange} placeholder="Cash" className="w-full p-2 border border-gray-300 rounded-md" />
-              <input type="number" name="check" value={formData.check || ''} onChange={handleChange} placeholder="Check" className="w-full p-2 border border-gray-300 rounded-md" />
-              <input type="number" name="bpi_ccard" value={formData.bpi_ccard || ''} onChange={handleChange} placeholder="BPI Credit Card" className="w-full p-2 border border-gray-300 rounded-md" />
-              <input type="number" name="bpi_dcard" value={formData.bpi_dcard || ''} onChange={handleChange} placeholder="BPI Debit Card" className="w-full p-2 border border-gray-300 rounded-md" />
-              <input type="number" name="metro_ccard" value={formData.metro_ccard || ''} onChange={handleChange} placeholder="Metro Credit Card" className="w-full p-2 border border-gray-300 rounded-md" />
-              <input type="number" name="metro_dcard" value={formData.metro_dcard || ''} onChange={handleChange} placeholder="Metro Debit Card" className="w-full p-2 border border-gray-300 rounded-md" />
-            </div>
-          </div>
-  
-          {/* Summary */}
-          <div className="bg-white rounded-lg shadow-md p-4">
-            <h2 className="font-semibold text-xl mb-2">Summary:</h2>
-            <div className="w-full">
-              <div className="mb-1">
-                <label className="block text-sm font-bold">Subtotal Trade POS:</label>
-                <p className="text-md w-full py-1 border-gray-300 rounded-md">
-                  P {subtotalTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </p>
-              </div>
-              <div className="mb-1">
-                <label className="block text-sm font-bold">Subtotal Non-Trade POS:</label>
-                <p className="text-md w-full py-1 border-gray-300 rounded-md">
-                  P {subtotalNonTradePOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </p>
-              </div>
-              <div className="mb-1">
-                <label className="block text-sm font-bold">GRAND TOTAL POS:</label>
-                <p className="text-md w-full py-1 border-gray-300 rounded-md">
-                  P {grandTotalPOS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </p>
-              </div>
-            </div>
-          </div>
-  
-          {/* Buttons */}
-          <div className="mt-4 flex justify-end">
-            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">Save</button>
-            <button type="button" onClick={handleClose} className="ml-2 px-4 py-2 bg-gray-400 text-white rounded-md">Cancel</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </Modal>
-  
-  );
-}
-
 // Row Component
 function Row({ row, handleSave }) {
   const [open, setOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const modalStyle = {
+    position: "absolute" as "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "70%",
+    bgcolor: "background.paper",
+    boxShadow: 24,
+  p: 6
+  }
+  const [editFormData, setEditFormData] = useState({
+    cashier: row.cashier?.id || 0,
+    time: row.time || "",
+    cash: row.cash || 0,
+    check: row.check || 0,
+    bpi_ccard: row.bpi_ccard || 0,
+    bpi_dcard: row.bpi_dcard || 0,
+    metro_ccard: row.metro_ccard || 0,
+    metro_dcard: row.metro_dcard || 0,
+    paymaya: row.paymaya || 0,
+    aub_ccard: row.aub_ccard || 0,
+    gcash: row.gcash || 0,
+    food_panda: row.food_panda || 0,
+    streetby: row.streetby || 0,
+    grabfood: row.grabfood || 0,
+    gc_claimed_others: row.gc_claimed_others || 0,
+    gc_claimed_own: row.gc_claimed_own || 0,
+    mm_head: row.mm_head || "",
+    mm_commissary: row.commissary || "",
+    mm_rm: row.mm_rm || 0,
+    mm_km: row.mm_km || 0,
+    mm_dm: row.mm_dm || 0,
+    food_charge: row.food_charge || 0,
+    z_reading_pos: row.z_reading_pos || 0,
+});
+
+const [summary, setSummary] = useState({
+    trade: 0,
+    non_trade: 0,
+    grand_total: 0,
+  })
 
   const handleEditClick = () => {
     setModalOpen(true);
   };
+
+  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      setEditFormData({
+        ...editFormData,
+        [e.target.name] : e.target.value
+      })
+  }
+
+  useEffect(() => {
+
+      const nonTradeTotal = Number(editFormData.mm_rm || 0) + Number(editFormData.mm_km || 0) + Number(editFormData.mm_dm || 0) + Number(editFormData.food_charge || 0);
+      const tradeTotal = 
+      Number(editFormData.cash || 0) + 
+      Number(editFormData.check || 0) + 
+      Number(editFormData.bpi_ccard || 0) + 
+      Number(editFormData.bpi_dcard || 0) +
+      Number(editFormData.metro_ccard || 0) +
+      Number(editFormData.metro_dcard || 0) +
+      Number(editFormData.paymaya || 0) +
+      Number(editFormData.aub_ccard || 0) +
+      Number(editFormData.gcash || 0) +
+      Number(editFormData.food_panda || 0) +
+      Number(editFormData.streetby || 0) +
+      Number(editFormData.grabfood || 0) +
+      Number(editFormData.gc_claimed_others || 0) +
+      Number(editFormData.gc_claimed_own || 0) 
+
+      setSummary((prevSummary) => ({
+        ...prevSummary,
+        trade: tradeTotal,
+        non_trade: nonTradeTotal,
+      }));
+
+  },[editFormData])
 
 
   return (
@@ -224,7 +134,7 @@ function Row({ row, handleSave }) {
         </TableCell>
         <TableCell>{row.id}</TableCell>
         <TableCell>{row.cashier?.name || 'Unknown'}</TableCell>
-        <TableCell align="center">{row.created_at}</TableCell>
+        <TableCell align="right">{row.created_at}</TableCell>
         <TableCell align="right">{row.time}</TableCell>
         <TableCell align="right">{row.sub_total_trade}</TableCell>
         <TableCell align="right">{row.sub_total_non_trade}</TableCell>
@@ -239,14 +149,214 @@ function Row({ row, handleSave }) {
           <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition ml-2">
             DELETE
           </button>
+
+          {/* Modal for EDIT */}
+          <Modal
+            open={modalOpen}
+            onClose={() => {setModalOpen(false)}}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={modalStyle}>
+                <h2 className="text-sm font-semibold mb-4">Edit Transaction</h2>
+
+                <form className="space-y-6 p-4">
+
+                  <div className='flex gap-4'>
+                    {/* Shift Details */}
+                    <div className="border p-4 rounded-md shadow-sm bg-gray-50 w-full">
+                      <h2 className="text-sm font-semibold mb-2">Shift Details</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-medium">Cashier's Name:</label>
+                          <input type="text" name="cashier" value={row.cashier?.name} disabled className="text-xs w-full p-2 border border-gray-300 rounded-md" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium">Shift Time:</label>
+                          <select name="time" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={editFormData.time} onChange={handleEditChange}>
+                            <option value="AM">AM</option>
+                            <option value="MID">MID</option>
+                            <option value="PM">PM</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Summary */}
+                    <div className="border p-4 rounded-md shadow-sm bg-gray-50 w-full">
+                                                    <h2 className="font-semibold text-sm mb-2">Summary:</h2>
+                                                    <div className="w-full">
+                                                        <div className="mb-1 flex w-full ">
+                                                            <label className="block text-xs font-bold w-full">Subtotal Trade POS:</label>
+                                                            <p className="text-xs w-full py-1 border-gray-300 rounded-md w-full">
+                                                                P {summary.trade.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                            </p>
+                                                        </div>
+                                                        <div className="mb-1 flex w-full ">
+                                                            <label className="block text-xs font-bold w-full">Subtotal Non-Trade POS:</label>
+                                                            <p className="text-xs w-full py-1 border-gray-300 rounded-md">
+                                                                P {summary.non_trade.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                            </p>
+                                                        </div>
+                                                        <div className="mb-1 flex w-full ">
+                                                            <label className="block w-full text-xs font-bold">GRAND TOTAL POS:</label>
+                                                            <p className="text-xs w-full py-1 border-gray-300 rounded-md">
+                                                                P {(summary.trade + summary.non_trade).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                  </div>
+                  </div>
+                  
+                  <div className='flex gap-4'>
+                      {/* MM Details */}
+                      <div className="border p-4 rounded-md shadow-sm bg-gray-50 w-2/5">
+                        <h2 className="text-sm font-semibold mb-2">MM Details</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                          <div>
+                            <label className="block text-xs font-medium">MM head:</label>
+                            <input type="text" name="mm_head"  placeholder="MM Head" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_head)?editFormData.mm_head:""} onChange={handleEditChange} />
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium">MM Commissary:</label>
+                            <input type="text" name="mm_commissary" placeholder="MM Commissary" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_commissary)?editFormData.mm_commissary:""} onChange={handleEditChange} />
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium">MM RM:</label>
+                            <input type="number" name="mm_rm" placeholder="MM RM" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_rm)?editFormData.mm_rm:""} onChange={handleEditChange} />
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium">MM DM:</label>
+                            <input type="number" name="mm_dm" placeholder="MM DM" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_dm)?editFormData.mm_dm:""} onChange={handleEditChange} /> 
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium">MM KM:</label>
+                            <input type="number" name="mm_km" placeholder="MM KM" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_km)?editFormData.mm_km:""} onChange={handleEditChange} />
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium">Food Charge:</label>
+                            <input type="number" name="food_charge" placeholder="Food Charge" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.food_charge)?editFormData.food_charge:""} onChange={handleEditChange}  />
+                          </div>
+                          
+                        </div>
+                      </div>
+
+                        {/* Payment Details */}
+                    <div className="border p-4 rounded-md shadow-sm bg-gray-50 w-3/5">
+                      <h2 className="text-sm font-semibold mb-2">Payment Details</h2>
+                      <div className='flex gap-4'>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-1/2">
+
+                          <div>
+                            <label className="block text-xs font-medium">Cash:</label>
+                            <input type="number" name="cash"  placeholder="Cash" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.cash)?editFormData.cash:""} onChange={handleEditChange} />
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium">Check:</label>
+                            <input type="number" name="check" placeholder="Check" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.check)?editFormData.check:""} onChange={handleEditChange} />
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium">BPI Credit:</label>
+                            <input type="number" name="bpi_ccard" placeholder="BPI Credit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.bpi_ccard)?editFormData.bpi_ccard:""} onChange={handleEditChange} />
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium">BPI Debit:</label>
+                            <input type="number" name="bpi_dcard" placeholder="BPI Debit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.bpi_dcard)?editFormData.bpi_dcard:""} onChange={handleEditChange} />
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium">Metro Credit:</label>
+                            <input type="number" name="metro_ccard" placeholder="Metro Credit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.metro_ccard)?editFormData.metro_ccard:""} onChange={handleEditChange} />
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium">Metro Debit:</label>
+                            <input type="number" name="metro_dcard" placeholder="Metro Debit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.metro_dcard)?editFormData.metro_dcard:""} onChange={handleEditChange}/>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium">AUB Credit:</label>
+                            <input type="number" name="aub_ccard" placeholder="Aub Credit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.aub_ccard)?editFormData.aub_ccard:""} onChange={handleEditChange}/>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium">Paymaya:</label>
+                            <input type="number" name="paymaya" placeholder="Paymaya" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.paymaya)?editFormData.paymaya:""} onChange={handleEditChange}/>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-1/2">
+                          <div>
+                            <label className="block text-xs font-medium">Gcash:</label>
+                            <input type="number" name="gcash"  placeholder="GCash" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.gcash)?editFormData.gcash:""} onChange={handleEditChange} />
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium">Foodpanda:</label>
+                            <input type="number" name="food_panda" placeholder="Foodpanda" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.food_panda)?editFormData.food_panda:""} onChange={handleEditChange} />
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium">Street By:</label>
+                            <input type="number" name="streetby" placeholder="Street By" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.streetby)?editFormData.streetby:""} onChange={handleEditChange} />
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium">Grab Food:</label>
+                            <input type="number" name="grabfood" placeholder="Grab Food" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.grabfood)?editFormData.grabfood:""} onChange={handleEditChange} />
+                          </div>
+                          
+                          <div>
+                            <label className="block text-xs font-medium">GC Others:</label>
+                            <input type="number" name="gc_claimed_others" placeholder="GC Others" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.gc_claimed_others)?editFormData.gc_claimed_others:""} onChange={handleEditChange} />
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium">GC Own:</label>
+                            <input type="number" name="gc_claimed_own" placeholder="GC Own" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.gc_claimed_own)?editFormData.gc_claimed_own:""} onChange={handleEditChange}/>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium">Z Reading POS:</label>
+                            <input type="number" name="z_reading_pos" placeholder="Z Reading POS" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.z_reading_pos)?editFormData.z_reading_pos:""} onChange={handleEditChange}/>
+                          </div>
+                        </div>
+
+                      </div>
+                      
+
+                      
+                    </div>
+
+                  </div>
+                 
+
+                  
+                  
+
+                  {/* Buttons */}
+                  <div className="mt-6 flex justify-end">
+                    <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">Save</button>
+                    <button type="button" onClick={() => {setModalOpen(false)}} className="ml-2 px-4 py-2 bg-gray-400 text-white rounded-md">Cancel</button>
+                  </div>
+                </form>
+
+            </Box>
+          </Modal>
+
+          
         </TableCell>
       </TableRow>
-      <EditModal
-        open={modalOpen}
-        handleClose={() => setModalOpen(false)}
-        row={row}
-        handleSave={handleSave}
-      />
       <TableRow>
         <TableCell colSpan={15} style={{ paddingBottom: 0, paddingTop: 0 }}>
           <Collapse in={open} timeout="auto" unmountOnExit>
@@ -364,7 +474,7 @@ export default function CollapsibleTable() {
                 <TableCell />
                 <TableCell>ID</TableCell>
                 <TableCell>Cashier</TableCell>
-                <TableCell align="center">Date</TableCell>
+                <TableCell>Date</TableCell>
                 <TableCell align="right">Time</TableCell>
                 <TableCell align="right">Sub-Total Trade</TableCell>
                 <TableCell align="right">Sub-Total Non Trade</TableCell>

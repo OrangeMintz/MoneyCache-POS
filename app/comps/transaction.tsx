@@ -68,6 +68,8 @@ export default function CashierForm({cashier}: TransactionFormProps) {
         ];
 
         const nonTradeFields = [
+            formData.mm_head,
+            formData.mm_commissary,
             formData.mm_rm,
             formData.mm_dm,
             formData.food_charge,
@@ -79,7 +81,6 @@ export default function CashierForm({cashier}: TransactionFormProps) {
         setSubtotalTradePOS(tradeTotal);
         setSubtotalNonTradePOS(nonTradeTotal);
         setGrandTotalPOS(tradeTotal + nonTradeTotal);
-        localStorage.removeItem('selected_date')
     }, [formData]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
