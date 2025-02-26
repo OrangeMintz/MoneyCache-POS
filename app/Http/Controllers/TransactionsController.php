@@ -25,76 +25,6 @@ class TransactionsController extends Controller
         return view('pages.transactions-list');
     }
 
-    // public function store(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'cashier' => 'required|exists:users,id',
-    //         'time' => 'required|string|in:AM,MID,PM',
-    //         'cash' => 'numeric|nullable|min:0',
-    //         'check' => 'numeric|nullable|min:0',
-    //         'bpi_ccard' => 'numeric|nullable|min:0',
-    //         'bpi_dcard' => 'numeric|nullable|min:0',
-    //         'metro_ccard' => 'numeric|nullable|min:0',
-    //         'metro_dcard' => 'numeric|nullable|min:0',
-    //         'paymaya' => 'numeric|nullable|min:0',
-    //         'aub_ccard' => 'numeric|nullable|min:0',
-    //         'gcash' => 'numeric|nullable|min:0',
-    //         'food_panda' => 'numeric|nullable|min:0',
-    //         'streetby' => 'numeric|nullable|min:0',
-    //         'grabfood' => 'numeric|nullable|min:0',
-    //         'gc_claimed_others' => 'numeric|nullable|min:0',
-    //         'gc_claimed_own' => 'numeric|nullable|min:0',
-    //         'mm_head' => 'string|nullable',
-    //         'mm_commissary' => 'string|nullable',
-    //         'mm_rm' => 'numeric|nullable|min:0',
-    //         'mm_dm' => 'numeric|nullable|min:0',
-    //         'mm_km' => 'numeric|nullable|min:0',
-    //         'food_charge' => 'numeric|nullable|min:0',
-    //         'z_reading_pos' => 'numeric|nullable|min:0',
-    //     ]);
-
-    //     // Check if a transaction already exists for the same user, time, and day
-    //     $existingTransaction = Transactions::where('cashier', $validated['cashier'])
-    //         ->where('time', $validated['time'])
-    //         ->whereDate('created_at', now()->toDateString())
-    //         ->exists();
-
-    //     if ($existingTransaction) {
-    //         return response()->json(['status' => 'error', 'message' => 'A transaction for this user and time already exists today.'], 422);
-    //     }
-
-    //     // Compute subtotals
-    //     $subtotal_trade =
-    //         ($validated['cash'] ?? 0) + ($validated['check'] ?? 0) +
-    //         ($validated['bpi_ccard'] ?? 0) + ($validated['bpi_dcard'] ?? 0) +
-    //         ($validated['metro_ccard'] ?? 0) + ($validated['metro_dcard'] ?? 0) +
-    //         ($validated['paymaya'] ?? 0) + ($validated['aub_ccard'] ?? 0) +
-    //         ($validated['gcash'] ?? 0) + ($validated['food_panda'] ?? 0) +
-    //         ($validated['streetby'] ?? 0) + ($validated['grabfood'] ?? 0) +
-    //         ($validated['gc_claimed_others'] ?? 0) + ($validated['gc_claimed_own'] ?? 0);
-
-    //     $subtotal_non_trade =
-    //         ($validated['mm_rm'] ?? 0) + ($validated['mm_dm'] ?? 0) +
-    //         ($validated['mm_km'] ?? 0) + ($validated['food_charge'] ?? 0);
-
-    //     $grand_total = $subtotal_trade + $subtotal_non_trade;
-
-    //     // Store transaction
-    //     Transactions::create(array_merge($validated, [
-    //         'sub_total_trade' => $subtotal_trade,
-    //         'sub_total_non_trade' => $subtotal_non_trade,
-    //         'grand_total' => $grand_total,
-    //     ]));
-
-    //     $notification = array ( //toaster notif when updated
-    //         'message' => 'Added Successfully',
-    //         'alert-type' => 'success',
-    //     );
-
-    //     //redirects to transactions-list
-    //     return redirect()->route('transactions')->with($notification);
-    // }
-
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -305,15 +235,15 @@ class TransactionsController extends Controller
 
     // public function export($date)
     // {
-    //     // Convert date from MM-DD-YYYY to YYYY-MM-DD format for database query
+    // Convert date from MM-DD-YYYY to YYYY-MM-DD format for database query
     //     $formattedDate = Carbon::createFromFormat('m-d-Y', $date)->format('Y-m-d');
 
-    //     // Fetch transactions for that date
+    // Fetch transactions for that date
     //     $transactions = Transactions::whereDate('created_at', $formattedDate)->get();
 
-    //     // Return as JSON
-    //     // return response()->json($transactions);
-    //     // return view('pages.transactions');
+    // Return as JSON
+    // return response()->json($transactions);
+    // return view('pages.transactions');
     //     return view('pages.transactions-export', compact('transactions'));
     // }
 }
