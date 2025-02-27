@@ -111,10 +111,13 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        const availableDates = @json($availableDates); // Pass PHP array to JavaScript
+
         flatpickr("#datepicker", {
-            dateFormat: "Y-m-d", // Format: YYYY-MM-DD
-            enableTime: false, // Set to true if you need time selection
-            onChange: function(selectedDates, dateStr, instance) {
+            dateFormat: "Y-m-d",
+            enable: availableDates, // Restrict selection
+            defaultDate: null, // Remove default selection
+            onChange: function(selectedDates, dateStr) {
                 if (dateStr) {
                     window.location.href = `/export?date=${dateStr}`;
                 }
