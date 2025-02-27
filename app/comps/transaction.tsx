@@ -271,9 +271,17 @@ export default function CashierForm({ cashier }: TransactionFormProps) {
                                 <div className="col-span-1 lg:col-span-2">
                                     <h2 className="bg-gray-100 font-semibold tracking-wide mt-0 text-lg p-5 border-2 rounded-t-md shadow-md">SHIFT TIME:</h2>
                                     <div className="bg-white shadow-md rounded-b-lg border-2 gap-6 p-6">
-                                        <div className="w-full mb-3">
-                                            <label className="block text-sm font-medium">Cashier's Name:</label>
-                                            <input type="text" className="text-sm w-full appearance-none block p-3 bg-gray-200 text-gray-700 border rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="cashier_id" disabled value={cashier.name} />
+                                        <div className="w-full mb-3 flex gap-3">
+                                            <div>
+                                                <label className="block text-sm font-medium">User's Name:</label>
+                                                <input type="text" className="text-sm w-full appearance-none block p-3 bg-gray-200 text-gray-700 border rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="cashier_id" disabled value={cashier.name} />
+                                            </div>
+
+                                            <div>
+                                                <label className="block text-sm font-medium">User's Role:</label>
+                                                <input type="text" className="text-sm w-full appearance-none block p-3 bg-gray-200 text-gray-700 border rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="cashier_id" disabled value={cashier.role} />
+                                            </div>
+
                                         </div>
                                         <div className="w-full">
                                             <label className="block text-sm font-medium">Shift Time:</label>
