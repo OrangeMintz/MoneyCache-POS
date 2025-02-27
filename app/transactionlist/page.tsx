@@ -16,10 +16,10 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Toast from 'typescript-toastify';
 import api from "../../utils/api";
-import { formatNumber } from "../../utils/formatter"
+import { formatNumber } from "../../utils/formatter";
 
 
 async function fetchData() {
@@ -261,16 +261,17 @@ function Row({ row, handleSave, visibleColumns }) {
           <IconButton size="small" onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
+         
         </TableCell>
         {visibleColumns.id && <TableCell><span className='text-xs'>{row.id}</span></TableCell>}
         {visibleColumns.cashier && <TableCell><span className='text-xs'>{row.cashier?.name || 'Unknown'}</span></TableCell>}
         {visibleColumns.date && <TableCell align="center"><span className='text-xs'>{new Date(row.created_at).toISOString().split("T")[0]}</span></TableCell>}
-        {visibleColumns.time && <TableCell align="right"><span className='text-xs'>{row.time}</span></TableCell>}
-        {visibleColumns.trade && <TableCell align="right"><span className={`px-2 py-1 font-semibold leading-tight rounded-md text-xs ${(row.sub_total_trade > 5000) ? 'text-green-700 bg-green-100' : (row.sub_total_trade > 500 && row.sub_total_trade < 5000) ? 'text-orange-700 bg-gray-100' : 'text-red-700 bg-red-100'}`}> ₱ {formatNumber(row.sub_total_trade)} </span></TableCell>}
-        {visibleColumns.nonTrade && <TableCell align="right"><span className={`px-2 py-1 font-semibold leading-tight rounded-md text-xs ${(row.sub_total_non_trade > 5000) ? 'text-green-700 bg-green-100' : (row.sub_total_non_trade > 500 && row.sub_total_non_trade < 5000) ? 'text-orange-700 bg-gray-100' : 'text-red-700 bg-red-100'}`}>₱ {formatNumber(row.sub_total_non_trade)}  </span></TableCell>}
-        {visibleColumns.grandTotal && <TableCell align="right"><span className={`px-2 py-1 font-semibold leading-tight rounded-md text-xs ${(row.grand_total > 5000) ? 'text-green-700 bg-green-100' : (row.grand_total > 500 && row.grand_total < 5000) ? 'text-orange-700 bg-gray-100' : 'text-red-700 bg-red-100'}`}>₱ {formatNumber(row.grand_total)}  </span></TableCell>}
+        {visibleColumns.time && <TableCell align="center"><span className='text-xs'>{row.time}</span></TableCell>}
+        {visibleColumns.trade && <TableCell align="center"><span className={`px-2 py-1 font-semibold leading-tight rounded-md text-xs ${(row.sub_total_trade > 5000) ? 'text-green-700 bg-green-100' : (row.sub_total_trade > 500 && row.sub_total_trade < 5000) ? 'text-orange-700 bg-gray-100' : 'text-red-700 bg-red-100'}`}> ₱ {formatNumber(row.sub_total_trade)} </span></TableCell>}
+        {visibleColumns.nonTrade && <TableCell align="center"><span className={`px-2 py-1 font-semibold leading-tight rounded-md text-xs ${(row.sub_total_non_trade > 5000) ? 'text-green-700 bg-green-100' : (row.sub_total_non_trade > 500 && row.sub_total_non_trade < 5000) ? 'text-orange-700 bg-gray-100' : 'text-red-700 bg-red-100'}`}>₱ {formatNumber(row.sub_total_non_trade)}  </span></TableCell>}
+        {visibleColumns.grandTotal && <TableCell align="center"><span className={`px-2 py-1 font-semibold leading-tight rounded-md text-xs ${(row.grand_total > 5000) ? 'text-green-700 bg-green-100' : (row.grand_total > 500 && row.grand_total < 5000) ? 'text-orange-700 bg-gray-100' : 'text-red-700 bg-red-100'}`}>₱ {formatNumber(row.grand_total)}  </span></TableCell>}
         {visibleColumns.actions &&
-          <TableCell align="right">
+          <TableCell align="center">
             <button
               className="px-4 py-2 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition"
               onClick={handleEditClick}
@@ -645,22 +646,52 @@ export default function CollapsibleTable() {
               placeholder="Search by Date or Cashier..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full mb-4 text-sm p-2 border rounded w-1/4"
+              className=" mb-4 text-sm p-2 border rounded w-1/4"
             />
           </div>
 
-          <div className="mb-4 flex gap-2 col-span-2">
-            {Object.keys(visibleColumns).map((col) => (
-              <label key={col} className="flex items-center gap-1 text-sm">
-                <input
-                  type="checkbox"
-                  checked={visibleColumns[col]}
-                  onChange={() => handleColumnToggle(col)}
-                />
-                {col.charAt(0).toUpperCase() + col.slice(1)}
-              </label>
-            ))}
-          </div>
+          <div className="mb-4 flex justify-end col-span-2 relative">
+  <button 
+    id="dropdownDefaultButton" 
+    data-dropdown-toggle="dropdown" 
+    className="inline-flex  justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50" 
+    type="button"
+    onClick={() => {
+      const dropdown = document.getElementById('dropdownContent');
+      dropdown.classList.toggle('hidden');
+      dropdown.classList.toggle('opacity-0');
+      dropdown.classList.toggle('opacity-100');
+      dropdown.classList.toggle('translate-y-0');
+      dropdown.classList.toggle('-translate-y-2');
+    }}
+  >
+    Visibility
+    <svg className="w-2.5 h-5.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
+    </svg>
+  </button>
+  
+  <div 
+    id="dropdownContent" 
+    className="hidden opacity-0 -translate-y-2 absolute top-full right-0 mt-1 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 sm:w-48 md:w-56 dark:bg-gray-700 transition-all duration-300 ease-in-out transform"
+  >
+    <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+      {Object.keys(visibleColumns).map((col) => (
+        <li key={col}>
+          <label className="flex items-center gap-1 text-sm px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={visibleColumns[col]}
+              onChange={() => handleColumnToggle(col)}
+              className="w-4 h-4"
+            />
+            <span className="ml-2 truncate">{col.charAt(0).toUpperCase() + col.slice(1)}</span>
+          </label>
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
         </div>
 
 
@@ -672,12 +703,12 @@ export default function CollapsibleTable() {
                 <TableCell />
                 {visibleColumns.id && <TableCell>ID</TableCell>}
                 {visibleColumns.cashier && <TableCell>Cashier</TableCell>}
-                {visibleColumns.date && <TableCell>Date</TableCell>}
-                {visibleColumns.time && <TableCell>Time</TableCell>}
-                {visibleColumns.trade && <TableCell>Sub-Total Trade</TableCell>}
-                {visibleColumns.nonTrade && <TableCell>Sub-Total Non Trade</TableCell>}
-                {visibleColumns.grandTotal && <TableCell>Grand Total</TableCell>}
-                {visibleColumns.actions && <TableCell>Actions</TableCell>}
+                {visibleColumns.date && <TableCell align='center'>Date</TableCell>}
+                {visibleColumns.time && <TableCell align='center'>Time</TableCell>}
+                {visibleColumns.trade && <TableCell align='center'>Sub-Total Trade</TableCell>}
+                {visibleColumns.nonTrade && <TableCell align='center'>Sub-Total Non Trade</TableCell>}
+                {visibleColumns.grandTotal && <TableCell align='center'>Grand Total</TableCell>}
+                {visibleColumns.actions && <TableCell align='center'>Actions</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
