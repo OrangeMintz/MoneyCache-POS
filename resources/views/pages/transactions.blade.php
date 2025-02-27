@@ -156,10 +156,8 @@
                         <div class="w-full">
                             <label for="cashier_id" class="block text-sm font-medium">Cashier's
                                 Name:</label>
-                            <input type="hidden" id="cashier_id" name="cashier_id" value="{{ auth()->user()->id }}"
-                                class="w-full p-3 border border-gray-300 rounded-md">
-                            <input type="text" value="{{ auth()->user()->name }}" disabled
-                                class="w-full p-3 border border-gray-300 rounded-md">
+                            <input type="hidden" id="cashier_id" name="cashier_id" value="{{ auth()->user()->id }}"  class="w-full p-3 border border-gray-300 rounded-md">
+                            <input type="text" value="{{ auth()->user()->name }}" disabled  class="w-full p-3 border border-gray-300 rounded-md">
                         </div>
                         <div class="w-full">
                             <label for="time" class="block text-sm font-medium">Shift Time:</label>
