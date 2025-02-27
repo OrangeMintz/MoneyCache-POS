@@ -68,7 +68,7 @@ useEffect(() => {
                 alt="Moneycache"
                 style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }} 
                 />
-                <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                <h1 className="text-xl font-bold leading-tight tracking-tight text-center text-gray-900 md:text-2xl dark:text-white">
                   Sign in to your account
                 </h1>
                 {error && <p className="text-red-500 text-sm">{error}</p>}
