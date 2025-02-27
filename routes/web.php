@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
 
     // CURRENTLY WORKING
     Route::get('/export', [TransactionsController::class, 'export'])->name('transactions.export');
+    Route::get('/export/csv', [CsvController::class, 'csv'])->name('transactions.export.csv');
     Route::get('/pdf', [PDFController::class, 'pdf'])->name('pdf');
 });
 
