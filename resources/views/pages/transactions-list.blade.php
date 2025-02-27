@@ -98,41 +98,52 @@
             },
             {
                 data: 'cashier.name'
-
             },
             {
                 data: 'created_at',
-                render: function(data, type, row) {
+                render: function(data) {
                     if (!data) return '';
                     let date = new Date(data);
-                    let options = {
+                    return date.toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric'
-                    };
-                    return date.toLocaleDateString('en-US', options);
+                    });
                 }
-
             },
             {
                 data: 'time'
             },
             {
-                data: 'sub_total_trade'
+                data: 'sub_total_trade',
+                render: function(data) {
+                    return data ?
+                        `₱ ${parseFloat(data).toLocaleString('en-PH', { minimumFractionDigits: 2 })}` :
+                        '₱ 0.00';
+                }
             },
             {
-                data: 'sub_total_non_trade'
+                data: 'sub_total_non_trade',
+                render: function(data) {
+                    return data ?
+                        `₱ ${parseFloat(data).toLocaleString('en-PH', { minimumFractionDigits: 2 })}` :
+                        '₱ 0.00';
+                }
             },
             {
-                data: 'grand_total'
+                data: 'grand_total',
+                render: function(data) {
+                    return data ?
+                        `₱ ${parseFloat(data).toLocaleString('en-PH', { minimumFractionDigits: 2 })}` :
+                        '₱ 0.00';
+                }
             },
-
             {
                 data: 'id',
                 render: function(data, type, row) {
                     return `
                     <div style="display: flex; gap: 0.5rem; justify-content: center;">
-                        <button data-modal-target="crud-modal"  class="w-20 px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600"
+                        <button data-modal-target="crud-modal" class="w-20 px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600"
                             onclick="openModal('${data}')"
                             data-modal-toggle="crud-modal">Edit</button>
                         <form method="POST" class="delete-form" action="/transactions/${data}" onsubmit="return confirmation(event)">
@@ -141,13 +152,12 @@
                             <button type="submit" class="w-20 px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600">Delete</button>
                         </form>
                     </div>
-
                 `;
                 }
             }
         ],
         order: [
-            [2, 'dsc']
+            [2, 'desc']
         ]
     });
 
