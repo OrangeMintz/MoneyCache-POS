@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transactions;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionsController extends Controller
 {
@@ -15,20 +17,11 @@ class TransactionsController extends Controller
         return view('pages.transactions');
     }
 
-    // public function test(Request $request)
-    // {
-    //     if ($request->ajax()) {
-    //         $transactions = Transactions::get();
-    //         return response()->json(['data' => $transactions]);
-    //     }
-
-    //     return view('pages.test');
-    // }
-
     public function list(Request $request)
     {
         if ($request->ajax()) {
-            $transactions = Transactions::with('cashier:id,name')->get();
+            // $transactions = Transactions::with('cashier')->get();
+            $transactions = Transactions::with('cashier')->get();
             return response()->json(['data' => $transactions]);
         }
         return view('pages.transactions-list');
@@ -37,7 +30,8 @@ class TransactionsController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'cashier' => 'required|exists:users,id',
+            // 'cashier_id' => 'required|exists:users,id',
+            'cashier_id' => 'required|exists:users,id',
             'time' => 'required|string|in:AM,MID,PM',
             'cash' => 'numeric|nullable|min:0',
             'check' => 'numeric|nullable|min:0',
@@ -62,6 +56,22 @@ class TransactionsController extends Controller
             'z_reading_pos' => 'numeric|nullable|min:0',
         ]);
 
+        // Check if a transaction already exists for the same time period on the same day
+        $existingTransaction = Transactions::where('time', $validated['time'])
+            ->whereDate('created_at', now()->toDateString())
+            ->exists();
+
+        if ($existingTransaction) {
+            $message = 'A transaction for this period already exists today.';
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => $message], 422);
+            }
+            $notification = [
+                'message' => $message,
+                'alert-type' => 'error',
+            ];
+            return redirect()->back()->with($notification);
+        }
 
         // Compute subtotals
         $subtotal_trade =
@@ -86,19 +96,20 @@ class TransactionsController extends Controller
             'grand_total' => $grand_total,
         ]));
 
-        // return redirect()->back()->with('success', 'Transaction stored successfully.');
-        return response()->json(['status' => 'success', 'message' => 'Transaction stored successfully.']);
+        $notification = array ( //toaster notif when updated
+            'message' => 'Added Successfully',
+            'alert-type' => 'success',
+        );
 
-    }
-
-    public function show(string $id)
-    {
-        //
-    }
-
-    public function edit(string $id)
-    {
-        //
+        //redirects to transactions-list
+        if ($request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Transaction store successfully'
+            ]);
+        }else{
+            return redirect()->route('transactions')->with($notification);
+        }
     }
 
     public function populateEdit($id)
@@ -110,8 +121,8 @@ class TransactionsController extends Controller
     public function update(Request $request, string $id)
     {
         $validated = $request->validate([
-            'cashier' => 'required|string',
-            'time' => 'required|string',
+            'time' => 'string|nullable',
+            'time' => 'string|in:AM,MID,PM',
             'cash' => 'numeric|nullable',
             'check' => 'numeric|nullable',
             'bpi_ccard' => 'numeric|nullable',
@@ -135,7 +146,27 @@ class TransactionsController extends Controller
             'z_reading_pos' => 'numeric|nullable|min:0',
         ]);
 
+        // Find the existing transaction
+        $transaction = Transactions::findOrFail($id);
 
+        // Check if another transaction exists for the same period and date (excluding the current one)
+        $existingTransaction = Transactions::where('time', $validated['time'])
+            ->whereDate('created_at', $transaction->created_at->toDateString())
+            ->where('id', '!=', $id) // Exclude the current transaction being updated
+            ->exists();
+
+        if ($existingTransaction) {
+            $message = 'Another transaction for this period already exists today.';
+
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => $message], 422);
+            }
+            $notification = [
+                'message' => $message,
+                'alert-type' => 'error',
+            ];
+            return redirect()->back()->with($notification);
+        }
         // Compute subtotals
         $subtotal_trade =
             ($validated['cash'] ?? 0) + ($validated['check'] ?? 0) +
@@ -152,33 +183,115 @@ class TransactionsController extends Controller
 
         $grand_total = $subtotal_trade + $subtotal_non_trade;
 
-        // Find and update transaction
-        $transaction = Transactions::findOrFail($id);
+        // Update transaction
         $transaction->update(array_merge($validated, [
             'sub_total_trade' => $subtotal_trade,
             'sub_total_non_trade' => $subtotal_non_trade,
             'grand_total' => $grand_total,
         ]));
 
-        return response()->json(['status' => 'success', 'message' => 'Transaction updated successfully.']);
+        $notification = array ( //toaster notif when updated
+            'message' => 'Updated Successfully',
+            'alert-type' => 'success',
+        );
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Transaction updated successfully'
+            ]);
+        }else{
+            return redirect()->back()->with($notification);
+        }
     }
-
-
-    public function softDelete(string $id)
+    public function softDelete(Request $request, string $id)
     {
         $transaction = Transactions::findOrFail($id);
         $transaction->delete();
-        return redirect()->route('transactions')->with('success', 'Transaction deleted successfully.');
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Transaction deleted successfully'
+            ]);
+        }else{
+            return redirect()->route('transactions')->with('success', 'Transaction deleted successfully.');
+        }
     }
 
     public function retrieve()
     {
-        $transactions = Transactions::with('cashier')->get();
+        $transactions = '';
+        $user = Auth::user();
+        $userId = $user->id;
+
+        if($user->role == 'admin'){
+            $transactions = Transactions::with('cashier')->get();
+        }else{
+            $transactions = Transactions::with('cashier')
+            ->where('cashier_id', $userId)
+            ->get();
+        }
 
         return response()->json([
             "status" => 1,
             "transactions" => $transactions,
         ]);
     }
+
+    public function getByDate(Request $request){
+        $request->validate([
+            "date" => "required|date|date_format:Y-m-d",
+        ]);
+
+        $date = $request->date;
+
+        $transactions = Transactions::with('cashier')->whereDate('created_at', $date)->get();
+
+        return response()->json([
+            "status" => 1,
+            "message" => "Here are the transactions for: ". $date,
+            "transactions" => $transactions,
+        ]);
+    }
+
+    public function export(Request $request)
+    {
+        $selectedDate = $request->input('date'); // Get 'date' from query parameters
+
+        // Fetch available transaction dates
+        $availableDates = Transactions::selectRaw('DATE(created_at) as date')
+            ->distinct()
+            ->pluck('date')
+            ->toArray();
+
+        // If no date is selected, show the page with available dates only
+        if (!$selectedDate) {
+            return view('pages.transactions-sheet', compact('availableDates'));
+            }
+
+            // Fetch transactions for the selected date
+            $transactions = Transactions::with('cashier')
+                ->whereDate('created_at', $selectedDate)
+                ->get();
+
+            return view('pages.transactions-sheet', compact('transactions', 'selectedDate', 'availableDates'));
+    }
+
+    public function retrievebyUser()
+    {
+
+        $userId = auth()->id();
+        $transactions = Transactions::with('cashier')
+            ->where('cashier_id', $userId)
+            ->get();
+
+        return response()->json([
+            "status" => 1,
+            "transactions" => $transactions,
+            "id" => $userId,
+        ]);
+    }
+
 
 }

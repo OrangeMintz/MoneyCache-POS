@@ -92,16 +92,16 @@ class TransactionsGrossTotalController extends Controller
 
     public function netAll()
     {
-        $particulars = Config::get('transactions.valid_columns'); 
-        $fees = Config::get('transactions.fees'); 
+        $particulars = Config::get('transactions.valid_columns');
+        $fees = Config::get('transactions.fees');
         $netSales = [];
 
         foreach ($particulars as $particular) {
 
             $safeColumn = "`$particular`";
-            
+
             $percent = $fees[$particular];
-            $compute = 1 - ($percent / 100); 
+            $compute = 1 - ($percent / 100);
 
             $netSales[$particular] = Transactions::select(
                     DB::raw("DATE(created_at) as date"),
@@ -118,6 +118,36 @@ class TransactionsGrossTotalController extends Controller
         ]);
     }
 
+    public function getGrossNetByDate(Request $request)
+{
+    $request->validate([
+        'date' => 'required|date'
+    ]);
 
-    
+    $date = $request->input('date');
+    $particulars = Config::get('transactions.valid_columns');
+    $fees = Config::get('transactions.fees');
+    $totals = [];
+
+    foreach ($particulars as $particular) {
+        $gross = Transactions::whereDate('created_at', $date)->sum($particular);
+        $compute = isset($fees[$particular]) ? 1 - ($fees[$particular] / 100) : 1;
+        $net = Transactions::whereDate('created_at', $date)->sum(DB::raw("`$particular` * $compute"));
+
+        $totals[$particular] = [
+            'gross' => round($gross, 2),
+            'net' => round($net, 2)
+        ];
+    }
+
+    return response()->json([
+        "status" => 1,
+        "date" => $date,
+        "totals" => $totals
+    ]);
+}
+
+
+
+
 }

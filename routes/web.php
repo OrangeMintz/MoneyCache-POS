@@ -6,7 +6,8 @@ use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\TransactionsGrossTotalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CsvController;
-
+use App\Http\Controllers\AdminController;
+use App\Http\Middleware\CheckRole;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,23 +24,36 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // TRANSACTIONS
-    Route::prefix('transaction')->group(function () {
-        Route::get('/', [TransactionsController::class, 'index'])->name('transaction');
-        Route::post('/', [TransactionsController::class, 'store'])->name('transaction.store');
-        Route::put('/{id}', [TransactionsController::class, 'update'])->name('transaction.update');
-        Route::get('/edit/{id}', [TransactionsController::class, 'populateEdit']);
-        Route::get('/gross/{type}', [TransactionsGrossTotalController::class, 'gross']);
-        Route::get('/net/{type}', [TransactionsGrossTotalController::class, 'net']);
-    });
-    Route::prefix('transactions')->group(function () {
-        Route::get('/', [TransactionsController::class, 'list'])->name('transactions');
-        Route::delete('/{id}', [TransactionsController::class, 'softDelete'])->name('transactions.softDelete');
+    Route::middleware([CheckRole::class . ":admin,cashier"])->group(function () {
+        // TRANSACTIONS
+        Route::prefix('transaction')->group(function () {
+            Route::get('/', [TransactionsController::class, 'index'])->name('transaction');
+            Route::post('/', [TransactionsController::class, 'store'])->name('transaction.store');
+            Route::put('/{id}', [TransactionsController::class, 'update'])->name('transaction.update');
+            Route::get('/edit/{id}', [TransactionsController::class, 'populateEdit']);
+        });
 
+        Route::prefix('transactions')->group(function () {
+            Route::get('/', [TransactionsController::class, 'list'])->name('transactions');
+            Route::delete('/{id}', [TransactionsController::class, 'softDelete'])->name('transactions.softDelete');
+        });
     });
 
+    Route::middleware([CheckRole::class . ":admin"])->group(function () {
+        // USERS
+        Route::prefix('user')->group(function () {
+            Route::get('/', [AdminController::class, 'index'])->name('admin.users');
+            Route::delete('/{id}', [AdminController::class, 'softDelete'])->name('admin.softDelete');
+        });
+
+        Route::prefix('sheets')->group(function () {
+            Route::get('/', [TransactionsController::class, 'export'])->name('transactions.sheet');
+            Route::get('/export/csv', [CsvController::class, 'csv'])->name('transactions.sheet.csv');
+        });
+    });
+
+    Route::get('/pdf', [PDFController::class, 'pdf'])->name('pdf');
 });
 
-// Route::get('/pdf', [PDFController::class, 'pdf']);
 
 require __DIR__.'/auth.php';

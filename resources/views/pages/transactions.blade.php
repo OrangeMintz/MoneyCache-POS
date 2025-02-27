@@ -1,4 +1,5 @@
 @include('layouts.header')
+
 <main>
     <div class="font-sans bg-gray-100 p-6">
         <div class="bg-white p-4">
@@ -6,7 +7,7 @@
 
                 {{-- First column for Cashier Form --}}
                 <div class="bg-white rounded-lg shadow-md">
-                    <form method="POST" action="{{ route('transaction.store') }}">
+                    <form method="POST" action="{{ route('transaction.store') }}" id="storeForm">
                         @csrf
                         <!-- FIRST ROW -->
                         <h2 class="shadow-md font-semibold text-lg mb-4 p-4">Payment Details:</h2>
@@ -153,9 +154,10 @@
                     <h2 class="shadow-md font-semibold text-lg mb-4 p-4">Shift Time:</h2>
                     <div class="grid grid-cols-1 gap-2 justify-items-start p-4 mb-8">
                         <div class="w-full">
-                            {{-- <label for="cashier" class="block text-sm font-medium">Cashier's
-                                Name:</label> --}}
-                            <input type="hidden" id="cashier" name="cashier" value="{{ auth()->user()->id }}">
+                            <label for="cashier_id" class="block text-sm font-medium">Cashier's
+                                Name:</label>
+                            <input type="hidden" id="cashier_id" name="cashier_id" value="{{ auth()->user()->id }}"  class="w-full p-3 border border-gray-300 rounded-md">
+                            <input type="text" value="{{ auth()->user()->name }}" disabled  class="w-full p-3 border border-gray-300 rounded-md">
                         </div>
                         <div class="w-full">
                             <label for="time" class="block text-sm font-medium">Shift Time:</label>
@@ -199,6 +201,9 @@
     </div>
 </main>
 
+@include('layouts.footer')
+
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const tradeFields = [
@@ -241,6 +246,68 @@
         updateTotals();
     });
 </script>
+
+
+{{-- EDIT validation: no negative, atleast one field is filled --}}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.getElementById("storeForm");
+
+        form.addEventListener("submit", function(event) {
+            let isValid = true;
+            let hasValidPayment = false;
+            const paymentFields = [
+                "cash", "check", "bpi_ccard", "bpi_dcard", "metro_ccard", "metro_dcard", "paymaya",
+                "aub_ccard", "gcash", "food_panda", "streetby", "grabfood", "gc_claimed_others",
+                "gc_claimed_own"
+            ];
+
+            paymentFields.forEach((field) => {
+                let input = document.getElementById(field);
+                let value = input.value.trim();
+                let errorElement = input.nextElementSibling;
+
+                if (!errorElement || !errorElement.classList.contains("error-message")) {
+                    errorElement = document.createElement("div");
+                    errorElement.classList.add("error-message");
+                    errorElement.style.color = "red";
+                    errorElement.style.fontSize = "12px";
+                    input.after(errorElement);
+                }
+
+                //if value is filled
+                if (value !== "") {
+                    if (isNaN(value) || Number(value) <= 0) {
+                        errorElement.textContent = "Please enter a positive number.";
+                        input.classList.add("border-red-500");
+                        isValid = false;
+                    } else {
+                        errorElement.textContent = "";
+                        input.classList.remove("border-red-500");
+                        hasValidPayment = true;
+                    }
+                } else {
+                    errorElement.textContent = "";
+                    input.classList.remove("border-red-500");
+                }
+            });
+
+            if (!hasValidPayment) {
+                event.preventDefault(); // Stop form submission
+                toastr.error("Please enter at least one valid payment amount.");
+            }
+
+            // If there are any invalid inputs, stop form submission
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+
+
+
+
 
 </body>
 

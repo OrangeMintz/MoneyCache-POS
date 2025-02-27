@@ -4,8 +4,13 @@
 <main>
     <div class="font-sans bg-gray-100 p-6">
         <div class="bg-white p-4 mb-4">
-            <div class="card-header">
+            <div class="card-header flex justify-between items-center">
                 <h5 class="title font-semibold text-[26px]">Test Transactions</h5>
+                <div class="flex flex-wrap justify-center">
+                    <a href="{{ route('pdf') }}"
+                        class="bg-emerald-700 hover:bg-emerald-900 rounded-lg text-white text-md text-center self-center px-3 py-2 my-2 mx-2">Download
+                        as PDF <i class="fas fa-file-pdf ml-1"></i></a>
+                </div>
             </div>
             <div class="overflow-x-auto">
                 <table id="example" class="display" style="width:100%">
@@ -13,6 +18,7 @@
                         <tr>
                             <th></th>
                             <th>Name</th>
+                            <th>Date</th>
                             <th>Time</th>
                             <th>Sub-Total</th>
                             <th>Sub-Total Non Trade</th>
@@ -24,18 +30,19 @@
             </div>
         </div>
     </div>
+    <div style="background: rgb(238, 235, 235)"></div>
 </main>
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+@include('layouts.footer')
 
 <script>
     // Formatting function for row details - modify as you need
     function format(d) {
-        let details = "<dl>";
+        let details = `<div style="padding:10px 40px; background: rgb(238, 235, 235);">`;
 
-        // Define the fields you want to check dynamically
-        let tradeFields = {
+        let formatCurrency = (amount) => `₱${parseFloat(amount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}`;
+
+        let tradeFields = {};
+        let data = {
             "Cash": d.cash,
             "Check": d.check,
             "BPI Credit Card": d.bpi_ccard,
@@ -52,6 +59,13 @@
             "GC Claimed (Own)": d.gc_claimed_own
         };
 
+        // Loop through each field and add only non-empty values
+        for (let key in data) {
+            if (data[key]) { // If value is not null, undefined, or 0
+                tradeFields[key] = formatCurrency(data[key]);
+            }
+        }
+
         let nonTradeFields = {
             "MM Head Office": d.mm_head,
             "MM Commissary": d.mm_commissary,
@@ -65,7 +79,7 @@
         function formatFields(fields) {
             return Object.entries(fields)
                 .filter(([key, value]) => value && value != 0) // Show only non-empty values
-                .map(([key, value]) => `<p>${key}: ${value}</p>`)
+                .map(([key, value]) => `<p style="margin: .4rem 0;">${key}: ${value}</p>`)
                 .join("");
         }
 
@@ -93,27 +107,52 @@
             },
             {
                 data: 'cashier.name'
-
+            },
+            {
+                data: 'created_at',
+                render: function(data) {
+                    if (!data) return '';
+                    let date = new Date(data);
+                    return date.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                }
             },
             {
                 data: 'time'
             },
             {
-                data: 'sub_total_trade'
+                data: 'sub_total_trade',
+                render: function(data) {
+                    return data ?
+                        `₱ ${parseFloat(data).toLocaleString('en-PH', { minimumFractionDigits: 2 })}` :
+                        '₱ 0.00';
+                }
             },
             {
-                data: 'sub_total_non_trade'
+                data: 'sub_total_non_trade',
+                render: function(data) {
+                    return data ?
+                        `₱ ${parseFloat(data).toLocaleString('en-PH', { minimumFractionDigits: 2 })}` :
+                        '₱ 0.00';
+                }
             },
             {
-                data: 'grand_total'
+                data: 'grand_total',
+                render: function(data) {
+                    return data ?
+                        `₱ ${parseFloat(data).toLocaleString('en-PH', { minimumFractionDigits: 2 })}` :
+                        '₱ 0.00';
+                }
             },
-
             {
                 data: 'id',
                 render: function(data, type, row) {
                     return `
                     <div style="display: flex; gap: 0.5rem; justify-content: center;">
-                        <button data-modal-target="crud-modal"  class="w-20 px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600"
+                        <button data-modal-target="crud-modal" class="w-20 px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600"
                             onclick="openModal('${data}')"
                             data-modal-toggle="crud-modal">Edit</button>
                         <form method="POST" class="delete-form" action="/transactions/${data}" onsubmit="return confirmation(event)">
@@ -122,13 +161,12 @@
                             <button type="submit" class="w-20 px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600">Delete</button>
                         </form>
                     </div>
-
                 `;
                 }
             }
         ],
         order: [
-            [1, 'asc']
+            [2, 'desc']
         ]
     });
 
@@ -150,10 +188,9 @@
 {{-- DELETE FUNCTIONS --}}
 <script>
     document.querySelectorAll('.delete-form').forEach(form => {
-    let transactionId = "${data}";
-    form.action = "{{ route('transactions.softDelete', '__id__') }}".replace('__id__', transactionId);
+        let transactionId = "${data}";
+        form.action = "{{ route('transactions.softDelete', '__id__') }}".replace('__id__', transactionId);
     });
-
 </script>
 
 <script>
@@ -176,72 +213,76 @@
 
 {{-- CALCULATE TOTAL --}}
 <script>
-// Function to open the modal
+    // Function to open the modal
 
-function openModal(id) {
-    console.log("Opening modal for ID:", id);
-    const modal = document.getElementById("crud-modal");
-    modal.classList.remove("hidden");
-    modal.classList.add("flex");
+    function openModal(id) {
+        console.log("Opening modal for ID:", id);
+        const modal = document.getElementById("crud-modal");
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
 
-    // Update form action dynamically
-    document.getElementById('editForm').action = `/transaction/${id}`;
+        // Update form action dynamically
+        document.getElementById('editForm').action = `/transaction/${id}`;
 
-    // Fetch transaction data via AJAX
-    fetch(`/transaction/edit/${id}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data) {
-                document.getElementById('cash').value = data.cash ?? '';
-                document.getElementById('check').value = data.check ?? '';
-                document.getElementById('bpi_ccard').value = data.bpi_ccard ?? '';
-                document.getElementById('bpi_dcard').value = data.bpi_dcard ?? '';
-                document.getElementById('metro_ccard').value = data.metro_ccard ?? '';
-                document.getElementById('metro_dcard').value = data.metro_dcard ?? '';
-                document.getElementById('paymaya').value = data.paymaya ?? '';
-                document.getElementById('aub_ccard').value = data.aub_ccard ?? '';
-                document.getElementById('gcash').value = data.gcash ?? '';
-                document.getElementById('food_panda').value = data.food_panda ?? '';
-                document.getElementById('streetby').value = data.streetby ?? '';
-                document.getElementById('grabfood').value = data.grabfood ?? '';
-                document.getElementById('gc_claimed_others').value = data.gc_claimed_others ?? '';
-                document.getElementById('gc_claimed_own').value = data.gc_claimed_own ?? '';
-                document.getElementById('mm_head').value = data.mm_head ?? '';
-                document.getElementById('mm_commissary').value = data.mm_commissary ?? '';
-                document.getElementById('mm_rm').value = data.mm_rm ?? '';
-                document.getElementById('mm_dm').value = data.mm_dm ?? '';
-                document.getElementById('mm_km').value = data.mm_km ?? '';
-                document.getElementById('food_charge').value = data.food_charge ?? '';
-                document.getElementById('z_reading_pos').value = data.z_reading_pos ?? '';
-                document.getElementById('time').value = data.time ?? 'AM';
-                document.getElementById('sub_total_trade').textContent = `P ${data.sub_total_trade ?? '0.00'}`;
-                document.getElementById('sub_total_non_trade').textContent = `P ${data.sub_total_non_trade ?? '0.00'}`;
-                document.getElementById('grand_total').textContent = `P ${data.grand_total ?? '0.00'}`;
+        // Fetch transaction data via AJAX
+        fetch(`/transaction/edit/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    document.getElementById('cash').value = data.cash ?? '';
+                    document.getElementById('check').value = data.check ?? '';
+                    document.getElementById('bpi_ccard').value = data.bpi_ccard ?? '';
+                    document.getElementById('bpi_dcard').value = data.bpi_dcard ?? '';
+                    document.getElementById('metro_ccard').value = data.metro_ccard ?? '';
+                    document.getElementById('metro_dcard').value = data.metro_dcard ?? '';
+                    document.getElementById('paymaya').value = data.paymaya ?? '';
+                    document.getElementById('aub_ccard').value = data.aub_ccard ?? '';
+                    document.getElementById('gcash').value = data.gcash ?? '';
+                    document.getElementById('food_panda').value = data.food_panda ?? '';
+                    document.getElementById('streetby').value = data.streetby ?? '';
+                    document.getElementById('grabfood').value = data.grabfood ?? '';
+                    document.getElementById('gc_claimed_others').value = data.gc_claimed_others ?? '';
+                    document.getElementById('gc_claimed_own').value = data.gc_claimed_own ?? '';
+                    document.getElementById('mm_head').value = data.mm_head ?? '';
+                    document.getElementById('mm_commissary').value = data.mm_commissary ?? '';
+                    document.getElementById('mm_rm').value = data.mm_rm ?? '';
+                    document.getElementById('mm_dm').value = data.mm_dm ?? '';
+                    document.getElementById('mm_km').value = data.mm_km ?? '';
+                    document.getElementById('food_charge').value = data.food_charge ?? '';
+                    document.getElementById('z_reading_pos').value = data.z_reading_pos ?? '';
+                    document.getElementById('time').value = data.time ?? 'AM';
+                    document.getElementById('sub_total_trade').textContent = `P ${data.sub_total_trade ?? '0.00'}`;
+                    document.getElementById('sub_total_non_trade').textContent =
+                        `P ${data.sub_total_non_trade ?? '0.00'}`;
+                    document.getElementById('grand_total').textContent = `P ${data.grand_total ?? '0.00'}`;
+                }
+            })
+            .catch(error => console.error('Error fetching transaction:', error));
+    }
+
+
+    // Function to close the modal when clicking outside or close button
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll("[data-modal-toggle]").forEach(button => {
+            button.addEventListener("click", function() {
+                const modal = document.getElementById("crud-modal");
+                modal.classList.add("hidden");
+                modal.classList.remove("flex");
+            });
+        });
+
+        // Close modal when clicking outside modal content
+        document.getElementById("crud-modal").addEventListener("click", function(e) {
+            if (e.target === this) {
+                this.classList.add("hidden");
+                this.classList.remove("flex");
             }
-        })
-        .catch(error => console.error('Error fetching transaction:', error));
-}
-
-// Function to close the modal when clicking outside or close button
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll("[data-modal-toggle]").forEach(button => {
-        button.addEventListener("click", function () {
-            const modal = document.getElementById("crud-modal");
-            modal.classList.add("hidden");
-            modal.classList.remove("flex");
         });
     });
-
-    // Close modal when clicking outside modal content
-    document.getElementById("crud-modal").addEventListener("click", function (e) {
-        if (e.target === this) {
-            this.classList.add("hidden");
-            this.classList.remove("flex");
-        }
-    });
-});
 </script>
 
+{{-- toaster for update notification --}}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const tradeFields = [

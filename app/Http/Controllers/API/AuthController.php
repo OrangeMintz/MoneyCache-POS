@@ -47,26 +47,26 @@ class AuthController extends Controller
         ]);
     }
 
-    public function login(Request $request){
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
-            $user = Auth::user();
-            $response = [];
-            $response['token']=$user->createToken("MyApp")->accessToken;
-            $response['user']=$user->name;
-            $response['email']=$user->email;
+    // public function login(Request $request){
+    //     if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
+    //         $user = Auth::user();
+    //         $response = [];
+    //         $response['token']=$user->createToken("MyApp")->accessToken;
+    //         $response['user']=$user->name;
+    //         $response['email']=$user->email;
 
-            return response()->json([
-                "status" => 1,
-                "message" => "User Authenticated",
-                "data" => $response
-            ]);
-        }
-        return response()->json([
-            "status" => 0,
-            "message" => "Invalid Credentials",
-            "data" => null
-        ]);
-    }
+    //         return response()->json([
+    //             "status" => 1,
+    //             "message" => "User Authenticated",
+    //             "data" => $response
+    //         ]);
+    //     }
+    //     return response()->json([
+    //         "status" => 0,
+    //         "message" => "Invalid Credentials",
+    //         "data" => null
+    //     ]);
+    // }
 
     public function getUser(Request $request){
         $user = Auth::user();
