@@ -266,4 +266,20 @@ class TransactionsController extends Controller
             return view('pages.transactions-export', compact('transactions', 'selectedDate', 'availableDates'));
     }
 
+    public function retrievebyUser()
+    {
+
+        $userId = auth()->id();
+        $transactions = Transactions::with('cashier')
+            ->where('cashier_id', $userId)
+            ->get();
+
+        return response()->json([
+            "status" => 1,
+            "transactions" => $transactions,
+            "id" => $userId,
+        ]);
+    }
+
+
 }
