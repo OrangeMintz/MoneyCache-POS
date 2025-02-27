@@ -1,5 +1,6 @@
 'use client';
 
+import Footer from '@/app/comps/footer';
 import Navbar from '@/app/comps/header';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -728,6 +729,10 @@ export default function CollapsibleTable() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Box>
+      <div className='z-50 border-t'>
+      <Footer/>
+      </div>
     </>
+ 
   );
 }
