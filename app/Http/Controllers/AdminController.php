@@ -12,11 +12,14 @@ class AdminController extends Controller
     public function index()
     {
         $users = User::all();
-
         return view('pages.users', compact('users'));
     }
-
     public function store()
+    {
+
+    }
+
+    public function update()
     {
 
     }
@@ -26,14 +29,16 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        if ($request->wantsJson()) {
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Transaction deleted successfully'
-            ]);
-        }else{
-            return redirect()->back()->with('success', 'Transaction deleted successfully.');
-        }
+        $message = 'User deleted successfully';
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'success', 'message' => $message], 200);
+            }
+            $notification = [
+                'message' => $message,
+                'alert-type' => 'success',
+            ];
+         return redirect()->back()->with($notification);
+
     }
 
 }

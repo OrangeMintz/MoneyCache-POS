@@ -26,7 +26,7 @@
                     <tbody>
                         @foreach ($users as $user)
                             <tr>
-                                <td>{{ $user->role }}</td>
+                                <td class="capitalize">{{ $user->role }}</td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->created_at }}</td>
@@ -36,46 +36,41 @@
                                         <button data-modal-target="edit-modal"
                                             class="w-20 px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600"
                                             data-modal-toggle="add-modal">Edit</button>
-                                        <form method="POST" class="delete-form" href="" action=""
-                                            onsubmit="return confirmation(event)">
+                                        <form action="{{ route('admin.softDelete', $user->id) }}" method="POST"
+                                            onsubmit="confirmation(event)">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="w-20 px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600">Delete</button>
+                                                class="w-20 px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600">
+                                                Delete
+                                            </button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
                         @endforeach
-
                     </tbody>
-
                 </table>
             </div>
         </div>
     </div>
     @include('layouts.footer')
-
-
-
     <script>
         new DataTable('#usersTable');
-
 
         function confirmation(event) {
             event.preventDefault();
             swal({
-                    title: "Are you sure you want to delete this?",
-                    text: "You won't be able to revert this action!",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        event.target.closest("form").submit(); // Submit the form
-                    }
-                });
+                title: "Are you sure you want to delete this?",
+                text: "You won't be able to revert this action!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    event.target.closest("form").submit(); // Submit the form
+                }
+            });
         }
     </script>
 

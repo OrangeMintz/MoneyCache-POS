@@ -224,9 +224,9 @@ class TransactionsController extends Controller
         $transactions = '';
         $user = Auth::user();
         $userId = $user->id;
-        
+
         if($user->role == 'admin'){
-            $transactions = Transactions::with('cashier')->get();  
+            $transactions = Transactions::with('cashier')->get();
         }else{
             $transactions = Transactions::with('cashier')
             ->where('cashier_id', $userId)
