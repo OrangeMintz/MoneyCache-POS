@@ -44,13 +44,13 @@ export default function Navbar() {
     return (
         <>
             {/* Sidebar */}
-            <div className={`bg-blue-500 text-white w-80 fixed h-full transition-all duration-300 ease-in-out z-20 ${sidebarOpen ? 'translate-x-0' : '-translate-x-80'}`}>
+            <div className={`bg-blue-500 text-black w-80 fixed h-full transition-all duration-300 ease-in-out z-20 ${sidebarOpen ? 'translate-x-0' : '-translate-x-80'}`}>
                 {/* Close icon inside the sidebar */}
                 <div className="p-4 border-b border-gray-700 flex justify-between items-center">
                     <span className="text-xl md:mt-6 font-semibold">MoneyCache</span>
                     <button 
                         onClick={() => setSidebarOpen(false)} 
-                        className="p-2 rounded-md text-gray-200 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                        className="p-2 rounded-md text-gray-200 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
                         aria-label="Close sidebar"
                     >
                         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -61,26 +61,26 @@ export default function Navbar() {
                 <nav className="mt-5">
                     <ul className="space-y-2 px-4">
                         <li>
-                            <Link href="/dashboard" className="flex items-center p-2 rounded-md hover:bg-gray-700 transition-colors">
-                                <span>Transaction</span>
+                            <Link href="/dashboard" className="flex items-center p-2 rounded-md hover:bg-green-200 transition-colors">
+                                <span><b>Transactions</b></span>
                             </Link>
                         </li>
                         <li>
-                            <Link href="/transactionlist" className="flex items-center p-2 rounded-md hover:bg-gray-700 transition-colors">
-                                <span>Transaction List</span>
+                            <Link href="/transactionlist" className="flex items-center p-2 rounded-md hover:bg-green-200 transition-colors">
+                                <span><b>Transaction List</b></span>
                             </Link>
                         </li>
                         <li>
-                            <Link href="/Product" className="flex items-center p-2 rounded-md hover:bg-gray-700 transition-colors">
-                                <span>Sheets</span>
+                            <Link href="/Product" className="flex items-center p-2 rounded-md hover:bg-green-300 transition-colors">
+                                <span><b>Sheets</b></span>
                             </Link>
                         </li>
                     </ul>
                 </nav>
                 <div className="absolute bottom-0 w-full p-4 border-t border-gray-700">
                     <form onSubmit={logout}>
-                        <button type="submit" className="w-full p-2 bg-gray-700 rounded-md hover:bg-gray-600 transition-colors">
-                            Logout
+                        <button type="submit" className="w-full p-2 bg-gray-700 rounded-md hover:bg-green-300 transition-colors">
+                        <b>Logout</b>
                         </button>
                     </form>
                 </div>
@@ -94,7 +94,7 @@ export default function Navbar() {
                             {/* Sidebar toggle button */}
                             <button 
                                 onClick={() => setSidebarOpen(!sidebarOpen)} 
-                                className="p-2 rounded-md  text-black justify-start hidden sm:flex sm:items-center sm:ms-6 hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-300"
+                                className="p-2 rounded-md  text-black justify-start hidden sm:flex sm:items-start sm:ms-6 hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-300"
                                 aria-label="Toggle sidebar"
                             >
                                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -107,7 +107,7 @@ export default function Navbar() {
                             </button>
                             
                             <div className="ml-4 shrink-0 flex items-center">
-                                <Link href="#">
+                                <Link href="/dashboard">
                                     <span className="block  w-auto text-lg text-black dark:text-gray-200 hover:text-green-300">
                                         <b>MoneyCache</b>
                                     </span>
