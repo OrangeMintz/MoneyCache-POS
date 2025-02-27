@@ -19,6 +19,10 @@
                 class="p-4 border-b-2 duration-200 cursor-pointer {{ request()->routeIs('transactions') ? 'border-MCGreen text-MCGreen' : 'hover:border-opacity-100 hover:text-MCGreen' }}">
                 Transaction List
             </a>
+            <a href="{{route("admin.users")}}"
+                class="p-4 border-b-2 border-MCGreen border-opacity-0 hover:border-opacity-100 hover:text-MCGreen duration-200 cursor-pointer">
+                User List
+            </a>
             <a href="{{route("transactions.export")}}"
                 class="p-4 border-b-2 border-MCGreen border-opacity-0 hover:border-opacity-100 hover:text-MCGreen duration-200 cursor-pointer">
                 Export

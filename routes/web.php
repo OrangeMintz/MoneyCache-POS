@@ -6,7 +6,7 @@ use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\TransactionsGrossTotalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CsvController;
-
+use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -35,7 +35,11 @@ Route::middleware('auth')->group(function () {
     Route::prefix('transactions')->group(function () {
         Route::get('/', [TransactionsController::class, 'list'])->name('transactions');
         Route::delete('/{id}', [TransactionsController::class, 'softDelete'])->name('transactions.softDelete');
+    });
 
+    Route::prefix('admin')->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->name('admin.users');
+        Route::delete('/{id}', [AdminController::class, 'softDelete'])->name('admin.softDelete');
     });
 
     // CURRENTLY WORKING
