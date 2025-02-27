@@ -1,6 +1,7 @@
 'use client';
 
 import axios from 'axios';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -44,7 +45,7 @@ export default function Navbar() {
     return (
         <>
             {/* Sidebar */}
-            <div className={`bg-blue-500 text-black w-80 fixed h-full transition-all duration-300 ease-in-out z-20 ${sidebarOpen ? 'translate-x-0' : '-translate-x-80'}`}>
+            <div className={`bg-blue-500 text-black w-80 fixed h-full transition-all duration-300 ease-in-out z-50 ${sidebarOpen ? 'translate-x-0' : '-translate-x-80'}`}>
                 {/* Close icon inside the sidebar */}
                 <div className="p-4 border-b border-gray-700 flex justify-between items-center">
                     <span className="text-xl md:mt-6 font-semibold">MoneyCache</span>
@@ -97,7 +98,7 @@ export default function Navbar() {
                                 className="p-2 rounded-md  text-black justify-start hidden sm:flex sm:items-start sm:ms-6 hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-300"
                                 aria-label="Toggle sidebar"
                             >
-                                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg className="h-6 w-6 md:mr-98" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     {sidebarOpen ? (
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                     ) : (
@@ -105,7 +106,12 @@ export default function Navbar() {
                                     )}
                                 </svg>
                             </button>
-                            
+                             <Image
+                                        src="/images/logo.png"
+                                        width={30}
+                                        height={30}
+                                        alt="Picture of the author"
+                                        />
                             <div className="ml-4 shrink-0 flex items-center">
                                 <Link href="/dashboard">
                                     <span className="block  w-auto text-lg text-black dark:text-gray-200 hover:text-green-300">
