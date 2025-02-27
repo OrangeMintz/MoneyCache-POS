@@ -36,15 +36,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [TransactionsController::class, 'list'])->name('transactions');
         Route::delete('/{id}', [TransactionsController::class, 'softDelete'])->name('transactions.softDelete');
     });
-
+    
     Route::prefix('admin')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('admin.users');
         Route::delete('/{id}', [AdminController::class, 'softDelete'])->name('admin.softDelete');
     });
+    Route::prefix('sheets')->group(function () {
+        Route::get('/', [TransactionsController::class, 'export'])->name('transactions.sheet');
+        Route::get('/export/csv', [CsvController::class, 'csv'])->name('transactions.sheet.csv');
+    });
 
-    // CURRENTLY WORKING
-    Route::get('/export', [TransactionsController::class, 'export'])->name('transactions.export');
-    Route::get('/export/csv', [CsvController::class, 'csv'])->name('transactions.export.csv');
     Route::get('/pdf', [PDFController::class, 'pdf'])->name('pdf');
 });
 

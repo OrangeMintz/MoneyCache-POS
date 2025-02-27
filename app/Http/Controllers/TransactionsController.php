@@ -203,11 +203,6 @@ class TransactionsController extends Controller
             return redirect()->back()->with($notification);
         }
     }
-
-
-
-
-
     public function softDelete(Request $request, string $id)
     {
         $transaction = Transactions::findOrFail($id);
@@ -270,4 +265,5 @@ class TransactionsController extends Controller
 
             return view('pages.transactions-export', compact('transactions', 'selectedDate', 'availableDates'));
     }
+
 }

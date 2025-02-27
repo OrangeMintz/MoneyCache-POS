@@ -16,16 +16,18 @@
                 Transaction
             </a>
             <a href="{{ route('transactions') }}"
-                class="p-4 border-b-2 duration-200 cursor-pointer {{ request()->routeIs('transactions') ? 'border-MCGreen text-MCGreen' : 'hover:border-opacity-100 hover:text-MCGreen' }}">
+                class="p-4 border-b-2 duration-200 cursor-pointer
+                    {{ request()->routeIs('transactions') ? 'border-MCGreen text-MCGreen' : 'border-transparent hover:border-MCGreen hover:text-MCGreen' }}">
                 Transaction List
             </a>
             <a href="{{route("admin.users")}}"
                 class="p-4 border-b-2 border-MCGreen border-opacity-0 hover:border-opacity-100 hover:text-MCGreen duration-200 cursor-pointer">
                 User List
             </a>
-            <a href="{{route("transactions.export")}}"
-                class="p-4 border-b-2 border-MCGreen border-opacity-0 hover:border-opacity-100 hover:text-MCGreen duration-200 cursor-pointer">
-                Export
+            <a href="{{ route('transactions.sheet', ['date' => now()->format('Y-m-d')]) }}"
+                class="p-4 border-b-2 duration-200 cursor-pointer
+        {{ request()->routeIs('transactions.sheet') ? 'border-MCGreen text-MCGreen' : 'border-transparent hover:border-MCGreen hover:text-MCGreen' }}">
+                Sheets
             </a>
         </div>
     </nav>
@@ -34,7 +36,8 @@
     <div class="w-3/12 flex justify-end">
         <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <a href="{{ route('logout') }}" class="p-4 border-b-2 border-MCGreen border-opacity-0 hover:text-MCGreen duration-200 cursor-pointer"
+            <a href="{{ route('logout') }}"
+                class="p-4 border-b-2 border-MCGreen border-opacity-0 hover:text-MCGreen duration-200 cursor-pointer"
                 onclick="event.preventDefault(); this.closest('form').submit();">
                 Logout
             </a>

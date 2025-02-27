@@ -52,7 +52,7 @@ class CsvController extends Controller
     $csvData[] = [$particular, $am, $mid, $pm, $grossTotal ?: '', $netTotal ?: ''];
         }
 
-        $fileName = "transactions_" . now()->format('Y-m-d') . ".csv";
+        $fileName = "transactions_" . $date . ".csv";
         $handle = fopen('php://output', 'w');
         ob_start();
 
@@ -70,5 +70,4 @@ class CsvController extends Controller
             'Content-Disposition' => "attachment; filename=$fileName"
         ]);
     }
-
 }
