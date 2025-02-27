@@ -18,7 +18,7 @@ type TransactionFormProps = {
 
 export default function CashierForm({ cashier }: TransactionFormProps) {
     const [formData, setFormData] = useState({
-        cashier: cashier.id,
+        cashier_id: cashier.id,
         time: "AM",
         cash: null,
         check: null,
@@ -273,7 +273,7 @@ export default function CashierForm({ cashier }: TransactionFormProps) {
                                     <div className="bg-white shadow-md rounded-b-lg border-2 gap-6 p-6">
                                         <div className="w-full mb-3">
                                             <label className="block text-sm font-medium">Cashier's Name:</label>
-                                            <input type="text" className="text-sm w-full appearance-none block p-3 bg-gray-200 text-gray-700 border rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="cashier" disabled value={cashier.name} />
+                                            <input type="text" className="text-sm w-full appearance-none block p-3 bg-gray-200 text-gray-700 border rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="cashier_id" disabled value={cashier.name} />
                                         </div>
                                         <div className="w-full">
                                             <label className="block text-sm font-medium">Shift Time:</label>
