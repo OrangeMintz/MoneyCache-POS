@@ -112,8 +112,8 @@ export default function DenseTable() {
   return (
     <main className="min-h-screen ">
       <Navbar />
-      <div className="-6 ml-6">
-        <div className="flex justify-start mb-4 mt-6 px-4 md:px-6">
+      <div className="p-8">
+        <div className="flex justify-start mb-4 px-4 md:px-6">
           <form onSubmit={downloadCsv}>
             <button type="submit" className="text-xs h-10 bg-green-300 hover:bg-gray-100 text-gray-800 font-semibold py-2 px-6 border border-gray-400 rounded shadow">
               Download
