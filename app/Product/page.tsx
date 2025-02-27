@@ -3,6 +3,7 @@ import Navbar from "@/app/comps/header";
 import Preloader from "@/app/comps/preloader"; // Import the Preloader component
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
+import { formatNumber } from "@/utils/formatter";
 import { particulars } from "../../utils/particulars";
 
 export default function DenseTable() {
@@ -60,6 +61,7 @@ export default function DenseTable() {
           }
         );
 
+        console.log("redbone", totals.data.totals)
         setTotals(totals.data.totals);
         setTransactions(transactions);
       }
@@ -161,11 +163,11 @@ export default function DenseTable() {
                 return (
                   <tr key={key} className={` ${bgTD} text-gray-800 border-b dark:border-gray-700 border-gray-200`}>
                     <td className="border border-gray-300 p-2 font-bold">{label}</td>
-                    <td className="border border-gray-300 p-2">{key == "cashier" ? (amTransact ? amTransact['cashier'].name : "") : (amTransact ? amTransact[key] : "")}</td>
-                    <td className="border border-gray-300 p-2">{key == "cashier" ? (midTransact ? midTransact['cashier'].name : "") : (midTransact ? midTransact[key] : "")}</td>
-                    <td className="border border-gray-300 p-2">{key == "cashier" ? (pmTransact ? pmTransact['cashier'].name : "") : (pmTransact ? pmTransact[key] : "")}</td>
-                    <td className={`border border-white p-2 ${bgGross}`}>{totals[key] ? (totals[key].gross || totals[key].gross != 0) : ""}</td>
-                    <td className={`border ${bgNet} border-white p-2`}>{totals[key] ? (totals[key].net || totals[key].net != 0) : ""}</td>
+                    <td className="border border-gray-300 p-2">{key == "cashier" ? (amTransact ? amTransact['cashier'].name : "") : (amTransact && amTransact[key] !== null ? '₱ ' + formatNumber(amTransact[key]) : "")}</td>
+                    <td className="border border-gray-300 p-2">{key == "cashier" ? (midTransact ? midTransact['cashier'].name : "") : (midTransact && midTransact[key] !== null ? '₱ ' + formatNumber(midTransact[key]) : "")}</td>
+                    <td className="border border-gray-300 p-2">{key == "cashier" ? (pmTransact ? pmTransact['cashier'].name : "") : (pmTransact && pmTransact[key] !== null ? '₱ ' + formatNumber(pmTransact[key]) : "")}</td>
+                    <td className={`border border-white p-2 ${bgGross}`}>{totals[key] && totals[key].gross !== 0 ? '₱ ' + formatNumber(totals[key].gross) : ""}</td>
+                    <td className={`border ${bgNet} border-white p-2`}>{totals[key] && totals[key].net !== 0 ? '₱ ' + formatNumber(totals[key].net) : ""}</td>
                   </tr>
                 );
               })}
