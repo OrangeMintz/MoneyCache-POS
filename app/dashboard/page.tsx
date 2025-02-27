@@ -7,6 +7,7 @@ import TransactionForm from "@/app/comps/transaction";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
+import Users from '@/app/comps/user'
 
 export default function Dashboard() {
     const [user, setUser] = useState<any>(null);

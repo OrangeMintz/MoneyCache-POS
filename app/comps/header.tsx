@@ -4,7 +4,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Navbar() {
     const router = useRouter();
@@ -42,16 +42,44 @@ export default function Navbar() {
         }
     };
 
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef(null);
+  
+    const toggleDropdown = () => {
+      setIsOpen(!isOpen);
+    };
+  
+    // Close dropdown when clicking outside
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+          setIsOpen(false);
+        }
+      };
+  
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, []);
+
     return (
         <>
             {/* Sidebar */}
-            <div className={`bg-blue-500  text-black w-80 fixed h-full transition-all duration-300 ease-in-out z-50 ${sidebarOpen ? 'translate-x-0' : '-translate-x-80'}`}>
+            <div className={`bg-gray-300  text-black md:mb-3 w-80 fixed h-full transition-all duration-300 ease-in-out z-50 ${sidebarOpen ? 'translate-x-0' : '-translate-x-80'}`}>
                 {/* Close icon inside the sidebar */}
-                <div className="p-4 border-b  border-gray-700 flex justify-between items-center">
-                    <span className="text-xl md:mt-6 font-semibold">MoneyCache</span>
+                <div className="p-1 mt-1 border-b  border-gray-700 flex items-center ">
+                <Image
+                                src="/images/logo.png"
+                                width={50}
+                                height={30}
+                                className='sm:ml-4'
+                                alt="Picture of the author"
+                            />
+                    <span className="text-xl md:mt-3 md:mb-3 md:ml-2 font-semibold">MoneyCache</span>
                     <button
                         onClick={() => setSidebarOpen(false)}
-                        className="p-2 rounded-md text-gray-200 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                        className="p-2 rounded-md md:ml-[50px] text-black hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
                         aria-label="Close sidebar"
                     >
                         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -61,6 +89,7 @@ export default function Navbar() {
                 </div>
                 <nav className="mt-5">
                     <ul className="space-y-2 px-4">
+                   
                         <li>
                             <Link href="/dashboard" className="flex items-center p-2 rounded-md hover:bg-green-200 transition-colors">
                                 <span><b>Transactions</b></span>
@@ -69,6 +98,11 @@ export default function Navbar() {
                         <li>
                             <Link href="/transactionlist" className="flex items-center p-2 rounded-md hover:bg-green-200 transition-colors">
                                 <span><b>Transaction List</b></span>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/user" className="flex items-center p-2 rounded-md hover:bg-green-200 transition-colors">
+                                <span><b>Users</b></span>
                             </Link>
                         </li>
                         <li>
@@ -85,6 +119,7 @@ export default function Navbar() {
                         </button>
                     </form>
                 </div>
+            
             </div>
 
             {/* Top navigation */}
@@ -124,6 +159,7 @@ export default function Navbar() {
                         {/* Desktop navigation */}
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
                             <div className="relative">
+                        
                                 <Link href="/dashboard">
                                     <button className="inline-flex items-center px-3 py-2 border border-transparent text-md leading-4 font-medium rounded-md text-black dark:bg-gray-800 hover:text-gray-500 focus:outline-none ">
                                         <span>Transaction</span>
@@ -134,6 +170,11 @@ export default function Navbar() {
                                         <span>Transaction List</span>
                                     </button>
                                 </Link>
+                                <Link href="/user">
+                                    <button className="inline-flex items-center px-3 py-2 border border-transparent text-md leading-4 font-medium rounded-md text-black dark:bg-gray-800 hover:text-gray-500 focus:outline-none ">
+                                        <span>Users</span>
+                                    </button>
+                                </Link>
                                 <Link href="/Product">
                                     <button className="inline-flex items-center px-3 py-2 border border-transparent text-md leading-4 font-medium rounded-md text-black dark:bg-gray-800 hover:text-gray-500 focus:outline-none ">
                                         <span>Sheets</span>
@@ -141,19 +182,45 @@ export default function Navbar() {
                                 </Link>
                             </div>
                         </div>
-
-                        {/* Desktop logout */}
-                        <div className="hidden sm:flex sm:items-center sm:ms-6">
-                            <div className="relative">
-                                <form onSubmit={logout}>
-                                    <button type='submit' className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:bg-gray-800 hover:text-gray-500 focus:outline-none ">
-                                        <span className="block h-9 mt-3 w-auto fill-current text-sm text-black hover:text-gray-500">
-                                            Logout
-                                        </span>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
+                        <div className="relative" ref={dropdownRef}>
+      {/* Avatar button that triggers dropdown */}
+      <div className="w-30 h-10 lg:mt-3 rounded-full 
+                      inline-flex items-center justify-end 
+                      bg-white text-gray-700 text-xl font-bold">
+        <Image 
+          id="avatarButton"
+          src="/images/logo.png"  
+          width={20}
+          height={30}
+          onClick={toggleDropdown}
+          className="w-10 h-10 rounded-full cursor-pointer"
+          alt="User dropdown" 
+        />
+      </div>
+      
+      {/* Dropdown menu */}
+      {isOpen && (
+        <div 
+          id="userDropdown" 
+          className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50"
+        >
+          <div className="px-4 py-3 text-sm text-gray-900">
+            <Link href='#'><div>Profile</div></Link>
+          </div>
+          <hr className="border-gray-200" />
+          <div className="py-1">
+            <form onSubmit={logout}>
+              <button 
+                type='submit' 
+                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Logout
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
 
                         {/* Mobile menu button */}
                         <div className="-me-2 flex items-center sm:hidden">
@@ -174,11 +241,15 @@ export default function Navbar() {
                 {/* Mobile menu */}
                 <div className={open ? 'block sm:hidden' : 'hidden sm:hidden'}>
                     <div className="pt-2 p-4 ml-4 space-y-1">
+                    
                         <Link href="/dashboard" className="block py-2  text-black hover:text-green-300 dark:text-gray-200">
                             <b>Transaction</b>
                         </Link>
                         <Link href="/transactionlist" className="block py-2  text-black hover:text-green-300 dark:text-gray-200">
                             <b>Transaction List</b>
+                        </Link>
+                        <Link href="/user" className="block py-2  text-black hover:text-green-300 dark:text-gray-200">
+                            <b>Users</b>
                         </Link>
                         <Link href="/Product" className="block py-2  text-black hover:text-green-300 dark:text-gray-200">
                             <b>Sheets</b>
