@@ -4,7 +4,8 @@
         <div class="bg-white p-4">
             <div class="py-2 flex justify-between items-center">
                 <div>
-                    <a href="{{ route('transactions.export.csv') }}"
+                    <a id="downloadCsv"
+                        href="{{ route('transactions.sheet.csv', ['date' => request('date') ?? now()->format('Y-m-d')]) }}"
                         class="bg-emerald-700 hover:bg-emerald-900 rounded-lg text-white text-md text-center px-3 py-2">
                         Download CSV <i class="fas fa-file-csv ml-1"></i>
                     </a>
@@ -127,15 +128,13 @@
 
         flatpickr("#datepicker", {
             dateFormat: "Y-m-d",
-            enable: availableDates,
-            defaultDate: null,
+            enable: availableDates, // Only enable dates with transactions
+            defaultDate: "{{ request('date') ?? '' }}",
             onChange: function(selectedDates, dateStr) {
                 if (dateStr) {
-                    window.location.href = `/export?date=${dateStr}`;
+                    window.location.href = `?date=${dateStr}`; // Redirect to selected date
                 }
             }
         });
     });
 </script>
-
-@include('layouts.footer')
