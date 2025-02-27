@@ -248,16 +248,19 @@
 </script>
 
 
-{{-- EDIT validation: no negative, atleast one field is filled--}}
-<script>   
-    document.addEventListener("DOMContentLoaded", function () {
+{{-- EDIT validation: no negative, atleast one field is filled --}}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
         const form = document.getElementById("storeForm");
 
-        form.addEventListener("submit", function (event) {
+        form.addEventListener("submit", function(event) {
             let isValid = true;
             let hasValidPayment = false;
             const paymentFields = [
-                "cash", "check", "bpi_ccard", "bpi_dcard", "metro_ccard", "metro_dcard", "paymaya", "aub_ccard", "gcash", "food_panda", "streetby", "grabfood", "gc_claimed_others", "gc_claimed_own"];
+                "cash", "check", "bpi_ccard", "bpi_dcard", "metro_ccard", "metro_dcard", "paymaya",
+                "aub_ccard", "gcash", "food_panda", "streetby", "grabfood", "gc_claimed_others",
+                "gc_claimed_own"
+            ];
 
             paymentFields.forEach((field) => {
                 let input = document.getElementById(field);

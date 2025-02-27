@@ -33,23 +33,16 @@
                     </div>
                 </div>
             </div>
-            <div class="relative overflow-x-auto my-4">
-                <table class="w-full text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead
-                        class="text-base text-center text-TableBlue uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
-                        <tr class="border-4 border-black">
-                            <th class="px-6 py-3 bg-TableLYellow border-2 border-black">PARTICULARS</th>
-                            <th class="px-6 py-3 bg-TableLYellow border-2 border-black">AM</th>
-                            <th class="px-6 py-3 bg-TableLYellow border-2 border-black">MID</th>
-                            <th class="px-6 py-3 bg-TableLYellow border-2 border-black">PM</th>
-                            <th class="px-6 py-3 bg-TableLYellow border-2 border-black">GROSS TOTAL</th>
-                            <th class="px-6 py-3 bg-TableYellow border-2 border-black">NET TOTAL</th>
-                            <th class="px-6 py-3 bg-TableLYellow border-2 border-black">PARTICULARS</th>
-                            <th class="px-6 py-3 bg-TableLYellow border-2 border-black">AM</th>
-                            <th class="px-6 py-3 bg-TableLYellow border-2 border-black">MID</th>
-                            <th class="px-6 py-3 bg-TableLYellow border-2 border-black">PM</th>
-                            <th class="px-6 py-3 bg-TableLYellow border-2 border-black">GROSS TOTAL</th>
-                            <th class="px-6 py-3 bg-TableYellow border-2 border-black">NET TOTAL</th>
+            <div class="relative overflow-x-auto my-4 sm:rounded-lg">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr class="border-2 text-center ">
+                            <th class="px-6 py-3">PARTICULARS</th>
+                            <th class="px-6 py-3">AM</th>
+                            <th class="px-6 py-3">MID</th>
+                            <th class="px-6 py-3">PM</th>
+                            <th class="px-6 py-3">GROSS TOTAL</th>
+                            <th class="px-6 py-3">NET TOTAL</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -62,31 +55,65 @@
                             $totals = ['AM' => [], 'MID' => [], 'PM' => [], 'GROSS' => []];
                         @endphp
 
-                        @foreach (['cashier.name' => "CASHIER'S NAME", 'cash' => 'CASH', 'check' => 'CHECK', 'bpi_ccard' => 'BPI CREDIT CARD', 'bpi_dcard' => 'BPI DEBIT CARD', 'metro_ccard' => 'METRO CREDIT CARD', 'metro_dcard' => 'METRO DEBIT CARD', 'paymaya' => 'PAYMAYA', 'aub_ccard' => 'AUB DEBIT CARD', 'gcash' => 'GCASH', 'food_panda' => 'FOOD PANDA', 'streetby' => 'STREETBY', 'grabfood' => 'GRAB FOOD'] as $key => $label)
-                            <tr class="text-TableBlue font-semibold uppercase border-2 border-black">
-                                <th class="px-6 py-3 text-base bg-TableLYellow">{{ $label }}</th>
+                        @foreach ([
+        'cashier.name' => "CASHIER'S NAME",
+        'cash' => 'CASH',
+        'check' => 'CHECK',
+        'bpi_ccard' => 'BPI CREDIT CARD',
+        'bpi_dcard' => 'BPI DEBIT CARD',
+        'metro_ccard' => 'METRO CREDIT CARD',
+        'metro_dcard' => 'METRO DEBIT CARD',
+        'paymaya' => 'PAYMAYA',
+        'aub_ccard' => 'AUB DEBIT CARD',
+        'gcash' => 'GCASH',
+        'food_panda' => 'FOOD PANDA',
+        'streetby' => 'STREETBY',
+        'grabfood' => 'GRAB FOOD',
+        'gc_claimed_others' => 'GC Claimed (Others)',
+        'gc_claimed_own' => 'GC Claimed (Own)',
+        'sub_total_trade' => 'Sub Total Trade',
+        'mm_head' => 'MM-Head',
+        'mm_commissary' => 'MM-Commissary',
+        'mm_rm' => 'MM-RM',
+        'mm_dm' => 'MM-DM',
+        'mm_km' => 'MM-KM',
+        'food_charge' => 'Food Charge',
+        'sub_total_non_trade' => 'Sub Total Non Trade',
+        'grand_total' => 'Grand Total',
+    ] as $key => $label)
+                            <tr
+                                class="text-TableBlue font-semibold uppercase border-2 odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800">
+                                <th class="px-6 py-3 text-sm">
+                                    {{ $label }}</th>
                                 @foreach (['AM', 'MID', 'PM'] as $time)
                                     @php
-                                        $value = $transactions
-                                            ->where('time', $time)
-                                            ->sum(function ($transaction) use ($key) {
-                                                return data_get($transaction, $key, 0);
-                                            });
-                                        $totals[$time][$key] = $value;
-                                        $totals['GROSS'][$key] = ($totals['GROSS'][$key] ?? 0) + $value;
+                                        $value = '-';
+                                        if ($key === 'cashier.name') {
+                                            $cashier = $transactions->where('time', $time)->first();
+                                            $value = $cashier ? $cashier->cashier->name : '-';
+                                        } else {
+                                            $value = $transactions->where('time', $time)->pluck($key)->first() ?? '-';
+                                            if (is_numeric($value)) {
+                                                $totals[$time][$key] = $value;
+                                                $totals['GROSS'][$key] = ($totals['GROSS'][$key] ?? 0) + $value;
+                                            }
+                                        }
                                     @endphp
-                                    <td class="px-6 py-3 border-2 border-black text-center">
-                                        {{ number_format($value, 2) }}</td>
+                                    <td class="px-6 py-3 border-2 text-center">
+                                        {{ is_numeric($value) ? number_format($value, 2) : $value }}
+                                    </td>
                                 @endforeach
-                                <td class="px-6 py-3 border-2 border-black text-center font-bold bg-TableOrange">
-                                    {{ number_format($totals['GROSS'][$key], 2) }}</td>
-                                <td class="px-6 py-3 border-2 border-black text-center font-bold bg-TableYellow">
+                                <td class="px-6 py-3 border-2 text-center font-bold bg-blue-200">
+                                    {{ isset($totals['GROSS'][$key]) ? number_format($totals['GROSS'][$key], 2) : '-' }}
+                                </td>
+                                <td class="px-6 py-3 border-2 text-center font-bold bg-TableLYellow">
                                     @php
                                         $chargeRate = $interestRates[$key] ?? 0;
-                                        $netTotal =
-                                            $totals['GROSS'][$key] - $totals['GROSS'][$key] * ($chargeRate / 100);
+                                        $netTotal = isset($totals['GROSS'][$key])
+                                            ? $totals['GROSS'][$key] - $totals['GROSS'][$key] * ($chargeRate / 100)
+                                            : '-';
                                     @endphp
-                                    {{ number_format($netTotal, 2) }}
+                                    {{ is_numeric($netTotal) ? number_format($netTotal, 2) : $netTotal }}
                                 </td>
                             </tr>
                         @endforeach
@@ -104,21 +131,7 @@
             enableTime: false, // Set to true if you need time selection
             onChange: function(selectedDates, dateStr, instance) {
                 if (dateStr) {
-                    window.location.href = `/export?${dateStr}`;
-                }
-            }
-        });
-    });
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        flatpickr("#datepicker", {
-            dateFormat: "Y-m-d", // Format: YYYY-MM-DD
-            enableTime: false, // Set to true if you need time selection
-            onChange: function(selectedDates, dateStr, instance) {
-                if (dateStr) {
-                    window.location.href = `/export?${dateStr}`;
+                    window.location.href = `/export?date=${dateStr}`;
                 }
             }
         });

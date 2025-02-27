@@ -19,6 +19,7 @@ class TransactionsController extends Controller
     public function list(Request $request)
     {
         if ($request->ajax()) {
+            // $transactions = Transactions::with('cashier')->get();
             $transactions = Transactions::with('cashier')->get();
             return response()->json(['data' => $transactions]);
         }
@@ -28,6 +29,7 @@ class TransactionsController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            // 'cashier_id' => 'required|exists:users,id',
             'cashier_id' => 'required|exists:users,id',
             'time' => 'required|string|in:AM,MID,PM',
             'cash' => 'numeric|nullable|min:0',
