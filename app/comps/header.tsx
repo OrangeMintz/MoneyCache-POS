@@ -95,17 +95,17 @@ export default function Navbar() {
                             {/* Sidebar toggle button */}
                             <button 
                                 onClick={() => setSidebarOpen(!sidebarOpen)} 
-                                className="p-2 rounded-md  text-black justify-start hidden sm:flex sm:items-start sm:ms-6 hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-300"
+                                className="p-2 rounded-md text-black hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-300"
                                 aria-label="Toggle sidebar"
-                            >
-                                <svg className="h-6 w-6 md:mr-98" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                >
+                                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     {sidebarOpen ? (
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                     ) : (
-                                        <path  strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                                     )}
                                 </svg>
-                            </button>
+                                </button>
                              <Image
                                         src="/images/logo.png"
                                         width={30}
