@@ -113,7 +113,7 @@ export default function CashierForm({ cashier }: TransactionFormProps) {
             if (response.data.status === 'success') {
                 setDisable(true);
                 new Toast({
-                    position: "top-right",
+                    position: "bottom-right",
                     onClose: () => { window.location.href = "/transactionlist"; },
                     toastMsg: "Successfully stored transaction!",
                     autoCloseTime: 2000,
@@ -138,7 +138,7 @@ export default function CashierForm({ cashier }: TransactionFormProps) {
             }
 
             new Toast({
-                position: "top-right",
+                position: "bottom-right",
                 toastMsg: errorMessage,
                 autoCloseTime: 2000,
                 canClose: true,
