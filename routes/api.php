@@ -12,17 +12,23 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/user', [AuthController::class, 'getUser']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // Routes for admin
-    Route::middleware([CheckRole::class . ":admin"])->group(function () {
-
+    // Routes for admin and cashier
+    Route::middleware([CheckRole::class . ":admin,cashier"])->group(function () {
         Route::prefix('transaction')->group(function () {
             Route::post('/', [TransactionsController::class, 'store'])->name('api.transaction.store');
             Route::put('/{id}', [TransactionsController::class, 'update'])->name('api.transaction.update');
             Route::delete('/{id}', [TransactionsController::class, 'softDelete'])->name('api.transactions.softDelete');
         });
-
+    
         Route::prefix('transactions')->group(function () {
             Route::get('/', [TransactionsController::class, 'retrieve']);
+        });
+    });
+    
+
+    Route::middleware([CheckRole::class . ":admin"])->group(function () {
+
+        Route::prefix('transactions')->group(function () {
             Route::get('/gross/{type}', [TransactionsGrossTotalController::class, 'gross']);
             Route::get('/net/{type}', [TransactionsGrossTotalController::class, 'net']);
             Route::get('/gross-all', [TransactionsGrossTotalController::class, 'grossAll']);
@@ -31,19 +37,7 @@ Route::middleware(['auth:api'])->group(function () {
             Route::post('/get-by-date/totals', [TransactionsGrossTotalController::class, 'getGrossNetByDate']);
             Route::post('/csv', [CsvController::class, 'csv']);
         });
-    });
 
-    Route::middleware([CheckRole::class . ":cashier"])->group(function () {
-
-        Route::prefix('transaction')->group(function () {
-            Route::post('/', [TransactionsController::class, 'store'])->name('api.transaction.store');
-            Route::put('/{id}', [TransactionsController::class, 'update'])->name('api.transaction.update');
-            Route::delete('/{id}', [TransactionsController::class, 'softDelete'])->name('api.transactions.softDelete');
-        });
-
-        Route::prefix('transactions')->group(function () {
-            Route::get('/', [TransactionsController::class, 'retrievebyUser']);
-        });
     });
 
     // Exclusive routes for admin

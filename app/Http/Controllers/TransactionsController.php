@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Transactions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionsController extends Controller
 {
@@ -220,7 +221,18 @@ class TransactionsController extends Controller
 
     public function retrieve()
     {
-        $transactions = Transactions::with('cashier')->get();
+        $transactions = '';
+        $user = Auth::user();
+        $userId = $user->id;
+        
+        if($user->role == 'admin'){
+            $transactions = Transactions::with('cashier')->get();  
+        }else{
+            $transactions = Transactions::with('cashier')
+            ->where('cashier_id', $userId)
+            ->get();
+        }
+
         return response()->json([
             "status" => 1,
             "transactions" => $transactions,
