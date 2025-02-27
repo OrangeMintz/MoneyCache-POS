@@ -10,6 +10,11 @@
     <!-- navigation -->
     <nav class="nav font-semibold text-lg flex-grow flex justify-center">
         <div class="flex space-x-6">
+            <a href="{{ route('admin.users') }}"
+                class="p-4 border-b-2 duration-200 cursor-pointer
+                    {{ request()->routeIs('admin.users') ? 'border-MCGreen text-MCGreen' : 'border-transparent hover:border-MCGreen hover:text-MCGreen' }}">
+                User List
+            </a>
             <a href="{{ route('transaction') }}"
                 class="p-4 border-b-2 duration-200 cursor-pointer
                     {{ request()->routeIs('transaction') ? 'border-MCGreen text-MCGreen' : 'border-transparent hover:border-MCGreen hover:text-MCGreen' }}">
@@ -19,10 +24,6 @@
                 class="p-4 border-b-2 duration-200 cursor-pointer
                     {{ request()->routeIs('transactions') ? 'border-MCGreen text-MCGreen' : 'border-transparent hover:border-MCGreen hover:text-MCGreen' }}">
                 Transaction List
-            </a>
-            <a href="{{route("admin.users")}}"
-                class="p-4 border-b-2 border-MCGreen border-opacity-0 hover:border-opacity-100 hover:text-MCGreen duration-200 cursor-pointer">
-                User List
             </a>
             <a href="{{ route('transactions.sheet', ['date' => now()->format('Y-m-d')]) }}"
                 class="p-4 border-b-2 duration-200 cursor-pointer

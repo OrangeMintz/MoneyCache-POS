@@ -92,16 +92,16 @@ class TransactionsGrossTotalController extends Controller
 
     public function netAll()
     {
-        $particulars = Config::get('transactions.valid_columns'); 
-        $fees = Config::get('transactions.fees'); 
+        $particulars = Config::get('transactions.valid_columns');
+        $fees = Config::get('transactions.fees');
         $netSales = [];
 
         foreach ($particulars as $particular) {
 
             $safeColumn = "`$particular`";
-            
+
             $percent = $fees[$particular];
-            $compute = 1 - ($percent / 100); 
+            $compute = 1 - ($percent / 100);
 
             $netSales[$particular] = Transactions::select(
                     DB::raw("DATE(created_at) as date"),
@@ -146,8 +146,8 @@ class TransactionsGrossTotalController extends Controller
         "totals" => $totals
     ]);
 }
-    
 
 
-    
+
+
 }
