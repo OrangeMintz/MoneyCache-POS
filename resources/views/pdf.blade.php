@@ -95,9 +95,9 @@
     <tbody>
       <tr>
           <td><strong>CASHIER'S NAME</strong></td>
-          <td>{{ $am->cashier->name ?? 'cant get' }}</td>
-          <td>{{ $mid->cashier->name ?? 'in db yet' }}</td>
-          <td>{{ $pm->cashier->name ?? 'Cherry Lou' }}</td>
+          <td>{{ $am->cashier->name ?? '' }}</td>
+          <td>{{ $mid->cashier->name ?? '' }}</td>
+          <td>{{ $pm->cashier->name ?? '' }}</td>
           <td></td>
           <td></td>
       </tr>

@@ -30,13 +30,14 @@
             </div>
         </div>
     </div>
+    <div style="background: rgb(238, 235, 235)"></div>
 </main>
 @include('layouts.footer')
 
 <script>
     // Formatting function for row details - modify as you need
     function format(d) {
-        let details = "<dl>";
+        let details = `<div style="padding:10px 40px; background: rgb(238, 235, 235);">`;
 
         // Define the fields you want to check dynamically
         let tradeFields = {
@@ -69,7 +70,7 @@
         function formatFields(fields) {
             return Object.entries(fields)
                 .filter(([key, value]) => value && value != 0) // Show only non-empty values
-                .map(([key, value]) => `<p>${key}: ${value}</p>`)
+                .map(([key, value]) => `<p style="margin: .4rem 0;">${key}: ${value}</p>`)
                 .join("");
         }
 
