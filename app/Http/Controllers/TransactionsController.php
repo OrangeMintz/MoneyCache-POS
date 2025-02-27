@@ -255,7 +255,7 @@ class TransactionsController extends Controller
 
         // If no date is selected, show the page with available dates only
         if (!$selectedDate) {
-            return view('pages.transactions-export', compact('availableDates'));
+            return view('pages.transactions-sheet', compact('availableDates'));
             }
 
             // Fetch transactions for the selected date
@@ -263,7 +263,7 @@ class TransactionsController extends Controller
                 ->whereDate('created_at', $selectedDate)
                 ->get();
 
-            return view('pages.transactions-export', compact('transactions', 'selectedDate', 'availableDates'));
+            return view('pages.transactions-sheet', compact('transactions', 'selectedDate', 'availableDates'));
     }
 
     public function retrievebyUser()

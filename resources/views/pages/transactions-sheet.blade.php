@@ -65,12 +65,14 @@
         'food_charge' => 'Food Charge',
         'sub_total_non_trade' => 'Sub Total Non Trade',
         'grand_total' => 'Grand Total',
+        'z_reading_pos' => 'Z Reading POS',
+        'over_pos' => 'SHORT/OVER POS',
     ] as $key => $label)
                             <tr
                                 class="text-TableBlue font-semibold uppercase border-2 odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800">
                                 <th
                                     class="px-6 py-3 text-sm
-                                    {{ in_array($key, ['sub_total_trade', 'sub_total_non_trade']) ? 'bg-yellow-200' : '' }}
+                                    {{ in_array($key, ['sub_total_trade', 'sub_total_non_trade', 'over_pos']) ? 'bg-yellow-200' : '' }}
                                     {{ $key === 'grand_total' ? 'bg-yellow-300' : '' }}">
                                     {{ $label }}
                                 </th>
@@ -90,19 +92,19 @@
                                     @endphp
                                     <td
                                         class="px-6 py-3 border-2 text-center
-                                        {{ in_array($key, ['sub_total_trade', 'sub_total_non_trade']) ? 'bg-yellow-200' : '' }}
+                                        {{ in_array($key, ['sub_total_trade', 'sub_total_non_trade', 'over_pos']) ? 'bg-yellow-200' : '' }}
                                         {{ $key === 'grand_total' ? 'bg-yellow-300' : '' }}">
                                         {{ is_numeric($value) ? '₱' . number_format($value, 2) : $value }}
                                     </td>
                                 @endforeach
                                 <td
                                     class="px-6 py-3 border-2 text-center font-bold
-                                    {{ in_array($key, ['sub_total_trade', 'sub_total_non_trade']) ? 'bg-yellow-200' : ($key === 'grand_total' ? 'bg-yellow-300' : 'bg-blue-200') }}">
+                                    {{ in_array($key, ['sub_total_trade', 'sub_total_non_trade', 'over_pos']) ? 'bg-yellow-200' : ($key === 'grand_total' ? 'bg-yellow-300' : 'bg-blue-200') }}">
                                     {{ isset($totals['GROSS'][$key]) ? '₱' . number_format($totals['GROSS'][$key], 2) : '-' }}
                                 </td>
                                 <td
                                     class="px-6 py-3 border-2 text-center font-bold
-                                    {{ in_array($key, ['sub_total_trade', 'sub_total_non_trade']) ? 'bg-yellow-200' : ($key === 'grand_total' ? 'bg-yellow-300' : 'bg-green-200') }}">
+                                    {{ in_array($key, ['sub_total_trade', 'sub_total_non_trade', 'over_pos']) ? 'bg-yellow-200' : ($key === 'grand_total' ? 'bg-yellow-300' : 'bg-green-200') }}">
                                     @php
                                         $chargeRate = $interestRates[$key] ?? 0;
                                         $netTotal = isset($totals['GROSS'][$key])
