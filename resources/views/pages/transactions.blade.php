@@ -154,9 +154,9 @@
                     <h2 class="shadow-md font-semibold text-lg mb-4 p-4">Shift Time:</h2>
                     <div class="grid grid-cols-1 gap-2 justify-items-start p-4 mb-8">
                         <div class="w-full">
-                            <label for="cashier" class="block text-sm font-medium">Cashier's
+                            <label for="cashier_id" class="block text-sm font-medium">Cashier's
                                 Name:</label>
-                            <input type="hidden" id="cashier" name="cashier" value="{{ auth()->user()->id }}"  class="w-full p-3 border border-gray-300 rounded-md">
+                            <input type="hidden" id="cashier_id" name="cashier_id" value="{{ auth()->user()->id }}"  class="w-full p-3 border border-gray-300 rounded-md">
                             <input type="text" value="{{ auth()->user()->name }}" disabled  class="w-full p-3 border border-gray-300 rounded-md">
                         </div>
                         <div class="w-full">

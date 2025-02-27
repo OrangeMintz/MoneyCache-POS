@@ -12,7 +12,7 @@ class Transactions extends Model
     /** @use HasFactory<\Database\Factories\TransactionsFactory> */
     use HasFactory, SoftDeletes;
 
-        protected $fillable = ['cashier','time','cash','check','bpi_ccard','bpi_dcard',
+        protected $fillable = ['cashier_id','time','cash','check','bpi_ccard','bpi_dcard',
         'metro_ccard','metro_dcard','paymaya','aub_ccard','gcash','food_panda','streetby',
         'grabfood','gc_claimed_others','gc_claimed_own','mm_head','mm_commissary','mm_rm',
         'mm_dm','mm_km','food_charge','z_reading_pos','sub_total_trade',
@@ -20,6 +20,6 @@ class Transactions extends Model
 
     public function cashier()
     {
-        return $this->belongsTo(User::class, 'cashier');
+        return $this->belongsTo(User::class, 'cashier_id');
     }
 }
