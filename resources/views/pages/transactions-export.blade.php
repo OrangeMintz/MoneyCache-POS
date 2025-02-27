@@ -3,24 +3,8 @@
     <div class="font-sans bg-gray-100 p-6">
         <div class="bg-white p-4">
             <div class="py-2 flex justify-between items-center">
-                <!-- Download Button -->
                 <div>
-                    <a href="{{ route('transactions.export') }}"
-                        class="bg-emerald-700 hover:bg-emerald-900 rounded-lg text-white text-md text-center px-3 py-2">
-                        Download CSV <i class="fas fa-file-csv ml-1"></i>
-                    </a>
-                </div>
-                <div>
-                    <div class="relative max-w-sm">
-                        <input id="datepicker" type="text"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Select a date">
-                    </div>
-                </div>
-            <div class="py-2 flex justify-between items-center">
-                <!-- Download Button -->
-                <div>
-                    <a href="{{ route('transactions.export') }}"
+                    <a href="{{ route('transactions.export.csv') }}"
                         class="bg-emerald-700 hover:bg-emerald-900 rounded-lg text-white text-md text-center px-3 py-2">
                         Download CSV <i class="fas fa-file-csv ml-1"></i>
                     </a>
@@ -36,7 +20,7 @@
             <div class="relative overflow-x-auto my-4 sm:rounded-lg">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr class="border-2 text-center ">
+                        <tr class="border-2 text-center">
                             <th class="px-6 py-3">PARTICULARS</th>
                             <th class="px-6 py-3">AM</th>
                             <th class="px-6 py-3">MID</th>
@@ -83,8 +67,12 @@
     ] as $key => $label)
                             <tr
                                 class="text-TableBlue font-semibold uppercase border-2 odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800">
-                                <th class="px-6 py-3 text-sm">
-                                    {{ $label }}</th>
+                                <th
+                                    class="px-6 py-3 text-sm
+                                    {{ in_array($key, ['sub_total_trade', 'sub_total_non_trade']) ? 'bg-yellow-200' : '' }}
+                                    {{ $key === 'grand_total' ? 'bg-yellow-300' : '' }}">
+                                    {{ $label }}
+                                </th>
                                 @foreach (['AM', 'MID', 'PM'] as $time)
                                     @php
                                         $value = '-';
@@ -99,21 +87,28 @@
                                             }
                                         }
                                     @endphp
-                                    <td class="px-6 py-3 border-2 text-center">
-                                        {{ is_numeric($value) ? number_format($value, 2) : $value }}
+                                    <td
+                                        class="px-6 py-3 border-2 text-center
+                                        {{ in_array($key, ['sub_total_trade', 'sub_total_non_trade']) ? 'bg-yellow-200' : '' }}
+                                        {{ $key === 'grand_total' ? 'bg-yellow-300' : '' }}">
+                                        {{ is_numeric($value) ? '₱' . number_format($value, 2) : $value }}
                                     </td>
                                 @endforeach
-                                <td class="px-6 py-3 border-2 text-center font-bold bg-blue-200">
-                                    {{ isset($totals['GROSS'][$key]) ? number_format($totals['GROSS'][$key], 2) : '-' }}
+                                <td
+                                    class="px-6 py-3 border-2 text-center font-bold
+                                    {{ in_array($key, ['sub_total_trade', 'sub_total_non_trade']) ? 'bg-yellow-200' : ($key === 'grand_total' ? 'bg-yellow-300' : 'bg-blue-200') }}">
+                                    {{ isset($totals['GROSS'][$key]) ? '₱' . number_format($totals['GROSS'][$key], 2) : '-' }}
                                 </td>
-                                <td class="px-6 py-3 border-2 text-center font-bold bg-TableLYellow">
+                                <td
+                                    class="px-6 py-3 border-2 text-center font-bold
+                                    {{ in_array($key, ['sub_total_trade', 'sub_total_non_trade']) ? 'bg-yellow-200' : ($key === 'grand_total' ? 'bg-yellow-300' : 'bg-green-200') }}">
                                     @php
                                         $chargeRate = $interestRates[$key] ?? 0;
                                         $netTotal = isset($totals['GROSS'][$key])
                                             ? $totals['GROSS'][$key] - $totals['GROSS'][$key] * ($chargeRate / 100)
                                             : '-';
                                     @endphp
-                                    {{ is_numeric($netTotal) ? number_format($netTotal, 2) : $netTotal }}
+                                    {{ is_numeric($netTotal) ? '₱' . number_format($netTotal, 2) : $netTotal }}
                                 </td>
                             </tr>
                         @endforeach
@@ -124,12 +119,17 @@
     </div>
 </main>
 
+@include('layouts.footer')
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        const availableDates = @json($availableDates);
+
         flatpickr("#datepicker", {
-            dateFormat: "Y-m-d", // Format: YYYY-MM-DD
-            enableTime: false, // Set to true if you need time selection
-            onChange: function(selectedDates, dateStr, instance) {
+            dateFormat: "Y-m-d",
+            enable: availableDates,
+            defaultDate: null,
+            onChange: function(selectedDates, dateStr) {
                 if (dateStr) {
                     window.location.href = `/export?date=${dateStr}`;
                 }

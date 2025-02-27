@@ -248,27 +248,26 @@ class TransactionsController extends Controller
         ]);
     }
 
-    // public function export()
-    // {
-    //     return view('pages.transactions-export');
-    // }
-
     public function export(Request $request)
     {
         $selectedDate = $request->input('date'); // Get 'date' from query parameters
 
+        // Fetch available transaction dates
+        $availableDates = Transactions::selectRaw('DATE(created_at) as date')
+            ->distinct()
+            ->pluck('date')
+            ->toArray();
+
+        // If no date is selected, show the page with available dates only
         if (!$selectedDate) {
-            return response()->json(['error' => 'No date selected.'], 400);
-        }
+            return view('pages.transactions-export', compact('availableDates'));
+            }
 
-        $transactions = Transactions::with('cashier')
-            ->whereDate('created_at', $selectedDate)
-            ->get();
+            // Fetch transactions for the selected date
+            $transactions = Transactions::with('cashier')
+                ->whereDate('created_at', $selectedDate)
+                ->get();
 
-        // return response()->json(['selectedDate' => $selectedDate, 'transactions' => $transactions]);
-        return view('pages.transactions-export', compact('transactions', 'selectedDate'));
-
+            return view('pages.transactions-export', compact('transactions', 'selectedDate', 'availableDates'));
     }
-
-
 }
