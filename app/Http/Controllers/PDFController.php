@@ -14,11 +14,16 @@ use Illuminate\Support\Facades\Log;
 
 class PDFController extends Controller
 {
-  public function pdf()
+  public function pdf(Request $request)
   {
-      $am = Transactions::where('time', 'AM')->with('cashier')->first();
-      $mid = Transactions::where('time', 'MID')->with('cashier')->first();
-      $pm = Transactions::where('time', 'PM')->with('cashier')->first();
+      $selectedDate = $request->input('date'); // Get 'date' from query parameters
+
+      if (!$selectedDate) {
+          return response()->json(['error' => 'No date selected.'], 400);
+      }
+      $am = Transactions::where('time', 'AM')->with('cashier')->whereDate('created_at', $selectedDate)->first();
+      $mid = Transactions::where('time', 'MID')->with('cashier')->whereDate('created_at', $selectedDate)->first();
+      $pm = Transactions::where('time', 'PM')->with('cashier')->whereDate('created_at', $selectedDate)->first();
   
       $payment_methods = [
           'cash' => 'Cash',
@@ -78,7 +83,14 @@ class PDFController extends Controller
       ];
   
       $pdf = Pdf::loadView('pdf', $data);
-      return $pdf->stream('transaction.pdf');
+      return $pdf->stream("transactions_$selectedDate.pdf");
+    //   return response()->json([
+    //     'selectedDate' => $selectedDate,
+    //     'am' => $am,
+    //     'mid' => $mid,
+    //     'pm' => $pm,
+    //   ]);
+    
   }
   
   
