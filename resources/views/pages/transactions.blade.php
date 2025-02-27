@@ -154,10 +154,12 @@
                     <h2 class="shadow-md font-semibold text-lg mb-4 p-4">Shift Time:</h2>
                     <div class="grid grid-cols-1 gap-2 justify-items-start p-4 mb-8">
                         <div class="w-full">
-                            <label for="cashier" class="block text-sm font-medium">Cashier's
+                            <label for="cashier_id" class="block text-sm font-medium">Cashier's
                                 Name:</label>
-                            <input type="hidden" id="cashier" name="cashier" value="{{ auth()->user()->id }}"  class="w-full p-3 border border-gray-300 rounded-md">
-                            <input type="text" value="{{ auth()->user()->name }}" disabled  class="w-full p-3 border border-gray-300 rounded-md">
+                            <input type="hidden" id="cashier_id" name="cashier_id" value="{{ auth()->user()->id }}"
+                                class="w-full p-3 border border-gray-300 rounded-md">
+                            <input type="text" value="{{ auth()->user()->name }}" disabled
+                                class="w-full p-3 border border-gray-300 rounded-md">
                         </div>
                         <div class="w-full">
                             <label for="time" class="block text-sm font-medium">Shift Time:</label>
@@ -248,16 +250,19 @@
 </script>
 
 
-{{-- EDIT validation: no negative, atleast one field is filled--}}
-<script>   
-    document.addEventListener("DOMContentLoaded", function () {
+{{-- EDIT validation: no negative, atleast one field is filled --}}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
         const form = document.getElementById("storeForm");
 
-        form.addEventListener("submit", function (event) {
+        form.addEventListener("submit", function(event) {
             let isValid = true;
             let hasValidPayment = false;
             const paymentFields = [
-                "cash", "check", "bpi_ccard", "bpi_dcard", "metro_ccard", "metro_dcard", "paymaya", "aub_ccard", "gcash", "food_panda", "streetby", "grabfood", "gc_claimed_others", "gc_claimed_own"];
+                "cash", "check", "bpi_ccard", "bpi_dcard", "metro_ccard", "metro_dcard", "paymaya",
+                "aub_ccard", "gcash", "food_panda", "streetby", "grabfood", "gc_claimed_others",
+                "gc_claimed_own"
+            ];
 
             paymentFields.forEach((field) => {
                 let input = document.getElementById(field);
