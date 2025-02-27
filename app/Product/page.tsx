@@ -1,9 +1,10 @@
 "use client"
+import Footer from '@/app/comps/footer';
 import Navbar from "@/app/comps/header";
 import Preloader from "@/app/comps/preloader"; // Import the Preloader component
+import { formatNumber } from "@/utils/formatter";
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
-import { formatNumber } from "@/utils/formatter";
 import { particulars } from "../../utils/particulars";
 
 export default function DenseTable() {
@@ -112,6 +113,7 @@ export default function DenseTable() {
   }
 
   return (
+    <div>
     <main className="min-h-screen ">
       <Navbar />
       <div className="p-8">
@@ -175,6 +177,11 @@ export default function DenseTable() {
           </table>
         </div>
       </div>
+      <div className='border-t'>
+      <Footer/>
+      </div>
     </main>
+   
+    </div>
   );
 }

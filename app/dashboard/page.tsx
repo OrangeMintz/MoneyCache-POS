@@ -1,5 +1,6 @@
 'use client';
 
+import Footer from '@/app/comps/footer';
 import Navbar from "@/app/comps/header";
 import Preloader from "@/app/comps/preloader";
 import TransactionForm from "@/app/comps/transaction";
@@ -48,9 +49,12 @@ export default function Dashboard() {
     }
 
     return (
+        <div>
         <main>
             <Navbar/>
             <TransactionForm cashier={user}/>
         </main>
+        <Footer />
+        </div>
     );
 }

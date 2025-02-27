@@ -45,9 +45,9 @@ export default function Navbar() {
     return (
         <>
             {/* Sidebar */}
-            <div className={`bg-blue-500 text-black w-80 fixed h-full transition-all duration-300 ease-in-out z-50 ${sidebarOpen ? 'translate-x-0' : '-translate-x-80'}`}>
+            <div className={`bg-blue-500  text-black w-80 fixed h-full transition-all duration-300 ease-in-out z-50 ${sidebarOpen ? 'translate-x-0' : '-translate-x-80'}`}>
                 {/* Close icon inside the sidebar */}
-                <div className="p-4 border-b border-gray-700 flex justify-between items-center">
+                <div className="p-4 border-b  border-gray-700 flex justify-between items-center">
                     <span className="text-xl md:mt-6 font-semibold">MoneyCache</span>
                     <button
                         onClick={() => setSidebarOpen(false)}
@@ -95,7 +95,7 @@ export default function Navbar() {
                             {/* Sidebar toggle button */}
                             <button
                                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                                className="p-2 rounded-md text-black hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-300"
+                                className="p-2 rounded-md hidden sm:flex sm:items-center sm:ms-6 text-black hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-300"
                                 aria-label="Toggle sidebar"
                             >
                                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
