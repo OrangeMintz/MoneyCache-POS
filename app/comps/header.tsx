@@ -146,8 +146,8 @@ export default function Navbar() {
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
                             <div className="relative">
                                 <form onSubmit={logout}>
-                                    <button type='submit' className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:bg-gray-800 hover:text-green-300 focus:outline-none ">
-                                        <span className="block h-9 mt-3 w-auto fill-current text-sm text-black hover:text-green-300">
+                                    <button type='submit' className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:bg-gray-800 hover:text-gray-500 focus:outline-none ">
+                                        <span className="block h-9 mt-3 w-auto fill-current text-sm text-black hover:text-gray-500">
                                             Logout
                                         </span>
                                     </button>
