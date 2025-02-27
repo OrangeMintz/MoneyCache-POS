@@ -31,7 +31,7 @@ class CsvController extends Controller
             $pmValues = $transactions->where('time', 'PM')->pluck($particular)->toArray();
 
             // Extract numeric values for summation
-            $amNumeric = array_sum(array_filter($amValues, 'is_numeric')) ?: ''; 
+            $amNumeric = array_sum(array_filter($amValues, 'is_numeric')) ?: '';
             $midNumeric = array_sum(array_filter($midValues, 'is_numeric')) ?: '';
             $pmNumeric = array_sum(array_filter($pmValues, 'is_numeric')) ?: '';
 
@@ -47,28 +47,28 @@ class CsvController extends Controller
 
             // Compute totals only for numeric values
             $grossTotal = ($amNumeric ?: 0) + ($midNumeric ?: 0) + ($pmNumeric ?: 0);
-            $netTotal = $grossTotal * (1 - ($fees[$particular] / 100)); 
+            $netTotal = $grossTotal * (1 - ($fees[$particular] / 100));
 
     $csvData[] = [$particular, $am, $mid, $pm, $grossTotal ?: '', $netTotal ?: ''];
         }
-    
 
         $fileName = "transactions_" . now()->format('Y-m-d') . ".csv";
         $handle = fopen('php://output', 'w');
         ob_start();
-    
+
         fputcsv($handle, $csvHeader);
-    
+
         foreach ($csvData as $row) {
             fputcsv($handle, $row);
         }
-    
+
         fclose($handle);
         $csvContent = ob_get_clean();
-    
+
         return Response::make($csvContent, 200, [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => "attachment; filename=$fileName"
         ]);
     }
+
 }
