@@ -49,7 +49,7 @@ export default function Dashboard() {
 
     return (
         <main>
-            <Navbar />
+            <Navbar/>
             <TransactionForm cashier={user}/>
         </main>
     );
