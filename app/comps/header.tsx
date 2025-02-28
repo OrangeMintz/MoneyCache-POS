@@ -114,7 +114,7 @@ export default function Navbar() {
                 </nav>
                 <div className="absolute bottom-0 w-full p-4 border-t border-gray-700">
                     <form onSubmit={logout}>
-                        <button type="submit" className="w-full p-2 bg-gray-700 rounded-md hover:bg-green-300 transition-colors">
+                        <button type="submit" className="w-full p-2 text-white bg-gray-700 rounded-md hover:bg-green-300 transition-colors">
                             <b>Logout</b>
                         </button>
                     </form>
@@ -124,7 +124,7 @@ export default function Navbar() {
 
             {/* Top navigation */}
             <nav className=" dark:bg-gray-800 bg-gray-200 text-black border-b-2 sticky top-0 z-20">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="  max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         <div className="flex items-center ">
                             {/* Sidebar toggle button */}
@@ -202,10 +202,11 @@ export default function Navbar() {
       {isOpen && (
         <div 
           id="userDropdown" 
-          className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50"
+          className="absolute right-0 mt-2 w-48 bg-white rounded-md justify-center text-center shadow-lg py-1 z-50"
         >
           <div className="px-4 py-3 text-sm text-gray-900">
-            <Link href='#'><div>Profile</div></Link>
+            <h1>Jepri Gwapogi</h1>
+            <p>Email</p>
           </div>
           <hr className="border-gray-200" />
           <div className="py-1">
