@@ -85,12 +85,12 @@ function Row({ row, handleSave, visibleColumns }) {
     setdeleteModalOpen(true);
   };
 
-  // const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-  //   setEditFormData({
-  //     ...editFormData,
-  //     [e.target.name]: e.target.value
-  //   })
-  // }
+  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setEditFormData({
+      ...editFormData,
+      [e.target.name]: e.target.value
+    })
+  }
 
   const handleDeletSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -265,11 +265,62 @@ function Row({ row, handleSave, visibleColumns }) {
               aria-describedby="modal-modal-description"
             >
               <Box sx={ediModalStyle}>
-                <div className='flex w-full'>
-                  <div className='w-5/6'>
+                <div className='w-full'>
+                  <div className='w-1/2'>
                     <h2 className="text-sm font-semibold mb-4">Edit User {row.id}</h2>
                   </div>
 
+                  {/* Form */}
+                  <form className="space-y-6 p-4" onSubmit={handleEditFormSubmit}>
+                    <div className="md:mb-4">
+                      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name:</label>
+                      <input
+                        onChange={handleEditChange}
+                        type="text"
+                        name="name"
+                        value={row.name}
+                        placeholder="Enter your name..."
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      />
+                    </div>
+                    <div className="md:mb-4">
+                      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email:</label>
+                      <input
+                        onChange={handleEditChange}
+                        type="email"
+                        name="email"
+                        value={row.email}
+                        placeholder="Enter your email..."
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      />
+                    </div>
+                    <div className="md:mb-4">
+                      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role:</label>
+                      <select onChange={handleEditChange} value={row.role}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="role">
+                        <option>Choose a role...</option>
+                        <option value="admin">Admin</option>
+                        <option value="cashier">Cashier</option>
+                      </select>
+                    </div>
+
+                    {/* Buttons */}
+                    <div className="flex justify-end mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
+                      <button
+                        type="submit"
+                        className="text-white bg-green-500 hover:opacity-80 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      >
+                        Add User
+                      </button>
+                      <button
+                        type="button"
+                        className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-gray-200 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                        onClick={() => seteditModalOpen(false)}
+                      >
+                        Decline
+                      </button>
+                    </div>
+                  </form>
 
                   <div className="w-7 h-7 rounded-full bg-green-600 dark:bg-green-500 p-2 flex items-center justify-center mx-auto mb-3.5" style={{ display: `${successIcon}` }}>
                     <svg aria-hidden="true" className="w-11 h-11 text-green-100 dark:text-green-100" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
@@ -476,7 +527,7 @@ export default function CollapsibleTable() {
                     </button>
                   </div>
 
-                  {/* Form */}
+                  {/* Add Form */}
                   <div className="md:p-7 space-y-4">
                     <form className="p-4 md:p-5" onSubmit={handleAddUserSubmit}>
                       <div className="md:mb-4">
