@@ -3,17 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $users = User::all();
 
-        return view('pages.users', compact('users'));
+        if($request->wantsJson()){
+            return response()->json([
+                "status" => "success",
+                "message" => "Here are your list of users my master admin!",
+                "users" => $users,
+            ]);
+        }else{
+            return view('pages.users', compact('users'));
+        }
     }
 
     /**
@@ -29,6 +38,13 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'role' => 'required|string',
+            'password' => 'required|string',
+        ]);
+
         return response()->json([
             "message" => "This is store"
             ]);
