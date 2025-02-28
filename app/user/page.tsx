@@ -21,7 +21,7 @@ import api from "../../utils/api";
 async function fetchData() {
   try {
     const token = localStorage.getItem('access_token');
-    const response = await api.get("/api/transactions", {
+    const response = await api.get("/api/users", {
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
@@ -29,7 +29,7 @@ async function fetchData() {
     });
 
     console.log(response.data)
-    return response.data.transactions.reverse() || [];
+    return response.data.users.reverse() || [];
   } catch (error) {
     console.error('Error fetching data:', error);
     return [];
@@ -66,29 +66,9 @@ function Row({ row, handleSave, visibleColumns }) {
   }
 
   const [editFormData, setEditFormData] = useState({
-    cashier: row.cashier?.id || 0,
-    time: row.time || "",
-    cash: row.cash || 0,
-    check: row.check || 0,
-    bpi_ccard: row.bpi_ccard || 0,
-    bpi_dcard: row.bpi_dcard || 0,
-    metro_ccard: row.metro_ccard || 0,
-    metro_dcard: row.metro_dcard || 0,
-    paymaya: row.paymaya || 0,
-    aub_ccard: row.aub_ccard || 0,
-    gcash: row.gcash || 0,
-    food_panda: row.food_panda || 0,
-    streetby: row.streetby || 0,
-    grabfood: row.grabfood || 0,
-    gc_claimed_others: row.gc_claimed_others || 0,
-    gc_claimed_own: row.gc_claimed_own || 0,
-    mm_head: row.mm_head || "",
-    mm_commissary: row.commissary || "",
-    mm_rm: row.mm_rm || 0,
-    mm_km: row.mm_km || 0,
-    mm_dm: row.mm_dm || 0,
-    food_charge: row.food_charge || 0,
-    z_reading_pos: row.z_reading_pos || 0,
+    name: row.name || "",
+    email: row.email || "",
+    role: row.role || ""
   });
 
   const [summary, setSummary] = useState({
@@ -105,12 +85,12 @@ function Row({ row, handleSave, visibleColumns }) {
     setdeleteModalOpen(true);
   };
 
-  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setEditFormData({
-      ...editFormData,
-      [e.target.name]: e.target.value
-    })
-  }
+  // const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  //   setEditFormData({
+  //     ...editFormData,
+  //     [e.target.name]: e.target.value
+  //   })
+  // }
 
   const handleDeletSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -164,13 +144,8 @@ function Row({ row, handleSave, visibleColumns }) {
 
     try {
 
-      const filteredData = Object.fromEntries(
-        Object.entries(editFormData).map(([key, value]) =>
-          (value === 0 || value === "0.00") ? [key, null] : [key, value]
-        )
-      );
 
-      const response = await api.put(`/api/transaction/${row.id}`, { ...filteredData }, {
+      const response = await api.put(`/api/transaction/${row.id}`, { ...editFormData }, {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -223,33 +198,6 @@ function Row({ row, handleSave, visibleColumns }) {
     }
   }
 
-  useEffect(() => {
-
-    const nonTradeTotal = Number(editFormData.mm_rm || 0) + Number(editFormData.mm_km || 0) + Number(editFormData.mm_dm || 0) + Number(editFormData.food_charge || 0);
-    const tradeTotal =
-      Number(editFormData.cash || 0) +
-      Number(editFormData.check || 0) +
-      Number(editFormData.bpi_ccard || 0) +
-      Number(editFormData.bpi_dcard || 0) +
-      Number(editFormData.metro_ccard || 0) +
-      Number(editFormData.metro_dcard || 0) +
-      Number(editFormData.paymaya || 0) +
-      Number(editFormData.aub_ccard || 0) +
-      Number(editFormData.gcash || 0) +
-      Number(editFormData.food_panda || 0) +
-      Number(editFormData.streetby || 0) +
-      Number(editFormData.grabfood || 0) +
-      Number(editFormData.gc_claimed_others || 0) +
-      Number(editFormData.gc_claimed_own || 0)
-
-    setSummary((prevSummary) => ({
-      ...prevSummary,
-      trade: tradeTotal,
-      non_trade: nonTradeTotal,
-    }));
-
-  }, [editFormData])
-
 
   return (
     <>
@@ -257,9 +205,9 @@ function Row({ row, handleSave, visibleColumns }) {
         <TableCell>
         </TableCell>
         {visibleColumns.id && <TableCell><span className='text-xs'>{row.id}</span></TableCell>}
-        {visibleColumns.cashier && <TableCell><span className='text-xs'>{row.cashier?.name || 'Unknown'}</span></TableCell>}
-        {visibleColumns.date && <TableCell align="center"><span className='text-xs'>{new Date(row.created_at).toISOString().split("T")[0]}</span></TableCell>}
-        {visibleColumns.time && <TableCell align="center"><span className='text-xs'>{row.time}</span></TableCell>}
+        {visibleColumns.name && <TableCell><span className='text-xs'>{row.name || 'Unknown'}</span></TableCell>}
+        {visibleColumns.email && <TableCell align="center"><span className='text-xs'>{row.email}</span></TableCell>}
+        {visibleColumns.role && <TableCell align="center"><span className={`px-2 py-1 font-semibold leading-tight rounded-md text-xs ${(row.role == 'admin') ? 'text-green-700 bg-green-100' : 'text-orange-700 bg-gray-100'}`}>{row.role}</span></TableCell>}
         {visibleColumns.actions &&
           <TableCell align="center">
             <button
@@ -287,13 +235,13 @@ function Row({ row, handleSave, visibleColumns }) {
                     <span className="sr-only">Close modal</span>
                   </button>
                   <div className='flex items-center justify-center h-full w-full'>
-                   <Image
-                                                 src="/images/loading.gif"
-                                                 width={50}
-                                                 height={50}
-                                                 alt="Picture of the author"
-                                             />
-                                             </div>
+                    <Image
+                      src="/images/loading.gif"
+                      width={50}
+                      height={50}
+                      alt="Picture of the author"
+                    />
+                  </div>
                   <p className="mb-4 text-gray-500 dark:text-gray-300">Are you sure you want to delete transaction {row.id}?</p>
                   <div className="flex justify-center items-center space-x-4">
                     <button onClick={() => { setdeleteModalOpen(false) }} data-modal-toggle="deleteModal" type="button" className="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
@@ -320,7 +268,7 @@ function Row({ row, handleSave, visibleColumns }) {
               <Box sx={ediModalStyle}>
                 <div className='flex w-full'>
                   <div className='w-5/6'>
-                    <h2 className="text-sm font-semibold mb-4">Edit Transaction {row.id}</h2>
+                    <h2 className="text-sm font-semibold mb-4">Edit User {row.id}</h2>
                   </div>
 
 
@@ -330,187 +278,7 @@ function Row({ row, handleSave, visibleColumns }) {
                   </div>
                 </div>
 
-                <form className="space-y-6 p-4" onSubmit={handleEditFormSubmit}>
 
-                  <div className='flex gap-4'>
-                    {/* Shift Details */}
-                    <div className="border p-4 rounded-md shadow-sm bg-gray-50 w-full">
-                      <h2 className="text-sm font-semibold mb-2">Shift Details</h2>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-xs font-medium">Cashier's Name:</label>
-                          <input type="text" name="cashier" value={row.cashier?.name} disabled className="text-xs w-full p-2 border border-gray-300 rounded-md" />
-                        </div>
-                        <div>
-                          <label className="block text-xs font-medium">Shift Time:</label>
-                          <select name="time" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={editFormData.time} disabled>
-                            <option value="AM">AM</option>
-                            <option value="MID">MID</option>
-                            <option value="PM">PM</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Summary */}
-                    <div className="border p-4 rounded-md shadow-sm bg-gray-50 w-full">
-                      <h2 className="font-semibold text-sm mb-2">Summary:</h2>
-                      <div className="w-full">
-                        <div className="mb-1 flex w-full ">
-                          <label className="block text-xs font-bold w-full">Subtotal Trade POS:</label>
-                          <p className="text-xs w-full py-1 overflow-hidden border-gray-300 rounded-md w-full">
-                            P {summary.trade.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                          </p>
-                        </div>
-                        <div className="mb-1 flex w-full ">
-                          <label className="block text-xs font-bold w-full">Subtotal Non-Trade POS:</label>
-                          <p className="text-xs w-full py-1 overflow-hidden border-gray-300 rounded-md">
-                            P {summary.non_trade.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                          </p>
-                        </div>
-                        <div className="mb-1 flex w-full ">
-                          <label className="block w-full text-xs font-bold">GRAND TOTAL POS:</label>
-                          <p className="text-xs w-full py-1 overflow-hidden border-gray-300 rounded-md">
-                            P {(summary.trade + summary.non_trade).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className='flex gap-4'>
-                    {/* MM Details */}
-                    <div className="border p-4 rounded-md shadow-sm bg-gray-50 w-2/5">
-                      <h2 className="text-sm font-semibold mb-2">MM Details</h2>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                        <div>
-                          <label className="block text-xs font-medium">MM head:</label>
-                          <input type="text" name="mm_head" placeholder="MM Head" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_head) ? editFormData.mm_head : ""} onChange={handleEditChange} />
-                        </div>
-
-                        <div>
-                          <label className="block text-xs font-medium">MM Commissary:</label>
-                          <input type="text" name="mm_commissary" placeholder="MM Commissary" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_commissary) ? editFormData.mm_commissary : ""} onChange={handleEditChange} />
-                        </div>
-
-                        <div>
-                          <label className="block text-xs font-medium">MM RM:</label>
-                          <input type="number" name="mm_rm" placeholder="MM RM" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_rm) ? editFormData.mm_rm : ""} onChange={handleEditChange} />
-                        </div>
-
-                        <div>
-                          <label className="block text-xs font-medium">MM DM:</label>
-                          <input type="number" name="mm_dm" placeholder="MM DM" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_dm) ? editFormData.mm_dm : ""} onChange={handleEditChange} />
-                        </div>
-
-                        <div>
-                          <label className="block text-xs font-medium">MM KM:</label>
-                          <input type="number" name="mm_km" placeholder="MM KM" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.mm_km) ? editFormData.mm_km : ""} onChange={handleEditChange} />
-                        </div>
-
-                        <div>
-                          <label className="block text-xs font-medium">Food Charge:</label>
-                          <input type="number" name="food_charge" placeholder="Food Charge" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.food_charge) ? editFormData.food_charge : ""} onChange={handleEditChange} />
-                        </div>
-
-                      </div>
-                    </div>
-
-                    {/* Payment Details */}
-                    <div className="border p-4 rounded-md shadow-sm bg-gray-50 w-3/5">
-                      <h2 className="text-sm font-semibold mb-2">Payment Details</h2>
-                      <div className='flex gap-4'>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-1/2">
-
-                          <div>
-                            <label className="block text-xs font-medium">Cash:</label>
-                            <input type="number" name="cash" placeholder="Cash" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.cash) ? editFormData.cash : ""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">Check:</label>
-                            <input type="number" name="check" placeholder="Check" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.check) ? editFormData.check : ""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">BPI Credit:</label>
-                            <input type="number" name="bpi_ccard" placeholder="BPI Credit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.bpi_ccard) ? editFormData.bpi_ccard : ""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">BPI Debit:</label>
-                            <input type="number" name="bpi_dcard" placeholder="BPI Debit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.bpi_dcard) ? editFormData.bpi_dcard : ""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">Metro Credit:</label>
-                            <input type="number" name="metro_ccard" placeholder="Metro Credit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.metro_ccard) ? editFormData.metro_ccard : ""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">Metro Debit:</label>
-                            <input type="number" name="metro_dcard" placeholder="Metro Debit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.metro_dcard) ? editFormData.metro_dcard : ""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">AUB Credit:</label>
-                            <input type="number" name="aub_ccard" placeholder="Aub Credit Card" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.aub_ccard) ? editFormData.aub_ccard : ""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">Paymaya:</label>
-                            <input type="number" name="paymaya" placeholder="Paymaya" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.paymaya) ? editFormData.paymaya : ""} onChange={handleEditChange} />
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-1/2">
-                          <div>
-                            <label className="block text-xs font-medium">Gcash:</label>
-                            <input type="number" name="gcash" placeholder="GCash" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.gcash) ? editFormData.gcash : ""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">Foodpanda:</label>
-                            <input type="number" name="food_panda" placeholder="Foodpanda" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.food_panda) ? editFormData.food_panda : ""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">Street By:</label>
-                            <input type="number" name="streetby" placeholder="Street By" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.streetby) ? editFormData.streetby : ""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">Grab Food:</label>
-                            <input type="number" name="grabfood" placeholder="Grab Food" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.grabfood) ? editFormData.grabfood : ""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">GC Others:</label>
-                            <input type="number" name="gc_claimed_others" placeholder="GC Others" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.gc_claimed_others) ? editFormData.gc_claimed_others : ""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">GC Own:</label>
-                            <input type="number" name="gc_claimed_own" placeholder="GC Own" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.gc_claimed_own) ? editFormData.gc_claimed_own : ""} onChange={handleEditChange} />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-medium">Z Reading POS:</label>
-                            <input type="number" name="z_reading_pos" placeholder="Z Reading POS" className="text-xs w-full p-2 border border-gray-300 rounded-md" value={(editFormData.z_reading_pos) ? editFormData.z_reading_pos : ""} onChange={handleEditChange} />
-                          </div>
-                        </div>
-
-                      </div>
-                    </div>
-                  </div>
-                  {/* Buttons */}
-                  <div className="mt-6 flex justify-end">
-                    <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">Save</button>
-                    <button type="button" onClick={() => { seteditModalOpen(false) }} className="ml-2 px-4 py-2 bg-gray-400 text-white rounded-md">Cancel</button>
-                  </div>
-                </form>
               </Box>
             </Modal>
           </TableCell>
@@ -528,9 +296,9 @@ export default function CollapsibleTable() {
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [visibleColumns, setVisibleColumns] = useState({
     id: true,
-    cashier: true,
-    date: true,
-    time: true,
+    name: true,
+    email: true,
+    role: true,
     actions: true,
   });
 
@@ -552,8 +320,8 @@ export default function CollapsibleTable() {
   };
 
   const filteredRows = data.filter((row) =>
-    row.cashier?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    new Date(row.created_at).toISOString().split("T")[0].includes(searchTerm.toLocaleLowerCase())
+    row.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    row.id.toString().toLowerCase().includes(searchTerm.toLocaleLowerCase())
   );
 
   const paginatedRows = filteredRows.slice(
@@ -633,9 +401,9 @@ export default function CollapsibleTable() {
               <TableRow>
                 <TableCell />
                 {visibleColumns.id && <TableCell>ID</TableCell>}
-                {visibleColumns.cashier && <TableCell>Name</TableCell>}
-                {visibleColumns.date && <TableCell align='center'>Email</TableCell>}
-                {visibleColumns.time && <TableCell align='center'>Role</TableCell>}
+                {visibleColumns.name && <TableCell>Name</TableCell>}
+                {visibleColumns.email && <TableCell align='center'>Email</TableCell>}
+                {visibleColumns.role && <TableCell align='center'>Role</TableCell>}
                 {visibleColumns.actions && <TableCell align='center'>Actions</TableCell>}
               </TableRow>
             </TableHead>
@@ -657,9 +425,9 @@ export default function CollapsibleTable() {
         />
       </Box>
       <div className='z-50 border-t'>
-      <Footer/>
+        <Footer />
       </div>
     </>
- 
+
   );
 }
