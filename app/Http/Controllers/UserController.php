@@ -25,34 +25,49 @@ class UserController extends Controller
         }
     }
 
-        //CREATE USERS
+    //CREATE USERS
     function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'role' => 'required|in:admin,cashier',
-        ]);
+        try {
+            $validated = $request->validate([
+                'name' => 'required',
+                'email' => 'required|email|unique:users',
+                'role' => 'required|in:admin,cashier',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $message = 'This email is already taken or has invalid input.';
+
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => $message, 'errors' => $e->errors()], 422);
+            }
+
+            return redirect()->back()->with([
+                'message' => $message,
+                'alert-type' => 'error',
+            ])->withInput();
+        }
 
         $plainPassword = Str::random(10);
-
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'role' => $request->role,
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'role' => $validated['role'],
             'password' => Hash::make($plainPassword),
             'theme' => 'light',
         ]);
 
-        Mail::to($request->email)->send(new CredentialsMail($user, $plainPassword));
+        Mail::to($validated['email'])->send(new CredentialsMail($user, $plainPassword));
+
+        $message = 'User Registered Successfully!';
+
         if ($request->wantsJson()) {
-            return response()->json([
-                'status' => 'success',
-                'message' => 'User Registered Successfully!'
-            ]);
-        }else{
-            return redirect()->back()->with('success', 'User Registered Successfully!');
+            return response()->json(['status' => 'success', 'message' => $message], 201);
         }
+
+        return redirect()->back()->with([
+            'message' => $message,
+            'alert-type' => 'success',
+        ]);
     }
 
     public function update(Request $request, string $id)
@@ -67,27 +82,15 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
+        $message = 'User Deleted Successfully!';
         if ($request->wantsJson()) {
-            return response()->json([
-                'status' => 'success',
-                'message' => 'User Deleted Successfully'
-            ]);
-        }else{
-            return redirect()->back()->with('success', 'User Deleted Successfully');
+            return response()->json(['status' => 'success', 'message' => $message], 200);
         }
+        $notification = [
+            'message' => $message,
+            'alert-type' => 'success',
+        ];
+        return redirect()->back()->with($notification);
     }
 
-        // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'name' => 'required|string',
-    //         'email' => 'required|email',
-    //         'role' => 'required|string',
-    //         'password' => 'required|string',
-    //     ]);
-
-    //     return response()->json([
-    //         "message" => "This is store"
-    //         ]);
-    // }
 }
