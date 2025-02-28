@@ -1,4 +1,5 @@
 @include('layouts.header')
+@include('components.modals.add-user')
 
 <main>
     <div class="font-sans bg-gray-100 p-6">
@@ -6,9 +7,9 @@
             <div class="card-header flex justify-between items-center">
                 <h5 class="title font-semibold text-[26px]">Manage Users</h5>
                 <div class="flex flex-wrap justify-center">
-                    <a href="{{ route('pdf') }}"
-                        class="bg-emerald-700 hover:bg-emerald-900 rounded-lg text-white text-md text-center self-center px-3 py-2 my-2 mx-2">Add
-                        User</a>
+                    <button data-modal-target="add-user-modal" data-modal-toggle="add-user-modal" 
+                        class="block bg-emerald-700 hover:bg-emerald-800 rounded-lg text-white text-md text-center self-center px-3 md:px-6 py-2 my-2 mx-2">Add User
+                    </button>
                 </div>
             </div>
             <div class="overflow-x-auto">
@@ -50,6 +51,11 @@
                             </tr>
                         @endforeach
                     </tbody>
+                    
+
+
+
+
                 </table>
             </div>
         </div>
@@ -75,6 +81,8 @@
     </script>
 
 
+
+    
 
 
     </body>
