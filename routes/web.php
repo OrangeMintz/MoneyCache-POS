@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () {
         // USERS
         Route::prefix('user')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('admin.users');
+            Route::put('/{id}', [UserController::class, 'update'])->name('admin.update');
             Route::delete('/{id}', [UserController::class, 'softDelete'])->name('admin.softDelete');
             Route::post('/', [UserController::class, 'store'])->name('admin.post');
         });

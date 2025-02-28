@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules;
 
 class UserController extends Controller
 {
@@ -35,7 +36,7 @@ class UserController extends Controller
                 'role' => 'required|in:admin,cashier',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            $message = 'This email is already taken or has invalid input.';
+            $message = 'This email is already taken';
 
             if ($request->wantsJson()) {
                 return response()->json(['status' => 'error', 'message' => $message, 'errors' => $e->errors()], 422);
@@ -72,9 +73,39 @@ class UserController extends Controller
 
     public function update(Request $request, string $id)
     {
-        return response()->json([
-            "message" => "This is store"
-            ]);
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'role' => 'required|in:admin,cashier',
+            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        $existingUser = User::where('email', $validated['email'])
+            ->where('id', '!=', $id)
+            ->exists();
+
+        if ($existingUser) {
+            $message = 'This email is already taken';
+
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => $message], 422);
+            }
+            return redirect()->back()->with(['message' => $message, 'alert-type' => 'error']);
+        }
+
+        $user = User::findOrFail($id);
+        $user->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'role' => $validated['role'],
+            'password' => $validated['password'] ? Hash::make($validated['password']) : $user->password,
+        ]);
+
+        $message = 'User updated successfully!';
+        if ($request->wantsJson()) {
+            return response()->json(['status' => 'success', 'message' => $message]);
+        }
+        return redirect()->back()->with(['message' => $message, 'alert-type' => 'success']);
     }
 
     public function softDelete(Request $request, string $id)
@@ -86,10 +117,7 @@ class UserController extends Controller
         if ($request->wantsJson()) {
             return response()->json(['status' => 'success', 'message' => $message], 200);
         }
-        $notification = [
-            'message' => $message,
-            'alert-type' => 'success',
-        ];
+        $notification = ['message' => $message,'alert-type' => 'success',];
         return redirect()->back()->with($notification);
     }
 
