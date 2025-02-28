@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\CredentialsMail;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $users = User::all();
-
         if($request->wantsJson()){
             return response()->json([
                 "status" => "success",
@@ -25,22 +25,34 @@ class UserController extends Controller
         }
     }
 
-    public function store(Request $request)
+        //CREATE USERS
+    function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email',
-            'role' => 'required|string',
-            'password' => 'required|string',
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'role' => 'required|in:AM,MID,PM',
         ]);
 
-        return response()->json([
-            "message" => "This is store"
-            ]);
-    }
+        $plainPassword = Str::random(10);
 
-    public function show(string $id)
-    {
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'role' => $request->role,
+            'password' => Hash::make($plainPassword),
+            'theme' => 'light',
+        ]);
+
+        Mail::to($request->email)->send(new CredentialsMail($user, $plainPassword));
+        if ($request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'User Registered Successfully!'
+            ]);
+        }else{
+            return redirect()->back()->with('success', 'User Registered Successfully!');
+        }
     }
 
     public function update(Request $request, string $id)
@@ -48,11 +60,6 @@ class UserController extends Controller
         return response()->json([
             "message" => "This is store"
             ]);
-    }
-
-    public function destroy(string $id)
-    {
-        // Soft delete
     }
 
     public function softDelete(Request $request, string $id)
@@ -69,4 +76,18 @@ class UserController extends Controller
             return redirect()->back()->with('success', 'User Deleted Successfully');
         }
     }
+
+        // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => 'required|string',
+    //         'email' => 'required|email',
+    //         'role' => 'required|string',
+    //         'password' => 'required|string',
+    //     ]);
+
+    //     return response()->json([
+    //         "message" => "This is store"
+    //         ]);
+    // }
 }
