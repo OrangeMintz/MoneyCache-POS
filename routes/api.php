@@ -7,6 +7,7 @@ use App\Http\Controllers\TransactionsGrossTotalController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CsvController;
+use App\Http\Controllers\PDFController;
 use App\Http\Middleware\CheckRole;
 
 Route::middleware(['auth:api'])->group(function () {
@@ -39,6 +40,7 @@ Route::middleware(['auth:api'])->group(function () {
             Route::post('/get-by-date', [TransactionsController::class, 'getByDate']);
             Route::post('/get-by-date/totals', [TransactionsGrossTotalController::class, 'getGrossNetByDate']);
             Route::post('/csv', [CsvController::class, 'csv']);
+            Route::get('/pdf', [PDFController::class, 'pdf']);
         });
 
         // User route for admin
