@@ -25,7 +25,6 @@ Route::middleware(['auth:api'])->group(function () {
         });
     });
     
-
     Route::middleware([CheckRole::class . ":admin"])->group(function () {
 
         Route::prefix('transactions')->group(function () {
