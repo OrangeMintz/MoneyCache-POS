@@ -3,11 +3,11 @@
 import Footer from '@/app/comps/footer';
 import Navbar from "@/app/comps/header";
 import Preloader from "@/app/comps/preloader";
-import TransactionForm from "@/app/comps/transaction";
+import TransactionForm from "@/app/transaction/transaction";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
-import Users from '@/app/comps/user'
+
 
 export default function Dashboard() {
     const [user, setUser] = useState<any>(null);
