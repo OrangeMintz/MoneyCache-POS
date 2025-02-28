@@ -221,7 +221,7 @@
   </div>
 </div>
 
-{{-- STORE validation: no negative, atleast one field is filled--}}
+{{-- Edit Transaction validation: no negative, atleast one field is filled--}}
 <script>   
   document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("editForm");
