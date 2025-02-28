@@ -1,5 +1,5 @@
 <!-- Main Modal -->
-<div id="edit-user-modal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center">
+<div id="edit-user-modal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 items-center justify-center">
   <!-- Overlay -->
   <div class="absolute inset-0 bg-gray-900 bg-opacity-50"></div>
 
