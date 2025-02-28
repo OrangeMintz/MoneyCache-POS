@@ -418,8 +418,12 @@ export default function CollapsibleTable() {
                               <input type="email" name="email" placeholder='Enter your email...' className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500' />
                             </div>
                             <div className='md:mb-4'>
-                              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="">Role: </label>
-                              <input type="text" name="role" placeholder='Choose a role...' className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'  />
+                            <label for="countries" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role: </label>
+                                <select id="countries" name='role' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                  <option className='opacity-50' selected>Choose a role...</option>
+                                  <option value="admin">Admin</option>
+                                  <option value="cashier">Cashier</option>
+                                </select>
                             </div>
                             
                             <div className="flex justify-end mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
