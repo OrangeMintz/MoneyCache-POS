@@ -77,8 +77,9 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email,' . $id,
-            'role' => 'required|in:admin,cashier',
-            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+            'role' => 'in:admin,cashier',
+            'password' => ['nullable', Rules\Password::defaults()],
+
         ]);
 
         Log::info("Validated: ",$validated);

@@ -25,18 +25,18 @@
             </div>
 
             <!-- Modal Body -->
-            <form class="p-1 md:p-2" method="POST" action="">
+            <form class="p-1 md:p-2" method="POST" action="{{ route('admin.update', $user->id) }}">
                 @csrf
-
+                @method('PUT')
                 <div class=" mb-4 md:mb-8 grid-cols-2">
                     <div class="col-span-2 sm:col-span-1">
                         <label for="role"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
-                        <select id="role"
+                        <select name="role" id="role"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
-                            <option selected="">Select Role</option>
-                            <option value="Admin">Admin</option>
-                            <option value="Cashier">Cashier</option>
+                            <option selected value="">Select Role</option>
+                            <option value="admin">Admin</option>
+                            <option value="cashier">Cashier</option>
                         </select>
                     </div>
                     <div class="col-span-2">
@@ -71,7 +71,6 @@
         </div>
     </div>
 @endforeach
-
 {{-- toggle modal script --}}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -82,13 +81,11 @@
                 if (modal) modal.classList.remove("hidden");
             });
         });
-
         document.querySelectorAll("[data-close-modal]").forEach(button => {
             button.addEventListener("click", function() {
                 this.closest(".fixed").classList.add("hidden");
             });
         });
-
         document.querySelectorAll(".absolute.inset-0").forEach(overlay => {
             overlay.addEventListener("click", function() {
                 this.closest(".fixed").classList.add("hidden");
