@@ -63,10 +63,10 @@ class UserController extends Controller
         if ($request->wantsJson()) {
             return response()->json([
                 'status' => 'success',
-                'message' => 'User Successfully'
+                'message' => 'User Deleted Successfully'
             ]);
         }else{
-            return redirect()->back()->with('success', 'User Successfully');
+            return redirect()->back()->with('success', 'User Deleted Successfully');
         }
     }
 }

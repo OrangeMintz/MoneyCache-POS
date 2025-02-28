@@ -50,10 +50,11 @@ Route::middleware('auth')->group(function () {
         Route::prefix('sheets')->group(function () {
             Route::get('/', [TransactionsController::class, 'export'])->name('transactions.sheet');
             Route::get('/export/csv', [CsvController::class, 'csv'])->name('transactions.sheet.csv');
+            Route::get('/export/pdf', [PDFController::class, 'pdf'])->name('transactions.sheet.pdf');
+
         });
     });
 
-    Route::get('/pdf', [PDFController::class, 'pdf'])->name('pdf');
 });
 
 
