@@ -39,8 +39,10 @@
     function format(d) {
         let details = `<div style="padding:10px 40px; background: rgb(238, 235, 235);">`;
 
-        // Define the fields you want to check dynamically
-        let tradeFields = {
+        let formatCurrency = (amount) => `₱${parseFloat(amount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}`;
+
+        let tradeFields = {};
+        let data = {
             "Cash": d.cash,
             "Check": d.check,
             "BPI Credit Card": d.bpi_ccard,
@@ -56,6 +58,13 @@
             "GC Claimed (Others)": d.gc_claimed_others,
             "GC Claimed (Own)": d.gc_claimed_own
         };
+
+        // Loop through each field and add only non-empty values
+        for (let key in data) {
+            if (data[key]) { // If value is not null, undefined, or 0
+                tradeFields[key] = formatCurrency(data[key]);
+            }
+        }
 
         let nonTradeFields = {
             "MM Head Office": d.mm_head,

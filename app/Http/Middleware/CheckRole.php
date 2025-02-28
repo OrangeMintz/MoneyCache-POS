@@ -11,15 +11,19 @@ class CheckRole
     public function handle(Request $request, Closure $next, ...$roles)
     {
         $user = Auth::user();
-
-        // Flatten roles array in case it's passed as a single string
         $rolesArray = is_array($roles[0]) ? $roles[0] : $roles;
 
         if (!$user || !in_array($user->role, $rolesArray)) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            $message = 'Unauthorized';
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => $message], 403);
+            }
+            $notification = [
+                'message' => $message,
+                'alert-type' => 'error',
+            ];
+            return redirect()->back()->with($notification);
         }
-
         return $next($request);
     }
 }
-
