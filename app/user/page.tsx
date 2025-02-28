@@ -68,7 +68,8 @@ function Row({ row, handleSave, visibleColumns }) {
   const [editFormData, setEditFormData] = useState({
     name: row.name || "",
     email: row.email || "",
-    role: row.role || ""
+    role: row.role || "",
+    password: null
   });
 
   const [summary, setSummary] = useState({
@@ -144,7 +145,7 @@ function Row({ row, handleSave, visibleColumns }) {
 
     try {
 
-      const response = await api.put(`/api/transaction/${row.id}`, { ...editFormData }, {
+      const response = await api.put(`/api/users/${row.id}`, { ...editFormData }, {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -157,7 +158,7 @@ function Row({ row, handleSave, visibleColumns }) {
         setSuccessIcon('')
         new Toast({
           position: "bottom-right",
-          onClose: () => { window.location.href = "/transactionlist"; },
+          onClose: () => { window.location.href = "/user"; },
           toastMsg: "Successfully stored transaction!",
           autoCloseTime: 1000,
           canClose: true,
@@ -278,7 +279,7 @@ function Row({ row, handleSave, visibleColumns }) {
                         onChange={handleEditChange}
                         type="text"
                         name="name"
-                        value={row.name}
+                        value={editFormData.name}
                         placeholder="Enter your name..."
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       />
@@ -289,19 +290,36 @@ function Row({ row, handleSave, visibleColumns }) {
                         onChange={handleEditChange}
                         type="email"
                         name="email"
-                        value={row.email}
+                        value={editFormData.email}
                         placeholder="Enter your email..."
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       />
                     </div>
-                    <div className="md:mb-4">
-                      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role:</label>
-                      <select onChange={handleEditChange} value={row.role}
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="role">
-                        <option>Choose a role...</option>
-                        <option value="admin">Admin</option>
-                        <option value="cashier">Cashier</option>
-                      </select>
+                    <div className="w-full md:mb-4 flex grid grid-cols-2 gap-4">
+
+                      <div className='col-span-1'>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role:</label>
+                        <select onChange={handleEditChange} value={editFormData.role}
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="role">
+                          <option>Choose a role...</option>
+                          <option value="admin">Admin</option>
+                          <option value="cashier">Cashier</option>
+                        </select>
+                      </div>
+
+                      <div className='col-span-1'>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password:</label>
+
+                        <input
+                          type="password"
+                          name="password"
+                          onChange={handleEditChange}
+                          value={row.password}
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="Enter password"
+                        />
+                      </div>
+
                     </div>
 
                     {/* Buttons */}
@@ -310,14 +328,14 @@ function Row({ row, handleSave, visibleColumns }) {
                         type="submit"
                         className="text-white bg-green-500 hover:opacity-80 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                       >
-                        Add User
+                        Save Changes
                       </button>
                       <button
                         type="button"
                         className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-gray-200 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                         onClick={() => seteditModalOpen(false)}
                       >
-                        Decline
+                        Cancel
                       </button>
                     </div>
                   </form>
