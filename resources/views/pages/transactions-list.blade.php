@@ -5,12 +5,23 @@
     <div class="font-sans bg-gray-100 p-6">
         <div class="bg-white p-4 mb-4">
             <div class="card-header flex justify-between items-center">
-                <h5 class="title font-semibold text-[26px]">Test Transactions</h5>
+                <h5 class="title font-semibold text-[26px]">Manage Transactions</h5>
+                
+                @if (auth()->user()->role === 'admin')
                 <div class="flex flex-wrap justify-center">
-                    <a href="{{ route('pdf') }}"
-                        class="bg-emerald-700 hover:bg-emerald-900 rounded-lg text-white text-md text-center self-center px-3 py-2 my-2 mx-2">Download
-                        as PDF <i class="fas fa-file-pdf ml-1"></i></a>
+                    <a href="{{ route('transactions.sheet', ['date' => now()->format('Y-m-d')]) }}"
+                        class="bg-amber-500 hover:bg-amber-600 rounded-lg text-white text-md text-center self-center px-8 py-2 my-2 mx-2">
+                        Sheets
+                    </a>
                 </div>
+
+                @endif
+
+
+
+
+
+
             </div>
             <div class="overflow-x-auto">
                 <table id="example" class="display" style="width:100%">
