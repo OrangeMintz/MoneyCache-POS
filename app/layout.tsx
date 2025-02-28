@@ -1,3 +1,4 @@
+import Exclude from '@/components/exclude';
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
@@ -15,13 +16,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} antialiased`}>
-        {children}
+      <body>
+        <Exclude>{children}</Exclude>
       </body>
     </html>
   );

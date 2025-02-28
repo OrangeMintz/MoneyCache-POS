@@ -1,7 +1,5 @@
 'use client';
 
-import Footer from '@/app/comps/footer';
-import Navbar from '@/app/comps/header';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Paper from '@mui/material/Paper';
@@ -472,7 +470,6 @@ export default function CollapsibleTable() {
 
   return (
     <>
-      <Navbar />
       <Box className='bg-gray-100 m-6 p-6 rounded-md shadow-md'>
         <div className='grid grid-cols-5 flex'>
 
@@ -657,7 +654,6 @@ export default function CollapsibleTable() {
         />
       </Box>
       <div className='z-50 border-t'>
-        <Footer />
       </div>
     </>
 

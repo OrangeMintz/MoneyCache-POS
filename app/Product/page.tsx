@@ -1,6 +1,4 @@
 "use client"
-import Footer from '@/app/comps/footer';
-import Navbar from "@/app/comps/header";
 import Preloader from "@/app/comps/preloader"; // Import the Preloader component
 import { formatNumber } from "@/utils/formatter";
 import React, { useEffect, useState } from "react";
@@ -141,7 +139,6 @@ export default function DenseTable() {
   return (
     <div>
       <main className="min-h-screen ">
-        <Navbar />
         <div className="p-8">
           <div className="flex justify-start mb-4 px-4 md:px-6">
             <form onSubmit={downloadCsv}>
@@ -210,7 +207,6 @@ export default function DenseTable() {
           </div>
         </div>
         <div className='border-t'>
-          <Footer />
         </div>
       </main>
 

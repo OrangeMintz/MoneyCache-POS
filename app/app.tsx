@@ -1,18 +1,25 @@
-import type { AppProps } from 'next/app';
-import Head from 'next/head';
+import Navbar from '@/app/comps/header';
+import type { AppProps } from "next/app";
+import { useRouter } from "next/router";
+import "../styles/globals.css";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  
+  // Define routes where header should be hidden
+  const noHeaderRoutes = ['/login', '/forgot-password'];
+  const showHeader = !noHeaderRoutes.includes(router.pathname);
+
   return (
     <>
-      <Head>
-        <script
-          src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"
-          integrity="sha384-..."
-          crossOrigin="anonymous"
-          defer
-        ></script>
-      </Head>
-      <Component {...pageProps} />
+      {showHeader && (
+        <header>
+         <Navbar />
+        </header>
+      )}
+      <main>
+        <Component {...pageProps} />
+      </main>
     </>
   );
 }

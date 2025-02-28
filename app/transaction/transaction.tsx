@@ -328,12 +328,14 @@ export default function CashierForm({ cashier }: TransactionFormProps) {
 
                                     </div>
 
-
+                                                        
 
                                 </div>
                             </div>
 
                         </form>
+                    </div>
+                    <div>
                     </div>
                 </div>
             </div>
