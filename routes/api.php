@@ -45,7 +45,8 @@ Route::middleware(['auth:api'])->group(function () {
         // User route for admin
         Route::prefix('users')->group(function () {
             Route::get('/', [UserController::class, 'index']);
-            Route::post('users/{id}', [UserController::class, 'store']);
+            Route::post('/', [UserController::class, 'store']);
+            Route::put('/{id}', [UserController::class, 'update']);
         });
 
     });
