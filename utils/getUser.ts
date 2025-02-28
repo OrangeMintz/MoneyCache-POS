@@ -1,3 +1,4 @@
+'use client';
 import api from "./api";
 
 export const getUser = async (router: any, setUser: (user: any) => void, setLoading: (loading: boolean) => void) => {
@@ -16,6 +17,7 @@ export const getUser = async (router: any, setUser: (user: any) => void, setLoad
             },
         });
 
+        localStorage.setItem('role', response.data.role);
         setUser(response.data);
     } catch (error: any) {
         router.push('/');

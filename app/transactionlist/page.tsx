@@ -594,6 +594,7 @@ export default function CollapsibleTable() {
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [visibleColumns, setVisibleColumns] = useState({
     id: true,
     cashier: true,
@@ -655,27 +656,32 @@ export default function CollapsibleTable() {
           <div className="mb-4 flex justify-end col-span-2 relative">
             <button
               id="dropdownDefaultButton"
-              data-dropdown-toggle="dropdown"
-              className="inline-flex  justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
+              className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
               type="button"
-              onClick={() => {
-                const dropdown = document.getElementById('dropdownContent');
-                dropdown.classList.toggle('hidden');
-                dropdown.classList.toggle('opacity-0');
-                dropdown.classList.toggle('opacity-100');
-                dropdown.classList.toggle('translate-y-0');
-                dropdown.classList.toggle('-translate-y-2');
-              }}
+              onClick={() => setDropdownOpen(!dropdownOpen)}
             >
               Visibility
-              <svg className="w-2.5 h-5.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+              <svg
+                className="w-2.5 h-5.5 ms-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 10 6"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 4 4 4-4"
+                />
               </svg>
             </button>
 
             <div
               id="dropdownContent"
-              className="hidden opacity-0 -translate-y-2 absolute top-full right-0 mt-1 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 sm:w-48 md:w-56 dark:bg-gray-700 transition-all duration-300 ease-in-out transform"
+              className={`absolute top-full right-0 mt-1 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 sm:w-48 md:w-56 dark:bg-gray-700 transition-all duration-300 ease-in-out transform ${dropdownOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 hidden"
+                }`}
             >
               <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                 {Object.keys(visibleColumns).map((col) => (
@@ -731,9 +737,9 @@ export default function CollapsibleTable() {
         />
       </Box>
       <div className='z-50 border-t'>
-      <Footer/>
+        <Footer />
       </div>
     </>
- 
+
   );
 }

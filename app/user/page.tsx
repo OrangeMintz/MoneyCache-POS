@@ -109,7 +109,7 @@ function Row({ row, handleSave, visibleColumns }) {
       if (response.data.status === 'success') {
         setSuccessIcon('')
         new Toast({
-          position: "top-right",
+          position: "bottom-right",
           onClose: () => { window.location.href = "/transactionlist"; },
           toastMsg: "Successfully deleted transaction!",
           autoCloseTime: 1000,
@@ -122,7 +122,7 @@ function Row({ row, handleSave, visibleColumns }) {
         });
       } else {
         new Toast({
-          position: "top-right",
+          position: "bottom-right",
           toastMsg: response.data.message,
           autoCloseTime: 1000,
           canClose: true,
@@ -144,7 +144,6 @@ function Row({ row, handleSave, visibleColumns }) {
 
     try {
 
-
       const response = await api.put(`/api/transaction/${row.id}`, { ...editFormData }, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -157,7 +156,7 @@ function Row({ row, handleSave, visibleColumns }) {
       if (response.data.status === 'success') {
         setSuccessIcon('')
         new Toast({
-          position: "top-right",
+          position: "bottom-right",
           onClose: () => { window.location.href = "/transactionlist"; },
           toastMsg: "Successfully stored transaction!",
           autoCloseTime: 1000,
@@ -170,7 +169,7 @@ function Row({ row, handleSave, visibleColumns }) {
         });
       } else {
         new Toast({
-          position: "top-right",
+          position: "bottom-right",
           toastMsg: response.data.message,
           autoCloseTime: 1000,
           canClose: true,
@@ -294,6 +293,8 @@ export default function CollapsibleTable() {
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
+  const [addModalView, setAddModalView] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [visibleColumns, setVisibleColumns] = useState({
     id: true,
     name: true,
@@ -301,6 +302,15 @@ export default function CollapsibleTable() {
     role: true,
     actions: true,
   });
+  const [addForm, setAddForm] = useState({
+    name: null,
+    email: null,
+    role: null
+  })
+
+  const handleAddInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setAddForm({ ...addForm, [e.target.name]: e.target.value });
+  };
 
   useEffect(() => {
     fetchData().then(setData);
@@ -333,6 +343,64 @@ export default function CollapsibleTable() {
     setVisibleColumns((prev) => ({ ...prev, [column]: !prev[column] }));
   };
 
+  const handleAddUserSubmit = async (event: React.FormEvent) => {
+    event.preventDefault()
+
+    try {
+      const token = localStorage.getItem('access_token')
+
+      console.log(addForm)
+
+      const response = await api.post("/api/users", { ...addForm }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      });
+
+      if (response.data.status === 'success') {
+        new Toast({
+          position: "bottom-right",
+          onClose: () => { window.location.href = "/user"; },
+          toastMsg: "Successfully stored transaction!",
+          autoCloseTime: 2000,
+          canClose: true,
+          showProgress: true,
+          pauseOnHover: true,
+          pauseOnFocusLoss: true,
+          type: "success",
+          theme: 'dark',
+        });
+      } else {
+        new Toast({
+          position: "bottom-right",
+          toastMsg: response.data.message,
+          autoCloseTime: 1000,
+          canClose: true,
+          showProgress: true,
+          pauseOnHover: true,
+          pauseOnFocusLoss: true,
+          type: "error",
+          theme: 'dark',
+        });
+      }
+
+    } catch (error) {
+      console.error("Error adding user: ", error)
+      new Toast({
+        position: "bottom-right",
+        toastMsg: "Error adding user",
+        autoCloseTime: 1000,
+        canClose: true,
+        showProgress: true,
+        pauseOnHover: true,
+        pauseOnFocusLoss: true,
+        type: "error",
+        theme: 'dark',
+      });
+    }
+  }
+
   return (
     <>
       <Navbar />
@@ -348,110 +416,126 @@ export default function CollapsibleTable() {
               className=" mb-4 text-sm p-2 border rounded w-1/4"
             />
           </div>
-          
+
 
           <div className="mb-4 flex justify-end col-span-2 relative">
             <button
               id="dropdownDefaultButton"
-              data-dropdown-toggle="dropdown"
-              className="inline-flex  justify-center gap-x-1 rounded-md bg-white sm:px-3 sm:py-3 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
+              className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
               type="button"
-              onClick={() => {
-                const dropdown = document.getElementById('dropdownContent');
-                dropdown.classList.toggle('hidden');
-                dropdown.classList.toggle('opacity-0');
-                dropdown.classList.toggle('opacity-100');
-                dropdown.classList.toggle('translate-y-0');
-                dropdown.classList.toggle('-translate-y-2');
-              }}
+              onClick={() => setDropdownOpen(!dropdownOpen)}
             >
               Visibility
-              <svg className="md:w-2.5 md:h-5.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+              <svg
+                className="w-2.5 h-5.5 ms-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 10 6"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 4 4 4-4"
+                />
               </svg>
             </button>
 
 
             <div>
-                <button  
-                      id="AddModal" 
-                      className='inline-flex justify-center gap-x-1 md:ml-1 rounded-md bg-green-600 sm:px-3 sm:py-3 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10'
-                      onClick={() => {
-                        const modal = document.getElementById('default-modal');
-                        modal.classList.toggle('hidden');
-                      }}
-                    >
-                      Add User
-                    </button>
-                  </div>
-                    
-                  <div id="default-modal" aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-900 bg-opacity-50">
-                    <div className="relative p-4 md:p6 w-full max-w-2xl max-h-full">
-                      <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+              <button
+                id="AddModal"
+                className='inline-flex justify-center gap-x-1 md:ml-1 rounded-md bg-green-400 sm:px-3 sm:py-3 text-xs font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10'
+                onClick={() => setAddModalView(true)}
+              >
+                Add User
+              </button>
+            </div>
 
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                          <h3 className="text-xl md:ml-7 font-semibold text-gray-900 dark:text-white">
-                           Add User 
-                          </h3>
-                          <button 
-                            type="button" 
-                            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" 
-                            onClick={() => {
-                              document.getElementById('default-modal').classList.add('hidden');
-                            }}
-                          >
-                            <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                            </svg>
-                            <span className="sr-only">Close modal</span>
-                          </button>
-                        </div>
-                      
-                        <div className="md:p-7 space-y-4">
-                          <form className="p-4 md:p-5" action="">
-                            <div className='md:mb-4'>
-                              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="">Name: </label>
-                              <input type="text" name="name" placeholder='Enter your name...' className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'  />
-                            </div>
-                            <div className='md:mb-4'>
-                              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="">Email: </label>
-                              <input type="email" name="email" placeholder='Enter your email...' className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500' />
-                            </div>
-                            <div className='md:mb-4'>
-                            <label for="countries" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role: </label>
-                                <select id="countries" name='role' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                  <option className='opacity-50' selected>Choose a role...</option>
-                                  <option value="admin">Admin</option>
-                                  <option value="cashier">Cashier</option>
-                                </select>
-                            </div>
-                            
-                            <div className="flex justify-end mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
-                              <button 
-                                type="button" 
-                                className="text-white bg-green-500 hover:opacity-80 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                              >
-                                Add User
-                              </button>
-                              <button 
-                                type="button" 
-                                className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-gray-200 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                                onClick={() => {
-                                  document.getElementById('default-modal').classList.add('hidden');
-                                }}
-                              >
-                                Decline
-                              </button>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-            
             <div
               id="dropdownContent"
-              className="hidden opacity-0 -translate-y-2 absolute top-full right-0 mt-1 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 sm:w-48 md:w-56 dark:bg-gray-700 transition-all duration-300 ease-in-out transform"
+              className={`overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-900 bg-opacity-50 ${addModalView ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 hidden"
+                }`}
+            >
+              <div className="relative p-4 md:p-6 w-full max-w-2xl max-h-full">
+                <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                  {/* Header */}
+                  <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                    <h3 className="text-xl md:ml-7 font-semibold text-gray-900 dark:text-white">Add User</h3>
+                    <button
+                      type="button"
+                      className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                      onClick={() => setAddModalView(false)}
+                    >
+                      <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                      </svg>
+                      <span className="sr-only">Close modal</span>
+                    </button>
+                  </div>
+
+                  {/* Form */}
+                  <div className="md:p-7 space-y-4">
+                    <form className="p-4 md:p-5" onSubmit={handleAddUserSubmit}>
+                      <div className="md:mb-4">
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name:</label>
+                        <input
+                          onChange={handleAddInputChange}
+                          type="text"
+                          name="name"
+                          placeholder="Enter your name..."
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        />
+                      </div>
+                      <div className="md:mb-4">
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email:</label>
+                        <input
+                          onChange={handleAddInputChange}
+                          type="email"
+                          name="email"
+                          placeholder="Enter your email..."
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        />
+                      </div>
+                      <div className="md:mb-4">
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role:</label>
+                        <select onChange={handleAddInputChange}
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="role">
+                          <option>Choose a role...</option>
+                          <option value="admin">Admin</option>
+                          <option value="cashier">Cashier</option>
+                        </select>
+                      </div>
+
+                      {/* Buttons */}
+                      <div className="flex justify-end mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
+                        <button
+                          type="submit"
+                          className="text-white bg-green-500 hover:opacity-80 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        >
+                          Add User
+                        </button>
+                        <button
+                          type="button"
+                          className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-gray-200 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                          onClick={() => setAddModalView()}
+                        >
+                          Decline
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div
+              id="dropdownContent"
+              className={`absolute top-full right-0 mt-1 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 sm:w-48 md:w-56 dark:bg-gray-700 transition-all duration-300 ease-in-out transform ${dropdownOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 hidden"
+                }`}
             >
               <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                 {Object.keys(visibleColumns).map((col) => (

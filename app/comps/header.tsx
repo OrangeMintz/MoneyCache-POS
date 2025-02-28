@@ -6,12 +6,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { UserCircle } from 'lucide-react';
-import { getUser } from '@/utils/getUser';
 
 export default function Navbar() {
     const router = useRouter();
-    const [user, setUser] = useState<any>(null);
-    const [loading, setLoading] = useState(true);
     const [open, setOpen] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -55,7 +52,6 @@ export default function Navbar() {
 
     // Close dropdown when clicking outside
     useEffect(() => {
-        getUser(router, setUser, setLoading)
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setIsOpen(false);
@@ -67,11 +63,6 @@ export default function Navbar() {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-
-    useEffect(() => {
-
-        console.log(user)
-    }, [user]);
 
     return (
         <>
@@ -212,29 +203,16 @@ export default function Navbar() {
                                         <span>Transaction List</span>
                                     </button>
                                 </Link>
-                                {user ?
-                                    (user.role == 'admin' ?
-                                        <Link href="/user">
-                                            <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:text-gray-200 hover:text-green-300 focus:outline-none">
-                                                <span>Users</span>
-                                            </button>
-                                        </Link> : ""
-                                    ) :
-                                    ""
-                                }
-
-                                {user ?
-                                    (user.role == 'admin' ?
-                                        <Link href="/Product">
-                                            <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:text-gray-200 hover:text-green-300 focus:outline-none">
-                                                <span>Sheets</span>
-                                            </button>
-                                        </Link> : ""
-                                    ) :
-                                    ""
-                                }
-
-
+                                <Link href="/user">
+                                    <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:text-gray-200 hover:text-green-300 focus:outline-none">
+                                        <span>Users</span>
+                                    </button>
+                                </Link>
+                                <Link href="/Product">
+                                    <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:text-gray-200 hover:text-green-300 focus:outline-none">
+                                        <span>Sheets</span>
+                                    </button>
+                                </Link>
                             </div>
                         </div>
 
@@ -257,14 +235,10 @@ export default function Navbar() {
                    transition-all duration-300 ease-in-out 
                    right-0 md:right-1/2 md:translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50`}
                                 >
-                                    {user ?
-                                        <div className="px-4 py-3 text-sm text-gray-900 text-center">
-                                            <h1 className="font-medium">{user.name} ({user.role})</h1>
-                                            <p className='text-xs'>{user.email}</p>
-                                        </div>
-                                        :
-                                        <h1 className="font-medium">Loading</h1>
-                                    }
+                                    <div className="px-4 py-3 text-sm text-gray-900 text-center">
+                                        <h1 className="font-medium">Jepri Gwapogi</h1>
+                                        <p className="text-gray-500">Email</p>
+                                    </div>
                                     <hr className="border-gray-200" />
                                     <div className="py-1">
                                         <form onSubmit={logout}>
