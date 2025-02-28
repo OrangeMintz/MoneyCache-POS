@@ -1,4 +1,6 @@
 @include('layouts.header')
+@include('components.modals.add-user')
+@include('components.modals.edit-user')
 
 <main>
     <div class="font-sans bg-gray-100 p-6">
@@ -6,9 +8,10 @@
             <div class="card-header flex justify-between items-center">
                 <h5 class="title font-semibold text-[26px]">Manage Users</h5>
                 <div class="flex flex-wrap justify-center">
-                    <a href="{{ route('pdf') }}"
-                        class="bg-emerald-700 hover:bg-emerald-900 rounded-lg text-white text-md text-center self-center px-3 py-2 my-2 mx-2">Add
-                        User</a>
+                    <button data-modal-target="add-user-modal" data-modal-toggle="add-user-modal"
+                        class="block bg-emerald-700 hover:bg-emerald-800 rounded-lg text-white text-md text-center self-center px-3 md:px-6 py-2 my-2 mx-2">Add
+                        User
+                    </button>
                 </div>
             </div>
             <div class="overflow-x-auto">
@@ -33,9 +36,10 @@
                                 <td>{{ $user->updated_at }}</td>
                                 <td>
                                     <div style="display: flex; gap: 0.5rem; justify-content: center;">
-                                        <button data-modal-target="edit-modal"
-                                            class="w-20 px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600"
-                                            data-modal-toggle="add-modal">Edit</button>
+                                        <button class="w-20 px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600"
+                                            data-modal-target="updateModal{{ $user->id }}"
+                                            data-modal-toggle="updateModal{{ $user->id }}">Edit</button>
+
                                         <form action="{{ route('admin.softDelete', $user->id) }}" method="POST"
                                             onsubmit="confirmation(event)">
                                             @csrf
@@ -56,8 +60,10 @@
     </div>
     @include('layouts.footer')
     <script>
+        //DataTable
         new DataTable('#usersTable');
 
+        //Delete Sweet Alert
         function confirmation(event) {
             event.preventDefault();
             swal({
@@ -73,8 +79,6 @@
             });
         }
     </script>
-
-
 
 
     </body>

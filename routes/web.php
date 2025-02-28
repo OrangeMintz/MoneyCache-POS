@@ -7,6 +7,7 @@ use App\Http\Controllers\TransactionsGrossTotalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CsvController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckRole;
 
 Route::get('/', function () {
@@ -42,17 +43,20 @@ Route::middleware('auth')->group(function () {
     Route::middleware([CheckRole::class . ":admin"])->group(function () {
         // USERS
         Route::prefix('user')->group(function () {
-            Route::get('/', [AdminController::class, 'index'])->name('admin.users');
-            Route::delete('/{id}', [AdminController::class, 'softDelete'])->name('admin.softDelete');
+            Route::get('/', [UserController::class, 'index'])->name('admin.users');
+            Route::put('/{id}', [UserController::class, 'update'])->name('admin.update');
+            Route::delete('/{id}', [UserController::class, 'softDelete'])->name('admin.softDelete');
+            Route::post('/', [UserController::class, 'store'])->name('admin.post');
         });
 
         Route::prefix('sheets')->group(function () {
             Route::get('/', [TransactionsController::class, 'export'])->name('transactions.sheet');
             Route::get('/export/csv', [CsvController::class, 'csv'])->name('transactions.sheet.csv');
+            Route::get('/export/pdf', [PDFController::class, 'pdf'])->name('transactions.sheet.pdf');
+
         });
     });
 
-    Route::get('/pdf', [PDFController::class, 'pdf'])->name('pdf');
 });
 
 

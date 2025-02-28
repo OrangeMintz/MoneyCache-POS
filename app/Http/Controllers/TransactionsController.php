@@ -20,10 +20,14 @@ class TransactionsController extends Controller
     public function list(Request $request)
     {
         if ($request->ajax()) {
-            // $transactions = Transactions::with('cashier')->get();
-            $transactions = Transactions::with('cashier')->get();
+            $user = Auth::user();
+            $transactions = ($user->role === 'admin')
+                ? Transactions::with('cashier')->get()
+                : Transactions::with('cashier')->where('cashier_id', $user->id)->get();
+
             return response()->json(['data' => $transactions]);
         }
+
         return view('pages.transactions-list');
     }
 
@@ -121,7 +125,6 @@ class TransactionsController extends Controller
     public function update(Request $request, string $id)
     {
         $validated = $request->validate([
-            'time' => 'string|nullable',
             'time' => 'string|in:AM,MID,PM',
             'cash' => 'numeric|nullable',
             'check' => 'numeric|nullable',

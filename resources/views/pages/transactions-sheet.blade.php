@@ -3,13 +3,20 @@
     <div class="font-sans bg-gray-100 p-6">
         <div class="bg-white p-4">
             <div class="py-2 flex justify-between items-center">
-                <div>
+                <div class="flex gap-3">
                     <a id="downloadCsv"
                         href="{{ route('transactions.sheet.csv', ['date' => request('date') ?? now()->format('Y-m-d')]) }}"
                         class="bg-emerald-700 hover:bg-emerald-900 rounded-lg text-white text-md text-center px-3 py-2">
-                        Download CSV <i class="fas fa-file-csv ml-1"></i>
+                        Download as CSV <i class="fas fa-file-csv ml-1"></i>
+                    </a>
+                    <a href="{{ route('transactions.sheet.pdf', ['date' => request('date') ?? now()->format('Y-m-d')]) }}"
+                        class="bg-red-700 hover:bg-red-900 rounded-lg text-white text-md text-center px-3 py-2">Download
+                        as PDF <i class="fas fa-file-pdf ml-1"></i>
                     </a>
                 </div>
+                {{-- <div class="flex flex-wrap justify-center">
+
+                </div> --}}
                 <div>
                     <div class="relative max-w-sm">
                         <input id="datepicker" type="text"
@@ -32,6 +39,7 @@
                     </thead>
                     <tbody>
                         @php
+                            // INTEREST RATES
                             $interestRates = [
                                 'cash' => 0,
                                 'gcash' => 2,

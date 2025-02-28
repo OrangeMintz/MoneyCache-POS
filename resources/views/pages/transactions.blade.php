@@ -3,6 +3,7 @@
 <main>
     <div class="font-sans bg-gray-100 p-6">
         <div class="bg-white p-4">
+            {{-- <h5 class="title font-semibold text-[26px]">Add Transaction</h5> --}}
             <div class="container-transaction mx-auto">
 
                 {{-- First column for Cashier Form --}}
@@ -248,7 +249,7 @@
 </script>
 
 
-{{-- EDIT validation: no negative, atleast one field is filled --}}
+{{-- STORE Transaction validation: no negative, atleast one field is filled --}}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const form = document.getElementById("storeForm");
