@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -74,11 +75,13 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         $validated = $request->validate([
-            'name' => 'required',
+            'name' => 'required|string',
             'email' => 'required|email|unique:users,email,' . $id,
             'role' => 'required|in:admin,cashier',
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
         ]);
+
+        Log::info("Validated: ",$validated);
 
         $existingUser = User::where('email', $validated['email'])
             ->where('id', '!=', $id)
