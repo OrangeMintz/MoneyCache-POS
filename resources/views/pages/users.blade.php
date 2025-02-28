@@ -1,5 +1,6 @@
 @include('layouts.header')
 @include('components.modals.add-user')
+@include('components.modals.edit-user')
 
 <main>
     <div class="font-sans bg-gray-100 p-6">
@@ -34,9 +35,9 @@
                                 <td>{{ $user->updated_at }}</td>
                                 <td>
                                     <div style="display: flex; gap: 0.5rem; justify-content: center;">
-                                        <button data-modal-target="edit-modal"
+                                        <button data-modal-target="edit-user-modal"
                                             class="w-20 px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600"
-                                            data-modal-toggle="add-modal">Edit</button>
+                                            data-modal-toggle="edit-user-modal">Edit</button>
                                         <form action="{{ route('admin.softDelete', $user->id) }}" method="POST"
                                             onsubmit="confirmation(event)">
                                             @csrf
@@ -62,8 +63,10 @@
     </div>
     @include('layouts.footer')
     <script>
+        //DataTable
         new DataTable('#usersTable');
 
+        //Delete Sweet Alert
         function confirmation(event) {
             event.preventDefault();
             swal({
@@ -79,10 +82,6 @@
             });
         }
     </script>
-
-
-
-    
 
 
     </body>
