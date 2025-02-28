@@ -9,7 +9,7 @@
                         class="bg-emerald-700 hover:bg-emerald-900 rounded-lg text-white text-md text-center px-3 py-2">
                         Download as CSV <i class="fas fa-file-csv ml-1"></i>
                     </a>
-                    <a href="{{ route('pdf') }}"
+                    <a href="{{ route('transactions.sheet.pdf', ['date' => request('date') ?? now()->format('Y-m-d')]) }}"
                         class="bg-red-700 hover:bg-red-900 rounded-lg text-white text-md text-center px-3 py-2">Download
                         as PDF <i class="fas fa-file-pdf ml-1"></i>
                     </a>
