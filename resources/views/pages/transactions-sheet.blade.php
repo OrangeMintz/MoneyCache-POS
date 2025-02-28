@@ -32,6 +32,7 @@
                     </thead>
                     <tbody>
                         @php
+                            // INTEREST RATES
                             $interestRates = [
                                 'cash' => 0,
                                 'gcash' => 2,
