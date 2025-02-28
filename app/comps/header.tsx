@@ -92,22 +92,22 @@ export default function Navbar() {
                    
                         <li>
                             <Link href="/dashboard" className="flex items-center p-2 rounded-md hover:bg-green-200 transition-colors">
-                                <span><b>Transactions</b></span>
+                                <span>Transactions</span>
                             </Link>
                         </li>
                         <li>
                             <Link href="/transactionlist" className="flex items-center p-2 rounded-md hover:bg-green-200 transition-colors">
-                                <span><b>Transaction List</b></span>
+                                <span>Transaction List</span>
                             </Link>
                         </li>
                         <li>
                             <Link href="/user" className="flex items-center p-2 rounded-md hover:bg-green-200 transition-colors">
-                                <span><b>Users</b></span>
+                                <span>Users</span>
                             </Link>
                         </li>
                         <li>
                             <Link href="/Product" className="flex items-center p-2 rounded-md hover:bg-green-300 transition-colors">
-                                <span><b>Sheets</b></span>
+                                <span>Sheets</span>
                             </Link>
                         </li>
                     </ul>
