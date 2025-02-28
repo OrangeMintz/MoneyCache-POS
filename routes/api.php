@@ -22,16 +22,15 @@ Route::middleware(['auth:api'])->group(function () {
             Route::put('/{id}', [TransactionsController::class, 'update'])->name('api.transaction.update');
             Route::delete('/{id}', [TransactionsController::class, 'softDelete'])->name('api.transactions.softDelete');
         });
-    
+
         Route::prefix('transactions')->group(function () {
             Route::get('/', [TransactionsController::class, 'retrieve']);
         });
     });
-    
+
     // Exclusive routes for admin only
     Route::middleware([CheckRole::class . ":admin"])->group(function () {
 
-        // Transaction routes for admin
         Route::prefix('transactions')->group(function () {
             Route::get('/gross/{type}', [TransactionsGrossTotalController::class, 'gross']);
             Route::get('/net/{type}', [TransactionsGrossTotalController::class, 'net']);
@@ -51,7 +50,7 @@ Route::middleware(['auth:api'])->group(function () {
 
     });
 
-    
+
 });
 
 
