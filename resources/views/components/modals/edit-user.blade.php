@@ -1,7 +1,7 @@
 <!-- Main Modal -->
 @foreach ($users as $user)
     <div id="updateModal{{ $user->id }}" tabindex="-1" aria-hidden="true"
-        class="hidden fixed inset-0 z-50 items-center justify-center">
+        class="hidden fixed inset-0 z-50 flex items-center justify-center">
         <!-- Overlay -->
         <div class="absolute inset-0 bg-gray-900 bg-opacity-50"></div>
 
@@ -32,11 +32,10 @@
                     <div class="col-span-2 sm:col-span-1">
                         <label for="role"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
-                        <select name="role" id="role"
+                        <select name="role" id="role" required
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
-                            <option selected value="">Select Role</option>
-                            <option value="admin">Admin</option>
-                            <option value="cashier">Cashier</option>
+                            <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
+                            <option value="cashier" {{ $user->role === 'cashier' ? 'selected' : '' }}>Cashier</option>
                         </select>
                     </div>
                     <div class="col-span-2">
@@ -44,14 +43,14 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
                         <input type="text" name="name" id="name"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
-                            placeholder="Enter new name" value="{{ $user->name }}" required>
+                            placeholder="Enter New Name" value="{{ $user->name }}" required>
                     </div>
                     <div class="col-span-2 sm:col-span-1">
                         <label for="email"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
                         <input type="email" name="email" id="email"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
-                            placeholder="Enter new email" value="{{ $user->email }}">
+                            placeholder="Enter New Email" value="{{ $user->email }}" required>
                     </div>
 
                     <div class="col-span-2 sm:col-span-1">
@@ -59,7 +58,7 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                         <input type="password" name="password" id="password"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
-                            placeholder="Enter new password" required>
+                            placeholder="Enter New Password">
                     </div>
 
                 </div>

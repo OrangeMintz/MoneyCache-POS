@@ -76,8 +76,8 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'role' => 'in:admin,cashier',
+            'email' => 'required|email',
+            'role' => 'required|in:admin,cashier',
             'password' => ['nullable', Rules\Password::defaults()],
 
         ]);
@@ -90,7 +90,6 @@ class UserController extends Controller
 
         if ($existingUser) {
             $message = 'This email is already taken';
-
             if ($request->wantsJson()) {
                 return response()->json(['status' => 'error', 'message' => $message], 422);
             }
