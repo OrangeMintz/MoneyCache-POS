@@ -348,12 +348,13 @@ export default function CollapsibleTable() {
               className=" mb-4 text-sm p-2 border rounded w-1/4"
             />
           </div>
+          
 
           <div className="mb-4 flex justify-end col-span-2 relative">
             <button
               id="dropdownDefaultButton"
               data-dropdown-toggle="dropdown"
-              className="inline-flex  justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
+              className="inline-flex  justify-center gap-x-1 rounded-md bg-white sm:px-3 sm:py-3 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
               type="button"
               onClick={() => {
                 const dropdown = document.getElementById('dropdownContent');
@@ -365,11 +366,85 @@ export default function CollapsibleTable() {
               }}
             >
               Visibility
-              <svg className="w-2.5 h-5.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+              <svg className="md:w-2.5 md:h-5.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
               </svg>
             </button>
 
+
+            <div>
+                <button  
+                      id="AddModal" 
+                      className='inline-flex justify-center gap-x-1 md:ml-1 rounded-md bg-green-600 sm:px-3 sm:py-3 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10'
+                      onClick={() => {
+                        const modal = document.getElementById('default-modal');
+                        modal.classList.toggle('hidden');
+                      }}
+                    >
+                      Add User
+                    </button>
+                  </div>
+                    
+                  <div id="default-modal" aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-900 bg-opacity-50">
+                    <div className="relative p-4 md:p6 w-full max-w-2xl max-h-full">
+                      <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                          <h3 className="text-xl md:ml-7 font-semibold text-gray-900 dark:text-white">
+                           Add User 
+                          </h3>
+                          <button 
+                            type="button" 
+                            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" 
+                            onClick={() => {
+                              document.getElementById('default-modal').classList.add('hidden');
+                            }}
+                          >
+                            <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            </svg>
+                            <span className="sr-only">Close modal</span>
+                          </button>
+                        </div>
+                      
+                        <div className="md:p-7 space-y-4">
+  <form className="p-4 md:p-5" action="">
+    <div className='md:mb-4'>
+      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="">Name: </label>
+      <input type="text" className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'  />
+    </div>
+    <div className='md:mb-4'>
+      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="">Email: </label>
+      <input type="text" className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500' />
+    </div>
+    <div className='md:mb-4'>
+      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="">Role: </label>
+      <input type="text" className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'  />
+    </div>
+    
+    <div className="flex justify-end mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
+      <button 
+        type="button" 
+        className="text-white bg-green-500 hover:opacity-80 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      >
+        Add User
+      </button>
+      <button 
+        type="button" 
+        className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-gray-200 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+        onClick={() => {
+          document.getElementById('default-modal').classList.add('hidden');
+        }}
+      >
+        Decline
+      </button>
+    </div>
+  </form>
+</div>
+                      </div>
+                    </div>
+                  </div>
+            
             <div
               id="dropdownContent"
               className="hidden opacity-0 -translate-y-2 absolute top-full right-0 mt-1 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 sm:w-48 md:w-56 dark:bg-gray-700 transition-all duration-300 ease-in-out transform"
