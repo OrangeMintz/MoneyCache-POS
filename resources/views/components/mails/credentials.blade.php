@@ -56,7 +56,7 @@
                                                             <tr>
                                                                 <td align="center"
                                                                     style="padding:0;Margin:0;padding-top:10px;padding-bottom:10px;font-size:0px">
-                                                                    <img src="../../../../public/img/LogoIcon.png"
+                                                                    <img src="https://play-lh.googleusercontent.com/KP_ijrJcMl9tVs6R-E7ZF02ThEwFll8fxknIU7k5dzK3xwL4MtJYLSdPUCosSOxiuXxD=w480-h960"
                                                                         alt
                                                                         style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"
                                                                         width="100">
@@ -82,7 +82,7 @@
                                                                             {{ $user->name }}!</strong><br><br>Thank
                                                                         you for joining us!
                                                                         We're thrilled to have you on board. Below are
-                                                                        the details for your Dormy account:
+                                                                        the details for your MoneyCache POS account:
                                                                     </p>
                                                                 </td>
                                                             </tr>
@@ -274,7 +274,8 @@
                                                                     style="padding:0;Margin:0;padding-top:10px;padding-bottom:10px">
                                                                     <span class="es-button-border"
                                                                         style="border-style:solid;border-color:#2CB543;background:#5C68E2;border-width:0px;display:inline-block;border-radius:25px;width:auto"><a
-                                                                            href="" class="es-button" target="_blank"
+                                                                            href="" class="es-button"
+                                                                            target="_blank"
                                                                             style="mso-style-priority:100 !important;text-decoration:none;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;color:#FFFFFF;font-size:20px;padding:10px 30px 10px 30px;display:inline-block;background:#1d96ff;border-radius:25px;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-weight:normal;font-style:normal;line-height:24px;width:auto;text-align:center;mso-padding-alt:0;mso-border-alt:10px solid #ff771d;padding-left:30px;padding-right:30px">Open
                                                                             your Account</a></span>
                                                                 </td>
@@ -286,7 +287,8 @@
                                                                         style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
                                                                         If you have any questions or need assistance,
                                                                         feel free to reach out to our support
-                                                                        team.<br>Email us at support@money-cache.org. We're
+                                                                        team.<br>Email us at support@money-cache.org.
+                                                                        We're
                                                                         here to help!</p>
                                                                     <p
                                                                         style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
