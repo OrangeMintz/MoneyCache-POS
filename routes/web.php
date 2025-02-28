@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
         Route::prefix('user')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('admin.users');
             Route::delete('/{id}', [UserController::class, 'softDelete'])->name('admin.softDelete');
+            Route::post('/', [UserController::class, 'store'])->name('admin.post');
         });
 
         Route::prefix('sheets')->group(function () {

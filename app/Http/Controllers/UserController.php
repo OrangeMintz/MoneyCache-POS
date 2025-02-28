@@ -31,7 +31,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'role' => 'required|in:AM,MID,PM',
+            'role' => 'required|in:admin,cashier',
         ]);
 
         $plainPassword = Str::random(10);
