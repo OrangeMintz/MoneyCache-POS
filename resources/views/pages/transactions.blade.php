@@ -1,11 +1,9 @@
 @include('layouts.header')
-
 <main>
     <div class="font-sans bg-gray-100 p-6">
         <div class="bg-white p-4">
             {{-- <h5 class="title font-semibold text-[26px]">Add Transaction</h5> --}}
             <div class="container-transaction mx-auto">
-
                 {{-- First column for Cashier Form --}}
                 <div class="bg-white rounded-lg shadow-md">
                     <form method="POST" action="{{ route('transaction.store') }}" id="storeForm">
@@ -157,8 +155,10 @@
                         <div class="w-full">
                             <label for="cashier_id" class="block text-sm font-medium">Cashier's
                                 Name:</label>
-                            <input type="hidden" id="cashier_id" name="cashier_id" value="{{ auth()->user()->id }}"  class="w-full p-3 border border-gray-300 rounded-md">
-                            <input type="text" value="{{ auth()->user()->name }}" disabled  class="w-full p-3 border border-gray-300 rounded-md">
+                            <input type="hidden" id="cashier_id" name="cashier_id" value="{{ auth()->user()->id }}"
+                                class="w-full p-3 border border-gray-300 rounded-md">
+                            <input type="text" value="{{ auth()->user()->name }}" disabled
+                                class="w-full p-3 border border-gray-300 rounded-md">
                         </div>
                         <div class="w-full">
                             <label for="time" class="block text-sm font-medium">Shift Time:</label>
@@ -247,8 +247,6 @@
         updateTotals();
     });
 </script>
-
-
 {{-- STORE Transaction validation: no negative, atleast one field is filled --}}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -262,7 +260,6 @@
                 "aub_ccard", "gcash", "food_panda", "streetby", "grabfood", "gc_claimed_others",
                 "gc_claimed_own"
             ];
-
             paymentFields.forEach((field) => {
                 let input = document.getElementById(field);
                 let value = input.value.trim();
@@ -305,11 +302,6 @@
         });
     });
 </script>
-
-
-
-
-
 </body>
 
 </html>

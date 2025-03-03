@@ -111,7 +111,10 @@
                 defaultContent: ''
             },
             {
-                data: 'cashier.name'
+                data: 'cashier.name',
+                render: function(data) {
+                    return data ? data : '-';
+                }
             },
             {
                 data: 'created_at',
