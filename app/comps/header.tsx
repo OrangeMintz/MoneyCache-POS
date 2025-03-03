@@ -112,12 +112,12 @@ export default function Navbar() {
                 {/* Navigation links with hover animations */}
                 <nav className="mt-6">
                     <ul className="space-y-1 px-3">
-                    <li>
+                        <li>
                             <Link
                                 href="/dashboard"
                                 className={`flex items-center p-3 rounded-md transition-all duration-200 
-                                    ${isActive('/dashboard') 
-                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
+                                    ${isActive('/dashboard')
+                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2'
                                         : 'hover:bg-green-200 hover:translate-x-1'}`}
                             >
                                 <span className="font-medium">Dashboard</span>
@@ -127,8 +127,8 @@ export default function Navbar() {
                             <Link
                                 href="/transaction"
                                 className={`flex items-center p-3 rounded-md transition-all duration-200 
-                                    ${isActive('/transaction') 
-                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
+                                    ${isActive('/transaction')
+                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2'
                                         : 'hover:bg-green-200 hover:translate-x-1'}`}
                             >
                                 <span className="font-medium">Transactions</span>
@@ -214,7 +214,7 @@ export default function Navbar() {
                                 />
                                 <Link href="/dashboard" className="ml-2">
                                     <span className="text-lg text-black dark:text-gray-200 hover:text-green-300 font-bold">
-                                        Moneycache
+                                        Moneycaches
                                     </span>
                                 </Link>
                             </div>
@@ -223,28 +223,26 @@ export default function Navbar() {
                         {/* Desktop navigation */}
                         <div className="hidden md:flex md:items-center md:justify-center flex-1 px-2">
                             <div className="flex space-x-1">
-                            <Link href="/dashboard">
-                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
-                                        isActive('/dashboard') 
-                                            ? 'bg-green-100 text-green-800' 
+                                <Link href="/dashboard">
+                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/dashboard')
+                                            ? 'bg-green-100 text-green-800'
                                             : 'text-black dark:text-gray-200 hover:text-green-300'
-                                    }`}>
+                                        }`}>
                                         <span>Dashboard</span>
                                     </button>
                                 </Link>
                                 <Link href="/transaction">
-                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
-                                        isActive('/transaction') 
-                                            ? 'bg-green-100 text-green-800' 
+                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/transaction')
+                                            ? 'bg-green-100 text-green-800'
                                             : 'text-black dark:text-gray-200 hover:text-green-300'
-                                    }`}>
+                                        }`}>
                                         <span>Transaction</span>
                                     </button>
                                 </Link>
                                 <Link href="/transactionlist">
                                     <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/transactionlist')
-                                            ? 'bg-green-100 text-green-800'
-                                            : 'text-black dark:text-gray-200 hover:text-green-300'
+                                        ? 'bg-green-100 text-green-800'
+                                        : 'text-black dark:text-gray-200 hover:text-green-300'
                                         }`}>
                                         <span>Transaction List</span>
                                     </button>
@@ -252,8 +250,8 @@ export default function Navbar() {
                                 {user ? (user.role == 'admin' ?
                                     <Link href="/user">
                                         <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/user')
-                                                ? 'bg-green-100 text-green-800'
-                                                : 'text-black dark:text-gray-200 hover:text-green-300'
+                                            ? 'bg-green-100 text-green-800'
+                                            : 'text-black dark:text-gray-200 hover:text-green-300'
                                             }`}>
                                             <span>Users</span>
                                         </button>
@@ -263,8 +261,8 @@ export default function Navbar() {
                                 {user ? (user.role == 'admin' ?
                                     <Link href="/Product">
                                         <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/Product')
-                                                ? 'bg-green-100 text-green-800'
-                                                : 'text-black dark:text-gray-200 hover:text-green-300'
+                                            ? 'bg-green-100 text-green-800'
+                                            : 'text-black dark:text-gray-200 hover:text-green-300'
                                             }`}>
                                             <span>Sheets</span>
                                         </button>
