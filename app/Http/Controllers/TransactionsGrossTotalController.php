@@ -147,6 +147,42 @@ class TransactionsGrossTotalController extends Controller
     ]);
 }
 
+public function getOverallGrossNet()
+{
+    $particulars = Config::get('transactions.valid_columns'); // Get all transaction columns
+    $fees = Config::get('transactions.fees');
+    $transactions = Transactions::with('cashier')->get();
+
+    $grossTotal = 0;
+    $netTotal = 0;
+
+    foreach ($particulars as $particular) {
+
+        if (
+            $particular !== 'sub_total_trade' &&
+            $particular !== 'sub_total_non_trade' &&
+            $particular !== 'grand_total'
+        ) {
+                    $gross = Transactions::sum($particular);
+            $compute = isset($fees[$particular]) ? 1 - ($fees[$particular] / 100) : 1;
+            $net = Transactions::sum(DB::raw("`$particular` * $compute"));
+        
+            // Accumulate totals instead of overwriting
+            $grossTotal += round($gross, 2);
+            $netTotal += round($net, 2);
+        }
+        
+    }
+
+    return response()->json([
+        "status" => 1,
+        "gross" => round($grossTotal, 2),
+        "net" => round($netTotal, 2)
+    ]);
+}
+
+
+
 
 
 
