@@ -7,20 +7,6 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
-
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
 ## Execute Commands
 Before starting the application, run the following commands to install dependencies and build assets properly. These steps ensure the project runs smoothly with the required packages.
 
@@ -49,7 +35,58 @@ Compiles and optimizes frontend assets for production.
 php artisan key:generate
 ```
 
+### Run the Applicaiton 
+After installing dependencies, start the application using:
+```bash
+php composer run dev
+```
 
+### Open the Application 
+Open your browser and type http://127.0.0.1:8000/ on the searchbar
+
+## Screenshots
+
+<div align="center">
+  <img src="./docs/screenshots/127.0.0.1_8000_welcome.png" width="600" alt="Welcome Page Screenshot">
+</div>
+
+<div align="center">
+  <img src="./docs/screenshots/127.0.0.1_8000_register.png" width="600" alt="Register Page Screenshot">
+</div>
+
+<div align="center">
+  <img src="./docs/screenshots/127.0.0.1_8000_dashboard.png" width="600" alt="Dashboard Page Screenshot">
+</div>
+
+<div align="center">
+  <img src="./docs/screenshots/127.0.0.1_8000_user.png" width="600" alt="User Page Screenshot">
+</div>
+
+<div align="center">
+  <img src="./docs/screenshots/127.0.0.1_8000_transaction.png" width="600" alt="Transaction Page Screenshot">
+</div>
+
+<div align="center">
+  <img src="./docs/screenshots/127.0.0.1_8000_transactions.png" width="600" alt="Transactions Page Screenshot">
+</div>
+
+<div align="center">
+  <img src="./docs/screenshots/127.0.0.1_8000_sheets_date=2025-03-03.png" width="600" alt="Sheets Page Screenshot">
+</div>
+
+## About Laravel
+
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
 ## Learning Laravel
 
