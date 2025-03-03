@@ -1,13 +1,12 @@
 'use client';
 
+import { useAppContext } from '@/context/AppContext';
 import axios from 'axios';
 import { UserCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { UserCircle } from 'lucide-react';
-import { useAppContext } from '@/context/AppContext';
 
 export default function Navbar() {
     const { user, globalFunction } = useAppContext()
@@ -140,17 +139,23 @@ export default function Navbar() {
                         <li>
                             <Link
                                 href="/user"
-                                className="flex items-center p-3 rounded-md hover:bg-green-200 hover:translate-x-1 transition-all duration-200"
+                                className={`flex items-center p-3 rounded-md transition-all duration-200 
+                                    ${isActive('/user') 
+                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
+                                        : 'hover:bg-green-200 hover:translate-x-1'}`}
                             >
-                                <span className="font-medium">Users</span>
+                                <span className={`font-medium ${isActive('/user') ? 'text-green-800' : ''}`}>Users</span>
                             </Link>
                         </li>
                         <li>
                             <Link
                                 href="/Product"
-                                className="flex items-center p-3 rounded-md hover:bg-green-200 hover:translate-x-1 transition-all duration-200"
+                                className={`flex items-center p-3 rounded-md transition-all duration-200 
+                                    ${isActive('/Product') 
+                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
+                                        : 'hover:bg-green-200 hover:translate-x-1'}`}
                             >
-                                <span className="font-medium">Sheets</span>
+                                <span className={`font-medium ${isActive('/Product') ? 'text-green-800' : ''}`}>Sheets</span>
                             </Link>
                         </li>
                     </ul>
@@ -209,18 +214,30 @@ export default function Navbar() {
                         <div className="hidden md:flex md:items-center md:justify-center flex-1 px-2">
                             <div className="flex space-x-1">
                                 <Link href="/dashboard">
-                                    <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:text-gray-200 hover:text-green-300 focus:outline-none">
+                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
+                                        isActive('/dashboard') 
+                                            ? 'bg-green-100 text-green-800' 
+                                            : 'text-black dark:text-gray-200 hover:text-green-300'
+                                    }`}>
                                         <span>Transaction</span>
                                     </button>
                                 </Link>
                                 <Link href="/transactionlist">
-                                    <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:text-gray-200 hover:text-green-300 focus:outline-none">
+                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
+                                        isActive('/transactionlist') 
+                                            ? 'bg-green-100 text-green-800' 
+                                            : 'text-black dark:text-gray-200 hover:text-green-300'
+                                    }`}>
                                         <span>Transaction List</span>
                                     </button>
                                 </Link>
                                 {user ? (user.role == 'admin' ?
                                     <Link href="/user">
-                                        <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:text-gray-200 hover:text-green-300 focus:outline-none">
+                                        <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
+                                        isActive('/user') 
+                                            ? 'bg-green-100 text-green-800' 
+                                            : 'text-black dark:text-gray-200 hover:text-green-300'
+                                    }`}>
                                             <span>Users</span>
                                         </button>
                                     </Link> : ""
@@ -228,7 +245,11 @@ export default function Navbar() {
 
                                 {user ? (user.role == 'admin' ?
                                     <Link href="/Product">
-                                        <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:text-gray-200 hover:text-green-300 focus:outline-none">
+                                        <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
+                                        isActive('/Product') 
+                                            ? 'bg-green-100 text-green-800' 
+                                            : 'text-black dark:text-gray-200 hover:text-green-300'
+                                    }`}>
                                             <span>Sheets</span>
                                         </button>
                                     </Link> : ""
