@@ -21,13 +21,15 @@
                 Welcome back {{ auth()->user()->name }}!
             </h1>
             <p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
-                Here at MoneyCache we focus on markets where technology, innovation, and capital can unlock long-term
-                value and drive economic growth.
+                At MoneyCache, we back businesses with the tools and support they need to grow and
+                thrive.
+                Our focus is on smart financial solutions that make managing money easier and more
+                efficient.
             </p>
             <div class="flex flex-col mb-8 lg:mb-8 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
                 <a href="{{ route('transaction') }}"
                     class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-MCGreen hover:bg-MCHover focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900">
-                    Transaction +
+                    Transaction
                 </a>
                 <a href="#"
                     class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800">

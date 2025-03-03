@@ -116,8 +116,10 @@
                             </h1>
                             <p
                                 class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
-                                Here at Flowbite we focus on markets where technology, innovation, and capital can
-                                unlock long-term value and drive economic growth.
+                                At MoneyCache, we back businesses with the tools and support they need to grow and
+                                thrive.
+                                Our focus is on smart financial solutions that make managing money easier and more
+                                efficient.
                             </p>
                             <div
                                 class="flex flex-col mb-8 lg:mb-8 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
@@ -151,9 +153,12 @@
                             <div class="max-w-screen-md mb-8 lg:mb-16">
                                 <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-[#3A3A3A] dark:text-white">
                                     Designed for business teams like yours</h2>
-                                <p class="text-[#3A3A3A] sm:text-xl dark:text-white">Here at Flowbite we focus on
-                                    markets where technology, innovation, and capital can unlock long-term value and
-                                    drive economic growth.</p>
+                                <p class="text-[#3A3A3A] sm:text-xl dark:text-white">
+                                    MoneyCache simplifies payments and financial management, so your team can focus on
+                                    growing the business.
+                                    With fast transactions and smart tools, we help you stay in control of your cash
+                                    flow.
+                                </p>
                             </div>
                             <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-2 md:gap-12 md:space-y-0">
                                 <div>
