@@ -223,14 +223,18 @@ export default function Navbar() {
                         {/* Desktop navigation */}
                         <div className="hidden md:flex md:items-center md:justify-center flex-1 px-2">
                             <div className="flex space-x-1">
-                                <Link href="/dashboard">
-                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/dashboard')
-                                        ? 'bg-green-100 text-green-800'
-                                        : 'text-black dark:text-gray-200 hover:text-green-300'
-                                        }`}>
-                                        <span>Dashboard</span>
-                                    </button>
-                                </Link>
+                                {user ? (user.role == 'admin' ?
+                                    <Link href="/dashboard">
+                                        <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/dashboard')
+                                            ? 'bg-green-100 text-green-800'
+                                            : 'text-black dark:text-gray-200 hover:text-green-300'
+                                            }`}>
+                                            <span>Dashboard</span>
+                                        </button>
+                                    </Link>
+                                    : ""
+                                ) : ""}
+
                                 <Link href="/transaction">
                                     <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/transaction')
                                         ? 'bg-green-100 text-green-800'
@@ -328,18 +332,33 @@ export default function Navbar() {
                 {/* Mobile menu */}
                 <div className={open ? 'block md:hidden' : 'hidden md:hidden'}>
                     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                        <Link href="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
-                            Dashboard
-                        </Link>
+                        {user ? (user.role == 'admin' ?
+                            <Link href="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
+                                Dashboard
+                            </Link>
+                            : "") : ""}
+
                         <Link href="/transactionlist" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
+                            Transaction
+                        </Link>
+
+                        <Link href="/transaction" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
                             Transaction List
                         </Link>
-                        <Link href="/user" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
-                            Users
-                        </Link>
-                        <Link href="/Product" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
-                            Sheets
-                        </Link>
+                        {user ? (user.role == 'admin' ?
+                            <Link href="/user" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
+                                Users
+                            </Link>
+                            : "") : ""}
+
+                        {user ? (user.role == 'admin' ?
+                            <Link href="/Product" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
+                                Sheets
+                            </Link>
+                            : "") : ""}
+
+
+
                         <form onSubmit={logout}>
                             <button type="submit" className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
                                 Logout

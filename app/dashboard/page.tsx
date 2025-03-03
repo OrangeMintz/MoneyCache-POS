@@ -1,5 +1,5 @@
 'use client';
-import GaugeChart from '@/components/ui/gauge'; // Import the GaugeChart component
+import PieChart from '@/components/ui/piechart';
 import LineChart from '@/components/ui/linechart';
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
@@ -75,15 +75,7 @@ export default function Home() {
                         </div>
                         {/* Gauge Chart - spans fewer columns */}
                         <div className="bg-white rounded-lg shadow p-3 flex flex-col items-center">
-                            <GaugeChart />
-                            <div className="justify-center flex items-center gap-2 mt-2">
-                                <h1>Target</h1>
-                                <p>20%</p>
-                                <h1 className='block'>Revenue</h1>
-                                <p>50%</p>
-                                <h1>Sales</h1>
-                                <p>1000%</p>
-                            </div>
+                            <PieChart gross={totals ? totals.gross : 0} net={totals ? totals.net : 0} />
                         </div>
                     </div>
                 </div>
