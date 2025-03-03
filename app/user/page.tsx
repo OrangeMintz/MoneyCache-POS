@@ -96,7 +96,7 @@ function Row({ row, handleSave, visibleColumns }) {
     const token = localStorage.getItem('access_token')
 
     try {
-      const response = await api.delete(`/api/transaction/${row.id}`, {
+      const response = await api.delete(`/api/users/${row.id}`, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${token}`
@@ -109,8 +109,8 @@ function Row({ row, handleSave, visibleColumns }) {
         setSuccessIcon('')
         new Toast({
           position: "bottom-right",
-          onClose: () => { window.location.href = "/transactionlist"; },
-          toastMsg: "Successfully deleted transaction!",
+          onClose: () => { window.location.href = "/user"; },
+          toastMsg: "Successfully deleted user!",
           autoCloseTime: 1000,
           canClose: true,
           showProgress: true,
@@ -240,7 +240,7 @@ function Row({ row, handleSave, visibleColumns }) {
                       alt="Picture of the author"
                     />
                   </div>
-                  <p className="mb-4 text-gray-500 dark:text-gray-300">Are you sure you want to delete transaction {row.id}?</p>
+                  <p className="mb-4 text-gray-500 dark:text-gray-300">Are you sure you want to delete {row.name}?</p>
                   <div className="flex justify-center items-center space-x-4">
                     <button onClick={() => { setdeleteModalOpen(false) }} data-modal-toggle="deleteModal" type="button" className="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
                       No, cancel
@@ -487,7 +487,7 @@ export default function CollapsibleTable() {
           <div className="mb-4 flex justify-end col-span-2 relative">
             <button
               id="dropdownDefaultButton"
-              className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
+              className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
               type="button"
               onClick={() => setDropdownOpen(!dropdownOpen)}
             >
@@ -513,7 +513,7 @@ export default function CollapsibleTable() {
             <div>
               <button
                 id="AddModal"
-                className='inline-flex justify-center gap-x-1 md:ml-1 rounded-md bg-green-400 sm:px-3 sm:py-3 text-xs font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10'
+                className='inline-flex justify-center gap-x-1 md:ml-1 rounded-md bg-green-400 sm:px-3 sm:py-3 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10'
                 onClick={() => setAddModalView(true)}
               >
                 Add User

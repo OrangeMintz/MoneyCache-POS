@@ -6,8 +6,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { UserCircle } from 'lucide-react';
+import { useAppContext } from '@/context/AppContext';
 
 export default function Navbar() {
+    const { user, globalFunction } = useAppContext()
     const router = useRouter();
     const [open, setOpen] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -52,6 +54,7 @@ export default function Navbar() {
 
     // Close dropdown when clicking outside
     useEffect(() => {
+        globalFunction()
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setIsOpen(false);
@@ -153,8 +156,7 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* Top navigation */}
-            <nav className="dark:bg-gray-800 bg-gray-200 text-black border-b-2 sticky top-0 z-20 w-full">
+            {user && (<nav className="dark:bg-gray-800 bg-gray-200 text-black border-b-2 sticky top-0 z-20 w-full">
                 <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
                     <div className="flex justify-between items-center h-16">
                         {/* Logo and sidebar toggle */}
@@ -184,7 +186,7 @@ export default function Navbar() {
                                 />
                                 <Link href="/dashboard" className="ml-2">
                                     <span className="text-lg text-black dark:text-gray-200 hover:text-green-300 font-bold">
-                                        MoneyCache
+                                        Moneycache
                                     </span>
                                 </Link>
                             </div>
@@ -203,16 +205,23 @@ export default function Navbar() {
                                         <span>Transaction List</span>
                                     </button>
                                 </Link>
-                                <Link href="/user">
-                                    <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:text-gray-200 hover:text-green-300 focus:outline-none">
-                                        <span>Users</span>
-                                    </button>
-                                </Link>
-                                <Link href="/Product">
-                                    <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:text-gray-200 hover:text-green-300 focus:outline-none">
-                                        <span>Sheets</span>
-                                    </button>
-                                </Link>
+                                {user ? (user.role == 'admin' ?
+                                    <Link href="/user">
+                                        <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:text-gray-200 hover:text-green-300 focus:outline-none">
+                                            <span>Users</span>
+                                        </button>
+                                    </Link> : ""
+                                ) : ""}
+
+                                {user ? (user.role == 'admin' ?
+                                    <Link href="/Product">
+                                        <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:text-gray-200 hover:text-green-300 focus:outline-none">
+                                            <span>Sheets</span>
+                                        </button>
+                                    </Link> : ""
+                                ) : ""}
+
+
                             </div>
                         </div>
 
@@ -236,8 +245,8 @@ export default function Navbar() {
                    right-0 md:right-1/2 md:translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50`}
                                 >
                                     <div className="px-4 py-3 text-sm text-gray-900 text-center">
-                                        <h1 className="font-medium">Jepri Gwapogi</h1>
-                                        <p className="text-gray-500">Email</p>
+                                        <h1 className="font-medium">{user ? user.name + ` (${user.role})` : ""}</h1>
+                                        <p className="text-gray-500">{user ? user.email : ""}</p>
                                     </div>
                                     <hr className="border-gray-200" />
                                     <div className="py-1">
@@ -290,7 +299,7 @@ export default function Navbar() {
                         </form>
                     </div>
                 </div>
-            </nav>
+            </nav>)}
 
             {/* Overlay for mobile to close sidebar when clicked outside */}
             {sidebarOpen && (

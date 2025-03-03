@@ -2,11 +2,12 @@ import Exclude from '@/components/exclude';
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import { AppProvider } from '@/context/AppContext';
 
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"], 
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -22,7 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Exclude>{children}</Exclude>
+        <AppProvider>
+          <Exclude>{children}</Exclude>
+        </AppProvider>
       </body>
     </html>
   );

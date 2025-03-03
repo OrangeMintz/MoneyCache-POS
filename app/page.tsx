@@ -86,7 +86,7 @@ export default function Home() {
               {/* Improved alignment for remember me and forgot password */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <input id="remember" type="checkbox" required className="w-4 h-4 border border-gray-300 rounded  bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" />
+                  <input id="remember" type="checkbox" className="w-4 h-4 border border-gray-300 rounded  bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" />
                   <label htmlFor="remember" className="ml-2 text-sm text-gray-500 dark:text-gray-300" >Remember me</label>
                 </div>
                 <a href="/forgot-password" className="text-sm ml-2 text-primary-600 hover:underline dark:text-primary-500">Forgot password?</a>
