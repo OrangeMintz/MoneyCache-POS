@@ -89,7 +89,7 @@
                                         $value = '-';
                                         if ($key === 'cashier.name') {
                                             $cashier = $transactions->where('time', $time)->first();
-                                            $value = $cashier ? $cashier->cashier->name : '-';
+                                            $value = $cashier && $cashier->cashier ? $cashier->cashier->name : '-';
                                         } else {
                                             $value = $transactions->where('time', $time)->pluck($key)->first() ?? '-';
                                             if (is_numeric($value)) {
