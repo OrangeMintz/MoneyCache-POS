@@ -28,14 +28,27 @@ Compiles and optimizes frontend assets for production.
 npm run build
 ```
 
-### Passport Key Generate 
+### Configure Environment  
+Laravel requires a `.env` file for database and app settings. If not already present, create one by copying the example file:  
+
+```bash
+cp .env.example .env
+```
+
+### App Key Generate 
+The application key is used by Laravel for **encryption, securing sessions, and hashing passwords**.  
+This key ensures that encrypted data (such as cookies and sensitive user information) remains secure.  
+
+```bash
+php artisan key:generate 
+```
+<!-- ### Passport Key Generate 
 Key is used by Laravel for encryption, including hashing passwords, encrypting data, and securing sessions.
 Compiles and optimizes frontend assets for production.
 ```bash
-php artisan key:generate
-```
+php artisan key:generate -->
 
-### Run the Applicaiton 
+### Run the Application 
 After installing dependencies, start the application using:
 ```bash
 composer run dev
