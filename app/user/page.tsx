@@ -14,6 +14,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import Toast from 'typescript-toastify';
 import api from "../../utils/api";
+import Preloader from '../comps/preloader';
 
 
 async function fetchData() {
@@ -362,6 +363,7 @@ export default function CollapsibleTable() {
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [addModalView, setAddModalView] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [loading, setLoading] = useState(true)
   const [visibleColumns, setVisibleColumns] = useState({
     id: true,
     name: true,
@@ -382,6 +384,10 @@ export default function CollapsibleTable() {
   useEffect(() => {
     fetchData().then(setData);
   }, []);
+
+  useEffect(() => {
+    (data.length > 0) && setLoading(false)
+  }, [data]);
 
   const handleChangePage = (_event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
@@ -466,6 +472,10 @@ export default function CollapsibleTable() {
         theme: 'dark',
       });
     }
+  }
+
+  if (loading) {
+    return <Preloader />
   }
 
   return (
