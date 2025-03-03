@@ -53,10 +53,9 @@ npm install
 
 ### Run Npm run dev
 The npm run dev command in a Next.js frontend starts the development server, allowing you to run the application locally with features like hot reloading and fast refresh. By default, it runs on http://localhost:3000
-
 ```bash
 npm run dev
-
+```
 
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
