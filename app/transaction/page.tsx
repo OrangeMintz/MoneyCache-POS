@@ -1,9 +1,9 @@
 'use client';
+import Preloader from "@/app/comps/preloader";
+import { useAppContext } from "@/context/AppContext";
 import { useEffect, useState } from "react";
 import Toast from 'typescript-toastify';
 import api from "../../utils/api";
-import { useAppContext } from "@/context/AppContext";
-import Preloader from "@/app/comps/preloader";
 
 export default function CashierForm() {
     const { user, globalFunction } = useAppContext()

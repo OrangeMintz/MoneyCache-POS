@@ -1,5 +1,6 @@
 'use client';
 
+import { useAppContext } from '@/context/AppContext';
 import axios from 'axios';
 import { UserCircle } from 'lucide-react';
 import Image from 'next/image';
@@ -8,8 +9,9 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 export default function Navbar() {
+    const { user, globalFunction } = useAppContext()
     const router = useRouter();
-    const pathname = usePathname(); // Get current path
+    const pathname = usePathname();
     const [open, setOpen] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -53,6 +55,7 @@ export default function Navbar() {
 
     // Close dropdown when clicking outside
     useEffect(() => {
+        globalFunction()
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setIsOpen(false);
@@ -65,11 +68,9 @@ export default function Navbar() {
         };
     }, []);
 
-    // Helper function to determine if a link is active
-    const isActive = (path) => {
+    const isActive = (path) =>{
         return pathname === path;
-    };
-
+    }
     return (
         <>
             {/* Sidebar */}
@@ -108,27 +109,29 @@ export default function Navbar() {
                     </button>
                 </div>
 
-                {/* Navigation links with hover animations and active states */}
+                {/* Navigation links with hover animations */}
                 <nav className="mt-6">
                     <ul className="space-y-1 px-3">
                         <li>
                             <Link
                                 href="/dashboard"
                                 className={`flex items-center p-3 rounded-md transition-all duration-200 
-                                ${isActive('/dashboard') 
-                                    ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
-                                    : 'hover:bg-green-200 hover:translate-x-1'}`}
+                                    ${isActive('/dashboard') 
+                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
+                                        : 'hover:bg-green-200 hover:translate-x-1'}`}
                             >
-                                <span className={`font-medium ${isActive('/dashboard') ? 'text-green-800' : ''}`}>Transactions</span>
+                                <span className="font-medium">Transactions</span>
                             </Link>
                         </li>
                         <li>
                             <Link
                                 href="/transactionlist"
-                                className={`flex items-center p-3 rounded-md transition-all duration-200 
-                                ${isActive('/transactionlist') 
-                                    ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
-                                    : 'hover:bg-green-200 hover:translate-x-1'}`}
+                                className={`flex items-center p-3 rounded-md transition-all duration-200
+                                    ${
+                                        isActive('/transactionlist')
+                                        ? 'bg-green-200 border-1-4 border-green-600 pl-2'
+                                        : 'hover:bg-green-200 hover:translate-x-1'
+                                    }`}
                             >
                                 <span className={`font-medium ${isActive('/transactionlist') ? 'text-green-800' : ''}`}>Transaction List</span>
                             </Link>
@@ -137,9 +140,9 @@ export default function Navbar() {
                             <Link
                                 href="/user"
                                 className={`flex items-center p-3 rounded-md transition-all duration-200 
-                                ${isActive('/user') 
-                                    ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
-                                    : 'hover:bg-green-200 hover:translate-x-1'}`}
+                                    ${isActive('/user') 
+                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
+                                        : 'hover:bg-green-200 hover:translate-x-1'}`}
                             >
                                 <span className={`font-medium ${isActive('/user') ? 'text-green-800' : ''}`}>Users</span>
                             </Link>
@@ -148,9 +151,9 @@ export default function Navbar() {
                             <Link
                                 href="/Product"
                                 className={`flex items-center p-3 rounded-md transition-all duration-200 
-                                ${isActive('/Product') 
-                                    ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
-                                    : 'hover:bg-green-200 hover:translate-x-1'}`}
+                                    ${isActive('/Product') 
+                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
+                                        : 'hover:bg-green-200 hover:translate-x-1'}`}
                             >
                                 <span className={`font-medium ${isActive('/Product') ? 'text-green-800' : ''}`}>Sheets</span>
                             </Link>
@@ -171,8 +174,7 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* Top navigation */}
-            <nav className="dark:bg-gray-800 bg-gray-200 text-black border-b-2 sticky top-0 z-20 w-full">
+            {user && (<nav className="dark:bg-gray-800 bg-gray-200 text-black border-b-2 sticky top-0 z-20 w-full">
                 <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
                     <div className="flex justify-between items-center h-16">
                         {/* Logo and sidebar toggle */}
@@ -202,13 +204,13 @@ export default function Navbar() {
                                 />
                                 <Link href="/dashboard" className="ml-2">
                                     <span className="text-lg text-black dark:text-gray-200 hover:text-green-300 font-bold">
-                                        MoneyCache
+                                        Moneycache
                                     </span>
                                 </Link>
                             </div>
                         </div>
 
-                        {/* Desktop navigation with active indicators */}
+                        {/* Desktop navigation */}
                         <div className="hidden md:flex md:items-center md:justify-center flex-1 px-2">
                             <div className="flex space-x-1">
                                 <Link href="/dashboard">
@@ -229,24 +231,31 @@ export default function Navbar() {
                                         <span>Transaction List</span>
                                     </button>
                                 </Link>
-                                <Link href="/user">
-                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
+                                {user ? (user.role == 'admin' ?
+                                    <Link href="/user">
+                                        <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
                                         isActive('/user') 
                                             ? 'bg-green-100 text-green-800' 
                                             : 'text-black dark:text-gray-200 hover:text-green-300'
                                     }`}>
-                                        <span>Users</span>
-                                    </button>
-                                </Link>
-                                <Link href="/Product">
-                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
+                                            <span>Users</span>
+                                        </button>
+                                    </Link> : ""
+                                ) : ""}
+
+                                {user ? (user.role == 'admin' ?
+                                    <Link href="/Product">
+                                        <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
                                         isActive('/Product') 
                                             ? 'bg-green-100 text-green-800' 
                                             : 'text-black dark:text-gray-200 hover:text-green-300'
                                     }`}>
-                                        <span>Sheets</span>
-                                    </button>
-                                </Link>
+                                            <span>Sheets</span>
+                                        </button>
+                                    </Link> : ""
+                                ) : ""}
+
+
                             </div>
                         </div>
 
@@ -270,8 +279,8 @@ export default function Navbar() {
                    right-0 md:right-1/2 md:translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50`}
                                 >
                                     <div className="px-4 py-3 text-sm text-gray-900 text-center">
-                                        <h1 className="font-medium">Jepri Gwapogi</h1>
-                                        <p className="text-gray-500">Email</p>
+                                        <h1 className="font-medium">{user ? user.name + ` (${user.role})` : ""}</h1>
+                                        <p className="text-gray-500">{user ? user.email : ""}</p>
                                     </div>
                                     <hr className="border-gray-200" />
                                     <div className="py-1">
@@ -302,35 +311,19 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                {/* Mobile menu with active indicators */}
+                {/* Mobile menu */}
                 <div className={open ? 'block md:hidden' : 'hidden md:hidden'}>
                     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                        <Link href="/dashboard" className={`block px-3 py-2 rounded-md text-base font-medium ${
-                            isActive('/dashboard') 
-                                ? 'bg-green-100 text-green-800' 
-                                : 'text-black hover:text-green-300 dark:text-gray-200'
-                        }`}>
+                        <Link href="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
                             Transaction
                         </Link>
-                        <Link href="/transactionlist" className={`block px-3 py-2 rounded-md text-base font-medium ${
-                            isActive('/transactionlist') 
-                                ? 'bg-green-100 text-green-800' 
-                                : 'text-black hover:text-green-300 dark:text-gray-200'
-                        }`}>
+                        <Link href="/transactionlist" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
                             Transaction List
                         </Link>
-                        <Link href="/user" className={`block px-3 py-2 rounded-md text-base font-medium ${
-                            isActive('/user') 
-                                ? 'bg-green-100 text-green-800' 
-                                : 'text-black hover:text-green-300 dark:text-gray-200'
-                        }`}>
+                        <Link href="/user" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
                             Users
                         </Link>
-                        <Link href="/Product" className={`block px-3 py-2 rounded-md text-base font-medium ${
-                            isActive('/Product') 
-                                ? 'bg-green-100 text-green-800' 
-                                : 'text-black hover:text-green-300 dark:text-gray-200'
-                        }`}>
+                        <Link href="/Product" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
                             Sheets
                         </Link>
                         <form onSubmit={logout}>
@@ -340,7 +333,7 @@ export default function Navbar() {
                         </form>
                     </div>
                 </div>
-            </nav>
+            </nav>)}
 
             {/* Overlay for mobile to close sidebar when clicked outside */}
             {sidebarOpen && (
