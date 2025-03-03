@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function Navbar() {
     const router = useRouter();
-    const pathname = usePathname();
+    const pathname = usePathname(); // Get current path
     const [open, setOpen] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -65,9 +65,11 @@ export default function Navbar() {
         };
     }, []);
 
-    const isActive = (path) =>{
+    // Helper function to determine if a link is active
+    const isActive = (path) => {
         return pathname === path;
-    }
+    };
+
     return (
         <>
             {/* Sidebar */}
@@ -106,29 +108,27 @@ export default function Navbar() {
                     </button>
                 </div>
 
-                {/* Navigation links with hover animations */}
+                {/* Navigation links with hover animations and active states */}
                 <nav className="mt-6">
                     <ul className="space-y-1 px-3">
                         <li>
                             <Link
                                 href="/dashboard"
                                 className={`flex items-center p-3 rounded-md transition-all duration-200 
-                                    ${isActive('/dashboard') 
-                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
-                                        : 'hover:bg-green-200 hover:translate-x-1'}`}
+                                ${isActive('/dashboard') 
+                                    ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
+                                    : 'hover:bg-green-200 hover:translate-x-1'}`}
                             >
-                                <span className="font-medium">Transactions</span>
+                                <span className={`font-medium ${isActive('/dashboard') ? 'text-green-800' : ''}`}>Transactions</span>
                             </Link>
                         </li>
                         <li>
                             <Link
                                 href="/transactionlist"
-                                className={`flex items-center p-3 rounded-md transition-all duration-200
-                                    ${
-                                        isActive('/transactionlist')
-                                        ? 'bg-green-200 border-1-4 border-green-600 pl-2'
-                                        : 'hover:bg-green-200 hover:translate-x-1'
-                                    }`}
+                                className={`flex items-center p-3 rounded-md transition-all duration-200 
+                                ${isActive('/transactionlist') 
+                                    ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
+                                    : 'hover:bg-green-200 hover:translate-x-1'}`}
                             >
                                 <span className={`font-medium ${isActive('/transactionlist') ? 'text-green-800' : ''}`}>Transaction List</span>
                             </Link>
@@ -136,17 +136,23 @@ export default function Navbar() {
                         <li>
                             <Link
                                 href="/user"
-                                className="flex items-center p-3 rounded-md hover:bg-green-200 hover:translate-x-1 transition-all duration-200"
+                                className={`flex items-center p-3 rounded-md transition-all duration-200 
+                                ${isActive('/user') 
+                                    ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
+                                    : 'hover:bg-green-200 hover:translate-x-1'}`}
                             >
-                                <span className="font-medium">Users</span>
+                                <span className={`font-medium ${isActive('/user') ? 'text-green-800' : ''}`}>Users</span>
                             </Link>
                         </li>
                         <li>
                             <Link
                                 href="/Product"
-                                className="flex items-center p-3 rounded-md hover:bg-green-200 hover:translate-x-1 transition-all duration-200"
+                                className={`flex items-center p-3 rounded-md transition-all duration-200 
+                                ${isActive('/Product') 
+                                    ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
+                                    : 'hover:bg-green-200 hover:translate-x-1'}`}
                             >
-                                <span className="font-medium">Sheets</span>
+                                <span className={`font-medium ${isActive('/Product') ? 'text-green-800' : ''}`}>Sheets</span>
                             </Link>
                         </li>
                     </ul>
@@ -202,26 +208,42 @@ export default function Navbar() {
                             </div>
                         </div>
 
-                        {/* Desktop navigation */}
+                        {/* Desktop navigation with active indicators */}
                         <div className="hidden md:flex md:items-center md:justify-center flex-1 px-2">
                             <div className="flex space-x-1">
                                 <Link href="/dashboard">
-                                    <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:text-gray-200 hover:text-green-300 focus:outline-none">
+                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
+                                        isActive('/dashboard') 
+                                            ? 'bg-green-100 text-green-800' 
+                                            : 'text-black dark:text-gray-200 hover:text-green-300'
+                                    }`}>
                                         <span>Transaction</span>
                                     </button>
                                 </Link>
                                 <Link href="/transactionlist">
-                                    <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:text-gray-200 hover:text-green-300 focus:outline-none">
+                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
+                                        isActive('/transactionlist') 
+                                            ? 'bg-green-100 text-green-800' 
+                                            : 'text-black dark:text-gray-200 hover:text-green-300'
+                                    }`}>
                                         <span>Transaction List</span>
                                     </button>
                                 </Link>
                                 <Link href="/user">
-                                    <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:text-gray-200 hover:text-green-300 focus:outline-none">
+                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
+                                        isActive('/user') 
+                                            ? 'bg-green-100 text-green-800' 
+                                            : 'text-black dark:text-gray-200 hover:text-green-300'
+                                    }`}>
                                         <span>Users</span>
                                     </button>
                                 </Link>
                                 <Link href="/Product">
-                                    <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black dark:text-gray-200 hover:text-green-300 focus:outline-none">
+                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
+                                        isActive('/Product') 
+                                            ? 'bg-green-100 text-green-800' 
+                                            : 'text-black dark:text-gray-200 hover:text-green-300'
+                                    }`}>
                                         <span>Sheets</span>
                                     </button>
                                 </Link>
@@ -280,19 +302,35 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                {/* Mobile menu */}
+                {/* Mobile menu with active indicators */}
                 <div className={open ? 'block md:hidden' : 'hidden md:hidden'}>
                     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                        <Link href="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
+                        <Link href="/dashboard" className={`block px-3 py-2 rounded-md text-base font-medium ${
+                            isActive('/dashboard') 
+                                ? 'bg-green-100 text-green-800' 
+                                : 'text-black hover:text-green-300 dark:text-gray-200'
+                        }`}>
                             Transaction
                         </Link>
-                        <Link href="/transactionlist" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
+                        <Link href="/transactionlist" className={`block px-3 py-2 rounded-md text-base font-medium ${
+                            isActive('/transactionlist') 
+                                ? 'bg-green-100 text-green-800' 
+                                : 'text-black hover:text-green-300 dark:text-gray-200'
+                        }`}>
                             Transaction List
                         </Link>
-                        <Link href="/user" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
+                        <Link href="/user" className={`block px-3 py-2 rounded-md text-base font-medium ${
+                            isActive('/user') 
+                                ? 'bg-green-100 text-green-800' 
+                                : 'text-black hover:text-green-300 dark:text-gray-200'
+                        }`}>
                             Users
                         </Link>
-                        <Link href="/Product" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
+                        <Link href="/Product" className={`block px-3 py-2 rounded-md text-base font-medium ${
+                            isActive('/Product') 
+                                ? 'bg-green-100 text-green-800' 
+                                : 'text-black hover:text-green-300 dark:text-gray-200'
+                        }`}>
                             Sheets
                         </Link>
                         <form onSubmit={logout}>
