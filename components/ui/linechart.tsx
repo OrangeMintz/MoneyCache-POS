@@ -66,7 +66,7 @@ const AreaLineChart: React.FC<LineChartProps> = ({ transactions }) => {
       options={options}
       series={series}
       type="area" // Changed from "line" to "area"
-      height={250} // Height of the chart
+      height={300} // Height of the chart
     />
   );
 };
