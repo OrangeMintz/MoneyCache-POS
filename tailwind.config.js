@@ -18,6 +18,7 @@ export default {
             },
             colors: {
                 MCGreen: "#6ABD45",
+                MCHover: "#5AA23D",
                 TableLYellow: "#FAF2C7",
                 TableBlue:"#1D2D5C",
                 TableYellow:"#F3D963",
