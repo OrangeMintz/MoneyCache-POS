@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { UserCircle } from 'lucide-react';
 
 export default function Navbar() {
     const { user, globalFunction } = useAppContext()
@@ -138,8 +139,8 @@ export default function Navbar() {
                             <Link
                                 href="/user"
                                 className={`flex items-center p-3 rounded-md transition-all duration-200 
-                                    ${isActive('/user') 
-                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
+                                    ${isActive('/user')
+                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2'
                                         : 'hover:bg-green-200 hover:translate-x-1'}`}
                             >
                                 <span className={`font-medium ${isActive('/user') ? 'text-green-800' : ''}`}>Users</span>
@@ -149,8 +150,8 @@ export default function Navbar() {
                             <Link
                                 href="/Product"
                                 className={`flex items-center p-3 rounded-md transition-all duration-200 
-                                    ${isActive('/Product') 
-                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
+                                    ${isActive('/Product')
+                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2'
                                         : 'hover:bg-green-200 hover:translate-x-1'}`}
                             >
                                 <span className={`font-medium ${isActive('/Product') ? 'text-green-800' : ''}`}>Sheets</span>
@@ -212,30 +213,27 @@ export default function Navbar() {
                         <div className="hidden md:flex md:items-center md:justify-center flex-1 px-2">
                             <div className="flex space-x-1">
                                 <Link href="/dashboard">
-                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
-                                        isActive('/dashboard') 
-                                            ? 'bg-green-100 text-green-800' 
+                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/dashboard')
+                                            ? 'bg-green-100 text-green-800'
                                             : 'text-black dark:text-gray-200 hover:text-green-300'
-                                    }`}>
+                                        }`}>
                                         <span>Transaction</span>
                                     </button>
                                 </Link>
                                 <Link href="/transactionlist">
-                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
-                                        isActive('/transactionlist') 
-                                            ? 'bg-green-100 text-green-800' 
+                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/transactionlist')
+                                            ? 'bg-green-100 text-green-800'
                                             : 'text-black dark:text-gray-200 hover:text-green-300'
-                                    }`}>
+                                        }`}>
                                         <span>Transaction List</span>
                                     </button>
                                 </Link>
                                 {user ? (user.role == 'admin' ?
                                     <Link href="/user">
-                                        <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
-                                        isActive('/user') 
-                                            ? 'bg-green-100 text-green-800' 
-                                            : 'text-black dark:text-gray-200 hover:text-green-300'
-                                    }`}>
+                                        <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/user')
+                                                ? 'bg-green-100 text-green-800'
+                                                : 'text-black dark:text-gray-200 hover:text-green-300'
+                                            }`}>
                                             <span>Users</span>
                                         </button>
                                     </Link> : ""
@@ -243,11 +241,10 @@ export default function Navbar() {
 
                                 {user ? (user.role == 'admin' ?
                                     <Link href="/Product">
-                                        <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
-                                        isActive('/Product') 
-                                            ? 'bg-green-100 text-green-800' 
-                                            : 'text-black dark:text-gray-200 hover:text-green-300'
-                                    }`}>
+                                        <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/Product')
+                                                ? 'bg-green-100 text-green-800'
+                                                : 'text-black dark:text-gray-200 hover:text-green-300'
+                                            }`}>
                                             <span>Sheets</span>
                                         </button>
                                     </Link> : ""

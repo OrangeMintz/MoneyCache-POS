@@ -1,7 +1,5 @@
 'use client';
 
-import Footer from '@/app/comps/footer';
-import Navbar from '@/app/comps/header';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Box from '@mui/material/Box';
@@ -21,6 +19,7 @@ import { useEffect, useState } from 'react';
 import Toast from 'typescript-toastify';
 import api from "../../utils/api";
 import { formatNumber } from "../../utils/formatter";
+import Preloader from '../comps/preloader';
 
 
 async function fetchData() {
@@ -595,6 +594,7 @@ export default function CollapsibleTable() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [loading, setLoading] = useState(true)
   const [visibleColumns, setVisibleColumns] = useState({
     id: true,
     cashier: true,
@@ -609,6 +609,10 @@ export default function CollapsibleTable() {
   useEffect(() => {
     fetchData().then(setData);
   }, []);
+
+  useEffect(() => {
+    (data.length > 0) && setLoading(false)
+  }, [data]);
 
   const handleChangePage = (_event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
@@ -637,6 +641,10 @@ export default function CollapsibleTable() {
     setVisibleColumns((prev) => ({ ...prev, [column]: !prev[column] }));
   };
 
+  if (loading) {
+    return <Preloader />
+  }
+
   return (
     <>
       <Box className='bg-gray-100 m-6 p-6 rounded-md shadow-md'>
@@ -655,7 +663,7 @@ export default function CollapsibleTable() {
           <div className="mb-4 flex justify-end col-span-2 relative">
             <button
               id="dropdownDefaultButton"
-              className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
+              className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
               type="button"
               onClick={() => setDropdownOpen(!dropdownOpen)}
             >
