@@ -38,8 +38,12 @@ php artisan key:generate
 ### Run the Applicaiton 
 After installing dependencies, start the application using:
 ```bash
-php composer run dev
+composer run dev
 ```
+This command runs the script defined in composer.json. Typically, it starts both:
+
+- The Laravel backend server (php artisan serve)
+- The Frontend build process (npm run dev for Vite or another tool)
 
 ### Open the Application 
 Open your browser and type http://127.0.0.1:8000/ on the searchbar
@@ -47,31 +51,31 @@ Open your browser and type http://127.0.0.1:8000/ on the searchbar
 ## Screenshots
 
 <div align="center">
-  <img src="./docs/screenshots/127.0.0.1_8000_welcome.png" width="600" alt="Welcome Page Screenshot">
+  <img src="./docs/screenshots/127.0.0.1_8000_welcome.png" width="900" alt="Welcome Page Screenshot">
 </div>
 
 <div align="center">
-  <img src="./docs/screenshots/127.0.0.1_8000_register.png" width="600" alt="Register Page Screenshot">
+  <img src="./docs/screenshots/127.0.0.1_8000_register.png" width="900" alt="Register Page Screenshot">
 </div>
 
 <div align="center">
-  <img src="./docs/screenshots/127.0.0.1_8000_dashboard.png" width="600" alt="Dashboard Page Screenshot">
+  <img src="./docs/screenshots/127.0.0.1_8000_dashboard.png" width="900" alt="Dashboard Page Screenshot">
 </div>
 
 <div align="center">
-  <img src="./docs/screenshots/127.0.0.1_8000_user.png" width="600" alt="User Page Screenshot">
+  <img src="./docs/screenshots/127.0.0.1_8000_user.png" width="900" alt="User Page Screenshot">
 </div>
 
 <div align="center">
-  <img src="./docs/screenshots/127.0.0.1_8000_transaction.png" width="600" alt="Transaction Page Screenshot">
+  <img src="./docs/screenshots/127.0.0.1_8000_transaction.png" width="900" alt="Transaction Page Screenshot">
 </div>
 
 <div align="center">
-  <img src="./docs/screenshots/127.0.0.1_8000_transactions.png" width="600" alt="Transactions Page Screenshot">
+  <img src="./docs/screenshots/127.0.0.1_8000_transactions.png" width="900" alt="Transactions Page Screenshot">
 </div>
 
 <div align="center">
-  <img src="./docs/screenshots/127.0.0.1_8000_sheets_date=2025-03-03.png" width="600" alt="Sheets Page Screenshot">
+  <img src="./docs/screenshots/127.0.0.1_8000_sheets_date=2025-03-03.png" width="900" alt="Sheets Page Screenshot">
 </div>
 
 ## About Laravel
