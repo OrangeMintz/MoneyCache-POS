@@ -214,7 +214,7 @@ export default function Navbar() {
                                 />
                                 <Link href="/dashboard" className="ml-2">
                                     <span className="text-lg text-black dark:text-gray-200 hover:text-green-300 font-bold">
-                                        Moneycaches
+                                        Moneycache
                                     </span>
                                 </Link>
                             </div>
@@ -225,16 +225,16 @@ export default function Navbar() {
                             <div className="flex space-x-1">
                                 <Link href="/dashboard">
                                     <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/dashboard')
-                                            ? 'bg-green-100 text-green-800'
-                                            : 'text-black dark:text-gray-200 hover:text-green-300'
+                                        ? 'bg-green-100 text-green-800'
+                                        : 'text-black dark:text-gray-200 hover:text-green-300'
                                         }`}>
                                         <span>Dashboard</span>
                                     </button>
                                 </Link>
                                 <Link href="/transaction">
                                     <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/transaction')
-                                            ? 'bg-green-100 text-green-800'
-                                            : 'text-black dark:text-gray-200 hover:text-green-300'
+                                        ? 'bg-green-100 text-green-800'
+                                        : 'text-black dark:text-gray-200 hover:text-green-300'
                                         }`}>
                                         <span>Transaction</span>
                                     </button>

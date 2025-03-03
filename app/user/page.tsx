@@ -15,25 +15,7 @@ import { useEffect, useState } from 'react';
 import Toast from 'typescript-toastify';
 import api from "../../utils/api";
 import Preloader from '../comps/preloader';
-
-
-async function fetchData() {
-  try {
-    const token = localStorage.getItem('access_token');
-    const response = await api.get("/api/users", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    });
-
-    console.log(response.data)
-    return response.data.users.reverse() || [];
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return [];
-  }
-}
+import { fetchUsers } from '@/utils/fetch';
 
 // Row Component
 function Row({ row, handleSave, visibleColumns }) {
@@ -382,7 +364,7 @@ export default function CollapsibleTable() {
   };
 
   useEffect(() => {
-    fetchData().then(setData);
+    fetchUsers().then(setData);
   }, []);
 
   useEffect(() => {

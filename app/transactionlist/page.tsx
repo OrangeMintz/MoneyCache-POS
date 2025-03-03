@@ -20,25 +20,7 @@ import Toast from 'typescript-toastify';
 import api from "../../utils/api";
 import { formatNumber } from "../../utils/formatter";
 import Preloader from '../comps/preloader';
-
-
-async function fetchData() {
-  try {
-    const token = localStorage.getItem('access_token');
-    const response = await api.get("/api/transactions", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    });
-
-    console.log(response.data)
-    return response.data.transactions.reverse() || [];
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return [];
-  }
-}
+import { fetchTransactions } from '@/utils/fetch';
 
 // Row Component
 function Row({ row, handleSave, visibleColumns }) {
@@ -607,7 +589,7 @@ export default function CollapsibleTable() {
   });
 
   useEffect(() => {
-    fetchData().then(setData);
+    fetchTransactions().then(setData);
   }, []);
 
   useEffect(() => {
