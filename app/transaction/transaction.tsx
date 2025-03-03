@@ -2,23 +2,14 @@
 import { useEffect, useState } from "react";
 import Toast from 'typescript-toastify';
 import api from "../../utils/api";
+import { useAppContext } from "@/context/AppContext";
+import Preloader from "@/app/comps/preloader";
 
-type Cashier = {
-    id: number;
-    name: string;
-    email: string;
-    created_at: string;
-    updated_at: string;
-    email_verified_at: string | null;
-};
-
-type TransactionFormProps = {
-    cashier: Cashier;
-}
-
-export default function CashierForm({ cashier }: TransactionFormProps) {
+export default function CashierForm() {
+    const { user, globalFunction } = useAppContext()
+    const [loading, setLoading] = useState(true)
     const [formData, setFormData] = useState({
-        cashier_id: cashier.id,
+        cashier_id: 0,
         time: "AM",
         cash: null,
         check: null,
@@ -49,8 +40,19 @@ export default function CashierForm({ cashier }: TransactionFormProps) {
 
     const [disable, setDisable] = useState(false);
 
+    useEffect(() => {
+        if (user) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                cashier_id: user.id
+            }));
+            setLoading(false)
+        }
+    }, [user])
+
     // Calculate totals whenever formData changes
     useEffect(() => {
+        globalFunction()
         const tradeFields = [
             formData.cash,
             formData.check,
@@ -150,6 +152,10 @@ export default function CashierForm({ cashier }: TransactionFormProps) {
             });
         }
     };
+
+    if (loading) {
+        return <Preloader />
+    }
 
     return (
         <main className="bg-gray-100 w-full text-black min-h-screen">
@@ -274,12 +280,12 @@ export default function CashierForm({ cashier }: TransactionFormProps) {
                                         <div className="w-full mb-3 flex gap-3">
                                             <div>
                                                 <label className="block text-sm font-medium">User's Name:</label>
-                                                <input type="text" className="text-sm w-full appearance-none block p-3 bg-gray-200 text-gray-700 border rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="cashier_id" disabled value={cashier.name} />
+                                                <input type="text" className="text-sm w-full appearance-none block p-3 bg-gray-200 text-gray-700 border rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="cashier_id" disabled value={user ? user.role : ""} />
                                             </div>
 
                                             <div>
                                                 <label className="block text-sm font-medium">User's Role:</label>
-                                                <input type="text" className="text-sm w-full appearance-none block p-3 bg-gray-200 text-gray-700 border rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="cashier_id" disabled value={cashier.role} />
+                                                <input type="text" className="text-sm w-full appearance-none block p-3 bg-gray-200 text-gray-700 border rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="cashier_id" disabled value={user ? user.role : ""} />
                                             </div>
 
                                         </div>
@@ -328,7 +334,7 @@ export default function CashierForm({ cashier }: TransactionFormProps) {
 
                                     </div>
 
-                                                        
+
 
                                 </div>
                             </div>
