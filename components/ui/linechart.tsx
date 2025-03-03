@@ -1,8 +1,26 @@
 'use client'
 import dynamic from 'next/dynamic';
+import { Transaction } from '@/utils/interface';
+import dayjs from 'dayjs';
+import { formatNumber } from '@/utils/formatter';
+
+interface LineChartProps {
+  transactions: Transaction[];
+}
+
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-const AreaLineChart = () => {
+const AreaLineChart: React.FC<LineChartProps> = ({ transactions }) => {
+
+  const formattedData = transactions.reduce<Record<string, number>>((acc, transaction) => {
+    const date = dayjs(transaction.created_at).format('DD MMM'); // Format x axis
+    acc[date] = (acc[date] || 0) + Math.round(transaction.grand_total); // Sum grand_total 
+    return acc;
+  }, {});
+
+  const categories = Object.keys(formattedData).sort((a, b) => dayjs(a, 'DD MMM').valueOf() - dayjs(b, 'DD MMM').valueOf());
+  const data = categories.map((date) => formattedData[date]);
+
   const options = {
     chart: {
       id: 'visitor-chart',
@@ -11,7 +29,7 @@ const AreaLineChart = () => {
       },
     },
     xaxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], // X-axis labels
+      categories: categories, // X-axis labels
     },
     stroke: {
       curve: 'smooth', // Smooth line
@@ -38,8 +56,8 @@ const AreaLineChart = () => {
 
   const series = [
     {
-      name: 'Visitors',
-      data: [30, 40, 35, 50, 49, 60, 70, 91, 125, 100, 110, 120], // Sample data
+      name: 'Grand Total',
+      data: data, // Sample data
     },
   ];
 
