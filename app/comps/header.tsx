@@ -1,7 +1,6 @@
 'use client';
 
 import axios from 'axios';
-import { UserCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -69,7 +68,7 @@ export default function Navbar() {
         };
     }, []);
 
-    const isActive = (path) =>{
+    const isActive = (path) => {
         return pathname === path;
     }
     return (
@@ -117,8 +116,8 @@ export default function Navbar() {
                             <Link
                                 href="/dashboard"
                                 className={`flex items-center p-3 rounded-md transition-all duration-200 
-                                    ${isActive('/dashboard') 
-                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
+                                    ${isActive('/dashboard')
+                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2'
                                         : 'hover:bg-green-200 hover:translate-x-1'}`}
                             >
                                 <span className="font-medium">Transactions</span>
@@ -128,8 +127,7 @@ export default function Navbar() {
                             <Link
                                 href="/transactionlist"
                                 className={`flex items-center p-3 rounded-md transition-all duration-200
-                                    ${
-                                        isActive('/transactionlist')
+                                    ${isActive('/transactionlist')
                                         ? 'bg-green-200 border-1-4 border-green-600 pl-2'
                                         : 'hover:bg-green-200 hover:translate-x-1'
                                     }`}
