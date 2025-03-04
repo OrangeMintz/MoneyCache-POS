@@ -463,6 +463,8 @@ export default function CollapsibleTable() {
   return (
     <>
       <Box className='bg-gray-100 m-6 p-6 rounded-md shadow-md'>
+        <h2 class="text-2xl font-semibold dark:text-white mb-3">User List</h2>
+
         <div className='grid grid-cols-5 flex'>
 
           <div className='col-span-3 '>

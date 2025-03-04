@@ -503,6 +503,7 @@ function Row({ row, handleSave, visibleColumns }) {
         }
 
       </TableRow >
+
       <TableRow>
         <TableCell colSpan={15} style={{ paddingBottom: 0, paddingTop: 0 }}>
           <Collapse in={open} timeout="auto" unmountOnExit>
@@ -630,6 +631,8 @@ export default function CollapsibleTable() {
   return (
     <>
       <Box className='bg-gray-100 m-6 p-6 rounded-md shadow-md'>
+        <h2 class="text-2xl font-semibold dark:text-white mb-3">Transaction List</h2>
+
         <div className='grid grid-cols-5 flex'>
 
           <div className='col-span-3 '>
