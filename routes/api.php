@@ -38,6 +38,7 @@ Route::middleware(['auth:api'])->group(function () {
             Route::get('/net-all', [TransactionsGrossTotalController::class, 'netAll']);
             Route::post('/get-by-date', [TransactionsController::class, 'getByDate']);
             Route::post('/get-by-date/totals', [TransactionsGrossTotalController::class, 'getGrossNetByDate']);
+            Route::get('/totals', [TransactionsGrossTotalController::class, 'getOverallGrossNet']);
             Route::post('/csv', [CsvController::class, 'csv']);
             Route::get('/pdf', [PDFController::class, 'pdf']);
         });
