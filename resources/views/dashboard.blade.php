@@ -130,7 +130,7 @@
     </section>
 
     {{-- FAQ Section --}}
-    <section class=" w-full bg-white px-6 pt-10 pb-8 mt-8 shadow-xl ring-1 ring-gray-900/5 sm:rounded-lg sm:px-10">
+    <section class=" w-full bg-white dark:bg-gray-900 dark:text-white px-6 pt-10 pb-8 mt-8 shadow-xl ring-1 ring-gray-900/5 sm:rounded-lg sm:px-10">
         <div class="mx-auto px-5">
             <div class="flex flex-col items-center">
                 <h2 class="mt-5 text-center text-4xl font-bold tracking-tight md:text-5xl">FAQ</h2>

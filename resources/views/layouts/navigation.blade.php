@@ -1,9 +1,9 @@
-<header class="z-50 sticky top-0 bg-white shadow-md flex items-center px-6 py-3">
+<header class="z-50 sticky top-0 bg-white dark:bg-gray-900 dark:text-white shadow-md flex items-center px-6 py-3">
     <!-- Logo -->
     <h1 class="flex items-center space-x-2 w-3/12">
         <a href="{{ route('dashboard') }}" class="flex items-center space-x-2">
             <img src="{{ asset('img/LogoIcon.png') }}" alt="MoneyCache Logo" class="h-14 w-auto">
-            <span class="text-2xl font-semibold text-gray-900 hover:text-MCGreen duration-200">MoneyCache</span>
+            <span class="text-2xl font-semibold text-gray-900 dark:text-white hover:text-MCGreen duration-200">MoneyCache</span>
         </a>
     </h1>
 
@@ -41,6 +41,9 @@
 
     <!-- Profile Dropdown -->
     <div class="w-3/12 flex justify-end relative">
+
+        @include('components.darkmode')
+
         <img id="avatarButton" type="button"
             class="w-10 h-10 rounded-full cursor-pointer" src="{{ asset('img/LogoIcon.png') }}" alt="User dropdown">
 

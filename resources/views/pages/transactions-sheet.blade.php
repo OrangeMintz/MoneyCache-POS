@@ -1,7 +1,7 @@
 @include('layouts.header')
 <main>
-    <div class="font-sans bg-gray-100 p-6">
-        <div class="bg-white p-4">
+    <div class="font-sans bg-gray-100 dark:bg-gray-800 dark:text-gray-100 p-6">
+        <div class="bg-white dark:bg-gray-900 dark:text-white p-4">
             <div class="py-2 flex justify-between items-center">
                 <div class="flex gap-3">
                     <a id="downloadCsv"
@@ -77,7 +77,7 @@
         'over_pos' => 'SHORT/OVER POS',
     ] as $key => $label)
                             <tr
-                                class="text-TableBlue font-semibold uppercase border-2 odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800">
+                                class="dark:text-gray-400 text-TableBlue font-semibold uppercase border-2 odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800">
                                 <th
                                     class="px-6 py-3 text-sm
                                     {{ in_array($key, ['sub_total_trade', 'sub_total_non_trade', 'over_pos']) ? 'bg-yellow-200' : '' }}

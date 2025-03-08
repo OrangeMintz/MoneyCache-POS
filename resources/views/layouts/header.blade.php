@@ -11,7 +11,7 @@
     
     @vite('resources/css/app.css')
 
-    <style>
+    {{-- <style>
         /* Styling for the layout to create 3 columns */
         .container-transaction {
             display: grid;
@@ -44,7 +44,7 @@
                 -moz-appearance: textfield;
             }
         }
-    </style>
+    </style> --}}
 
     {{-- datatable css --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" />
@@ -65,5 +65,5 @@
 
 </head>
 
-<body>
+<body class="dark:bg-gray-950">
     @include('layouts.navigation')

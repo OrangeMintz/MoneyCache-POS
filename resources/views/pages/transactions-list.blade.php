@@ -2,8 +2,8 @@
 @include('components.modals.edit')
 
 <main>
-    <div class="font-sans bg-gray-100 p-6">
-        <div class="bg-white p-4 mb-4">
+    <div class="font-sans bg-gray-100 dark:bg-gray-800 dark:text-gray-100 p-6">
+        <div class="bg-white dark:bg-gray-900 p-4 mb-4">
             <div class="card-header flex justify-between items-center">
                 <h5 class="title font-semibold text-[26px]">Manage Transactions</h5>
 
