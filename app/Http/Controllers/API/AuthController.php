@@ -79,14 +79,13 @@ class AuthController extends Controller
 
         // Identify taken time periods
         $takenTimes = $transactions->pluck('time')->toArray();
-        $availableTimes = array_diff(['AM', 'MID', 'PM'], $takenTimes);
-
+        $availableTimes = array_values(array_diff(['AM', 'MID', 'PM'], $takenTimes));
+        
         return response()->json([
             "status" => 1,
             "user" => $user,
             "available_times" => $availableTimes
         ]);
-        // return $user;
     }
 
     public function logout(Request $request){
