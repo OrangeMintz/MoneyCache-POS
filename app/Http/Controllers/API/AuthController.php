@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Transactions;
+
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -70,7 +72,21 @@ class AuthController extends Controller
 
     public function getUser(Request $request){
         $user = Auth::user();
-        return $user;
+        $today = now()->toDateString();
+
+        $query = Transactions::with('cashier')->whereDate('created_at', $today);
+        $transactions = $query->get();
+
+        // Identify taken time periods
+        $takenTimes = $transactions->pluck('time')->toArray();
+        $availableTimes = array_diff(['AM', 'MID', 'PM'], $takenTimes);
+
+        return response()->json([
+            "status" => 1,
+            "user" => $user,
+            "available_times" => $availableTimes
+        ]);
+        // return $user;
     }
 
     public function logout(Request $request){
