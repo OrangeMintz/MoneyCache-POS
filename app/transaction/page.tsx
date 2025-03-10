@@ -6,11 +6,11 @@ import Toast from 'typescript-toastify';
 import api from "../../utils/api";
 
 export default function CashierForm() {
-    const { user, globalFunction } = useAppContext()
+    const { user, globalFunction, availableTimes } = useAppContext()
     const [loading, setLoading] = useState(true)
     const [formData, setFormData] = useState({
         cashier_id: 0,
-        time: "AM",
+        time: availableTimes ? (Object.values(availableTimes).length != 0 ? Object.values(availableTimes)[0] : null) : "Loading",
         cash: null,
         check: null,
         bpi_ccard: null,
@@ -52,6 +52,7 @@ export default function CashierForm() {
 
     // Calculate totals whenever formData changes
     useEffect(() => {
+        console.log(formData)
         globalFunction()
         const tradeFields = [
             formData.cash,
@@ -291,12 +292,20 @@ export default function CashierForm() {
                                         </div>
                                         <div className="w-full">
                                             <label className="block text-sm font-medium">Shift Time:</label>
-                                            <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="time" onChange={handleInputChange}>
-                                                <option>Choose Time...</option>
-                                                <option value="AM">AM</option>
-                                                <option value="MID">MID</option>
-                                                <option value="PM">PM</option>
+                                            <select
+                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                name="time"
+                                                onChange={handleInputChange}
+                                            >
+                                                {Object.values(availableTimes).length > 0 ? (
+                                                    Object.values(availableTimes).map((time, index) => (
+                                                        <option value={time} key={index}>{time}</option>
+                                                    ))
+                                                ) : (
+                                                    <option disabled>No available periods</option>
+                                                )}
                                             </select>
+
                                         </div>
 
 
@@ -344,7 +353,7 @@ export default function CashierForm() {
                     <div>
                     </div>
                 </div>
-            </div>
-        </main>
+            </div >
+        </main >
     );
 }

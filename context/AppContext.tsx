@@ -21,6 +21,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null)
+    const [availableTimes, setAvailableTimes] = useState<any>(null)
     const router = useRouter()
 
     const globalFunction = async () => {
@@ -39,8 +40,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                 },
             });
 
-            localStorage.setItem('role', response.data.role);
-            setUser(response.data);
+            localStorage.setItem('role', response.data.user.role);
+            setUser(response.data.user);
+            setAvailableTimes(response.data.available_times)
         } catch (error: any) {
             router.push('/');
             console.error("Error fetching user data:", error.response?.data || error.message);
@@ -50,7 +52,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
 
     return (
-        <AppContext.Provider value={{ user, globalFunction }}>
+        <AppContext.Provider value={{ user, globalFunction, availableTimes }}>
             {children}
         </AppContext.Provider>
     );
