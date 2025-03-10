@@ -1,20 +1,7 @@
 <x-app-layout>
-    {{-- <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot> --}}
 
-    {{-- <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    <section class="bg-white dark:bg-gray-900">
+    {{-- Hero --}}
+    {{-- <section class="bg-white dark:bg-gray-900">
         <div class="py-12 px-4 mx-auto max-w-screen-xl text-center lg:py-20 lg:px-12">
             <h1
                 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
@@ -43,11 +30,11 @@
                 </a>
             </div>
         </div>
-    </section>
+    </section> --}}
 
 
     {{-- Features --}}
-    <section class=" dark:bg-gray-900">
+    {{-- <section class=" dark:bg-gray-900">
         <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
             <div class="max-w-screen-md mb-8 lg:mb-16">
                 <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-[#3A3A3A] dark:text-white">
@@ -127,10 +114,10 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     {{-- FAQ Section --}}
-    <section class=" w-full bg-white dark:bg-gray-900 dark:text-white px-6 pt-10 pb-8 mt-8 shadow-xl ring-1 ring-gray-900/5 sm:rounded-lg sm:px-10">
+    {{-- <section class=" w-full bg-white dark:bg-gray-900 dark:text-white px-6 pt-10 pb-8 mt-8 shadow-xl ring-1         ring-gray-900/5 sm:rounded-lg sm:px-10">
         <div class="mx-auto px-5">
             <div class="flex flex-col items-center">
                 <h2 class="mt-5 text-center text-4xl font-bold tracking-tight md:text-5xl">FAQ</h2>
@@ -254,10 +241,10 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     {{-- CTA Section --}}
-    <section class="bg-[#1669B2] dark:bg-gray-900 py-10">
+    {{-- <section class="bg-[#1669B2] dark:bg-gray-900 py-10">
         <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
             <div class="mx-auto max-w-screen-sm text-center space-y-6">
                 <h2 class="text-4xl tracking-tight font-extrabold leading-tight text-white dark:text-gray-900">
@@ -268,15 +255,211 @@
                 </p>
                 <a href="#"
                     class="text-white bg-[#EE7601] hover:bg-[#ee7001ef] focus:ring-4
-focus:ring-primary-300 font-bold rounded-3xl text-md px-8 py-5
-dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none
-dark:focus:ring-primary-800 inline-block">
+        focus:ring-primary-300 font-bold rounded-3xl text-md px-8 py-5
+        dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none
+        dark:focus:ring-primary-800 inline-block">
                     Free trial for 30 days
                 </a>
             </div>
         </div>
-    </section>
+    </section> --}}
+
+    <div class="font-sans bg-gray-100 dark:bg-gray-800 dark:text-gray-100 p-6">
+        <div class="bg-white dark:bg-gray-900 p-4 mb-4 grid gap-6">
+            <div class="flex flex-col space-y-6 md:space-y-0 md:flex-row justify-between">
+              <div class="mr-6">
+                <h1 class="title font-semibold text-[26px] mb-2">Dashboard</h1>
+                <h2 class="text-gray-600 ml-0.5">MoneyCache #1 POS</h2>
+              </div>
+              <div class="flex flex-wrap items-start justify-end -mb-3">
+                {{-- <button class="inline-flex px-5 py-3 text-purple-600 hover:text-purple-700 focus:text-purple-700 hover:bg-purple-100 focus:bg-purple-100 border border-purple-600 rounded-md mb-3">
+                  <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="flex-shrink-0 h-5 w-5 -ml-1 mt-0.5 mr-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  </svg>
+                  Manage dashboard
+                </button> --}}
+                <a href="{{route('transaction')}}" class="inline-flex px-5 py-3 text-white bg-MCGreen hover:bg-MCGreenHover focus:bg-MCGreenHover rounded-md ml-6 mb-3">
+                  Input a Transaction
+                </a>
+              </div>
+            </div>
+            <section class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+                <div class="flex items-center p-8 bg-white shadow rounded-lg">
+                    <div class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-purple-600 bg-purple-100 rounded-full mr-6">
+                    <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    </div>
+                    <div>
+                    <span class="block text-2xl font-bold">62</span>
+                    <span class="block text-gray-500">Users</span>
+                    </div>
+                </div>
+                <div class="flex items-center p-8 bg-white shadow rounded-lg">
+                    <div class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-green-600 bg-green-100 rounded-full mr-6">
+                    <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                    </div>
+                    <div>
+                    <span class="block text-2xl font-bold">6.8</span>
+                    <span class="block text-gray-500">Transaction</span>
+                    </div>
+                </div>
+                <div class="flex items-center p-8 bg-white shadow rounded-lg">
+                    <div class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-red-600 bg-red-100 rounded-full mr-6">
+                    <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
+                    </svg>
+                    </div>
+                    <div>
+                    <span class="inline-block text-2xl font-bold">9</span>
+                    <span class="block text-gray-500">Net Sales</span>
+                    </div>
+                </div>
+                <div class="flex items-center p-8 bg-white shadow rounded-lg">
+                    <div class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-blue-600 bg-blue-100 rounded-full mr-6">
+                    <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    </div>
+                    <div>
+                    <span class="block text-2xl font-bold">83</span>
+                    <span class="block text-gray-500">Gross Sales</span>
+                    </div>
+                </div>
+            </section>
+            <section class="grid md:grid-cols-3 xl:grid-cols-3 md:grid-rows-2 xl:grid-flow-col gap-6">
+
+                {{-- chart --}}
+                <div class="flex flex-col row-span-3 md:col-span-2 md:row-span-2 bg-white shadow rounded-lg p-4 sm:p-8">
+                    
+                    <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Recent Activities</h5>
+                    <div class="p-4 flex-grow">
+                    <div class="flex items-center justify-center h-full px-4 py-16 text-gray-400 text-3xl font-semibold bg-gray-100 border-2 border-gray-200 border-dashed rounded-md">Chart</div>
+                    </div>
+                </div>
 
 
-    @include('layouts/footer')
+                {{-- recent logs --}}
+                <div class="row-span-2  md:col-span-1 bg-white shadow rounded-lg">
+
+
+                    <div class="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+                        <div class="flex items-center justify-start mb-4">
+                            <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Recent Activities</h5>
+                       </div>
+                       <div class="flow-root max-h-96 overflow-y-auto">
+                            <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
+                                <li class="py-3 sm:py-4">
+                                    <div class="flex items-center relative">
+                                        <div class="min-w-0 ms-4">
+                                            <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                                                Name: 
+                                                <span class="text-sm text-gray-500 break-words dark:text-gray-400">John Doe</span>
+                                            </p>
+                                            <p class="text-sm font-medium text-gray-900 break-words dark:text-white">
+                                                Shift: 
+                                                <span class="text-sm text-gray-500 break-words dark:text-gray-400">AM</span>
+                                            </p>
+                                            <p class="text-sm font-medium text-gray-900 break-words dark:text-white">
+                                                Message: 
+                                                <span class="text-sm text-gray-500 break-words dark:text-gray-400 text-wrap">The quick brown fox jumps over the lazy dog</span>
+                                            </p>
+                                        </div>
+                                        <div class="flex flex-col justify-between h-full px-2 w-1/3">
+                                            <p class="text-xs italic absolute top-0 right-0">2025-03-10</p>
+                                            <a href="#" class="text-sm text-end font-medium text-blue-600 hover:underline dark:text-blue-500 absolute bottom-0 right-0">
+                                                Active
+                                            </a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="py-3 sm:py-4">
+                                    <div class="flex items-center relative">
+                                        <div class="min-w-0 ms-4">
+                                            <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                                                Name: 
+                                                <span class="text-sm text-gray-500 break-words dark:text-gray-400">John Doe</span>
+                                            </p>
+                                            <p class="text-sm font-medium text-gray-900 break-words dark:text-white">
+                                                Shift: 
+                                                <span class="text-sm text-gray-500 break-words dark:text-gray-400">AM</span>
+                                            </p>
+                                            <p class="text-sm font-medium text-gray-900 break-words dark:text-white">
+                                                Message: 
+                                                <span class="text-sm text-gray-500 break-words dark:text-gray-400 text-wrap">The quick brown fox jumps over the lazy dog</span>
+                                            </p>
+                                        </div>
+                                        <div class="flex flex-col justify-between h-full px-2 w-1/3">
+                                            <p class="text-xs italic absolute top-0 right-0">2025-03-10</p>
+                                            <a href="#" class="text-sm text-end font-medium text-blue-600 hover:underline dark:text-blue-500 absolute bottom-0 right-0">
+                                                Active
+                                            </a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="py-3 sm:py-4">
+                                    <div class="flex items-center relative">
+                                        <div class="min-w-0 ms-4">
+                                            <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                                                Name: 
+                                                <span class="text-sm text-gray-500 break-words dark:text-gray-400">John Doe</span>
+                                            </p>
+                                            <p class="text-sm font-medium text-gray-900 break-words dark:text-white">
+                                                Shift: 
+                                                <span class="text-sm text-gray-500 break-words dark:text-gray-400">AM</span>
+                                            </p>
+                                            <p class="text-sm font-medium text-gray-900 break-words dark:text-white">
+                                                Message: 
+                                                <span class="text-sm text-gray-500 break-words dark:text-gray-400 text-wrap">The quick brown fox jumps over the lazy dog</span>
+                                            </p>
+                                        </div>
+                                        <div class="flex flex-col justify-between h-full px-2 w-1/3">
+                                            <p class="text-xs italic absolute top-0 right-0">2025-03-10</p>
+                                            <a href="#" class="text-sm text-end font-medium text-blue-600 hover:underline dark:text-blue-500 absolute bottom-0 right-0">
+                                                Active
+                                            </a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="py-3 sm:py-4">
+                                    <div class="flex items-center relative">
+                                        <div class="min-w-0 ms-4">
+                                            <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                                                Name: 
+                                                <span class="text-sm text-gray-500 break-words dark:text-gray-400">John Doe</span>
+                                            </p>
+                                            <p class="text-sm font-medium text-gray-900 break-words dark:text-white">
+                                                Shift: 
+                                                <span class="text-sm text-gray-500 break-words dark:text-gray-400">AM</span>
+                                            </p>
+                                            <p class="text-sm font-medium text-gray-900 break-words dark:text-white">
+                                                Message: 
+                                                <span class="text-sm text-gray-500 break-words dark:text-gray-400 text-wrap">The quick brown fox jumps over the lazy dog</span>
+                                            </p>
+                                        </div>
+                                        <div class="flex flex-col justify-between h-full px-2 w-1/3">
+                                            <p class="text-xs italic absolute top-0 right-0">2025-03-10</p>
+                                            <a href="#" class="text-sm text-end font-medium text-blue-600 hover:underline dark:text-blue-500 absolute bottom-0 right-0">
+                                                Active
+                                            </a>
+                                        </div>
+                                    </div>
+                                </li>
+
+                            </ul>
+                       </div>
+                    </div>
+                    
+                </div>
+
+            </section>
+        </div>
+
+    </div>
+
+        @include('layouts/footer')
+
+
 </x-app-layout>

@@ -17,6 +17,9 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- datatable css --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" />
 </head>
 
 <body class="font-sans antialiased dark:bg-gray-950">
@@ -39,6 +42,21 @@
     </div>
 
     <script src="{{asset('js/darkmode.js')}}"></script>
+
+    {{-- dashboard User log datatable --}}
+    <script>
+        new DataTable('#userLog', {
+            paging: false,
+            scrollCollapse: true,
+            scrollY: '200px'
+        });
+    </script>
+
+    {{-- Jquery cdn for datatable and toaster to work --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    {{-- datatable cdn --}}
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
 
 </body>
 
