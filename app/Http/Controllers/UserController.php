@@ -58,10 +58,11 @@ class UserController extends Controller
             'theme' => 'light',
         ]);
 
-        Mail::to($validated['email'])->send(new CredentialsMail($user, $plainPassword));
+        // Log the action
+        $userId = auth()->id(); // Get the currently authenticated admin
+        (new LogsController)->storeUserLog($userId, $user->id);
 
         $message = 'User Registered Successfully!';
-
         if ($request->wantsJson()) {
             return response()->json(['status' => 'success', 'message' => $message], 201);
         }
@@ -70,6 +71,7 @@ class UserController extends Controller
             'message' => $message,
             'alert-type' => 'success',
         ]);
+        Mail::to($validated['email'])->send(new CredentialsMail($user, $plainPassword));
     }
 
     public function update(Request $request, string $id)

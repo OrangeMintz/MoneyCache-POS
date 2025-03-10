@@ -2,64 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\logs;
+use App\Models\Logs;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class LogsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function storeUserLog($userId, $newUserId)
     {
-        //
-    }
+        $admin = User::find($userId); // Get the admin user
+        $adminName = $admin ? $admin->name : 'null'; // Fallback if user not found
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(logs $logs)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(logs $logs)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, logs $logs)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(logs $logs)
-    {
-        //
+        Logs::create([
+            'user_id' => $userId, // Admin who created the user
+            'transaction_id' => null, // No transaction involved
+            'activity_user_id' => $newUserId, // The user that was created
+            'type' => 'user',
+            'category' => 'add',
+            'message' => "{$adminName} added a new user",
+            'total_hours' => null, // Not applicable
+        ]);
     }
 }
