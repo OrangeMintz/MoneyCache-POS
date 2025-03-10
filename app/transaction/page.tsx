@@ -10,7 +10,7 @@ export default function CashierForm() {
     const [loading, setLoading] = useState(true)
     const [formData, setFormData] = useState({
         cashier_id: 0,
-        time: availableTimes ? availableTimes[0] : null,
+        time: null,
         cash: null,
         check: null,
         bpi_ccard: null,
