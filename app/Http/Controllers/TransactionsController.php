@@ -105,7 +105,7 @@ class TransactionsController extends Controller
         $grand_total = $subtotal_trade + $subtotal_non_trade;
 
         // Store transaction
-        Transactions::create(array_merge($validated, [
+        $transaction = Transactions::create(array_merge($validated, [
             'sub_total_trade' => $subtotal_trade,
             'sub_total_non_trade' => $subtotal_non_trade,
             'grand_total' => $grand_total,
@@ -115,6 +115,9 @@ class TransactionsController extends Controller
             'message' => 'Added Successfully',
             'alert-type' => 'success',
         );
+
+        $userId = auth()->id();
+        (new LogsController)->storeTransactionLog($userId, $transaction->id, 'add');
 
         //redirects to transactions-list
         if ($request->wantsJson()) {
@@ -204,6 +207,9 @@ class TransactionsController extends Controller
             'grand_total' => $grand_total,
         ]));
 
+        $userId = auth()->id();
+        (new LogsController)->storeTransactionLog($userId, $transaction->id, 'update');
+
         $notification = array ( //toaster notif when updated
             'message' => 'Updated Successfully',
             'alert-type' => 'success',
@@ -222,6 +228,9 @@ class TransactionsController extends Controller
     {
         $transaction = Transactions::findOrFail($id);
         $transaction->delete();
+
+        $userId = auth()->id();
+        (new LogsController)->storeTransactionLog($userId, $transaction->id, 'delete');
 
         if ($request->wantsJson()) {
             return response()->json([
@@ -306,6 +315,4 @@ class TransactionsController extends Controller
             "id" => $userId,
         ]);
     }
-
-
 }

@@ -84,7 +84,7 @@ class UserController extends Controller
 
         ]);
 
-        Log::info("Validated: ",$validated);        
+        Log::info("Validated: ",$validated);
 
         $existingUser = User::where('email', $validated['email'])
             ->where('id', '!=', $id)
@@ -121,7 +121,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        $userId = auth()->id(); // Get the currently authenticated admin
+        $userId = auth()->id();
         (new LogsController)->storeUserLog($userId, $id, 'delete');
 
         $message = 'User Deleted Successfully!';

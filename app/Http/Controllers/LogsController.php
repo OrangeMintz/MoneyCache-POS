@@ -17,11 +17,9 @@ class LogsController extends Controller
                 "logs" => $logs
             ]);
         }else{
-
             // Diri ibutang inyong logic for laravel
-
         }
-        
+
     }
 
     public function storeUserLog($userId, $newUserId, $category)
@@ -37,6 +35,22 @@ class LogsController extends Controller
             'category' => $category,
             'message' => ($category === 'add') ? "added a new user" : $category . "d a new user",
             'total_hours' => null, // Not applicable
+        ]);
+    }
+
+    public function storeTransactionLog($userId, $transactionId, $category)
+    {
+        $admin = User::find($userId);
+        $adminName = $admin ? $admin->name : 'null';
+
+        Logs::create([
+            'user_id' => $userId,
+            'transaction_id' => $transactionId,
+            'activity_user_id' => null,
+            'type' => 'transaction',
+            'category' => $category,
+            'message' => ($category === 'add') ? "added a new transaction" : $category . "d a transaction",
+            'total_hours' => null,
         ]);
     }
 }
