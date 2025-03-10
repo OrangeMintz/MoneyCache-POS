@@ -280,7 +280,7 @@ export default function CashierForm() {
                                         <div className="w-full mb-3 flex gap-3">
                                             <div>
                                                 <label className="block text-sm font-medium">User's Name:</label>
-                                                <input type="text" className="text-sm w-full appearance-none block p-3 bg-gray-200 text-gray-700 border rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="cashier_id" disabled value={user ? user.role : ""} />
+                                                <input type="text" className="text-sm w-full appearance-none block p-3 bg-gray-200 text-gray-700 border rounded shadow-md leading-tight focus:outline-none focus:bg-white" name="cashier_id" disabled value={user ? user.name : ""} />
                                             </div>
 
                                             <div>
