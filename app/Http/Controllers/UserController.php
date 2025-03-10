@@ -58,10 +58,11 @@ class UserController extends Controller
             'theme' => 'light',
         ]);
 
-        Mail::to($validated['email'])->send(new CredentialsMail($user, $plainPassword));
+        // Log the action
+        $userId = auth()->id(); // Get the currently authenticated admin
+        (new LogsController)->storeUserLog($userId, $user->id, 'add');
 
         $message = 'User Registered Successfully!';
-
         if ($request->wantsJson()) {
             return response()->json(['status' => 'success', 'message' => $message], 201);
         }
@@ -70,6 +71,7 @@ class UserController extends Controller
             'message' => $message,
             'alert-type' => 'success',
         ]);
+        Mail::to($validated['email'])->send(new CredentialsMail($user, $plainPassword));
     }
 
     public function update(Request $request, string $id)
@@ -82,7 +84,7 @@ class UserController extends Controller
 
         ]);
 
-        Log::info("Validated: ",$validated);
+        Log::info("Validated: ",$validated);        
 
         $existingUser = User::where('email', $validated['email'])
             ->where('id', '!=', $id)
@@ -104,6 +106,9 @@ class UserController extends Controller
             'password' => $validated['password'] ? Hash::make($validated['password']) : $user->password,
         ]);
 
+        $userId = auth()->id(); // Get the currently authenticated admin
+        (new LogsController)->storeUserLog($userId, $id, 'update');
+
         $message = 'User updated successfully!';
         if ($request->wantsJson()) {
             return response()->json(['status' => 'success', 'message' => $message]);
@@ -115,6 +120,9 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
+
+        $userId = auth()->id(); // Get the currently authenticated admin
+        (new LogsController)->storeUserLog($userId, $id, 'delete');
 
         $message = 'User Deleted Successfully!';
         if ($request->wantsJson()) {
