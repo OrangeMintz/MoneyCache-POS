@@ -123,3 +123,7 @@
     @endif
 </script>
 {{-- end of toaster for update notif --}}
+
+{{-- darkmode script  --}}
+<script src="{{asset('js/darkmode.js')}}"></script>
+

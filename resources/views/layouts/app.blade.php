@@ -19,7 +19,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased">
+<body class="font-sans antialiased dark:bg-gray-950">
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         @include('layouts.navigation')
 
@@ -37,6 +37,9 @@
             {{ $slot }}
         </main>
     </div>
+
+    <script src="{{asset('js/darkmode.js')}}"></script>
+
 </body>
 
 </html>
