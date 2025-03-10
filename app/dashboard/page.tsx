@@ -72,31 +72,37 @@ export default function Home() {
                             <div className="absolute left-1.5 top-0 bottom-0 w-0.5 bg-gray-200 ml-0.5"></div>
                             
                             {/* Timeline items */}
-                            {transactions.map((transaction, index) => (
-                                <div key={index} className="relative pl-8 pb-5">
-                                    {/* Timeline dot */}
-                                    <div className="absolute left-0 mt-1.5">
-                                        <div className="h-4 w-4 rounded-full bg-blue-500 border-2 border-white shadow"></div>
-                                    </div>
-                                    
-                                    {/* Content */}
-                                    <div className="bg-gray-50 rounded-lg p-3 md:mr-5 shadow-sm">
-                                        <div className="flex justify-between mb-1">
-                                            <span className="text-sm font-medium text-gray-900">ID: {transaction.id}</span>
-                                            <span className="text-xs text-gray-500">{new Date(transaction.created_at).toISOString().split("T")[0]}</span>
-                                        </div>
-                                        <div className="mb-1">
-                                            <span className="text-sm text-gray-700">{transaction.cashier?.name || "Unknown"}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-xs text-gray-500">Hours: {transaction.time}</span>
-                                            <span className="text-xs px-2 py-1 rounded-full bg-blue-100 hover:bg-green-400 hover:text-white text-blue-800">
-                                                <a href="/user">Details</a>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
+                            {transactions
+  .slice() // Create a shallow copy to avoid mutating the original array
+  .sort((a, b) => a.id - b.id) // Sort in ascending order
+  .map((transaction, index) => (
+    <div key={index} className="relative pl-8 pb-5">
+      {/* Timeline dot */}
+      <div className="absolute left-0 mt-1.5">
+        <div className="h-4 w-4 rounded-full bg-blue-500 border-2 border-white shadow"></div>
+      </div>
+
+      {/* Content */}
+      <div className="bg-gray-50 rounded-lg p-3 md:mr-5 shadow-sm">
+        <div className="flex justify-between mb-1">
+          <span className="text-sm font-medium text-gray-900">ID: {transaction.id}</span>
+          <span className="text-xs text-gray-500">
+            {new Date(transaction.created_at).toISOString().split("T")[0]}
+          </span>
+        </div>
+        <div className="mb-1">
+          <span className="text-sm text-gray-700">{transaction.cashier?.name || "Unknown"}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-xs text-gray-500">Hours: {transaction.time}</span>
+          <span className="text-xs px-2 py-1 rounded-full bg-blue-100 hover:bg-green-400 hover:text-white text-blue-800">
+            <a href="/user">Details</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  ))}
+
                         </div>
                     </div>
                 </div>

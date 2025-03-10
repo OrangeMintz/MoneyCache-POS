@@ -14,7 +14,7 @@ export default function Navbar() {
     const pathname = usePathname();
     const [open, setOpen] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
-
+    const [isTimeIn, setIsTimeIn] = useState(false); 
     const logout = async (event: React.FormEvent) => {
         event.preventDefault();
 
@@ -277,71 +277,88 @@ export default function Navbar() {
                             </div>
                         </div>
 
-                        {/* User dropdown */}
                         <div className="flex items-center">
-                            <div className="relative" ref={dropdownRef}>
-                                {/* Avatar button that triggers dropdown */}
-                                <div className="flex items-center justify-center">
-                                    <UserCircle
-                                        id="avatarButton"
-                                        onClick={toggleDropdown}
-                                        className="w-7 h-7 text-black cursor-pointer transition-all duration-300"
-                                    />
-                                </div>
+                                    <div className="relative" ref={dropdownRef}>
+                                        {/* Avatar button that triggers dropdown */}
+                                        <div className="flex items-center justify-center relative">
+                                            {/* Wrapper for the avatar and indicator */}
+                                            <div className="relative">
+                                                <UserCircle
+                                                    id="avatarButton"
+                                                    onClick={toggleDropdown}
+                                                    className="w-7 h-7 text-black cursor-pointer transition-all duration-300"
+                                                />
+                                                {/* Indicator */}
+                                                <div
+                                                    className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
+                                                        isTimeIn ? 'bg-green-500' : 'bg-red-500'
+                                                    }`}
+                                                ></div>
+                                            </div>
+                                        </div>
 
-                                {/* Dropdown menu with animation */}
-                                <div
-                                    id="userDropdown"
-                                    className={`absolute transform ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'} 
-                   transition-all duration-300 ease-in-out 
-                   right-0 md:right-1/2 md:translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50`}
-                                >
-                                    <div className="px-4 py-3 text-sm text-gray-900 text-center">
-                                    <div className="flex justify-center">
-                                    <h1 className="font-medium">{user ? user.name + ` (${user.role})` : ""}</h1>
+                                        {/* Dropdown menu with animation */}
+                                        <div
+                                            id="userDropdown"
+                                            className={`absolute transform ${
+                                                isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+                                            } 
+                                            transition-all duration-300 ease-in-out 
+                                            right-0 md:right-1/2 md:translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50`}
+                                        >
+                                            <div className="px-4 py-3 text-sm text-gray-900 text-center">
+                                                <div className="flex justify-center">
+                                                    <h1 className="font-medium">{user ? user.name + ` (${user.role})` : ""}</h1>
+                                                </div>
+                                                <p className="text-gray-500">{user ? user.email : ""}</p>
+                                            </div>
+                                            {/* Time out Section */}
+                                            <hr className="border-gray-200" />
+                                            <div className="py-2 flex items-center justify-center w-full space-x-4">
+                                                {/* Time Display on the Left */}
+                                                <h2 className="text-sm font-medium">{isTimeIn ? "Time in" : "Time out"}</h2>
+                                                
+                                                {/* Toggle Switch on the Right */}
+                                                <label className="relative inline-flex items-center cursor-pointer">
+                                                    <input 
+                                                        type="checkbox" 
+                                                        checked={isTimeIn} // Directly use isTimeIn for the checked state
+                                                        onChange={() => setIsTimeIn(!isTimeIn)} 
+                                                        className="sr-only peer"
+                                                    />
+                                                    <div className={`w-11 h-6 rounded-full transition-colors ${
+                                                        isTimeIn ? 'bg-green-500 peer-focus:ring-green-300' : 'bg-red-500 peer-focus:ring-red-300'
+                                                    } peer-focus:ring-4 dark:peer-focus:ring-opacity-50 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-5`}></div>
+                                                </label>
+                                            </div>
+                                                
+                                            {/* Logout Section */}
+                                            <hr className="border-gray-200" />
+                                            <div className="py-1">
+                                                <form onSubmit={logout}>
+                                                    <button
+                                                        type='submit'
+                                                        className="block w-full text-center px-4 py-2 text-sm text-gray-700 hover:text-white transition-colors duration-200 hover:bg-green-400"
+                                                    >
+                                                        Logout
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
-                                        <p className="text-gray-500">{user ? user.email : ""}</p>
-                                    </div>
-                                    {/* Time out Section */}
-                                    <hr className="border-gray-200" />
-                                    <div className="py-1">
-                                        <form>
-                                            <button
-                                                type='submit'
-                                                className="block w-full text-center px-4 py-2 text-sm text-gray-700 hover:text-white transition-colors duration-200 hover:bg-red-500"
-                                            >
-                                                Time out
-                                            </button>
-                                        </form>
-                                    </div>
-                                    
-                                    {/* Logout Section */}
-                                    <hr className="border-gray-200" />
-                                    <div className="py-1">
-                                        <form onSubmit={logout}>
-                                            <button
-                                                type='submit'
-                                                className="block w-full text-center px-4 py-2 text-sm text-gray-700 hover:text-white transition-colors duration-200 hover:bg-green-400"
-                                            >
-                                                Logout
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
 
-                            {/* Mobile menu button */}
-                            <button
-                                onClick={() => setOpen(!open)}
-                                className="inline-flex md:hidden items-center justify-center p-2 ml-3 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out"
-                                aria-label="Toggle mobile menu"
-                            >
-                                <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                    <path className={open ? 'hidden' : 'inline-flex'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                                    <path className={open ? 'inline-flex' : 'hidden'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
+                                    {/* Mobile menu button */}
+                                    <button
+                                        onClick={() => setOpen(!open)}
+                                        className="inline-flex md:hidden items-center justify-center p-2 ml-3 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out"
+                                        aria-label="Toggle mobile menu"
+                                    >
+                                        <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                                            <path className={open ? 'hidden' : 'inline-flex'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                                            <path className={open ? 'inline-flex' : 'hidden'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
                     </div>
                 </div>
 

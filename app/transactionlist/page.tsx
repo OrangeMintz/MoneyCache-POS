@@ -505,67 +505,87 @@ function Row({ row, handleSave, visibleColumns }) {
       </TableRow >
 
       <TableRow>
-        <TableCell colSpan={15} style={{ paddingBottom: 0, paddingTop: 0 }}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <div className="flex grid grid-cols-1 lg:grid-cols-2 bg-gray-50 rounded-b-md shadow-b-md p-8 mb-5 gap-9">
-              <Box style={{ paddingBottom: 10, paddingTop: 0 }} className='col-span-1'>
-                <Typography variant="h6"><span className='text-sm font-semibold'>Sub Total Trade</span></Typography>
-                <Table size="small">
-                  <TableBody>
-                    {[
-                      { key: "cash", label: "Cash" },
-                      { key: "check", label: "Check" },
-                      { key: "bpi_ccard", label: "BPI Credit Card" },
-                      { key: "bpi_dcard", label: "BPI Debit Card" },
-                      { key: "metro_ccard", label: "Metro Credit Card" },
-                      { key: "metro_dcard", label: "Metro Debit Card" },
-                      { key: "paymaya", label: "PayMaya" },
-                      { key: "aub_ccard", label: "AUB Credit Card" },
-                      { key: "gcash", label: "GCash" },
-                      { key: "food_panda", label: "Food Panda" },
-                      { key: "streetby", label: "StreetBy" },
-                      { key: "grabfood", label: "GrabFood" },
-                      { key: "gc_claimed_others", label: "GC Claimed (Others)" },
-                      { key: "gc_claimed_own", label: "GC Claimed (Own)" },
-                    ].map(({ key, label }) =>
-                      row[key] !== null && row[key] !== undefined ? (
-                        <TableRow key={key}>
-                          <TableCell><span className='text-xs'>{label}:</span></TableCell>
-                          <TableCell><span className='text-xs'>{row[key]}</span></TableCell>
-                        </TableRow>
-                      ) : null
-                    )}
-                  </TableBody>
-                </Table>
-              </Box>
-              <Box style={{ paddingBottom: 10, paddingTop: 0 }} className='col-span-1'>
-                <Typography variant="h6"><span className='text-sm font-semibold'>Sub Total Non Trade</span></Typography>
-                <Table size="small">
-                  <TableBody>
-                    {[
-                      { key: "mm_head", label: "MM-Head Office" },
-                      { key: "mm_commissary", label: "MM-Commissary" },
-                      { key: "mm_rm", label: "MM-RM" },
-                      { key: "mm_dm", label: "MM-DM" },
-                      { key: "mm_km", label: "MM-KM" },
-                      { key: "food_charge", label: "Food Charge" },
-                      { key: "z_reading_pos", label: "Z Reading POS" },
-                      { key: "over_pos", label: "Over POS" },
-                    ].map(({ key, label }) =>
-                      row[key] !== null && row[key] !== undefined ? (
-                        <TableRow key={key}>
-                          <TableCell><span className='text-xs'>{label}:</span></TableCell>
-                          <TableCell><span className='text-xs'>{row[key]}</span></TableCell>
-                        </TableRow>
-                      ) : null
-                    )}
-                  </TableBody>
-                </Table>
-              </Box>
-            </div>
-          </Collapse>
-        </TableCell>
-      </TableRow>
+  <TableCell colSpan={15} style={{ paddingBottom: 0, paddingTop: 0 }}>
+    <Collapse in={open} timeout="auto" unmountOnExit>
+      <div className="flex grid grid-cols-1 lg:grid-cols-2 bg-gray-50 rounded-b-md shadow-b-md p-8 mb-5 gap-9">
+        {/* Sub Total Trade */}
+        <Box style={{ paddingBottom: 10, paddingTop: 0 }} className="col-span-1">
+          <Typography variant="h6">
+            <span className="text-sm font-semibold">Sub Total Trade</span>
+          </Typography>
+          <Table size="small">
+            <TableBody>
+              {[
+                { key: "cash", label: "Cash" },
+                { key: "check", label: "Check" },
+                { key: "bpi_ccard", label: "BPI Credit Card" },
+                { key: "bpi_dcard", label: "BPI Debit Card" },
+                { key: "metro_ccard", label: "Metro Credit Card" },
+                { key: "metro_dcard", label: "Metro Debit Card" },
+                { key: "paymaya", label: "PayMaya" },
+                { key: "aub_ccard", label: "AUB Credit Card" },
+                { key: "gcash", label: "GCash" },
+                { key: "food_panda", label: "Food Panda" },
+                { key: "streetby", label: "StreetBy" },
+                { key: "grabfood", label: "GrabFood" },
+                { key: "gc_claimed_others", label: "GC Claimed (Others)" },
+                { key: "gc_claimed_own", label: "GC Claimed (Own)" },
+              ]
+                .sort((a, b) => a.label.localeCompare(b.label)) // Sort alphabetically
+                .map(({ key, label }) =>
+                  row[key] !== null && row[key] !== undefined ? (
+                    <TableRow key={key}>
+                      <TableCell>
+                        <span className="text-xs">{label}:</span>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-xs">{row[key]}</span>
+                      </TableCell>
+                    </TableRow>
+                  ) : null
+                )}
+            </TableBody>
+          </Table>
+        </Box>
+
+        {/* Sub Total Non Trade */}
+        <Box style={{ paddingBottom: 10, paddingTop: 0 }} className="col-span-1">
+          <Typography variant="h6">
+            <span className="text-sm font-semibold">Sub Total Non Trade</span>
+          </Typography>
+          <Table size="small">
+            <TableBody>
+              {[
+                { key: "mm_head", label: "MM-Head Office" },
+                { key: "mm_commissary", label: "MM-Commissary" },
+                { key: "mm_rm", label: "MM-RM" },
+                { key: "mm_dm", label: "MM-DM" },
+                { key: "mm_km", label: "MM-KM" },
+                { key: "food_charge", label: "Food Charge" },
+                { key: "z_reading_pos", label: "Z Reading POS" },
+                { key: "over_pos", label: "Over POS" },
+              ]
+                .sort((a, b) => a.label.localeCompare(b.label)) // Sort alphabetically
+                .map(({ key, label }) =>
+                  row[key] !== null && row[key] !== undefined ? (
+                    <TableRow key={key}>
+                      <TableCell>
+                        <span className="text-xs">{label}:</span>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-xs">{row[key]}</span>
+                      </TableCell>
+                    </TableRow>
+                  ) : null
+                )}
+            </TableBody>
+          </Table>
+        </Box>
+      </div>
+    </Collapse>
+  </TableCell>
+</TableRow>
+
     </>
   );
 }
