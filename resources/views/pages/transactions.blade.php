@@ -15,8 +15,7 @@
                             <div class="w-full">
                                 <label for="cash" class="block text-sm font-medium">Cash:</label>
                                 <input type="number" id="cash" name="cash"
-                                    class="w-full p-2 border dark:bg-gray-800 dark:bg-gray-800 border-gray-300 dark:border-gray-700 dark:border-gray-700 rounded-md"
-                                    step="0.01">
+                                    class="w-full p-2 border dark:bg-gray-800 border-gray-300 dark:border-gray-700 rounded-md" step="0.01">
                             </div>
                             <div class="w-full">
                                 <label for="check" class="block text-sm font-medium">Check:</label>
