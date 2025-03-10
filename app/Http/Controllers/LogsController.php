@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 
 class LogsController extends Controller
 {
-    public function index(){
-        $logs = Logs::with('user')->get();
+    public function index(Request $request){
+        $logs = Logs::with(['user', 'activityUser', 'transaction'])->get();
 
         if ($request->wantsJson()) {
             return response()->json([
