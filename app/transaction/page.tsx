@@ -87,17 +87,6 @@ export default function CashierForm() {
         setGrandTotalPOS(tradeTotal + nonTradeTotal);
     }, [formData]);
 
-    // Ensures that availableTimes re-renders
-    useEffect(() => {
-        if (availableTimes && availableTimes.length > 0) {
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                time: availableTimes[0],
-            }));
-        }
-    }, [availableTimes]);
-
-
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 
@@ -120,8 +109,6 @@ export default function CashierForm() {
                     Accept: "application/json",
                 },
             });
-
-            console.log("Store Data:", response.data);
 
             if (response.data.status === 'success') {
                 setDisable(true);
