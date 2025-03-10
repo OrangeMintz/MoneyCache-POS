@@ -302,12 +302,26 @@ export default function Navbar() {
                                     </div>
                                         <p className="text-gray-500">{user ? user.email : ""}</p>
                                     </div>
+                                    {/* Time out Section */}
+                                    <hr className="border-gray-200" />
+                                    <div className="py-1">
+                                        <form>
+                                            <button
+                                                type='submit'
+                                                className="block w-full text-center px-4 py-2 text-sm text-gray-700 hover:text-white transition-colors duration-200 hover:bg-red-500"
+                                            >
+                                                Time out
+                                            </button>
+                                        </form>
+                                    </div>
+                                    
+                                    {/* Logout Section */}
                                     <hr className="border-gray-200" />
                                     <div className="py-1">
                                         <form onSubmit={logout}>
                                             <button
                                                 type='submit'
-                                                className="block w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+                                                className="block w-full text-center px-4 py-2 text-sm text-gray-700 hover:text-white transition-colors duration-200 hover:bg-green-400"
                                             >
                                                 Logout
                                             </button>
@@ -360,7 +374,7 @@ export default function Navbar() {
                             : "") : ""}
 
 
-
+                        <h2 className='bg-gray-600'></h2>
                         <form onSubmit={logout}>
                             <button type="submit" className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
                                 Logout
