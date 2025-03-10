@@ -10,7 +10,7 @@ export default function CashierForm() {
     const [loading, setLoading] = useState(true)
     const [formData, setFormData] = useState({
         cashier_id: 0,
-        time: availableTimes ? (Object.values(availableTimes).length != 0 ? Object.values(availableTimes)[0] : null) : "Loading",
+        time: availableTimes ? availableTimes[0] : null,
         cash: null,
         check: null,
         bpi_ccard: null,
@@ -52,7 +52,6 @@ export default function CashierForm() {
 
     // Calculate totals whenever formData changes
     useEffect(() => {
-        console.log(formData)
         globalFunction()
         const tradeFields = [
             formData.cash,
@@ -87,6 +86,17 @@ export default function CashierForm() {
         setSubtotalNonTradePOS(nonTradeTotal);
         setGrandTotalPOS(tradeTotal + nonTradeTotal);
     }, [formData]);
+
+    // Ensures that availableTimes re-renders
+    useEffect(() => {
+        if (availableTimes && availableTimes.length > 0) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                time: availableTimes[0],
+            }));
+        }
+    }, [availableTimes]);
+
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -333,13 +343,23 @@ export default function CashierForm() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <button
-                                            type="submit"
-                                            className="w-full py-3 bg-green-600 text-white rounded-md text-sm mt-6 hover:bg-green-500 transition-all duration-300 hover:scale-105"
-                                            disabled={disable}
-                                        >
-                                            Submit
-                                        </button>
+
+                                        {Object.values(availableTimes).length > 0 ?
+                                            <button
+                                                type="submit"
+                                                className="w-full py-3 bg-green-600 text-white rounded-md text-sm mt-6 hover:bg-green-500 transition-all duration-300 hover:scale-105"
+                                                disabled={disable}
+                                            >
+                                                Submit
+                                            </button>
+                                            :
+                                            <button
+                                                className="w-full py-3 bg-orange-400 text-white rounded-md text-sm mt-6  transition-all duration-300"
+                                                disabled
+                                            >
+                                                Transactions today have been completed
+                                            </button>}
+
 
                                     </div>
 
