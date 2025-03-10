@@ -164,9 +164,12 @@
                             <label for="time" class="block text-sm font-medium">Shift Time:</label>
                             <select id="time" name="time"
                                 class="w-full p-2 border border-gray-300 rounded-md">
-                                <option value="AM">AM</option>
-                                <option value="MID">MID</option>
-                                <option value="PM">PM</option>
+                                @foreach (['AM', 'MID', 'PM'] as $shift)
+                                    <option value="{{ $shift }}"
+                                        {{ in_array($shift, $availableTimes) ? '' : 'disabled' }}>
+                                        {{ $shift }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                     </div>

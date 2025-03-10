@@ -12,9 +12,20 @@ class TransactionsController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // public function index()
+    // {
+    //     return view('pages.transactions');
+    // }
+
     public function index()
     {
-        return view('pages.transactions');
+        $today = now()->toDateString(); // Get today's date
+        $takenTimes = Transactions::whereDate('created_at', $today)->pluck('time')->toArray(); // Fetch taken times
+
+        $allTimes = ['AM', 'MID', 'PM']; // Define all shift options
+        $availableTimes = array_diff($allTimes, $takenTimes); // Get available times
+
+        return view('pages.transactions', compact('availableTimes'));
     }
 
     public function list(Request $request)
