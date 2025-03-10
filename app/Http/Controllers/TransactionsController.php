@@ -12,9 +12,20 @@ class TransactionsController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // public function index()
+    // {
+    //     return view('pages.transactions');
+    // }
+
     public function index()
     {
-        return view('pages.transactions');
+        $today = now()->toDateString(); // Get today's date
+        $takenTimes = Transactions::whereDate('created_at', $today)->pluck('time')->toArray(); // Fetch taken times
+
+        $allTimes = ['AM', 'MID', 'PM']; // Define all shift options
+        $availableTimes = array_diff($allTimes, $takenTimes); // Get available times
+
+        return view('pages.transactions', compact('availableTimes'));
     }
 
     public function list(Request $request)
@@ -224,23 +235,49 @@ class TransactionsController extends Controller
 
     public function retrieve()
     {
-        $transactions = '';
         $user = Auth::user();
         $userId = $user->id;
+        $today = now()->toDateString();
 
-        if($user->role == 'admin'){
-            $transactions = Transactions::with('cashier')->get();
-        }else{
-            $transactions = Transactions::with('cashier')
-            ->where('cashier_id', $userId)
-            ->get();
+        $query = Transactions::with('cashier')->whereDate('created_at', $today);
+
+        if ($user->role !== 'admin') {
+            $query->where('cashier_id', $userId);
         }
+
+        $transactions = $query->get();
+
+        // Identify taken time periods
+        $takenTimes = $transactions->pluck('time')->toArray();
+        $availableTimes = array_diff(['AM', 'MID', 'PM'], $takenTimes);
 
         return response()->json([
             "status" => 1,
             "transactions" => $transactions,
+            "taken_times" => $takenTimes,
+            "available_times" => $availableTimes,
         ]);
     }
+
+    // public function retrieve()
+    // {
+    //     $transactions = '';
+    //     $user = Auth::user();
+    //     $userId = $user->id;
+
+    //     if($user->role == 'admin'){
+    //         $transactions = Transactions::with('cashier')->get();
+    //     }else{
+    //         $transactions = Transactions::with('cashier')
+    //         ->where('cashier_id', $userId)
+    //         ->get();
+    //     }
+
+    //     return response()->json([
+    //         "status" => 1,
+    //         "transactions" => $transactions,
+    //     ]);
+    // }
 
     public function getByDate(Request $request){
         $request->validate([

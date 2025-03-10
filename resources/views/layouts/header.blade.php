@@ -8,10 +8,10 @@
     <title>Transactions</title>
     {{-- favicon --}}
     <link rel="icon" type="image/png" href="{{ asset('img/LogoIcon.png') }}">
-    
+
     @vite('resources/css/app.css')
 
-    {{-- <style>
+    <style>
         /* Styling for the layout to create 3 columns */
         .container-transaction {
             display: grid;
@@ -44,7 +44,7 @@
                 -moz-appearance: textfield;
             }
         }
-    </style> --}}
+    </style>
 
     {{-- datatable css --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" />
