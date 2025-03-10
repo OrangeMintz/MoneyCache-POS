@@ -294,6 +294,7 @@ export default function CashierForm() {
                                                 name="time"
                                                 onChange={handleInputChange}
                                             >
+                                                <option value={null}>Please select period</option>
                                                 {Object.values(availableTimes).length > 0 ? (
                                                     Object.values(availableTimes).map((time, index) => (
                                                         <option value={time} key={index}>{time}</option>
