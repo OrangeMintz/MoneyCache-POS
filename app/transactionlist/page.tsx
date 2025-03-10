@@ -1,5 +1,6 @@
 'use client';
 
+import { fetchTransactions } from '@/utils/fetch';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Box from '@mui/material/Box';
@@ -20,7 +21,6 @@ import Toast from 'typescript-toastify';
 import api from "../../utils/api";
 import { formatNumber } from "../../utils/formatter";
 import Preloader from '../comps/preloader';
-import { fetchTransactions } from '@/utils/fetch';
 
 // Row Component
 function Row({ row, handleSave, visibleColumns }) {

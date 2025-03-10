@@ -2,11 +2,11 @@
 
 import { useAppContext } from '@/context/AppContext';
 import axios from 'axios';
+import { UserCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { UserCircle } from 'lucide-react';
 
 export default function Navbar() {
     const { user, globalFunction } = useAppContext()
@@ -297,7 +297,9 @@ export default function Navbar() {
                    right-0 md:right-1/2 md:translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50`}
                                 >
                                     <div className="px-4 py-3 text-sm text-gray-900 text-center">
-                                        <h1 className="font-medium">{user ? user.name + ` (${user.role})` : ""}</h1>
+                                    <div className="flex justify-center">
+                                    <h1 className="font-medium">{user ? user.name + ` (${user.role})` : ""}</h1>
+                                    </div>
                                         <p className="text-gray-500">{user ? user.email : ""}</p>
                                     </div>
                                     <hr className="border-gray-200" />

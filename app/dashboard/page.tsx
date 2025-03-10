@@ -1,10 +1,10 @@
 'use client';
-import PieChart from '@/components/ui/piechart';
 import LineChart from '@/components/ui/linechart';
+import PieChart from '@/components/ui/piechart';
+import { fetchTotals, fetchTransactions, fetchUsers } from '@/utils/fetch';
+import { formatNumber } from '@/utils/formatter';
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
-import { fetchUsers, fetchTransactions, fetchTotals } from '@/utils/fetch';
-import { formatNumber } from '@/utils/formatter';
 
 export default function Home() {
     const [transactions, setTransactions] = useState([])
@@ -32,28 +32,76 @@ export default function Home() {
         <>
             {/* Main Content */}
             <div className="p-10 bg-gray-100">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {/* Cards */}
-                    {[
-                        { title: 'Total Gross', value: (totals ? "₱ " + formatNumber(totals.gross) : ""), percentage: '59.3%', trend: 'up', extra: '35,000', color: 'primary' },
-                        { title: 'Total Net', value: (totals ? "₱ " + formatNumber(totals.net) : ""), percentage: '70.5%', trend: 'up', extra: '8,900', color: 'success' },
-                        { title: 'Total Transactions', value: ((transactions.length > 0) ? transactions.length : ""), percentage: '27.4%', trend: 'down', extra: '1,943', color: 'warning' },
-                        { title: 'Total Users', value: ((users.length > 0) ? users.length : ""), percentage: '27.4%', trend: 'down', extra: '$20,395', color: 'danger' },
-                    ].map((card, index) => (
-                        <div key={index} className="bg-white rounded-lg shadow p-4">
-                            <h6 className="text-sm text-gray-500 mb-2">{card.title}</h6>
-                            <h4 className="text-2xl font-bold mb-3">
-                                {card.value}{' '}
-                                <span className={`text-xs bg-${card.color}-100 border border-${card.color}-500 text-${card.color}-500 px-2 py-1 rounded-full`}>
-                                    {card.trend === 'up' ? '↑' : '↓'} {card.percentage}
-                                </span>
-                            </h4>
-                            <p className="text-sm text-gray-500">
-                                You made an extra <span className={`text-${card.color}-500`}>{card.extra}</span> this year
-                            </p>
+            <div className="grid grid-cols-3 gap-4">
+    {/* Left side: 2x2 grid of cards (taking 2 columns) */}
+    <div className="col-span-2 grid grid-cols-2 gap-4">
+        {[
+            { title: 'Total Gross', value: (totals ? "₱ " + formatNumber(totals.gross) : ""), percentage: '59.3%', trend: 'up', extra: '35,000', color: 'primary' },
+            { title: 'Total Net', value: (totals ? "₱ " + formatNumber(totals.net) : ""), percentage: '70.5%', trend: 'up', extra: '8,900', color: 'success' },
+            { title: 'Total Transactions', value: ((transactions.length > 0) ? transactions.length : ""), percentage: '27.4%', trend: 'down', extra: '1,943', color: 'warning' },
+            { title: 'Total Users', value: ((users.length > 0) ? users.length : ""), percentage: '27.4%', trend: 'down', extra: '$20,395', color: 'danger' },
+        ].map((card, index) => (
+            <div key={index} className="bg-white rounded-lg shadow p-4">
+                <h6 className="text-sm text-gray-500 mb-2">{card.title}</h6>
+                <h4 className="text-2xl font-bold mb-3">
+                    {card.value}{' '}
+                    <span className={`text-xs bg-${card.color}-100 border border-${card.color}-500 text-${card.color}-500 px-2 py-1 rounded-full`}>
+                        {card.trend === 'up' ? '↑' : '↓'} {card.percentage}
+                    </span>
+                </h4>
+                <p className="text-sm text-gray-500">
+                    You made an extra <span className={`text-${card.color}-500`}>{card.extra}</span> this year
+                </p>
+            </div>
+        ))}
+    </div>
+
+    {/* Right side: Activity Logs as Timeline (taking 1 column) */}
+    <div className="col-span-1 flex flex-col">
+        <div className="bg-white rounded-lg shadow p-4 flex-grow">
+            <h5 className="text-lg font-bold mb-4 md:ml-3">Activity Logs</h5>
+            <div className="max-h-64 pl-2 overflow-y-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                {/* Hide scrollbar for Chrome, Safari, and Opera */}
+                <style jsx>{`
+                    .max-h-64::-webkit-scrollbar {
+                        display: none;
+                    }
+                `}</style>
+                <div className="relative">
+                    {/* Timeline vertical line */}
+                    <div className="absolute left-2 top-0 bottom-0 w-0.5 bg-gray-200 ml-0.5"></div>
+                    
+                    {/* Timeline items */}
+                    {transactions.map((transaction, index) => (
+                        <div key={index} className="relative pl-8 pb-5">
+                            {/* Timeline dot */}
+                            <div className="absolute left-0 mt-1.5">
+                                <div className="h-4 w-4 rounded-full bg-blue-500 border-2 border-white shadow"></div>
+                            </div>
+                            
+                            {/* Content */}
+                            <div className="bg-gray-50 rounded-lg p-3 shadow-sm">
+                                <div className="flex justify-between mb-1">
+                                    <span className="text-sm font-medium text-gray-900">ID: {transaction.id}</span>
+                                    <span className="text-xs text-gray-500">{new Date(transaction.created_at).toISOString().split("T")[0]}</span>
+                                </div>
+                                <div className="mb-1">
+                                    <span className="text-sm text-gray-700">{transaction.cashier?.name || "Unknown"}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span className="text-xs text-gray-500">Hours: {transaction.time}</span>
+                                    <span className="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-800">
+                                        <a href="/user">Details</a>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     ))}
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
 
                 {/* Unique Visitor Section */}
                 <div className="mt-6">
@@ -80,7 +128,7 @@ export default function Home() {
                     </div>
                 </div>
 
-                {/* Recent Orders Section */}
+              
                 <div className="mt-6">
                     <h5 className="text-lg font-bold mb-3">RECENT TRANSACTIONS</h5>
                     <div className="bg-white rounded-lg shadow overflow-hidden p-8">
@@ -126,6 +174,7 @@ export default function Home() {
                         </table>
                     </div>
                 </div>
+                  {/* Logs  Section */}
             </div>
 
             {/* Scripts */}
