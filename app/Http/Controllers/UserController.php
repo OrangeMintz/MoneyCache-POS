@@ -60,7 +60,7 @@ class UserController extends Controller
 
         // Log the action
         $userId = auth()->id(); // Get the currently authenticated admin
-        (new LogsController)->storeUserLog($userId, $user->id);
+        (new LogsController)->storeUserLog($userId, $user->id, 'add');
 
         $message = 'User Registered Successfully!';
         if ($request->wantsJson()) {
@@ -84,7 +84,7 @@ class UserController extends Controller
 
         ]);
 
-        Log::info("Validated: ",$validated);
+        Log::info("Validated: ",$validated);        
 
         $existingUser = User::where('email', $validated['email'])
             ->where('id', '!=', $id)
@@ -106,6 +106,9 @@ class UserController extends Controller
             'password' => $validated['password'] ? Hash::make($validated['password']) : $user->password,
         ]);
 
+        $userId = auth()->id(); // Get the currently authenticated admin
+        (new LogsController)->storeUserLog($userId, $id, 'update');
+
         $message = 'User updated successfully!';
         if ($request->wantsJson()) {
             return response()->json(['status' => 'success', 'message' => $message]);
@@ -117,6 +120,9 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
+
+        $userId = auth()->id(); // Get the currently authenticated admin
+        (new LogsController)->storeUserLog($userId, $id, 'delete');
 
         $message = 'User Deleted Successfully!';
         if ($request->wantsJson()) {

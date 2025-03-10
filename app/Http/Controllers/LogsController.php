@@ -8,8 +8,23 @@ use Illuminate\Http\Request;
 
 class LogsController extends Controller
 {
+    public function index(){
+        $logs = Logs::with('user')->get();
 
-    public function storeUserLog($userId, $newUserId)
+        if ($request->wantsJson()) {
+            return response()->json([
+                "status" => 1,
+                "logs" => $logs
+            ]);
+        }else{
+
+            // Diri ibutang inyong logic for laravel
+
+        }
+        
+    }
+
+    public function storeUserLog($userId, $newUserId, $category)
     {
         $admin = User::find($userId); // Get the admin user
         $adminName = $admin ? $admin->name : 'null'; // Fallback if user not found
@@ -19,8 +34,8 @@ class LogsController extends Controller
             'transaction_id' => null, // No transaction involved
             'activity_user_id' => $newUserId, // The user that was created
             'type' => 'user',
-            'category' => 'add',
-            'message' => "{$adminName} added a new user",
+            'category' => $category,
+            'message' => ($category === 'add') ? "added a new user" : $category . "d a new user",
             'total_hours' => null, // Not applicable
         ]);
     }
