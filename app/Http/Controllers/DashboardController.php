@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Logs;
 use App\Models\Transactions;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -17,8 +19,9 @@ class DashboardController extends Controller
         $transactions = $this->getTransactions();
         $grossTotal = $this->getTotalGrossSales();
         $netTotal = $this->getTotalNetSales();
+        $grandTotal = $this->getGrandTotal();
 
-        return view('dashboard', compact('logs', 'users', 'transactions', 'grossTotal', 'netTotal'));
+        return view('dashboard', compact('logs', 'users', 'transactions', 'grossTotal', 'netTotal','grandTotal'));
     }
 
     public function getUsers(){
@@ -89,7 +92,6 @@ class DashboardController extends Controller
         return number_format($totalNetSales, 2);
     }
 
-
     public function getRecentLogs()
     {
         $user = Auth::user();
@@ -103,5 +105,40 @@ class DashboardController extends Controller
             ->get();
     }
 
+    public function getGrandTotal()
+    {
+        $user = Auth::user();
+
+        return Transactions::when($user->role === 'cashier', function ($query) use ($user) {
+                return $query->where('cashier_id', $user->id);
+            })
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->sum('grand_total'); // Get total sales for the month
+    }
+
+    public function getSalesData()
+    {
+        // Get current month
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+
+        // Fetch sales data: sum grand_total per day for the current month
+        $salesData = DB::table('transactions')
+            ->selectRaw('DATE(created_at) as date, SUM(grand_total) as total')
+            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        // Format response
+        $sales = $salesData->pluck('total')->toArray();
+        $dates = $salesData->pluck('date')->map(fn($date) => Carbon::parse($date)->format('d F'))->toArray();
+
+        return response()->json([
+            'sales' => $sales,
+            'dates' => $dates
+        ]);
+    }
 
 }
