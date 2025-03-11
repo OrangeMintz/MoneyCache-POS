@@ -5,14 +5,11 @@
                 <div class="mr-6">
                     <h1 class="title font-semibold text-[26px] mb-2">Dashboard</h1>
                 </div>
-                <div class="flex flex-wrap items-start justify-end -mb-3">
-                    {{-- <button class="inline-flex px-5 py-3 text-purple-600 hover:text-purple-700 focus:text-purple-700 hover:bg-purple-100 focus:bg-purple-100 border border-purple-600 rounded-md mb-3">
-                  <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="flex-shrink-0 h-5 w-5 -ml-1 mt-0.5 mr-2">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                  </svg>
-                  Manage dashboard
-                </button> --}}
-                </div>
+                {{-- <div class="flex flex-wrap items-start justify-end -mb-3">
+                    <a href="{{route('attendance.index')}}" class="inline-flex px-5 py-3 text-white bg-MCGreen hover:bg-MCGreenHover focus:bg-MCGreenHover rounded-md ml-6 mb-3">
+                        Attendance Record
+                    </a>
+                </div> --}}
             </div>
             <section class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
                 <div class="flex items-center p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
@@ -170,52 +167,58 @@
                         </div>
                         <div class="flow-root max-h-96 overflow-y-auto">
                             <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
-                                @foreach ($logs as $log)
-                                    <li class="py-3 sm:py-4">
-                                        <div class="flex items-center relative">
-                                            <div class="min-w-0 ms-4">
-                                                <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                                                    Name:
-                                                    <span class="text-sm text-gray-500 break-words dark:text-gray-400">
-                                                        {{ $log->user->name ?? 'Unknown' }}
-                                                    </span>
-                                                </p>
-                                                <p
-                                                    class="text-sm font-medium text-gray-900 break-words dark:text-white">
-                                                    Action:
-                                                    <span
-                                                        class="text-sm break-words text-wrap capitalize
-                                        @if ($log->category === 'add') text-green-600
-                                        @elseif ($log->category === 'update') text-blue-600
-                                        @elseif ($log->category === 'delete') text-red-500
-                                        @else text-gray-500 @endif">
-                                                        {{ ucfirst($log->category) }}
-                                                    </span>
-                                                </p>
-                                                <p
-                                                    class="text-sm font-medium text-gray-900 break-words dark:text-white">
-                                                    Activity:
-                                                    <span
-                                                        class="text-sm text-gray-500 break-words dark:text-gray-400 text-wrap">
-                                                        {{ $log->message }}
-                                                    </span>
-                                                </p>
-                                            </div>
-                                            <div class="flex flex-col justify-between h-full px-2 w-1/3">
-                                                <p class="text-xs italic absolute top-0 right-0">
-                                                    {{ \Carbon\Carbon::parse($log->created_at)->setTimezone(config('app.timezone'))->format('Y-m-d g:i A') }}
-                                                </p>
-                                                <p
-                                                    class="text-sm text-end font-medium px-1 rounded-lg text-white absolute bottom-0 right-0 capitalize
-                                    @if ($log->type === 'transaction') bg-green-500
-                                    @elseif ($log->type === 'user') bg-blue-500
-                                    @else bg-gray-500 @endif">
-                                                    {{ ucfirst($log->type) }}
-                                                </p>
-                                            </div>
-                                        </div>
+                                @if ($logs->isEmpty())
+                                    <li class="py-3 sm:py-4 text-center text-gray-500 dark:text-gray-400">
+                                        No transactions yet.
                                     </li>
-                                @endforeach
+                                @else
+                                    @foreach ($logs as $log)
+                                        <li class="py-3 sm:py-4">
+                                            <div class="flex items-center relative">
+                                                <div class="min-w-0 ms-4">
+                                                    <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                                                        Name:
+                                                        <span class="text-sm text-gray-500 break-words dark:text-gray-400">
+                                                            {{ $log->user->name ?? 'Unknown' }}
+                                                        </span>
+                                                    </p>
+                                                    <p
+                                                        class="text-sm font-medium text-gray-900 break-words dark:text-white">
+                                                        Action:
+                                                        <span
+                                                            class="text-sm break-words text-wrap capitalize
+                                            @if ($log->category === 'add') text-green-600
+                                            @elseif ($log->category === 'update') text-blue-600
+                                            @elseif ($log->category === 'delete') text-red-500
+                                            @else text-gray-500 @endif">
+                                                            {{ ucfirst($log->category) }}
+                                                        </span>
+                                                    </p>
+                                                    <p
+                                                        class="text-sm font-medium text-gray-900 break-words dark:text-white">
+                                                        Activity:
+                                                        <span
+                                                            class="text-sm text-gray-500 break-words dark:text-gray-400 text-wrap">
+                                                            {{ $log->message }}
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                                <div class="flex flex-col justify-between h-full px-2 w-1/3">
+                                                    <p class="text-xs italic absolute top-0 right-0">
+                                                        {{ \Carbon\Carbon::parse($log->created_at)->setTimezone(config('app.timezone'))->format('Y-m-d g:i A') }}
+                                                    </p>
+                                                    <p
+                                                        class="text-sm text-end font-medium px-1 rounded-lg text-white absolute bottom-0 right-0 capitalize
+                                        @if ($log->type === 'transaction') bg-green-500
+                                        @elseif ($log->type === 'user') bg-blue-500
+                                        @else bg-gray-500 @endif">
+                                                        {{ ucfirst($log->type) }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                @endif
                             </ul>
                         </div>
                     </div>

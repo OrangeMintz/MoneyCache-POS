@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Middleware\CheckRole;
 
 Route::get('/', function () {
@@ -47,6 +48,10 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware([CheckRole::class . ":admin"])->group(function () {
+
+        // ATTENDANCE
+        Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+
         // USERS
         Route::prefix('user')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('admin.users');
