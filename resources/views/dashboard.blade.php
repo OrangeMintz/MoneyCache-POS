@@ -28,7 +28,7 @@
                         <span class="block text-gray-500">Users</span>
                     </div>
                 </div>
-                <div class="flex items-center p-8 bg-white shadow rounded-lg">
+                <div class="flex items-center p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
                     <div
                         class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-green-600 bg-green-100 rounded-full mr-6">
                         <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -42,7 +42,7 @@
                         <span class="block text-gray-500">Transaction</span>
                     </div>
                 </div>
-                <div class="flex items-center p-8 bg-white shadow rounded-lg">
+                <div class="flex items-center p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
                     <div
                         class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-red-600 bg-red-100 rounded-full mr-6">
                         <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -56,7 +56,7 @@
                         <span class="block text-gray-500">Net Sales</span>
                     </div>
                 </div>
-                <div class="flex items-center p-8 bg-white shadow rounded-lg">
+                <div class="flex items-center p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
                     <div
                         class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-blue-600 bg-blue-100 rounded-full mr-6">
                         <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -74,7 +74,8 @@
             <section class="grid md:grid-cols-3 xl:grid-cols-3 md:grid-rows-2 xl:grid-flow-col gap-6">
 
                 {{-- chart --}}
-                <div class="flex flex-col row-span-3 md:col-span-2 md:row-span-2 bg-white shadow rounded-lg p-4 sm:p-8">
+                <div
+                    class="flex flex-col row-span-3 md:col-span-2 md:row-span-2 bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-8">
 
                     <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Income</h5>
                     <div class="flex-grow">
@@ -159,9 +160,7 @@
                     </div>
                 </div>
                 {{-- recent logs --}}
-                <div class="row-span-2  md:col-span-1 bg-white shadow rounded-lg">
-
-
+                <div class="row-span-2  md:col-span-1 bg-white dark:bg-gray-800 shadow rounded-lg">
                     <div
                         class="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
                         <div class="flex items-center justify-start mb-4">
