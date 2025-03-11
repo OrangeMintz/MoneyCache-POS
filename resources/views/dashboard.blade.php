@@ -24,36 +24,8 @@
                         </svg>
                     </div>
                     <div>
-                        <span class="block text-2xl font-bold">62</span>
-                        <span class="block text-gray-500">Users</span>
-                    </div>
-                </div>
-                <div class="flex items-center p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
-                    <div
-                        class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-green-600 bg-green-100 rounded-full mr-6">
-                        <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                            class="h-6 w-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                        </svg>
-                    </div>
-                    <div>
-                        <span class="block text-2xl font-bold">6.8</span>
-                        <span class="block text-gray-500">Transaction</span>
-                    </div>
-                </div>
-                <div class="flex items-center p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
-                    <div
-                        class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-red-600 bg-red-100 rounded-full mr-6">
-                        <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                            class="h-6 w-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
-                        </svg>
-                    </div>
-                    <div>
-                        <span class="inline-block text-2xl font-bold">9</span>
-                        <span class="block text-gray-500">Net Sales</span>
+                        <span class="block text-2xl font-bold">{{ $users }} </span>
+                        <span class="block text-gray-500">Total Users</span>
                     </div>
                 </div>
                 <div class="flex items-center p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
@@ -66,8 +38,36 @@
                         </svg>
                     </div>
                     <div>
-                        <span class="block text-2xl font-bold">83</span>
-                        <span class="block text-gray-500">Gross Sales</span>
+                        <span class="block text-2xl font-bold">{{ $transactions }}</span>
+                        <span class="block text-gray-500">Total Transactions</span>
+                    </div>
+                </div>
+                <div class="flex items-center p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
+                    <div
+                        class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-green-600 bg-green-100 rounded-full mr-6">
+                        <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            class="h-6 w-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="block text-2xl font-bold">{{ number_format($grossTotal, 2) }}</span>
+                        <span class="block text-gray-500">Total Gross Sales</span>
+                    </div>
+                </div>
+                <div class="flex items-center p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
+                    <div
+                        class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-red-600 bg-red-100 rounded-full mr-6">
+                        <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            class="h-6 w-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="inline-block text-2xl font-bold">{{ $netTotal }}</span>
+                        <span class="block text-gray-500">Total Net Sales</span>
                     </div>
                 </div>
             </section>
@@ -156,7 +156,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 {{-- recent logs --}}
