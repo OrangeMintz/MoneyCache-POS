@@ -15,7 +15,7 @@
                 </div>
             </div>
             <section class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
-                <div class="flex items-center p-8 bg-white shadow rounded-lg">
+                <div class="flex items-center p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
                     <div
                         class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-purple-600 bg-purple-100 rounded-full mr-6">
                         <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
@@ -159,7 +159,9 @@
                     </div>
                 </div>
                 {{-- recent logs --}}
-                <div class="row-span-2 md:col-span-1 bg-white shadow rounded-lg">
+                <div class="row-span-2  md:col-span-1 bg-white shadow rounded-lg">
+
+
                     <div
                         class="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
                         <div class="flex items-center justify-start mb-4">
