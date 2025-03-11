@@ -9,7 +9,14 @@ use Illuminate\Http\Request;
 class LogsController extends Controller
 {
     public function index(Request $request){
-        $logs = Logs::with(['user', 'activityUser', 'transaction'])->get();
+        $logs = Logs::with(['user',
+         'activityUser' => function($query) {
+            $query->withTrashed();
+         }, 
+         'transaction' => function($query) {
+            $query->withTrashed();
+         }
+         ])->get();
 
         if ($request->wantsJson()) {
             return response()->json([
@@ -33,7 +40,7 @@ class LogsController extends Controller
             'activity_user_id' => $newUserId, // The user that was created
             'type' => 'user',
             'category' => $category,
-            'message' => ($category === 'add') ? "added a new user" : $category . "d a new user",
+            'message' => ($category === 'add') ? "added a new user" : $category . "d a user",
             'total_hours' => null, // Not applicable
         ]);
     }
