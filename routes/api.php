@@ -54,6 +54,7 @@ Route::middleware(['auth:api'])->group(function () {
 
         Route::prefix('logs')->group(function () {
             Route::get('/', [LogsController::class, 'index']);
+            Route::get('/test', [LogsController::class, 'test']);
         });
 
     });
