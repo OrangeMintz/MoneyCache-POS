@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            // $table->string('cashier')->nullable();
             $table->foreignId('cashier_id')->constrained('users')->onDelete('cascade');
             $table->string('time');
             $table->decimal('cash', 10, 2)->nullable();
