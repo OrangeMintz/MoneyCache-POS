@@ -35,7 +35,7 @@
                         </svg>
                     </div>
                     <div>
-                        <span class="block text-2xl font-bold">{{ $transactions }}</span>
+                        <span class="block text-2xl font-bold">{{ $transactions ?? '0' }}</span>
                         <span class="block text-gray-500">Total Transactions</span>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                         </svg>
                     </div>
                     <div>
-                        <span class="block text-2xl font-bold">{{ number_format($grossTotal, 2) }}</span>
+                        <span class="block text-2xl font-bold">₱{{ number_format($grossTotal ?? '0', 2) }}</span>
                         <span class="block text-gray-500">Total Gross Sales</span>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                         </svg>
                     </div>
                     <div>
-                        <span class="inline-block text-2xl font-bold">{{ $netTotal }}</span>
+                        <span class="inline-block text-2xl font-bold">₱{{ number_format($netTotal ?? '0', 2) }}</span>
                         <span class="block text-gray-500">Total Net Sales</span>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                             <div class="flex justify-between">
                                 <div>
                                     <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">
-                                        {{ number_format($grandTotal, 2) }}
+                                        {{ number_format($grandTotal ?? '0', 2) }}
                                     </h5>
                                     <p class="text-base font-normal text-gray-500 dark:text-gray-400">Income this month
                                     </p>
@@ -176,9 +176,11 @@
                                         <li class="py-3 sm:py-4">
                                             <div class="flex items-center relative">
                                                 <div class="min-w-0 ms-4">
-                                                    <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                                                    <p
+                                                        class="text-sm font-medium text-gray-900 truncate dark:text-white">
                                                         Name:
-                                                        <span class="text-sm text-gray-500 break-words dark:text-gray-400">
+                                                        <span
+                                                            class="text-sm text-gray-500 break-words dark:text-gray-400">
                                                             {{ $log->user->name ?? 'Unknown' }}
                                                         </span>
                                                     </p>

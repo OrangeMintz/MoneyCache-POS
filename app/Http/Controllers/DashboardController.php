@@ -48,8 +48,7 @@ class DashboardController extends Controller
         return Transactions::when($user->role === 'cashier', function ($query) use ($user) {
                 return $query->where('cashier_id', $user->id);
             })
-            ->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
+            ->whereDate('created_at', now()->toDateString()) // Filter for today only
             ->sum('grand_total');
     }
 
@@ -64,12 +63,11 @@ class DashboardController extends Controller
             'grand_total'
         ]);
 
-        // Fetch transactions for the current month, filtered by user role
+        // Fetch transactions for today, filtered by user role
         $transactions = Transactions::when($user->role === 'cashier', function ($query) use ($user) {
                 return $query->where('cashier_id', $user->id);
             })
-            ->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
+            ->whereDate('created_at', now()->toDateString()) // Filter for today only
             ->get();
 
         $totalNetSales = 0;
@@ -88,8 +86,7 @@ class DashboardController extends Controller
             }
         }
 
-        // Return formatted amount
-        return number_format($totalNetSales, 2);
+        return $totalNetSales;
     }
 
     public function getRecentLogs()
