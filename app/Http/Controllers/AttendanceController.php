@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
+use App\Events\MyEvent;
 use DateTime;
 use DateTimeZone;
 
@@ -45,7 +46,7 @@ class AttendanceController extends Controller
         if ($alreadyClockedIn) {
             $message = 'You have already clocked in today!';
             if ($request->wantsJson()) {
-                return response()->json(['status' => 'error', 'message' => $message], 400);
+                return response()->json(['status' => 'error', 'message' => $message]);
             }
 
             return redirect()->back()->with([
@@ -66,6 +67,7 @@ class AttendanceController extends Controller
             'status' => $status,
         ]);
 
+        event(new MyEvent("Clocked in!"));
         $message = 'Clocked In Successfully!';
         if ($request->wantsJson()) {
             return response()->json(['status' => 'success', 'message' => $message], 200);
@@ -81,7 +83,7 @@ class AttendanceController extends Controller
     public function timeOut(Request $request) {
         $user = Auth::user();
         if (!$user) {
-            return response()->json(['error' => 'No authenticated user!'], 400);
+            return response()->json(['error' => 'No authenticated user!']);
         }
 
         $now = now();
@@ -96,7 +98,7 @@ class AttendanceController extends Controller
         if (!$attendance) {
             $message = 'You have not clocked in today or have already clocked out!';
             if ($request->wantsJson()) {
-                return response()->json(['status' => 'error', 'message' => $message], 400);
+                return response()->json(['status' => 'error', 'message' => $message]);
             }
 
             return redirect()->back()->with([
@@ -119,6 +121,7 @@ class AttendanceController extends Controller
             'totalRate' => $totalRate,
         ]);
 
+        event(new MyEvent("Clocked out!"));
         $message = 'Clocked Out Successfully!';
         if ($request->wantsJson()) {
             return response()->json(['status' => 'success', 'message' => $message], 200);
