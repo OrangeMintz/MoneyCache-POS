@@ -4,8 +4,15 @@
 <main>
   <div class="font-sans bg-gray-100 dark:bg-gray-800 dark:text-gray-100 p-6">
     <div class="bg-white dark:bg-gray-900 p-4 mb-4">
-        <div class="card-header">
-            <h5 class="title font-semibold text-[26px]">Attendance Record</h5>
+        <div class="">
+            <div class="flex justify-between items-center mb-2">
+
+                <h5 class="title font-semibold text-[26px]">Attendance Record</h5>
+                <div class="flex flex-col gap-2 justify-center w-60 md:flex-row">
+                    <button id="timeIn" class="w-full text-center px-3 py-2 bg-green-100 dark:bg-green-300 text-green-700 dark:text-green-900 hover:bg-green-200">Time in</button>
+                    <button id="timeOut" class="w-full text-center px-3 py-2 bg-red-100 dark:bg-red-300 text-red-700 dark:text-red-900 hover:bg-red-200">Time out</button>
+                </div>
+            </div>
             <table id="attendanceTable" class="display" style="width:100%">
               <thead>
                   <tr>

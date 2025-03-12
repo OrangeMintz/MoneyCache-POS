@@ -8,11 +8,11 @@
             <div class="card-header flex justify-between items-center">
                 <h5 class="title font-semibold text-[26px]">Manage Users</h5>
                 <div class="flex flex-wrap justify-center">
-                    <a href="{{ route('attendance.index') }}"
+                    {{-- <a href="{{ route('attendance.index') }}"
                         class="bg-amber-500 hover:bg-amber-600 rounded-lg text-white text-md text-center self-center px-4 py-2">
                         Attendance Record
                         <i class="fas fa-clipboard-list"></i>
-                    </a>
+                    </a> --}}
                     <button data-modal-target="add-user-modal" data-modal-toggle="add-user-modal"
                         class="block bg-emerald-700 hover:bg-emerald-800 rounded-lg text-white text-md text-center self-center px-3 md:px-6 py-2 my-2 mx-2">Add
                         User
