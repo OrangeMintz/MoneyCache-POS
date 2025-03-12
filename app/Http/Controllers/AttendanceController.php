@@ -12,21 +12,26 @@ use DateTimeZone;
 
 class AttendanceController extends Controller
 {
-    public function index() {
-
-        return view('pages.attendance');
+    public function index(Request $request) {
+        $attendance = $this->retrieve($request);
+        return view('pages.attendance', compact('attendance'));
     }
 
-    public function retrieve() {
-        
+    public function retrieve(Request $request) {
         $user = Auth::user();
 
-        $attendance = $user->role == 'admin' ? Attendance::with('user')->get() : Attendance::where('user_id', $user->id)->with('user')->get();
+        $attendance = $user->role == 'admin'
+            ? Attendance::with('user')->get()
+            : Attendance::where('user_id', $user->id)->with('user')->get();
 
-        return response()->json([
-            "status" => 1,
-            "attendance" => $attendance,
-        ]);
+        if ($request->wantsJson()) {
+            return response()->json([
+                "status" => 1,
+                "attendance" => $attendance,
+            ]);
+        }
+
+        return $attendance; // Return the collection for use in `compact()`
     }
 
     public function timeIn(Request $request) {
@@ -37,6 +42,7 @@ class AttendanceController extends Controller
 
         $now = now();
         $login = today()->setTime(8, 0);
+        $earlyThreshold = $login->copy()->subMinutes(20); // 7:40 AM
 
         // Check if the user has already clocked in today
         $alreadyClockedIn = Attendance::where('user_id', $user->id)
@@ -56,7 +62,13 @@ class AttendanceController extends Controller
         }
 
         // Determine status
-        $status = $now < $login ? 'Early' : ($now == $login ? 'On Time' : 'Late');
+        if ($now >= $login) {
+            $status = 'Late';
+        } elseif ($now >= $earlyThreshold) {
+            $status = 'On-time';
+        } else {
+            $status = 'Early';
+        }
 
         Attendance::create([
             'user_id' => $user->id,
@@ -78,6 +90,7 @@ class AttendanceController extends Controller
             'alert-type' => 'success',
         ]);
     }
+
 
 
     public function timeOut(Request $request) {
