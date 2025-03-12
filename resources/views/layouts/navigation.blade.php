@@ -55,10 +55,10 @@
             </div>
             <ul class="py-2 text-sm text-gray-700" aria-labelledby="avatarButton">
                 <li>
-                    <a href="{{ route('profile.edit') }}" class="text-center block px-4 py-2 bg-gray-100 hover:bg-gray-200">Profile</a>
+                    <a href="{{ route('profile.edit') }}" class="text-center block px-4 py-2 hover:bg-gray-100">Profile</a>
                 </li>
                 <li>
-                    <a href="{{ route('attendance.index')}}" class="text-center block px-4 py-2 bg-blue-100 text-blue-700 hover:bg-blue-200">Attendance</a>
+                    <a href="{{ route('attendance.index')}}" class="text-center block px-4 py-2 hover:bg-gray-100">Attendance</a>
                 </li>
 
                 <li>
@@ -112,17 +112,4 @@
     });
 </script>
 
-{{-- timein/timeout toggle --}}
-{{-- <script>
-    document.getElementById("timeOut").addEventListener("click", function(event) {
-        event.preventDefault();
-        document.getElementById("timeOut").classList.toggle("hidden");
-        document.getElementById("timeIn").classList.toggle("hidden");
-    });
 
-    document.getElementById("timeIn").addEventListener("click", function(event) {
-        event.preventDefault();
-        document.getElementById("timeOut").classList.toggle("hidden");
-        document.getElementById("timeIn").classList.toggle("hidden");
-    });
-</script> --}}
