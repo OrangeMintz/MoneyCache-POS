@@ -27,6 +27,7 @@
                             <th>Role</th>
                             <th>Name</th>
                             <th>Email</th>
+                            <th>Rate</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th>Action</th>
@@ -38,6 +39,7 @@
                                 <td class="capitalize">{{ $user->role }}</td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
+                                <td>₱ {{ $user->rate }}</td>
                                 <td>{{ $user->created_at }}</td>
                                 <td>{{ $user->updated_at }}</td>
                                 <td>
