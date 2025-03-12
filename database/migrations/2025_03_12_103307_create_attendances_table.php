@@ -16,9 +16,9 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // References users table
             $table->timestamp('timeIn')->nullable();
             $table->timestamp('timeOut')->nullable();
-            $table->decimal('totalHours', 5, 2)->default(0);
-            $table->decimal('totalRate', 10, 2)->default(0);
-            $table->string('status');
+            $table->decimal('totalHours', 5, 2)->default(0)->nullable();
+            $table->decimal('totalRate', 10, 2)->default(0)->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }
