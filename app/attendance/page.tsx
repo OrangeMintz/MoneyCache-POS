@@ -1,6 +1,6 @@
 'use client';
 
-import { fetchUsers } from '@/utils/fetch';
+import { fetchAttendance, timeIn, timeOut } from '@/utils/fetch';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -13,195 +13,36 @@ import TableRow from '@mui/material/TableRow';
 import { LogIn, LogOut } from "lucide-react";
 import { useEffect, useState } from 'react';
 import Toast from 'typescript-toastify';
-import api from "../../utils/api";
 import Preloader from '../comps/preloader';
+import { formatTime, formatDate } from '@/utils/formatter';
+import Pusher from 'pusher-js';
 
 // Row Component
 function Row({ row, handleSave, visibleColumns }) {
-  const [open, setOpen] = useState(false);
-  const [editModalOpen, seteditModalOpen] = useState(false);
-  const [deleteModalOpen, setdeleteModalOpen] = useState(false);
-  const [successIcon, setSuccessIcon] = useState('none')
-
-  const ediModalStyle = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "70%",
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    p: 6
-  }
-
-  const deleteModalStyle = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "30%",
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    p: 6
-  }
-
-  const [editFormData, setEditFormData] = useState({
-    name: row.name || "",
-    email: row.email || "",
-    role: row.role || "",
-    password: null
-  });
-
-  const [summary, setSummary] = useState({
-    trade: 0,
-    non_trade: 0,
-    grand_total: 0,
-  })
-
-  const handleEditClick = () => {
-    seteditModalOpen(true);
-  };
-
-  const handleDeleteClick = () => {
-    setdeleteModalOpen(true);
-  };
-
-  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setEditFormData({
-      ...editFormData,
-      [e.target.name]: e.target.value
-    })
-  }
-
-  const handleDeletSubmit = async (event: React.FormEvent) => {
-    event.preventDefault()
-    const token = localStorage.getItem('access_token')
-
-    try {
-      const response = await api.delete(`/api/users/${row.id}`, {
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${token}`
-        }
-      })
-
-      console.log(response.data)
-
-      if (response.data.status === 'success') {
-        setSuccessIcon('')
-        new Toast({
-          position: "bottom-right",
-          onClose: () => { window.location.href = "/user"; },
-          toastMsg: "Successfully deleted user!",
-          autoCloseTime: 1000,
-          canClose: true,
-          showProgress: true,
-          pauseOnHover: true,
-          pauseOnFocusLoss: true,
-          type: "success",
-          theme: 'dark',
-        });
-      } else {
-        new Toast({
-          position: "bottom-right",
-          toastMsg: response.data.message,
-          autoCloseTime: 1000,
-          canClose: true,
-          showProgress: true,
-          pauseOnHover: true,
-          pauseOnFocusLoss: true,
-          type: "error",
-          theme: 'dark',
-        });
-      }
-    } catch (error) {
-      console.error("Error deleting transaction: ", error)
-    }
-  }
-
-  const handleEditFormSubmit = async (event: React.FormEvent) => {
-    event.preventDefault()
-    const token = localStorage.getItem('access_token');
-
-    try {
-
-      const response = await api.put(`/api/users/${row.id}`, { ...editFormData }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      });
-
-      console.log(response.data)
-
-      if (response.data.status === 'success') {
-        setSuccessIcon('')
-        new Toast({
-          position: "bottom-right",
-          onClose: () => { window.location.href = "/user"; },
-          toastMsg: "Successfully stored transaction!",
-          autoCloseTime: 1000,
-          canClose: true,
-          showProgress: true,
-          pauseOnHover: true,
-          pauseOnFocusLoss: true,
-          type: "success",
-          theme: 'dark',
-        });
-      } else {
-        new Toast({
-          position: "bottom-right",
-          toastMsg: response.data.message,
-          autoCloseTime: 1000,
-          canClose: true,
-          showProgress: true,
-          pauseOnHover: true,
-          pauseOnFocusLoss: true,
-          type: "error",
-          theme: 'dark',
-        });
-      }
-
-    } catch (error) {
-      console.error("Error updating transaction: ", error)
-      new Toast({
-        position: "top-right",
-        toastMsg: "Error updating transaction",
-        autoCloseTime: 1000,
-        canClose: true,
-        showProgress: true,
-        pauseOnHover: true,
-        pauseOnFocusLoss: true,
-        type: "error",
-        theme: 'dark',
-      });
-    }
-  }
-
 
   return (
     <>
-<TableRow>
-  {visibleColumns.id && <TableCell align="center">
-    <div className="flex flex-col items-center">
-      <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white mb-1">
-        {row.name ? row.name.charAt(0).toUpperCase() : ''}
-      </div>
-      <div className="flex flex-col items-center">
-        <span className="font-medium">{row.name || ''}</span>
-        <span className="text-xs text-gray-500">{row.email || ''}</span>
-        <span className="text-xs mt-0.5 px-2 py-0.5 bg-gray-100 rounded-full inline-block">{row.id}</span> {/* default search value is id, i change ra by role */}
-        
-      </div>
-    </div>
-  </TableCell>}
-  {visibleColumns.in && <TableCell align="center"><span className='text-xs'>8:00 AM</span></TableCell>}
-  {visibleColumns.out && <TableCell align="center"><span className='text-xs'>5:00 PM</span></TableCell>}
-  {visibleColumns.hour && <TableCell align="center"><span className='text-xs'>490</span></TableCell>}
-  {visibleColumns.rate && <TableCell align="center"><span className='text-xs'>250.50</span></TableCell>}
-  {visibleColumns.status && <TableCell align="center"><span className='text-xs'>pending</span></TableCell>}
-  {visibleColumns.date && <TableCell align="center"><span className='text-xs'>tayo</span></TableCell>}
-</TableRow>
+      <TableRow>
+        {visibleColumns.id && <TableCell align="center">
+          <div className="flex flex-col items-center">
+            <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white mb-1">
+              {row.user ? row.user?.name.charAt(0).toUpperCase() : ''}
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="font-medium">{row.user?.name || ''}</span>
+              <span className="text-xs text-gray-500">{row.user?.email || ''}</span>
+              <span className="text-xs mt-0.5 px-2 py-0.5 bg-gray-100 rounded-full inline-block">{row.user?.id}</span> {/* default search value is id, i change ra by role */}
+
+            </div>
+          </div>
+        </TableCell>}
+        {visibleColumns.in && <TableCell align="center"><span className='px-2 py-1 font-semibold leading-tight rounded-md text-xs text-green-700 bg-green-100'>{formatTime(row.created_at)}</span></TableCell>}
+        {visibleColumns.out && <TableCell align="center"><span className='px-2 py-1 font-semibold leading-tight rounded-md text-xs text-purple-700 bg-purple-100'>{formatTime(row.timeOut)}</span></TableCell>}
+        {visibleColumns.hour && <TableCell align="center"><span className='text-xs'>{row.totalHours || "N/A"}</span></TableCell>}
+        {visibleColumns.rate && <TableCell align="center"><span className='px-2 py-1 font-semibold leading-tight rounded-md text-xs text-green-700 bg-green-100'>{row.totalRate || "N/A"}</span></TableCell>}
+        {visibleColumns.status && <TableCell align="center"><span className={`px-2 py-1 font-semibold leading-tight rounded-md text-xs ${(row.status == 'early') ? 'text-green-700 bg-green-100' : (row.status == 'early') ? 'text-blue-700 bg-green-100' : 'text-orange-700 bg-gray-100'}`}>{row.status}</span></TableCell>}
+        {visibleColumns.date && <TableCell align="center"><span className='text-xs'>{formatDate(row.created_at)}</span></TableCell>}
+      </TableRow>
     </>
   );
 }
@@ -212,9 +53,8 @@ export default function CollapsibleTable() {
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
-  const [addModalView, setAddModalView] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [visibleColumns, setVisibleColumns] = useState({
     id: true,
     in: true,
@@ -224,19 +64,33 @@ export default function CollapsibleTable() {
     status: true,
     date: true,
   });
-  const [addForm, setAddForm] = useState({
-    name: null,
-    email: null,
-    role: null
-  })
 
   useEffect(() => {
-    fetchUsers().then(setData);
+    fetchAttendance().then(setData);
+    Pusher.logToConsole = true;
+
+    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
+      cluster: "ap1",
+    });
+
+    const channel = pusher.subscribe("my-event");
+
+    channel.bind("myEvent", (data: any) => {
+      console.log(JSON.stringify(data))
+      fetchAttendance().then(setData);
+    });
+
+    channel.bind("pusher:subscription_succeeded", () => {
+      console.log("Successfully subscribed to laravel channel!");
+    });
+
+    return () => {
+      channel.unbind_all();
+      channel.unsubscribe();
+      pusher.disconnect();
+    };
   }, []);
 
-  useEffect(() => {
-    (data.length > 0) && setLoading(false)
-  }, [data]);
 
   const handleChangePage = (_event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
@@ -244,16 +98,43 @@ export default function CollapsibleTable() {
     setPage(0);
   };
 
-  const handleSave = (updatedData) => {
-    const updatedRows = data.map((row) =>
-      row.id === updatedData.id ? updatedData : row
-    );
-    setData(updatedRows);
-  };
+  const handleTimeIn = async (event: React.FormEvent) => {
+    event.preventDefault()
+    const res = await timeIn()
+
+    new Toast({
+      position: "bottom-right",
+      toastMsg: res.message,
+      autoCloseTime: 2000,
+      canClose: true,
+      showProgress: true,
+      pauseOnHover: true,
+      pauseOnFocusLoss: true,
+      type: (res.status == 'success') ? 'success' : 'error',
+      theme: 'dark',
+    });
+  }
+
+  const handleTimeOut = async (event: React.FormEvent) => {
+    event.preventDefault()
+    const res = await timeOut()
+
+    new Toast({
+      position: "bottom-right",
+      toastMsg: res.message,
+      autoCloseTime: 2000,
+      canClose: true,
+      showProgress: true,
+      pauseOnHover: true,
+      pauseOnFocusLoss: true,
+      type: (res.status == 'success') ? 'success' : 'error',
+      theme: 'dark',
+    });
+  }
 
   const filteredRows = data.filter((row) =>
-    row.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    row.id.toString().toLowerCase().includes(searchTerm.toLocaleLowerCase())
+    row.user?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    formatDate(row.created_at).toString().toLowerCase().includes(searchTerm.toLocaleLowerCase())
   );
 
   const paginatedRows = filteredRows.slice(
@@ -289,26 +170,27 @@ export default function CollapsibleTable() {
 
           <div className="mb-4 flex justify-end col-span-2 relative">
 
-          <div>
-                    <button
-                        id="TimeInButton"
-                        className="inline-flex items-center justify-center gap-x-1 md:mr-1 rounded-md bg-green-400 sm:px-3 sm:py-3 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10"
-                    
-                    >
-                        <LogIn className="w-4 h-4" />
-                        Time In
-                    </button>
-                    </div> 
-                    <div>
-                    <button
-                        id="TimeInButton"
-                        className="inline-flex items-center justify-center gap-x-1 md:mr-1 rounded-md bg-red-400 sm:px-3 sm:py-3 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10"
-                    
-                    >
-                        <LogOut className="w-4 h-4" />
-                        Time Out
-                    </button>
-                    </div> 
+            <div>
+              <button
+                id="TimeInButton"
+                onClick={handleTimeIn}
+                className="inline-flex items-center justify-center gap-x-1 md:mr-1 rounded-md bg-green-400 sm:px-3 sm:py-3 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10"
+              >
+                <LogIn className="w-4 h-4" />
+                Time In
+              </button>
+
+            </div>
+            <div>
+              <button
+                id="TimeInButton"
+                onClick={handleTimeOut}
+                className="inline-flex items-center justify-center gap-x-1 md:mr-1 rounded-md bg-red-400 sm:px-3 sm:py-3 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10"
+              >
+                <LogOut className="w-4 h-4" />
+                Time Out
+              </button>
+            </div>
             <button
               id="dropdownDefaultButton"
               className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
@@ -364,18 +246,18 @@ export default function CollapsibleTable() {
           <Table>
             <TableHead>
               <TableRow>
-                {visibleColumns.id && <TableCell  align="center">User Details</TableCell>}
-                {visibleColumns.in && <TableCell  align="center">Time In</TableCell>}
+                {visibleColumns.id && <TableCell align="center">User Details</TableCell>}
+                {visibleColumns.in && <TableCell align="center">Time In</TableCell>}
                 {visibleColumns.out && <TableCell align='center'>Time Out</TableCell>}
                 {visibleColumns.hour && <TableCell align='center'>Total Hours</TableCell>}
                 {visibleColumns.rate && <TableCell align='center'>Total Rate</TableCell>}
                 {visibleColumns.status && <TableCell align='center'>Status</TableCell>}
-                {visibleColumns.date&& <TableCell align='center'>Date</TableCell>}
+                {visibleColumns.date && <TableCell align='center'>Date</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
               {paginatedRows.map((row) => (
-                <Row key={row.id} row={row} handleSave={handleSave} visibleColumns={visibleColumns} />
+                <Row key={row.id} row={row} visibleColumns={visibleColumns} />
               ))}
             </TableBody>
           </Table>
