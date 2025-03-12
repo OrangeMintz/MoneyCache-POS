@@ -58,11 +58,11 @@
                     <a href="{{ route('profile.edit') }}" class="text-center block px-4 py-2 hover:bg-gray-100">Profile</a>
                 </li>
                 <li class="flex w-full">
-                    <button id="timeOut" class="w-1/2 text-center px-4 py-2 bg-blue-100 text-blue-700 hover:bg-blue-200">Time out</button>
-                    <button id="timeIn" class="w-1/2 text-center px-4 py-2 bg-green-100 text-green-700 hover:bg-green-200 hidden">Time in</button>
-                    <form method="POST" action="{{ route('logout') }}" class="w-1/2">
+                    <button id="timeOut" class="w-1/2 text-center px-3 py-2 bg-blue-100 text-blue-700 hover:bg-blue-200">Time out</button>
+                    <button id="timeIn" class="w-1/2 text-center px-3 py-2 bg-green-100 text-green-700 hover:bg-green-200 hidden">Time in</button>
+                    <form method="POST" action="{{ route('logout') }}" class="w-1/2 text-center bg-red-100 hover:bg-red-200">
                         @csrf
-                        <button class="px-4 py-2 text-sm bg-red-100 text-red-700 hover:bg-red-200">
+                        <button class="text-sm text-red-700 px-3 py-2">
                             Sign out
                         </button>
                     </form>

@@ -5,14 +5,11 @@
                 <div class="mr-6">
                     <h1 class="title font-semibold text-[26px] mb-2">Dashboard</h1>
                 </div>
-                <div class="flex flex-wrap items-start justify-end -mb-3">
-                    {{-- <button class="inline-flex px-5 py-3 text-purple-600 hover:text-purple-700 focus:text-purple-700 hover:bg-purple-100 focus:bg-purple-100 border border-purple-600 rounded-md mb-3">
-                  <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="flex-shrink-0 h-5 w-5 -ml-1 mt-0.5 mr-2">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                  </svg>
-                  Manage dashboard
-                </button> --}}
-                </div>
+                {{-- <div class="flex flex-wrap items-start justify-end -mb-3">
+                    <a href="{{route('attendance.index')}}" class="inline-flex px-5 py-3 text-white bg-MCGreen hover:bg-MCGreenHover focus:bg-MCGreenHover rounded-md ml-6 mb-3">
+                        Attendance Record
+                    </a>
+                </div> --}}
             </div>
             <section class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
                 <div class="flex items-center p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
@@ -24,36 +21,8 @@
                         </svg>
                     </div>
                     <div>
-                        <span class="block text-2xl font-bold">62</span>
-                        <span class="block text-gray-500">Users</span>
-                    </div>
-                </div>
-                <div class="flex items-center p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
-                    <div
-                        class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-green-600 bg-green-100 rounded-full mr-6">
-                        <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                            class="h-6 w-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                        </svg>
-                    </div>
-                    <div>
-                        <span class="block text-2xl font-bold">6.8</span>
-                        <span class="block text-gray-500">Transaction</span>
-                    </div>
-                </div>
-                <div class="flex items-center p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
-                    <div
-                        class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-red-600 bg-red-100 rounded-full mr-6">
-                        <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                            class="h-6 w-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
-                        </svg>
-                    </div>
-                    <div>
-                        <span class="inline-block text-2xl font-bold">9</span>
-                        <span class="block text-gray-500">Net Sales</span>
+                        <span class="block text-2xl font-bold">{{ $users }} </span>
+                        <span class="block text-gray-500">Total Users</span>
                     </div>
                 </div>
                 <div class="flex items-center p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
@@ -66,8 +35,36 @@
                         </svg>
                     </div>
                     <div>
-                        <span class="block text-2xl font-bold">83</span>
-                        <span class="block text-gray-500">Gross Sales</span>
+                        <span class="block text-2xl font-bold">{{ $transactions ?? '0' }}</span>
+                        <span class="block text-gray-500">Total Transactions</span>
+                    </div>
+                </div>
+                <div class="flex items-center p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
+                    <div
+                        class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-green-600 bg-green-100 rounded-full mr-6">
+                        <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            class="h-6 w-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="block text-2xl font-bold">₱{{ number_format($grossTotal ?? '0', 2) }}</span>
+                        <span class="block text-gray-500">Total Gross Sales</span>
+                    </div>
+                </div>
+                <div class="flex items-center p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
+                    <div
+                        class="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-red-600 bg-red-100 rounded-full mr-6">
+                        <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            class="h-6 w-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="inline-block text-2xl font-bold">₱{{ number_format($netTotal ?? '0', 2) }}</span>
+                        <span class="block text-gray-500">Total Net Sales</span>
                     </div>
                 </div>
             </section>
@@ -77,18 +74,18 @@
                 <div
                     class="flex flex-col row-span-3 md:col-span-2 md:row-span-2 bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-8">
 
-                    <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Income</h5>
+                    <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Grand Total</h5>
                     <div class="flex-grow">
-
                         <div class="w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 py-4 md:py-6">
                             <div class="flex justify-between">
                                 <div>
-                                    <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">32.4k
+                                    <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">
+                                        {{ number_format($grandTotal ?? '0', 2) }}
                                     </h5>
-                                    <p class="text-base font-normal text-gray-500 dark:text-gray-400">Income this week
+                                    <p class="text-base font-normal text-gray-500 dark:text-gray-400">Income this month
                                     </p>
                                 </div>
-                                <div
+                                {{-- <div
                                     class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 dark:text-green-500 text-center">
                                     12%
                                     <svg class="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -96,14 +93,14 @@
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                             stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
                                     </svg>
-                                </div>
+                                </div> --}}
                             </div>
                             <div id="area-chart"></div>
                             <div
                                 class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
-                                <div class="flex justify-between items-center pt-5">
+                                <div class="flex justify-end items-center pt-5">
                                     <!-- Button -->
-                                    <button id="dropdownDefaultButton" data-dropdown-toggle="lastDaysdropdown"
+                                    {{-- <button id="dropdownDefaultButton" data-dropdown-toggle="lastDaysdropdown"
                                         data-dropdown-placement="bottom"
                                         class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-white"
                                         type="button">
@@ -113,7 +110,7 @@
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                                 stroke-width="2" d="m1 1 4 4 4-4" />
                                         </svg>
-                                    </button>
+                                    </button> --}}
                                     <!-- Dropdown menu -->
                                     <div id="lastDaysdropdown"
                                         class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
@@ -144,19 +141,20 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <a href="#"
-                                        class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
-                                        Users Report
-                                        <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                            <path stroke="currentColor" stroke-linecap="round"
-                                                stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
-                                        </svg>
-                                    </a>
+                                    @if (auth()->user()->role === 'admin')
+                                        <a href="{{ route('transactions.sheet', ['date' => now()->format('Y-m-d')]) }}"
+                                            class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
+                                            Users Report
+                                            <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                                            </svg>
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 {{-- recent logs --}}
@@ -169,52 +167,60 @@
                         </div>
                         <div class="flow-root max-h-96 overflow-y-auto">
                             <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
-                                @foreach ($logs as $log)
-                                    <li class="py-3 sm:py-4">
-                                        <div class="flex items-center relative">
-                                            <div class="min-w-0 ms-4">
-                                                <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                                                    Name:
-                                                    <span class="text-sm text-gray-500 break-words dark:text-gray-400">
-                                                        {{ $log->user->name ?? 'Unknown' }}
-                                                    </span>
-                                                </p>
-                                                <p
-                                                    class="text-sm font-medium text-gray-900 break-words dark:text-white">
-                                                    Action:
-                                                    <span
-                                                        class="text-sm break-words text-wrap capitalize
-                                        @if ($log->category === 'add') text-green-600
-                                        @elseif ($log->category === 'update') text-blue-600
-                                        @elseif ($log->category === 'delete') text-red-500
-                                        @else text-gray-500 @endif">
-                                                        {{ ucfirst($log->category) }}
-                                                    </span>
-                                                </p>
-                                                <p
-                                                    class="text-sm font-medium text-gray-900 break-words dark:text-white">
-                                                    Activity:
-                                                    <span
-                                                        class="text-sm text-gray-500 break-words dark:text-gray-400 text-wrap">
-                                                        {{ $log->message }}
-                                                    </span>
-                                                </p>
-                                            </div>
-                                            <div class="flex flex-col justify-between h-full px-2 w-1/3">
-                                                <p class="text-xs italic absolute top-0 right-0">
-                                                    {{ \Carbon\Carbon::parse($log->created_at)->setTimezone(config('app.timezone'))->format('Y-m-d g:i A') }}
-                                                </p>
-                                                <p
-                                                    class="text-sm text-end font-medium px-1 rounded-lg text-white absolute bottom-0 right-0 capitalize
-                                    @if ($log->type === 'transaction') bg-green-500
-                                    @elseif ($log->type === 'user') bg-blue-500
-                                    @else bg-gray-500 @endif">
-                                                    {{ ucfirst($log->type) }}
-                                                </p>
-                                            </div>
-                                        </div>
+                                @if ($logs->isEmpty())
+                                    <li class="py-3 sm:py-4 text-center text-gray-500 dark:text-gray-400">
+                                        No transactions yet.
                                     </li>
-                                @endforeach
+                                @else
+                                    @foreach ($logs as $log)
+                                        <li class="py-3 sm:py-4">
+                                            <div class="flex items-center relative">
+                                                <div class="min-w-0 ms-4">
+                                                    <p
+                                                        class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                                                        Name:
+                                                        <span
+                                                            class="text-sm text-gray-500 break-words dark:text-gray-400">
+                                                            {{ $log->user->name ?? 'Unknown' }}
+                                                        </span>
+                                                    </p>
+                                                    <p
+                                                        class="text-sm font-medium text-gray-900 break-words dark:text-white">
+                                                        Action:
+                                                        <span
+                                                            class="text-sm break-words text-wrap capitalize
+                                            @if ($log->category === 'add') text-green-600
+                                            @elseif ($log->category === 'update') text-blue-600
+                                            @elseif ($log->category === 'delete') text-red-500
+                                            @else text-gray-500 @endif">
+                                                            {{ ucfirst($log->category) }}
+                                                        </span>
+                                                    </p>
+                                                    <p
+                                                        class="text-sm font-medium text-gray-900 break-words dark:text-white">
+                                                        Activity:
+                                                        <span
+                                                            class="text-sm text-gray-500 break-words dark:text-gray-400 text-wrap">
+                                                            {{ $log->message }}
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                                <div class="flex flex-col justify-between h-full px-2 w-1/3">
+                                                    <p class="text-xs italic absolute top-0 right-0">
+                                                        {{ \Carbon\Carbon::parse($log->created_at)->setTimezone(config('app.timezone'))->format('Y-m-d g:i A') }}
+                                                    </p>
+                                                    <p
+                                                        class="text-sm text-end font-medium px-1 rounded-lg text-white absolute bottom-0 right-0 capitalize
+                                        @if ($log->type === 'transaction') bg-green-500
+                                        @elseif ($log->type === 'user') bg-blue-500
+                                        @else bg-gray-500 @endif">
+                                                        {{ ucfirst($log->type) }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                @endif
                             </ul>
                         </div>
                     </div>
