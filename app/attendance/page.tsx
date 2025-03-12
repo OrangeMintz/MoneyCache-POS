@@ -10,7 +10,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { UserCheck } from "lucide-react";
+import { LogIn, UserCheck } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from 'react';
 import Toast from 'typescript-toastify';
@@ -289,12 +289,23 @@ export default function CollapsibleTable() {
 
 
           <div className="mb-4 flex justify-end col-span-2 relative">
+
+          <div>
+                    <button
+                        id="TimeInButton"
+                        className="inline-flex items-center justify-center gap-x-1 md:mr-1 rounded-md bg-green-400 sm:px-3 sm:py-3 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10"
                     
-            <div>
+                    >
+                        <LogIn className="w-4 h-4" />
+                        Time In
+                    </button>
+                    </div> 
+                    
+                  <div>
                 <Link href="/user">
               <button
                 id="ViewAttendance"
-                className="inline-flex items-center justify-center gap-x-1 md:mr-9 rounded-md bg-blue-400 sm:px-3 sm:py-3 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10"
+                className="inline-flex items-center justify-center gap-x-1 md:mr-1 rounded-md bg-blue-400 sm:px-3 sm:py-3 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10"
               >
                 <UserCheck className="w-4 h-4" />
                 View Users
