@@ -17,8 +17,10 @@ class AttendanceController extends Controller
     }
 
     public function retrieve() {
+        
+        $user = Auth::user();
 
-        $attendance = Attendance::with('user')->get();
+        $attendance = $user->role == 'admin' ? Attendance::with('user')->get() : Attendance::where('user_id', $user->id)->with('user')->get();
 
         return response()->json([
             "status" => 1,
