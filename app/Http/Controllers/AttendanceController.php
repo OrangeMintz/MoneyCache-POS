@@ -12,36 +12,36 @@ use DateTimeZone;
 class AttendanceController extends Controller
 {
     public function index() {
-        
+
         return view('pages.attendance');
     }
 
-    public function timein(){
+    public function timeIn(Request $request) {
         $user = Auth::user();
-        $timezone = new DateTimeZone(env('APP_TIMEZONE'));
-        $now = new DateTime('now', $timezone);
-
-        // logout time
-        $logout = new DateTime('today', $timezone);
-        $logout->setTime(17, 0, 0);
-        // login time
-        $login = new DateTime('today', $timezone);
-        $login->setTime(8, 0, 0);
-
-        // checks if user is early or late
-        $status = ($now < $login) ? 'Early' : (($now == $login) ? 'On Time' : 'Late');
-
-        if(!$user){
+        if (!$user) {
             return response()->json(['error' => 'No authenticated user!'], 400);
-        }else{
-            Attendance::create([
-                'user_id' => $user->id, 
-                'timeIn' => $now, 
-                'timeOut' => null, 
-                'totalHours' => null,
-                'totalRate' => null,
-                'status' => $status,
-            ]);
         }
+        $now = now();
+        $login = today()->setTime(8, 0);
+        $status = $now < $login ? 'Early' : ($now == $login ? 'On Time' : 'Late');
+
+        Attendance::create([
+            'user_id' => $user->id,
+            'timeIn' => $now,
+            'timeOut' => null,
+            'totalHours' => null,
+            'totalRate' => null,
+            'status' => $status,
+        ]);
+
+        $message = 'Clocked In Successfully!';
+        if ($request->wantsJson()) {
+            return response()->json(['status' => 'success', 'message' => $message], 200);
+        }
+
+        return redirect()->back()->with([
+            'message' => $message,
+            'alert-type' => 'success',
+        ]);
     }
 }

@@ -8,11 +8,11 @@
             <div class="card-header flex justify-between items-center">
                 <h5 class="title font-semibold text-[26px]">Manage Users</h5>
                 <div class="flex flex-wrap justify-center">
-                    {{-- <a href="{{ route('attendance.index') }}"
+                    <a href="{{ route('attendance.index') }}"
                         class="bg-amber-500 hover:bg-amber-600 rounded-lg text-white text-md text-center self-center px-4 py-2">
                         Attendance Record
                         <i class="fas fa-clipboard-list"></i>
-                    </a> --}}
+                    </a>
                     <button data-modal-target="add-user-modal" data-modal-toggle="add-user-modal"
                         class="block bg-emerald-700 hover:bg-emerald-800 rounded-lg text-white text-md text-center self-center px-3 md:px-6 py-2 my-2 mx-2">Add
                         User
@@ -25,7 +25,7 @@
                         <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
                         </svg>
                     </button>
-                        
+
                     <div id="dropdownDots" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600">
                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconButton">
                             <li>
