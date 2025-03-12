@@ -16,6 +16,26 @@ class AttendanceController extends Controller
         return view('pages.attendance');
     }
 
+    public function retrieve() {
+
+        $attendance = Attendance::with('user')->get();
+
+        return response()->json([
+            "status" => 1,
+            "attendance" => $attendance,
+        ]);
+    }
+
+    public function retrieve() {
+
+        $attendance = Attendance::with('user')->get();
+
+        return response()->json([
+            "status" => 1,
+            "attendance" => $attendance,
+        ]);
+    }
+
     public function timeIn(Request $request) {
         $user = Auth::user();
         if (!$user) {

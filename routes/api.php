@@ -36,6 +36,7 @@ Route::middleware(['auth:api'])->group(function () {
         });
 
         Route::prefix('attendance')->group(function () {
+            Route::get('/', [AttendanceController::class, 'retrieve']);
             Route::get('/timein', [AttendanceController::class, 'timein']);
         });
     });
