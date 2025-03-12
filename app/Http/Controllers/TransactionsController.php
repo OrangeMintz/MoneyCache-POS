@@ -6,6 +6,7 @@ use App\Models\Transactions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Events\MyEvent;
 
 class TransactionsController extends Controller
 {
@@ -119,6 +120,8 @@ class TransactionsController extends Controller
         $userId = auth()->id();
         (new LogsController)->storeTransactionLog($userId, $transaction->id, 'add');
 
+        event(new MyEvent("Transaction has been added!"));
+
         //redirects to transactions-list
         if ($request->wantsJson()) {
             return response()->json([
@@ -215,6 +218,8 @@ class TransactionsController extends Controller
             'alert-type' => 'success',
         );
 
+        event(new MyEvent("Transaction has been updated!"));
+
         if ($request->wantsJson()) {
             return response()->json([
                 'status' => 'success',
@@ -231,6 +236,8 @@ class TransactionsController extends Controller
 
         $userId = auth()->id();
         (new LogsController)->storeTransactionLog($userId, $transaction->id, 'delete');
+
+        event(new MyEvent("Transaction has been deleted!"));
 
         if ($request->wantsJson()) {
             return response()->json([
