@@ -1,40 +1,41 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { useEffect, useMemo, useState } from 'react';
 
 interface PieChartProps {
   gross: number;
   net: number;
 }
 
-
 const PieChart: React.FC<PieChartProps> = ({ gross, net }) => {
   const [hoveredSegment, setHoveredSegment] = useState<number | null>(null);
-  const [grossPercent, setGrossPercent] = useState(0)
-  const [netPercent, setNetPercent] = useState(0)
+  const [grossPercent, setGrossPercent] = useState(0);
+  const [netPercent, setNetPercent] = useState(0);
 
-  const data = [
-    { name: "Gross Total", value: grossPercent, color: "#FF6384" },
-    { name: "Net Total", value: netPercent, color: "#36A2EB" },
-  ];
+  const data = useMemo(() => [
+    { name: "Gross Total", value: parseFloat(grossPercent.toFixed(2)), color: "#FF6384" },
+    { name: "Net Total", value: parseFloat(netPercent.toFixed(2)), color: "#36A2EB" },
+  ], [grossPercent, netPercent]);
 
-  const total = data.reduce((sum, item) => sum + item.value, 0);
-  let cumulativePercent = 0;
+  const total = useMemo(() => data.reduce((sum, item) => sum + item.value, 0), [data]);
 
-  const segments = data.map((item, index) => {
-    const percent = (item.value / total) * 100;
-    const startPercent = cumulativePercent;
-    cumulativePercent += percent;
+  const segments = useMemo(() => {
+    let cumulativePercent = 0;
+    return data.map((item, index) => {
+      const percent = (item.value / total) * 100;
+      const startPercent = cumulativePercent;
+      cumulativePercent += percent;
 
-    return {
-      ...item,
-      id: index,
-      percent,
-      startPercent,
-      endPercent: cumulativePercent,
-    };
-  });
+      return {
+        ...item,
+        id: index,
+        percent,
+        startPercent,
+        endPercent: cumulativePercent,
+      };
+    });
+  }, [data, total]);
 
   const centerX = 75;
   const centerY = 75;
@@ -45,9 +46,14 @@ const PieChart: React.FC<PieChartProps> = ({ gross, net }) => {
     const calcuGross = gross / total * 100;
     const calcuNet = net / total * 100;
 
-    setGrossPercent(calcuGross)
-    setNetPercent(calcuNet)
-  }, [gross, net])
+    setGrossPercent(calcuGross);
+    setNetPercent(calcuNet);
+  }, [gross, net]);
+
+  // Function to format numbers as ##.##
+  const formatNumber = (num) => {
+    return parseFloat(num.toFixed(2));
+  };
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -115,7 +121,7 @@ const PieChart: React.FC<PieChartProps> = ({ gross, net }) => {
                 {segments[hoveredSegment].name}
               </text>
               <text x={centerX} y={centerY + 5} textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">
-                {segments[hoveredSegment].value} ({Math.round(segments[hoveredSegment].percent)}%)
+                {formatNumber(segments[hoveredSegment].value)} ({Math.round(segments[hoveredSegment].percent)}%)
               </text>
             </g>
           )}
@@ -134,7 +140,7 @@ const PieChart: React.FC<PieChartProps> = ({ gross, net }) => {
             <div className="w-4 h-4 rounded-sm" style={{ backgroundColor: item.color }}></div>
             <div className="text-sm">
               <div className="font-medium">{item.name}</div>
-              <div>{item.value} ({Math.round((item.value / total) * 100)}%)</div>
+              <div>{formatNumber(item.value)} ({Math.round((item.value / total) * 100)}%)</div>
             </div>
           </div>
         ))}

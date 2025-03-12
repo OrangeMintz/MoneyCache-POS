@@ -1,8 +1,9 @@
 'use client';
 import LineChart from '@/components/ui/linechart';
 import PieChart from '@/components/ui/piechart';
-import { fetchTotals, fetchTransactions, fetchUsers, fetchLogs } from '@/utils/fetch';
+import { fetchLogs, fetchTotals, fetchTransactions, fetchUsers } from '@/utils/fetch';
 import { formatNumber } from '@/utils/formatter';
+import * as lucideIcons from 'lucide-react';
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
 import { useAppContext } from '@/context/AppContext';
@@ -66,44 +67,54 @@ export default function Home() {
         <>
             {/* Main Content */}
             <div className="p-4 md:p-10 bg-gray-100">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {/* Left side: 2x2 grid of cards (taking 2 columns on medium screens and above) */}
-                    <div className="col-span-1 md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {[
-                            { title: 'Total Gross', value: (totals ? "₱ " + formatNumber(totals.gross) : ""), percentage: '59.3%', trend: 'up', extra: '35,000', color: 'primary' },
-                            { title: 'Total Net', value: (totals ? "₱ " + formatNumber(totals.net) : ""), percentage: '70.5%', trend: 'up', extra: '8,900', color: 'success' },
-                            { title: 'Total Transactions', value: ((transactions.length > 0) ? transactions.length : "0"), percentage: '27.4%', trend: 'down', extra: '1,943', color: 'warning' },
-                            { title: 'Total Users', value: ((users.length > 0) ? users.length : "0"), percentage: '27.4%', trend: 'down', extra: '$20,395', color: 'danger' },
-                        ].map((card, index) => (
-                            <div key={index} className="bg-white rounded-lg shadow p-4">
-                                <h6 className="text-sm text-gray-500 mb-2">{card.title}</h6>
-                                <h4 className="text-xl md:text-2xl font-bold mb-3">
-                                    {card.value}{' '}
-                                    <span className={`text-xs bg-${card.color}-100 border border-${card.color}-500 text-${card.color}-500 px-2 py-1 rounded-full`}>
-                                        {card.trend === 'up' ? '↑' : '↓'} {card.percentage}
-                                    </span>
-                                </h4>
-                                <p className="text-sm text-gray-500">
-                                    You made an extra <span className={`text-${card.color}-500`}>{card.extra}</span> this year
-                                </p>
-                            </div>
-                        ))}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    {/* Left side: 2x2 grid of cards (taking 2 columns on medium screens and above) */}
+    <div className="col-span-1 md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {[
+            { title: 'Total Gross', value: (totals ? "₱ " + formatNumber(totals.gross) : ""), percentage: '59.3%', trend: 'up', extra: '35,000', color: 'primary', icon: 'DollarSign', bgColor: 'bg-blue-100' },
+            { title: 'Total Net', value: (totals ? "₱ " + formatNumber(totals.net) : ""), percentage: '70.5%', trend: 'up', extra: '8,900', color: 'success', icon: 'Euro', bgColor: 'bg-green-100' },
+            { title: 'Total Transactions', value: ((transactions.length > 0) ? transactions.length : "0"), percentage: '27.4%', trend: 'down', extra: '1,943', color: 'warning', icon: 'BarChart', bgColor: 'bg-yellow-100' },
+            { title: 'Total Users', value: ((users.length > 0) ? users.length : "0"), percentage: '27.4%', trend: 'down', extra: '$20,395', color: 'danger', icon: 'Users', bgColor: 'bg-red-100' },
+        ].map((card, index) => {
+            // Dynamic import of icons from lucide-react
+            const IconComponent = lucideIcons[card.icon];
+            
+            return (
+            <div key={index} className="bg-white rounded-lg shadow p-4">
+                <div className="flex justify-between items-center mb-2">
+                    <h6 className="text-sm text-gray-500">{card.title}</h6>
+                    {/* Icon with background */}
+                    <div className={`p-2 rounded-full ${card.bgColor}`}>
+                        {IconComponent && <IconComponent size={24} className={`text-${card.color}-500`} />}
                     </div>
+                </div>
+                <h4 className="text-xl md:text-2xl font-bold mb-3">
+                    {card.value}{' '}
+                    <span className={`text-xs bg-${card.color}-100 border border-${card.color}-500 text-${card.color}-500 px-2 py-1 rounded-full`}>
+                        {card.trend === 'up' ? '↑' : '↓'} {card.percentage}
+                    </span>
+                </h4>
+                <p className="text-sm text-gray-500">
+                    You made an extra <span className={`text-${card.color}-500`}>{card.extra}</span> this year
+                </p>
+            </div>
+        )})}
+    </div>
 
-                    {/* Right side: Activity Logs as Timeline (taking 1 column on medium screens and above) */}
-                    <div className="col-span-1 flex flex-col">
-                        <div className="bg-white rounded-lg shadow p-4 md:p-6 flex-grow">
-                            <h5 className="text-lg font-bold mb-4">Activity Logs</h5>
-                            <div className="max-h-64 overflow-y-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                                {/* Hide scrollbar for Chrome, Safari, and Opera */}
-                                <style jsx>{`
-                            .max-h-64::-webkit-scrollbar {
-                                display: none;
-                            }
-                        `}</style>
-                                <div className="relative">
-                                    {/* Timeline vertical line */}
-                                    <div className="absolute left-1.5 top-0 bottom-0 w-0.5 bg-gray-200 ml-0.5"></div>
+    {/* Right side: Activity Logs as Timeline (taking 1 column on medium screens and above) */}
+    <div className="col-span-1 flex flex-col">
+        <div className="bg-white rounded-lg shadow p-4 md:p-6 flex-grow">
+            <h5 className="text-lg font-bold mb-4">Activity Logs</h5>
+            <div className="max-h-64 overflow-y-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                {/* Hide scrollbar for Chrome, Safari, and Opera */}
+                <style jsx>{`
+                    .max-h-64::-webkit-scrollbar {
+                        display: none;
+                    }
+                `}</style>
+                <div className="relative">
+                    {/* Timeline vertical line */}
+                    <div className="absolute left-1.5 top-0 bottom-0 w-0.5 bg-gray-200 ml-0.5"></div>
 
                                     {/* Timeline items */}
                                     {logs
