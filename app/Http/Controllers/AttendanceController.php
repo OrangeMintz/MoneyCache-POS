@@ -42,7 +42,7 @@ class AttendanceController extends Controller
 
         $now = now();
         $login = today()->setTime(8, 0);
-        $earlyThreshold = $login->copy()->subMinutes(20); // 7:40 AM
+        $earlyThreshold = $login->copy()->subMinutes(20);
 
         // Check if the user has already clocked in today
         $alreadyClockedIn = Attendance::where('user_id', $user->id)
@@ -121,11 +121,8 @@ class AttendanceController extends Controller
             ]);
         }
 
-        // Convert timeIn to Carbon instance
         $timeIn = \Carbon\Carbon::parse($attendance->timeIn);
-
-        // Calculate total hours
-        $totalHours = $timeIn->diffInHours($now);
+        $totalHours = $timeIn->diffInMinutes($now) / 60;
         $totalRate = $totalHours * $user->rate;
 
         // Update the attendance record
