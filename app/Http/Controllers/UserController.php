@@ -64,6 +64,9 @@ class UserController extends Controller
         $userId = auth()->id(); // Get the currently authenticated admin
         (new LogsController)->storeUserLog($userId, $user->id, 'add');
 
+        // MUST BE FIRST BEFORE THE SUCCESS MESSAGE -> DON'T TOUCH
+        Mail::to($validated['email'])->send(new CredentialsMail($user, $plainPassword));
+
         $message = 'User Registered Successfully!';
         if ($request->wantsJson()) {
             return response()->json(['status' => 'success', 'message' => $message], 201);
@@ -73,7 +76,6 @@ class UserController extends Controller
             'message' => $message,
             'alert-type' => 'success',
         ]);
-        Mail::to($validated['email'])->send(new CredentialsMail($user, $plainPassword));
     }
 
     public function update(Request $request, string $id)
@@ -82,7 +84,7 @@ class UserController extends Controller
             'name' => 'required|string',
             'email' => 'required|email',
             'role' => 'required|in:admin,cashier',
-            'rate' => 'required|integer|min:0',
+            'rate' => 'required',
             'password' => ['nullable', Rules\Password::defaults()],
 
         ]);

@@ -10,7 +10,7 @@
                         <a id="timeIn" href="{{ route('attendance.timeIn') }}"
                             class="w-28 text-center px-2 py-2 rounded-lg bg-green-100 dark:bg-green-300 text-green-700 dark:text-green-900 hover:bg-green-200">Time
                             in</a>
-                        <a id="timeOut"
+                        <a id="timeOut" href="{{ route('attendance.timeOut') }}"
                             class="w-28 text-center px-2 py-2 rounded-lg bg-red-100 dark:bg-red-300 text-red-700 dark:text-red-900 hover:bg-red-200">
                             <i class="fa-solid fa-arrow-right-from-bracket"></i> Time Out</a>
                     </div>

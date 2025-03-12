@@ -37,7 +37,9 @@ Route::middleware('auth')->group(function () {
         // ATTENDANCE
         Route::prefix('attendance')->group(function () {
             Route::get('/', [AttendanceController::class, 'index'])->name('attendance.index');
-            Route::get('/timein', [AttendanceController::class, 'timein'])->name("attendance.timeIn");
+            Route::get('/timeIn', [AttendanceController::class, 'timeIn'])->name("attendance.timeIn");
+            Route::get('/timeOut', [AttendanceController::class, 'timeOut'])->name("attendance.timeOut");
+
         });
 
         // TRANSACTIONS

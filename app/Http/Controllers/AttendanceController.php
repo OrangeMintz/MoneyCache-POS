@@ -77,6 +77,55 @@ class AttendanceController extends Controller
 
 
     public function timeOut(Request $request) {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['error' => 'No authenticated user!'], 400);
+        }
 
+        $now = now();
+
+        // Get the latest attendance record for today
+        $attendance = Attendance::where('user_id', $user->id)
+            ->whereDate('timeIn', today())
+            ->whereNull('timeOut') // Ensure it's not already timed out
+            ->latest()
+            ->first();
+
+        if (!$attendance) {
+            $message = 'You have not clocked in today or have already clocked out!';
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => $message], 400);
+            }
+
+            return redirect()->back()->with([
+                'message' => $message,
+                'alert-type' => 'error',
+            ]);
+        }
+
+        // Convert timeIn to Carbon instance
+        $timeIn = \Carbon\Carbon::parse($attendance->timeIn);
+
+        // Calculate total hours
+        $totalHours = $timeIn->diffInHours($now);
+        $totalRate = $totalHours * $user->rate;
+
+        // Update the attendance record
+        $attendance->update([
+            'timeOut' => $now,
+            'totalHours' => $totalHours,
+            'totalRate' => $totalRate,
+        ]);
+
+        $message = 'Clocked Out Successfully!';
+        if ($request->wantsJson()) {
+            return response()->json(['status' => 'success', 'message' => $message], 200);
+        }
+
+        return redirect()->back()->with([
+            'message' => $message,
+            'alert-type' => 'success',
+        ]);
     }
+
 }
