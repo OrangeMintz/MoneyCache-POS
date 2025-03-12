@@ -4,6 +4,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LogsController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\TransactionsGrossTotalController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,10 @@ Route::middleware(['auth:api'])->group(function () {
         Route::prefix('logs')->group(function () {
             Route::get('/', [LogsController::class, 'index']);
             Route::get('/test', [LogsController::class, 'test']);
+        });
+
+        Route::prefix('attendance')->group(function () {
+            Route::get('/timein', [AttendanceController::class, 'timein']);
         });
     });
 
