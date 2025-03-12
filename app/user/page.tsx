@@ -50,6 +50,7 @@ function Row({ row, handleSave, visibleColumns }) {
     name: row.name || "",
     email: row.email || "",
     role: row.role || "",
+    rate: row.rate || 0,
     password: null
   });
 
@@ -288,6 +289,18 @@ function Row({ row, handleSave, visibleColumns }) {
                         </select>
                       </div>
 
+                      <div className="md:mb-4">
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rate:</label>
+                        <input
+                          onChange={handleEditChange}
+                          type="number"
+                          name="rate"
+                          value={editFormData.rate}
+                          placeholder="Enter their rate..."
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        />
+                      </div>
+
                       <div className='col-span-1'>
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password:</label>
 
@@ -300,6 +313,8 @@ function Row({ row, handleSave, visibleColumns }) {
                           placeholder="Enter password"
                         />
                       </div>
+
+
 
                     </div>
 
@@ -356,7 +371,8 @@ export default function CollapsibleTable() {
   const [addForm, setAddForm] = useState({
     name: null,
     email: null,
-    role: null
+    role: null,
+    rate: null,
   })
 
   const handleAddInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -569,13 +585,24 @@ export default function CollapsibleTable() {
                         </select>
                       </div>
 
+                      <div className="md:mb-4">
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rate:</label>
+                        <input
+                          onChange={handleAddInputChange}
+                          type="number"
+                          name="rate"
+                          placeholder="Enter their rate..."
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        />
+                      </div>
+
                       {/* Buttons */}
                       <div className="flex justify-end mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
                         <button
                           type="submit"
                           className="text-white bg-green-500 hover:opacity-80 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         >
-                          Add Users
+                          Add User
                         </button>
                         <button
                           type="button"

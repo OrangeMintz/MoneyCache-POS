@@ -5,10 +5,12 @@ import { fetchTotals, fetchTransactions, fetchUsers, fetchLogs } from '@/utils/f
 import { formatNumber } from '@/utils/formatter';
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
+import { useAppContext } from '@/context/AppContext';
 // import echo from '@/utils/echo';
 import Pusher from 'pusher-js';
 
 export default function Home() {
+    const { user, globalFunction } = useAppContext()
     const [transactions, setTransactions] = useState([])
     const [users, setUsers] = useState([])
     const [totals, setTotal] = useState(null)
@@ -16,9 +18,8 @@ export default function Home() {
 
     const fetchDashboardData = async () => {
         try {
-
             fetchTransactions().then(setTransactions);
-            fetchUsers().then(setUsers)
+            (user.role == 'admin') && fetchUsers().then(setUsers)
             fetchTotals().then(setTotal)
             fetchLogs().then(setLogs)
 
@@ -28,7 +29,13 @@ export default function Home() {
     }
 
     useEffect(() => {
-        fetchDashboardData()
+        if (user) {
+            fetchDashboardData()
+        }
+    }, [user])
+
+    useEffect(() => {
+        globalFunction()
         // Enable pusher logging - remove in production
         Pusher.logToConsole = true;
 
