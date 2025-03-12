@@ -1,5 +1,6 @@
 'use client';
 
+import { fetchUsers } from '@/utils/fetch';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Paper from '@mui/material/Paper';
@@ -10,12 +11,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import { ClipboardCheck } from "lucide-react";
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import Toast from 'typescript-toastify';
 import api from "../../utils/api";
 import Preloader from '../comps/preloader';
-import { fetchUsers } from '@/utils/fetch';
 
 // Row Component
 function Row({ row, handleSave, visibleColumns }) {
@@ -495,6 +497,19 @@ export default function CollapsibleTable() {
 
 
           <div className="mb-4 flex justify-end col-span-2 relative">
+                    
+            <div>
+               <Link href="/attendance">
+              <button
+                id="ViewAttendance"
+                className="inline-flex items-center justify-center gap-x-1 md:mr-9 rounded-md bg-blue-400 sm:px-3 sm:py-3 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10"
+              >
+                <ClipboardCheck className="w-4 h-4" />
+                View Attendance
+              </button>
+              </Link>
+            </div>
+
             <button
               id="dropdownDefaultButton"
               className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
@@ -529,7 +544,7 @@ export default function CollapsibleTable() {
                 Add User
               </button>
             </div>
-
+           
             <div
               id="dropdownContent"
               className={`overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-900 bg-opacity-50 ${addModalView ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 hidden"

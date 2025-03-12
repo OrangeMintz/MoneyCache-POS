@@ -167,6 +167,18 @@ export default function Navbar() {
                             >
                                 <span className={`font-medium ${isActive('/Product') ? 'text-green-800' : ''}`}>Sheets</span>
                             </Link>
+                            
+                        </li>
+                        <li>
+                            <Link
+                                href="/logs"
+                                className={`flex items-center p-3 rounded-md transition-all duration-200 
+                                    ${isActive('/logs')
+                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2'
+                                        : 'hover:bg-green-200 hover:translate-x-1'}`}
+                            >
+                                <span className={`font-medium ${isActive('/logs') ? 'text-green-800' : ''}`}>Logs</span>
+                            </Link>
                         </li>
                     </ul>
                 </nav>
@@ -265,6 +277,17 @@ export default function Navbar() {
                                             : 'text-black dark:text-gray-200 hover:text-green-300'
                                             }`}>
                                             <span>Sheets</span>
+                                        </button>
+                                    </Link> : ""
+                                ) : ""}
+                               
+                                {user ? (user.role == 'admin' ?
+                                    <Link href="/logs">
+                                        <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/logs')
+                                            ? 'bg-green-100 text-green-800'
+                                            : 'text-black dark:text-gray-200 hover:text-green-300'
+                                            }`}>
+                                            <span>Logs</span>
                                         </button>
                                     </Link> : ""
                                 ) : ""}
@@ -380,6 +403,12 @@ export default function Navbar() {
                         {user ? (user.role == 'admin' ?
                             <Link href="/Product" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
                                 Sheets
+                            </Link>
+                            : "") : ""}
+
+                             {user ? (user.role == 'admin' ?
+                            <Link href="/logs" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
+                                Logs
                             </Link>
                             : "") : ""}
 
