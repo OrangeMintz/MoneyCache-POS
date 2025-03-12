@@ -5,6 +5,8 @@ import { fetchTotals, fetchTransactions, fetchUsers, fetchLogs } from '@/utils/f
 import { formatNumber } from '@/utils/formatter';
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
+// import echo from '@/utils/echo';
+import Pusher from 'pusher-js';
 
 export default function Home() {
     const [transactions, setTransactions] = useState([])
@@ -27,6 +29,29 @@ export default function Home() {
 
     useEffect(() => {
         fetchDashboardData()
+        // Enable pusher logging - remove in production
+        Pusher.logToConsole = true;
+
+        const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
+            cluster: "ap1",
+        });
+
+        const channel = pusher.subscribe("my-event");
+
+        channel.bind("myEvent", (data: any) => {
+            console.log(JSON.stringify(data))
+            fetchDashboardData()
+        });
+
+        channel.bind("pusher:subscription_succeeded", () => {
+            console.log("Successfully subscribed to laravel channel!");
+        });
+
+        return () => {
+            channel.unbind_all();
+            channel.unsubscribe();
+            pusher.disconnect();
+        };
     }, [])
 
 
@@ -82,6 +107,7 @@ export default function Home() {
                                                     <div className={`h-4 w-4 rounded-full 
                                                         ${(log.type == 'user') && 'bg-green-500'}
                                                         ${(log.type == 'transaction') && 'bg-orange-500'}
+                                                        ${(log.type == 'attendance') && 'bg-blue-500'}
                                                          border-2 border-white shadow`}></div>
                                                 </div>
 
@@ -104,9 +130,12 @@ export default function Home() {
                                                                 ${(log?.message.split(" ")[0] == 'added') && 'text-green-700'}
                                                                 ${(log?.message.split(" ")[0] == 'updated') && 'text-blue-700'}
                                                                 ${(log?.message.split(" ")[0] == 'deleted') && 'text-red-700'}
-                                                                `}>{log?.message.split(" ")[0]}</span>
-                                                            {" " + ((log.type == 'user') ? log.activity_user?.name + "." || "Unknown" :
-                                                                (log.type == 'transaction') && "a " + log.type + "." || "Unknown")}
+                                                                ${(log?.type == 'attendance') && 'text-violet-700'}
+                                                                `}>{
+                                                                    (log.type == 'attendance') ? log?.message + "!" : log?.message.split(" ")[0]
+                                                                }</span>
+                                                            {" " + ((log.type == 'user') ? log.activity_user?.name + "." || "" :
+                                                                (log.type == 'transaction') && "a " + log.type + "." || "")}
                                                         </span>                                                    </div>
                                                     <div className="flex justify-between">
                                                         <span className="text-xs text-gray-600">
@@ -115,6 +144,7 @@ export default function Home() {
                                                         <span className={`text-xs px-2 py-1 rounded-full 
                                                             ${(log.type == 'user') && 'bg-green-500'}
                                                             ${(log.type == 'transaction') && 'bg-orange-500'}
+                                                            ${(log.type == 'attendance') && 'bg-blue-500'}
                                                             text-white`}>
                                                             <a>{log.type.charAt(0).toUpperCase() + log.type.slice(1)}</a>
                                                         </span>

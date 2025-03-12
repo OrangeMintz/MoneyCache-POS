@@ -22,7 +22,7 @@ const AreaLineChart: React.FC<LineChartProps> = ({ transactions }) => {
   }, {});
 
   // Sort dates chronologically
-  const categories = Object.keys(formattedData).sort((a, b) => 
+  const categories = Object.keys(formattedData).sort((a, b) =>
     dayjs(a, 'DD MMM').valueOf() - dayjs(b, 'DD MMM').valueOf()
   );
   const data = categories.map((date) => formattedData[date]);
@@ -43,7 +43,7 @@ const AreaLineChart: React.FC<LineChartProps> = ({ transactions }) => {
       id: 'visitor-chart',
       toolbar: { show: false },
       animations: {
-        enabled: true,
+        enabled: false,
         easing: 'easeinout',
         speed: 800,
       }
@@ -59,12 +59,12 @@ const AreaLineChart: React.FC<LineChartProps> = ({ transactions }) => {
     colors: ['#3b82f6'], // Default blue (not used directly, we set per-point colors)
     tooltip: {
       enabled: true,
-      custom: function({ series, seriesIndex, dataPointIndex }) {
+      custom: function ({ series, seriesIndex, dataPointIndex }) {
         const value = series[seriesIndex][dataPointIndex];
         const date = categories[dataPointIndex];
 
         let trendColor = pointColors[dataPointIndex];
-        let trendText = dataPointIndex > 0 
+        let trendText = dataPointIndex > 0
           ? value >= data[dataPointIndex - 1] ? '(Increasing)' : '(Decreasing)'
           : '';
 
@@ -88,7 +88,7 @@ const AreaLineChart: React.FC<LineChartProps> = ({ transactions }) => {
     },
     markers: {
       size: 5,
-      colors: pointColors, 
+      colors: pointColors,
     },
     dataLabels: { enabled: false },
   };
