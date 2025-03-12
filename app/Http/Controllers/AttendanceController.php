@@ -31,8 +31,28 @@ class AttendanceController extends Controller
         if (!$user) {
             return response()->json(['error' => 'No authenticated user!'], 400);
         }
+
         $now = now();
         $login = today()->setTime(8, 0);
+
+        // Check if the user has already clocked in today
+        $alreadyClockedIn = Attendance::where('user_id', $user->id)
+            ->whereDate('timeIn', today())
+            ->exists();
+
+        if ($alreadyClockedIn) {
+            $message = 'You have already clocked in today!';
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => $message], 400);
+            }
+
+            return redirect()->back()->with([
+                'message' => $message,
+                'alert-type' => 'error',
+            ]);
+        }
+
+        // Determine status
         $status = $now < $login ? 'Early' : ($now == $login ? 'On Time' : 'Late');
 
         Attendance::create([
@@ -53,5 +73,10 @@ class AttendanceController extends Controller
             'message' => $message,
             'alert-type' => 'success',
         ]);
+    }
+
+
+    public function timeOut(Request $request) {
+
     }
 }
