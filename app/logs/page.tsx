@@ -1,7 +1,11 @@
 'use client';
 
-import { fetchUsers } from '@/utils/fetch';
+import { fetchTransactions } from '@/utils/fetch';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,184 +14,88 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
+import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from 'react';
-import Toast from 'typescript-toastify';
-import api from "../../utils/api";
+import { formatNumber } from "../../utils/formatter";
 import Preloader from '../comps/preloader';
 
 // Row Component
 function Row({ row, handleSave, visibleColumns }) {
   const [open, setOpen] = useState(false);
-  const [editModalOpen, seteditModalOpen] = useState(false);
-  const [deleteModalOpen, setdeleteModalOpen] = useState(false);
-  const [successIcon, setSuccessIcon] = useState('none')
-
-  const ediModalStyle = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "70%",
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    p: 6
-  }
-
-  const deleteModalStyle = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "30%",
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    p: 6
-  }
-
-  const [editFormData, setEditFormData] = useState({
-    name: row.name || "",
-    email: row.email || "",
-    role: row.role || "",
-    password: null
-  });
-
-  const [summary, setSummary] = useState({
-    trade: 0,
-    non_trade: 0,
-    grand_total: 0,
-  })
-
-  const handleEditClick = () => {
-    seteditModalOpen(true);
-  };
-
-  const handleDeleteClick = () => {
-    setdeleteModalOpen(true);
-  };
-
-  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setEditFormData({
-      ...editFormData,
-      [e.target.name]: e.target.value
-    })
-  }
-
-  const handleDeletSubmit = async (event: React.FormEvent) => {
-    event.preventDefault()
-    const token = localStorage.getItem('access_token')
-
-    try {
-      const response = await api.delete(`/api/users/${row.id}`, {
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${token}`
-        }
-      })
-
-      console.log(response.data)
-
-      if (response.data.status === 'success') {
-        setSuccessIcon('')
-        new Toast({
-          position: "bottom-right",
-          onClose: () => { window.location.href = "/user"; },
-          toastMsg: "Successfully deleted user!",
-          autoCloseTime: 1000,
-          canClose: true,
-          showProgress: true,
-          pauseOnHover: true,
-          pauseOnFocusLoss: true,
-          type: "success",
-          theme: 'dark',
-        });
-      } else {
-        new Toast({
-          position: "bottom-right",
-          toastMsg: response.data.message,
-          autoCloseTime: 1000,
-          canClose: true,
-          showProgress: true,
-          pauseOnHover: true,
-          pauseOnFocusLoss: true,
-          type: "error",
-          theme: 'dark',
-        });
-      }
-    } catch (error) {
-      console.error("Error deleting transaction: ", error)
-    }
-  }
-
-  const handleEditFormSubmit = async (event: React.FormEvent) => {
-    event.preventDefault()
-    const token = localStorage.getItem('access_token');
-
-    try {
-
-      const response = await api.put(`/api/users/${row.id}`, { ...editFormData }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      });
-
-      console.log(response.data)
-
-      if (response.data.status === 'success') {
-        setSuccessIcon('')
-        new Toast({
-          position: "bottom-right",
-          onClose: () => { window.location.href = "/user"; },
-          toastMsg: "Successfully stored transaction!",
-          autoCloseTime: 1000,
-          canClose: true,
-          showProgress: true,
-          pauseOnHover: true,
-          pauseOnFocusLoss: true,
-          type: "success",
-          theme: 'dark',
-        });
-      } else {
-        new Toast({
-          position: "bottom-right",
-          toastMsg: response.data.message,
-          autoCloseTime: 1000,
-          canClose: true,
-          showProgress: true,
-          pauseOnHover: true,
-          pauseOnFocusLoss: true,
-          type: "error",
-          theme: 'dark',
-        });
-      }
-
-    } catch (error) {
-      console.error("Error updating transaction: ", error)
-      new Toast({
-        position: "top-right",
-        toastMsg: "Error updating transaction",
-        autoCloseTime: 1000,
-        canClose: true,
-        showProgress: true,
-        pauseOnHover: true,
-        pauseOnFocusLoss: true,
-        type: "error",
-        theme: 'dark',
-      });
-    }
-  }
-
 
   return (
     <>
-      <TableRow>
+      <TableRow className='hover:bg-gray-200'>
         <TableCell>
+          <IconButton size="small" onClick={() => setOpen(!open)}>
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+
         </TableCell>
-        {visibleColumns.id && <TableCell align='center'><span className='text-xs'>{row.id}</span></TableCell>}
-        {visibleColumns.name && <TableCell align='center'><span className='text-xs'>{row.name || 'Unknown'}</span></TableCell>}
-        {visibleColumns.email && <TableCell align="center"><span className='text-xs'>{row.email}</span></TableCell>}
-        {visibleColumns.role && <TableCell align="center"><span className={`px-2 py-1 font-semibold leading-tight rounded-md text-xs ${(row.role == 'admin') ? 'text-green-700 bg-green-100' : 'text-orange-700 bg-gray-100'}`}>this Message is a default message just for displaying dis nuts</span></TableCell>}
+        {visibleColumns.id && <TableCell><span className='text-xs'>{row.id}</span></TableCell>}
+        {visibleColumns.cashier && <TableCell><span className='text-xs'>{row.cashier?.name || 'Unknown'}</span></TableCell>}
+        {visibleColumns.date && <TableCell align="center"><span className='text-xs'>{new Date(row.created_at).toISOString().split("T")[0]}</span></TableCell>}
+        {visibleColumns.time && <TableCell align="center"><span className='text-xs'>{row.time}</span></TableCell>}
+        {visibleColumns.trade && <TableCell align="center"><span className={`px-2 py-1 font-semibold leading-tight rounded-md text-xs ${(row.sub_total_trade > 5000) ? 'text-green-700 bg-green-100' : (row.sub_total_trade > 500 && row.sub_total_trade < 5000) ? 'text-orange-700 bg-gray-100' : 'text-red-700 bg-red-100'}`}> ₱ {formatNumber(row.sub_total_trade)} </span></TableCell>}
+        {visibleColumns.nonTrade && <TableCell align="center"><span className={`px-2 py-1 font-semibold leading-tight rounded-md text-xs ${(row.sub_total_non_trade > 5000) ? 'text-green-700 bg-green-100' : (row.sub_total_non_trade > 500 && row.sub_total_non_trade < 5000) ? 'text-orange-700 bg-gray-100' : 'text-red-700 bg-red-100'}`}>₱ {formatNumber(row.sub_total_non_trade)}  </span></TableCell>}
+        {visibleColumns.grandTotal && <TableCell align="center"><span className={`px-2 py-1 font-semibold leading-tight rounded-md text-xs ${(row.grand_total > 5000) ? 'text-green-700 bg-green-100' : (row.grand_total > 500 && row.grand_total < 5000) ? 'text-orange-700 bg-gray-100' : 'text-red-700 bg-red-100'}`}>₱ {formatNumber(row.grand_total)}  </span></TableCell>}
+
       </TableRow >
+
+      <TableRow>
+  <TableCell colSpan={15} style={{ paddingBottom: 0, paddingTop: 0 }}>
+    <Collapse in={open} timeout="auto" unmountOnExit>
+      <div className="flex grid grid-cols-1 lg:grid-cols-2 bg-gray-50 rounded-b-md shadow-b-md p-8 mb-5 gap-9">
+        <Box style={{ paddingBottom: 10, paddingTop: 0 }} className="col-span-1">
+        <div className="md:mb-2 md:ml-1"style={{ fontWeight: 'bold' }}>User Details: </div>
+  <div style={{ display: 'flex', alignItems: 'center', marginBottom: 15 }}>
+    <div style={{ 
+      width: 50, 
+      height: 50, 
+      borderRadius: '50%', 
+      backgroundColor: '#1976d2', 
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center',
+      color: 'white',
+      fontWeight: 'bold',
+      marginRight: 15
+    }}>
+      {row.cashier?.name ? row.cashier.name.charAt(0).toUpperCase() : '?'}{row.cashier?.name ? row.cashier.name.charAt(1).toLowerCase() : '?'}
+    </div>
+    <div>
+      <div style={{ fontWeight: 'bold' }}>{row.cashier?.name || 'Unknown'}</div>
+      <div style={{ fontSize: '0.85rem', color: '#666' }}>{row.cashier?.email || 'Unknown'}</div>
+      <div style={{ fontSize: '0.8rem', display: 'flex', gap: 10, marginTop: 5 }}>
+        <span>Admin</span> • 
+        <span>March 12, 2025</span> • 
+        <span>14:30</span>
+      </div>
+    </div>
+  </div>
+</Box>
+
+        {/* Sub Total Non Trade */}
+        <Box style={{ paddingBottom: 10, paddingTop: 0 }} className="col-span-1">
+  <Typography variant="h6">
+    <span className="text-sm font-semibold">Message: </span>
+  </Typography>
+  <Table size="small">
+    <TableBody>
+      <TableRow>
+        <TableCell style={{ whiteSpace: 'pre-wrap', padding: '8px' }}>
+          {row.message || 'No message available for this transaction.'}
+        </TableCell>
+      </TableRow>
+    </TableBody>
+  </Table>
+</Box>
+      </div>
+    </Collapse>
+  </TableCell>
+</TableRow>
+
     </>
   );
 }
@@ -198,28 +106,21 @@ export default function CollapsibleTable() {
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
-  const [addModalView, setAddModalView] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [loading, setLoading] = useState(true)
   const [visibleColumns, setVisibleColumns] = useState({
     id: true,
-    name: true,
-    email: true,
-    role: true,
+    cashier: true,
+    date: true,
+    time: true,
+    trade: true,
+    nonTrade: true,
+    grandTotal: true,
     actions: true,
   });
-  const [addForm, setAddForm] = useState({
-    name: null,
-    email: null,
-    role: null
-  })
-
-  const handleAddInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setAddForm({ ...addForm, [e.target.name]: e.target.value });
-  };
 
   useEffect(() => {
-    fetchUsers().then(setData);
+    fetchTransactions().then(setData);
   }, []);
 
   useEffect(() => {
@@ -240,8 +141,8 @@ export default function CollapsibleTable() {
   };
 
   const filteredRows = data.filter((row) =>
-    row.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    row.id.toString().toLowerCase().includes(searchTerm.toLocaleLowerCase())
+    row.cashier?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    new Date(row.created_at).toISOString().split("T")[0].includes(searchTerm.toLocaleLowerCase())
   );
 
   const paginatedRows = filteredRows.slice(
@@ -253,64 +154,6 @@ export default function CollapsibleTable() {
     setVisibleColumns((prev) => ({ ...prev, [column]: !prev[column] }));
   };
 
-  const handleAddUserSubmit = async (event: React.FormEvent) => {
-    event.preventDefault()
-
-    try {
-      const token = localStorage.getItem('access_token')
-
-      console.log(addForm)
-
-      const response = await api.post("/api/users", { ...addForm }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      });
-
-      if (response.data.status === 'success') {
-        new Toast({
-          position: "bottom-right",
-          onClose: () => { window.location.href = "/user"; },
-          toastMsg: "Successfully stored transaction!",
-          autoCloseTime: 2000,
-          canClose: true,
-          showProgress: true,
-          pauseOnHover: true,
-          pauseOnFocusLoss: true,
-          type: "success",
-          theme: 'dark',
-        });
-      } else {
-        new Toast({
-          position: "bottom-right",
-          toastMsg: response.data.message,
-          autoCloseTime: 1000,
-          canClose: true,
-          showProgress: true,
-          pauseOnHover: true,
-          pauseOnFocusLoss: true,
-          type: "error",
-          theme: 'dark',
-        });
-      }
-
-    } catch (error) {
-      console.error("Error adding user: ", error)
-      new Toast({
-        position: "bottom-right",
-        toastMsg: "Error adding user",
-        autoCloseTime: 1000,
-        canClose: true,
-        showProgress: true,
-        pauseOnHover: true,
-        pauseOnFocusLoss: true,
-        type: "error",
-        theme: 'dark',
-      });
-    }
-  }
-
   if (loading) {
     return <Preloader />
   }
@@ -318,45 +161,41 @@ export default function CollapsibleTable() {
   return (
     <>
       <Box className='bg-gray-100 m-6 p-6 rounded-md shadow-md'>
-        <h2 className="text-2xl font-semibold dark:text-white mb-3">User List</h2>
+        <h2 className="text-2xl font-semibold dark:text-white mb-3">Activity Logs</h2>
 
         <div className='grid grid-cols-5 flex'>
 
-          <div className='col-span-3 '>
-            <input
-              type="text"
-              placeholder="Search by Date or Cashier..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className=" mb-4 text-sm p-2 border rounded w-1/4"
-            />
+        <div className='md:col-span-3'>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search by Name or ID..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full md:w-1/2 px-4 py-2 pl-10 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
+              />
+              <svg 
+                className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
           </div>
 
-
           <div className="mb-4 flex justify-end col-span-2 relative">
-            <button
-              id="dropdownDefaultButton"
-              className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
-              type="button"
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-            >
-              Visibility
-              <svg
-                className="w-2.5 h-5.5 ms-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 6"
+          <button
+                className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-medium text-gray-800 ring-1 shadow-sm ring-gray-300 hover:bg-gray-50 transition-colors duration-200"
+                type="button"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
               >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 1 4 4 4-4"
-                />
-              </svg>
-            </button>
+                Columns
+                <ChevronDown className="w-4 h-4 ml-1" />
+              </button>
+
             <div
               id="dropdownContent"
               className={`absolute top-full right-0 mt-1 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 sm:w-48 md:w-56 dark:bg-gray-700 transition-all duration-300 ease-in-out transform ${dropdownOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 hidden"
@@ -388,10 +227,13 @@ export default function CollapsibleTable() {
             <TableHead>
               <TableRow>
                 <TableCell />
-                {visibleColumns.id && <TableCell align='center'>User ID</TableCell>}
-                {visibleColumns.name && <TableCell align='center'>Type</TableCell>}
-                {visibleColumns.email && <TableCell align='center'>Role</TableCell>}
-                {visibleColumns.role && <TableCell align='center'>Message</TableCell>}
+                {visibleColumns.id && <TableCell>ID</TableCell>}
+                {visibleColumns.cashier && <TableCell>User Name</TableCell>}
+                {visibleColumns.date && <TableCell align='center'>Date</TableCell>}
+                {visibleColumns.time && <TableCell align='center'>Time</TableCell>}
+                {visibleColumns.trade && <TableCell align='center'>Category</TableCell>}
+                {visibleColumns.nonTrade && <TableCell align='center'>i dunno what to add </TableCell>}
+                {visibleColumns.grandTotal && <TableCell align='center'>i dunno</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>

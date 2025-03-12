@@ -10,7 +10,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { LogIn, LogOut } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronDown, LogIn, LogOut } from "lucide-react";
 import { useEffect, useState } from 'react';
 import Toast from 'typescript-toastify';
 import Preloader from '../comps/preloader';
@@ -93,6 +93,7 @@ export default function CollapsibleTable() {
 
 
   const handleChangePage = (_event, newPage) => setPage(newPage);
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -137,7 +138,11 @@ export default function CollapsibleTable() {
     formatDate(row.created_at).toString().toLowerCase().includes(searchTerm.toLocaleLowerCase())
   );
 
-  const paginatedRows = filteredRows.slice(
+  // Sort the filtered data
+  const sortedRows = getSortedData(filteredRows);
+
+  // Apply pagination to the sorted data
+  const paginatedRows = sortedRows.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
@@ -146,25 +151,56 @@ export default function CollapsibleTable() {
     setVisibleColumns((prev) => ({ ...prev, [column]: !prev[column] }));
   };
 
+  // Get the sort direction icon for a column
+  const getSortDirectionIcon = (columnName) => {
+    if (sortConfig.key !== columnName) {
+      return null;
+    }
+    return sortConfig.direction === 'ascending' ?
+      <ArrowUp className="w-3 h-3 ml-1 inline" /> :
+      <ArrowDown className="w-3 h-3 ml-1 inline" />;
+  };
+
+  // Column mapping for header labels
+  const columnLabels = {
+    id: "User Details",
+    in: "Time In",
+    out: "Time Out",
+    hour: "Total Hours",
+    rate: "Total Rate",
+    status: "Status",
+    date: "Date"
+  };
+
   if (loading) {
-    return <Preloader />
+    return <Preloader />;
   }
 
   return (
     <>
-      <Box className='bg-gray-100 m-6 p-6 rounded-md shadow-md'>
-        <h2 className="text-2xl font-semibold dark:text-white mb-3">Attendance Summary</h2>
+      <Box className='bg-white m-6 p-6 rounded-lg shadow-lg'>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Attendance Summary</h2>
 
-        <div className='grid grid-cols-5 flex'>
-
-          <div className='col-span-3 '>
-            <input
-              type="text"
-              placeholder="Search by Date or Cashier..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className=" mb-4 text-sm p-2 border rounded w-1/4"
-            />
+        <div className='grid grid-cols-1 md:grid-cols-5 gap-4 mb-6'>
+          <div className='md:col-span-3'>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search by Name or ID..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full md:w-1/2 px-4 py-2 pl-10 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
+              />
+              <svg
+                className="absolute left-3 top-2.5 h-4 w-4 text-gray-400"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
           </div>
 
 
@@ -217,51 +253,52 @@ export default function CollapsibleTable() {
 
 
             <div
-              id="dropdownContent"
-              className={`absolute top-full right-0 mt-1 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 sm:w-48 md:w-56 dark:bg-gray-700 transition-all duration-300 ease-in-out transform ${dropdownOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 hidden"
+              className={`absolute top-full right-0 mt-1 z-10 bg-white rounded-lg shadow-lg border border-gray-200 w-48 transition-all duration-200 ease-in-out transform ${dropdownOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
                 }`}
             >
-              <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+              <div className="py-2">
                 {Object.keys(visibleColumns).map((col) => (
-                  <li key={col}>
-                    <label className="flex items-center gap-1 text-sm px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={visibleColumns[col]}
-                        onChange={() => handleColumnToggle(col)}
-                        className="w-4 h-4"
-                      />
-                      <span className="ml-2 truncate">{col.charAt(0).toUpperCase() + col.slice(1)}</span>
-                    </label>
-                  </li>
+                  <label
+                    key={col}
+                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={visibleColumns[col]}
+                      onChange={() => handleColumnToggle(col)}
+                      className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                    />
+                    <span className="ml-2">{columnLabels[col]}</span>
+                  </label>
                 ))}
-              </ul>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
+      <TableContainer component={Paper} className='rounded-lg shadow-md overflow-hidden border border-gray-200'>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {visibleColumns.id && <TableCell align="center">User Details</TableCell>}
+              {visibleColumns.in && <TableCell align="center">Time In</TableCell>}
+              {visibleColumns.out && <TableCell align='center'>Time Out</TableCell>}
+              {visibleColumns.hour && <TableCell align='center'>Total Hours</TableCell>}
+              {visibleColumns.rate && <TableCell align='center'>Total Rate</TableCell>}
+              {visibleColumns.status && <TableCell align='center'>Status</TableCell>}
+              {visibleColumns.date && <TableCell align='center'>Date</TableCell>}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {paginatedRows.map((row) => (
+              <Row key={row.id} row={row} visibleColumns={visibleColumns} />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
-
-        <TableContainer component={Paper} className='p-7 pb-10'>
-          <Table>
-            <TableHead>
-              <TableRow>
-                {visibleColumns.id && <TableCell align="center">User Details</TableCell>}
-                {visibleColumns.in && <TableCell align="center">Time In</TableCell>}
-                {visibleColumns.out && <TableCell align='center'>Time Out</TableCell>}
-                {visibleColumns.hour && <TableCell align='center'>Total Hours</TableCell>}
-                {visibleColumns.rate && <TableCell align='center'>Total Rate</TableCell>}
-                {visibleColumns.status && <TableCell align='center'>Status</TableCell>}
-                {visibleColumns.date && <TableCell align='center'>Date</TableCell>}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {paginatedRows.map((row) => (
-                <Row key={row.id} row={row} visibleColumns={visibleColumns} />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+      <div className="mt-4">
         <TablePagination
           rowsPerPageOptions={[6, 10, 25]}
           component="div"
@@ -270,11 +307,10 @@ export default function CollapsibleTable() {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          className="text-sm"
         />
-      </Box>
-      <div className='z-50 border-t'>
       </div>
+    </Box >
     </>
-
   );
 }

@@ -1,7 +1,10 @@
 'use client';
 
 import { fetchUsers } from '@/utils/fetch';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,11 +13,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { LogIn, LogOut } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from 'react';
 import Toast from 'typescript-toastify';
 import api from "../../utils/api";
 import Preloader from '../comps/preloader';
+s
 
 // Row Component
 function Row({ row, handleSave, visibleColumns }) {
@@ -181,26 +185,46 @@ function Row({ row, handleSave, visibleColumns }) {
 
   return (
     <>
-<TableRow>
-  {visibleColumns.id && <TableCell align="center">
-    <div className="flex flex-col items-center">
-      <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white mb-1">
-        {row.name ? row.name.charAt(0).toUpperCase() : ''}
-      </div>
-      <div className="flex flex-col items-center">
-        <span className="font-medium">{row.name || ''}</span>
-        <span className="text-xs text-gray-500">{row.email || ''}</span>
-        <span className="text-xs mt-0.5 px-2 py-0.5 bg-gray-100 rounded-full inline-block">{row.id}</span> {/* default search value is id, i change ra by role */}
-        
-      </div>
-    </div>
+<TableRow
+  className="hover:bg-gray-100 cursor-pointer transition-colors duration-150"
+>
+   <TableCell>
+            <IconButton size="small" onClick={() => setOpen(!open)}>
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+  
+          </TableCell>
+  {visibleColumns.id && <TableCell align='center'><span className='text-xs'>{row.name}</span></TableCell>}
+  {visibleColumns.email && <TableCell align="center">
+    {row.status === 'success' ? (
+      <span className='text-blue-500 flex justify-center'>
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+        </svg>
+      </span>
+    ) : (
+      <span className='text-red-500 flex justify-center'>
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+        </svg>
+      </span>
+    )}
   </TableCell>}
-  {visibleColumns.in && <TableCell align="center"><span className='text-xs'>8:00 AM</span></TableCell>}
-  {visibleColumns.out && <TableCell align="center"><span className='text-xs'>5:00 PM</span></TableCell>}
-  {visibleColumns.hour && <TableCell align="center"><span className='text-xs'>490</span></TableCell>}
-  {visibleColumns.rate && <TableCell align="center"><span className='text-xs'>250.50</span></TableCell>}
-  {visibleColumns.status && <TableCell align="center"><span className='text-xs'>pending</span></TableCell>}
-  {visibleColumns.date && <TableCell align="center"><span className='text-xs'>tayo</span></TableCell>}
+  {visibleColumns.name && <TableCell align='center'>
+    <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+      row.status === 'deleted' ? 'text-red-700 bg-red-100' : 
+      row.status === 'updated' ? 'text-amber-700 bg-amber-100' : 
+      row.status === 'added' ? 'text-green-700 bg-green-100' : 
+      'text-gray-700 bg-gray-100'
+    }`}>
+      {row.status === 'deleted' ? 'Deleted' : 
+       row.status === 'updated' ? 'Updated' : 
+       row.status === 'added' ? 'Added' : 
+       'Deleted'}
+    </span>
+  </TableCell>}
+  {visibleColumns.email && <TableCell align="center"><span className={`px-2 py-1 font-semibold leading-tight rounded-md text-xs ${(row.role == 'admin') ? 'text-green-700 bg-green-100' : 'text-orange-700 bg-gray-100'}`}>admin</span></TableCell>}
+  {visibleColumns.role && <TableCell align="center"><span className={`px-2 py-1 font-semibold leading-tight rounded-md text-xs ${(row.role == 'admin') ? 'text-green-700 bg-green-100' : 'text-orange-700 bg-gray-100'}`}>this Message is a default message just for displaying dis nuts</span></TableCell>}
 </TableRow>
     </>
   );
@@ -217,18 +241,20 @@ export default function CollapsibleTable() {
   const [loading, setLoading] = useState(true)
   const [visibleColumns, setVisibleColumns] = useState({
     id: true,
-    in: true,
-    out: true,
-    hour: true,
-    rate: true,
-    status: true,
-    date: true,
+    name: true,
+    email: true,
+    role: true,
+    actions: true,
   });
   const [addForm, setAddForm] = useState({
     name: null,
     email: null,
     role: null
   })
+
+  const handleAddInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setAddForm({ ...addForm, [e.target.name]: e.target.value });
+  };
 
   useEffect(() => {
     fetchUsers().then(setData);
@@ -265,6 +291,64 @@ export default function CollapsibleTable() {
     setVisibleColumns((prev) => ({ ...prev, [column]: !prev[column] }));
   };
 
+  const handleAddUserSubmit = async (event: React.FormEvent) => {
+    event.preventDefault()
+
+    try {
+      const token = localStorage.getItem('access_token')
+
+      console.log(addForm)
+
+      const response = await api.post("/api/users", { ...addForm }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      });
+
+      if (response.data.status === 'success') {
+        new Toast({
+          position: "bottom-right",
+          onClose: () => { window.location.href = "/user"; },
+          toastMsg: "Successfully stored transaction!",
+          autoCloseTime: 2000,
+          canClose: true,
+          showProgress: true,
+          pauseOnHover: true,
+          pauseOnFocusLoss: true,
+          type: "success",
+          theme: 'dark',
+        });
+      } else {
+        new Toast({
+          position: "bottom-right",
+          toastMsg: response.data.message,
+          autoCloseTime: 1000,
+          canClose: true,
+          showProgress: true,
+          pauseOnHover: true,
+          pauseOnFocusLoss: true,
+          type: "error",
+          theme: 'dark',
+        });
+      }
+
+    } catch (error) {
+      console.error("Error adding user: ", error)
+      new Toast({
+        position: "bottom-right",
+        toastMsg: "Error adding user",
+        autoCloseTime: 1000,
+        canClose: true,
+        showProgress: true,
+        pauseOnHover: true,
+        pauseOnFocusLoss: true,
+        type: "error",
+        theme: 'dark',
+      });
+    }
+  }
+
   if (loading) {
     return <Preloader />
   }
@@ -272,7 +356,7 @@ export default function CollapsibleTable() {
   return (
     <>
       <Box className='bg-gray-100 m-6 p-6 rounded-md shadow-md'>
-        <h2 className="text-2xl font-semibold dark:text-white mb-3">Attendance Summary</h2>
+        <h2 className="text-2xl font-semibold dark:text-white mb-3">Activity Logs</h2>
 
         <div className='grid grid-cols-5 flex'>
 
@@ -288,52 +372,14 @@ export default function CollapsibleTable() {
 
 
           <div className="mb-4 flex justify-end col-span-2 relative">
-
-          <div>
-                    <button
-                        id="TimeInButton"
-                        className="inline-flex items-center justify-center gap-x-1 md:mr-1 rounded-md bg-green-400 sm:px-3 sm:py-3 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10"
-                    
-                    >
-                        <LogIn className="w-4 h-4" />
-                        Time In
-                    </button>
-                    </div> 
-                    <div>
-                    <button
-                        id="TimeInButton"
-                        className="inline-flex items-center justify-center gap-x-1 md:mr-1 rounded-md bg-red-400 sm:px-3 sm:py-3 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10"
-                    
-                    >
-                        <LogOut className="w-4 h-4" />
-                        Time Out
-                    </button>
-                    </div> 
-            <button
-              id="dropdownDefaultButton"
-              className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
-              type="button"
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-            >
-              Visibility
-              <svg
-                className="w-2.5 h-5.5 ms-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 6"
+          <button
+                className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-medium text-gray-800 ring-1 shadow-sm ring-gray-300 hover:bg-gray-50 transition-colors duration-200"
+                type="button"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
               >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 1 4 4 4-4"
-                />
-              </svg>
-            </button>
-
-
+                Columns
+                <ChevronDown className="w-4 h-4 ml-1" />
+              </button>
             <div
               id="dropdownContent"
               className={`absolute top-full right-0 mt-1 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 sm:w-48 md:w-56 dark:bg-gray-700 transition-all duration-300 ease-in-out transform ${dropdownOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 hidden"
@@ -364,18 +410,16 @@ export default function CollapsibleTable() {
           <Table>
             <TableHead>
               <TableRow>
-                {visibleColumns.id && <TableCell  align="center">User Details</TableCell>}
-                {visibleColumns.in && <TableCell  align="center">Time In</TableCell>}
-                {visibleColumns.out && <TableCell align='center'>Time Out</TableCell>}
-                {visibleColumns.hour && <TableCell align='center'>Total Hours</TableCell>}
-                {visibleColumns.rate && <TableCell align='center'>Total Rate</TableCell>}
-                {visibleColumns.status && <TableCell align='center'>Status</TableCell>}
-                {visibleColumns.date&& <TableCell align='center'>Date</TableCell>}
+                {visibleColumns.id && <TableCell align='center'>User Name</TableCell>}
+                {visibleColumns.name && <TableCell align='center'>Status</TableCell>}
+                {visibleColumns.email && <TableCell align='center'>Type</TableCell>}
+                {visibleColumns.email && <TableCell align='center'>Role</TableCell>}
+                {visibleColumns.role && <TableCell align='center'>Message</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
               {paginatedRows.map((row) => (
-                <Row key={row.role} row={row} handleSave={handleSave} visibleColumns={visibleColumns} />
+                <Row key={row.id} row={row} handleSave={handleSave} visibleColumns={visibleColumns} />
               ))}
             </TableBody>
           </Table>
