@@ -26,6 +26,12 @@ Route::middleware(['auth:api'])->group(function () {
 
         Route::prefix('transactions')->group(function () {
             Route::get('/', [TransactionsController::class, 'retrieve']);
+            Route::get('/totals', [TransactionsGrossTotalController::class, 'getOverallGrossNet']);
+        });
+
+        Route::prefix('logs')->group(function () {
+            Route::get('/', [LogsController::class, 'index']);
+            Route::get('/test', [LogsController::class, 'test']);
         });
     });
 
@@ -39,7 +45,6 @@ Route::middleware(['auth:api'])->group(function () {
             Route::get('/net-all', [TransactionsGrossTotalController::class, 'netAll']);
             Route::post('/get-by-date', [TransactionsController::class, 'getByDate']);
             Route::post('/get-by-date/totals', [TransactionsGrossTotalController::class, 'getGrossNetByDate']);
-            Route::get('/totals', [TransactionsGrossTotalController::class, 'getOverallGrossNet']);
             Route::post('/csv', [CsvController::class, 'csv']);
             Route::get('/pdf', [PDFController::class, 'pdf']);
         });
@@ -51,12 +56,6 @@ Route::middleware(['auth:api'])->group(function () {
             Route::put('/{id}', [UserController::class, 'update']);
             Route::delete('/{id}', [UserController::class, 'softDelete']);
         });
-
-        Route::prefix('logs')->group(function () {
-            Route::get('/', [LogsController::class, 'index']);
-            Route::get('/test', [LogsController::class, 'test']);
-        });
-
     });
 
 

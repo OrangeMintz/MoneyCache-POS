@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    fetch('/dashboard/sales-data')
+    fetch('/sales-data')
         .then(response => response.json())
         .then(data => {
             let options = {

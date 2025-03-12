@@ -88,7 +88,7 @@
                                 </p>
                                 <div
                                     class="flex flex-col md:flex-row gap-4 w-full md:w-auto justify-center md:justify-center lg:justify-start">
-                                    <a href="#"
+                                    <a href="{{ route('login') }}"
                                         class="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white rounded-lg bg-MCGreen hover:bg-MCGreenHover focus:ring-4 focus:ring-primary-300 dark:focus:ring-MCGreenHover w-full md:w-auto">
                                         Login
                                         <svg class="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20"
@@ -243,8 +243,7 @@
                     <section class="bg-[#1669B2] dark:bg-[#1669B2] py-10 dark:text-white">
                         <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
                             <div class="mx-auto max-w-screen-sm text-center space-y-6">
-                                <h2
-                                    class="text-4xl tracking-tight font-extrabold leading-tight text-white">
+                                <h2 class="text-4xl tracking-tight font-extrabold leading-tight text-white">
                                     Start your free trial today
                                 </h2>
                                 <p class="font-light text-TWHITE dark:text-gray-400 md:text-lg">
@@ -263,8 +262,8 @@
             </div>
         </div>
     </div>
-    
-    <script src="{{ asset('js/darkmode.js')}}"></script>
+
+    <script src="{{ asset('js/darkmode.js') }}"></script>
 </body>
 
 <div class=" mt-10">

@@ -8,11 +8,23 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DateTime;
 use DateTimeZone;
+use Illuminate\Support\Facades\Auth;
 
 class LogsController extends Controller
 {
     public function index(Request $request){
-        $logs = Logs::with(['user',
+
+        $user = Auth::user();
+
+        $logs = $user->role == 'admin' ? Logs::with(['user',
+         'activityUser' => function($query) {
+            $query->withTrashed();
+         }, 
+         'transaction' => function($query) {
+            $query->withTrashed();
+         }
+         ])->get():
+         Logs::where('user_id', $user->id)->with(['user',
          'activityUser' => function($query) {
             $query->withTrashed();
          }, 
@@ -117,7 +129,7 @@ class LogsController extends Controller
             'activity_user_id' => null,
             'type' => 'attendance',
             'category' => $category,
-            'message' => "nigga",
+            'message' => ($category == 'timein') ? "logged in" : "logged out",
             'total_hours' => $totalHours,
         ]);
 
@@ -132,6 +144,6 @@ class LogsController extends Controller
     }
 
     public function test(Request $request){
-        return $this->storeAttendance(1, 'timein');
+        return $this->storeAttendance(1, 'timeout');
     }
 }
