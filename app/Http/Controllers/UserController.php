@@ -35,6 +35,7 @@ class UserController extends Controller
                 'name' => 'required',
                 'email' => 'required|email|unique:users',
                 'role' => 'required|in:admin,cashier',
+                'rate' => 'required|integer|min:0',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             $message = 'This email is already taken';
@@ -54,6 +55,7 @@ class UserController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'role' => $validated['role'],
+            'rate' => $validated['rate'],
             'password' => Hash::make($plainPassword),
             'theme' => 'light',
         ]);
@@ -80,6 +82,7 @@ class UserController extends Controller
             'name' => 'required|string',
             'email' => 'required|email',
             'role' => 'required|in:admin,cashier',
+            'rate' => 'required|integer|min:0',
             'password' => ['nullable', Rules\Password::defaults()],
 
         ]);
@@ -103,6 +106,7 @@ class UserController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'role' => $validated['role'],
+            'rate' => $validated['rate'],
             'password' => $validated['password'] ? Hash::make($validated['password']) : $user->password,
         ]);
 
