@@ -11,9 +11,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { ClipboardCheck } from "lucide-react";
 import Image from 'next/image';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import Toast from 'typescript-toastify';
 import api from "../../utils/api";
@@ -497,19 +495,6 @@ export default function CollapsibleTable() {
 
 
           <div className="mb-4 flex justify-end col-span-2 relative">
-                    
-            <div>
-               <Link href="/attendance">
-              <button
-                id="ViewAttendance"
-                className="inline-flex items-center justify-center gap-x-1 md:mr-9 rounded-md bg-blue-400 sm:px-3 sm:py-3 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10"
-              >
-                <ClipboardCheck className="w-4 h-4" />
-                View Attendance
-              </button>
-              </Link>
-            </div>
-
             <button
               id="dropdownDefaultButton"
               className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"

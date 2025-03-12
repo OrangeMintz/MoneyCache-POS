@@ -10,8 +10,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { LogIn, UserCheck } from "lucide-react";
-import Link from "next/link";
+import { LogIn, LogOut } from "lucide-react";
 import { useEffect, useState } from 'react';
 import Toast from 'typescript-toastify';
 import api from "../../utils/api";
@@ -300,19 +299,16 @@ export default function CollapsibleTable() {
                         Time In
                     </button>
                     </div> 
+                    <div>
+                    <button
+                        id="TimeInButton"
+                        className="inline-flex items-center justify-center gap-x-1 md:mr-1 rounded-md bg-red-400 sm:px-3 sm:py-3 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10"
                     
-                  <div>
-                <Link href="/user">
-              <button
-                id="ViewAttendance"
-                className="inline-flex items-center justify-center gap-x-1 md:mr-1 rounded-md bg-blue-400 sm:px-3 sm:py-3 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10"
-              >
-                <UserCheck className="w-4 h-4" />
-                View Users
-              </button>
-              </Link>
-            </div>
-
+                    >
+                        <LogOut className="w-4 h-4" />
+                        Time Out
+                    </button>
+                    </div> 
             <button
               id="dropdownDefaultButton"
               className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"

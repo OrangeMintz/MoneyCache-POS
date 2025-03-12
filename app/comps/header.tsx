@@ -329,6 +329,17 @@ export default function Navbar() {
                                         </div>
                                         <p className="text-gray-500">{user ? user.email : ""}</p>
                                     </div>
+                                    <hr className="border-gray-200" />
+                                    <div className="py-1">
+                                    <Link href="/attendance">
+                                            <button
+                                                type='submit'
+                                                className="block w-full text-center px-4 py-2 text-sm text-gray-700 hover:text-white transition-colors duration-200 hover:bg-blue-600"
+                                            >
+                                                Attendance
+                                            </button>
+                                            </Link>
+                                    </div>
                                     {/* Time out Section */}
                                     <hr className="border-gray-200" />
                                     <div className="py-2 flex items-center justify-center w-full space-x-4">
@@ -354,7 +365,7 @@ export default function Navbar() {
                                         <form onSubmit={logout}>
                                             <button
                                                 type='submit'
-                                                className="block w-full text-center px-4 py-2 text-sm text-gray-700 hover:text-white transition-colors duration-200 hover:bg-green-400"
+                                                className="block w-full text-center px-4 py-2 text-sm text-gray-700 hover:text-white transition-colors duration-200 hover:bg-red-600"
                                             >
                                                 Logout
                                             </button>
