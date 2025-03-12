@@ -179,7 +179,7 @@ export default function Home() {
 
                 {/* Unique Visitor Section */}
                 <div className="mt-6">
-                    <div className="flex justify-between items-center mb-3">
+                    {/* <div className="flex justify-between items-center mb-3">
                         <h5 className="text-lg font-bold">INCOME</h5>
                         <div className="flex space-x-2">
                             <button className="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100">
@@ -189,10 +189,11 @@ export default function Home() {
                                 Week
                             </button>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {/* Line Chart - spans more columns */}
                         <div className="bg-white rounded-lg shadow p-4 md:p-6 col-span-1 md:col-span-2">
+                            <h5 className="text-lg font-bold">Income Line Graph</h5>
                             {(transactions.length > 0)
                                 ?
                                 <LineChart transactions={transactions} />
