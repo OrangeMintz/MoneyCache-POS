@@ -32,8 +32,19 @@
                             <tr>
                                 <td>{{ $record->user->name }}</td>
                                 <td class="capitalize">{{ $record->user->role }}</td>
-                                <td>{{ \Carbon\Carbon::parse($record->timeIn)->format('g:i A') }}</td>
-                                <td>{{ \Carbon\Carbon::parse($record->timeOut)->format('g:i A') }}</td>
+                                <td>
+                                    <span
+                                        class="font-medium text-sm px-2 py-1 rounded-xl uppercase text-white bg-indigo-300 inline-block">
+                                        {{ \Carbon\Carbon::parse($record->timeIn)->format('g:i A') }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span
+                                        class="font-medium text-sm px-2 py-1 rounded-xl uppercase inline-block
+                                        {{ $record->timeOut ? 'text-white bg-orange-300' : 'text-gray-500' }}">
+                                        {{ $record->timeOut ? \Carbon\Carbon::parse($record->timeOut)->format('g:i A') : '---' }}
+                                    </span>
+                                </td>
                                 <td>
                                     <span
                                         class="inline-flex items-center justify-center text-sm font-medium px-2 py-1 rounded-xl text-white uppercase
@@ -43,7 +54,7 @@
                                         {{ ucfirst($record->status) }}
                                     </span>
                                 </td>
-                                <td>{{ $record->created_at }}</td>
+                                <td>{{ \Carbon\Carbon::parse($record->created_at)->format('l j, Y') }}</td>
                                 <td>
                                     <button data-popover-target="view-details-{{ $record->id }}" type="button"
                                         class="cursor-default px-3 py-1 text-blue-500 hover:text-blue-600">View Rate
@@ -61,7 +72,7 @@
                                             </p>
                                             <p class="font-medium text-gray-900 dark:text-white">Total Rate:
                                                 <span class="font-normal">₱
-                                                    {{ number_format(($record->totalRate ?? 0) * ($record->user->rate ?? 0), 2) }}</span>
+                                                    {{ number_format($record->totalRate ?? 0) }}</span>
                                             </p>
                                         </div>
                                         <div data-popper-arrow></div>
@@ -80,5 +91,9 @@
 
 <script>
     //DataTable
-    new DataTable('#attendanceTable');
+    new DataTable('#attendanceTable', {
+        order: [
+            [5, 'desc']
+        ]
+    });
 </script>
