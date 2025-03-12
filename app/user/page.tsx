@@ -11,6 +11,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import { ChevronDown } from "lucide-react";
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import Toast from 'typescript-toastify';
@@ -495,29 +496,14 @@ export default function CollapsibleTable() {
 
 
           <div className="mb-4 flex justify-end col-span-2 relative">
-            <button
-              id="dropdownDefaultButton"
-              className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
-              type="button"
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-            >
-              Visibility
-              <svg
-                className="w-2.5 h-5.5 ms-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 6"
+          <button
+                className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-medium text-gray-800 ring-1 shadow-sm ring-gray-300 hover:bg-gray-50 transition-colors duration-200"
+                type="button"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
               >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 1 4 4 4-4"
-                />
-              </svg>
-            </button>
+                Columns
+                <ChevronDown className="w-4 h-4 ml-1" />
+              </button>
 
 
             <div>

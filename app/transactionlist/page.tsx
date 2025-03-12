@@ -16,6 +16,7 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
+import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from 'react';
 import Toast from 'typescript-toastify';
 import api from "../../utils/api";
@@ -655,40 +656,36 @@ export default function CollapsibleTable() {
 
         <div className='grid grid-cols-5 flex'>
 
-          <div className='col-span-3 '>
-            <input
-              type="text"
-              placeholder="Search by Date or Cashier..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className=" mb-4 text-sm p-2 border rounded w-1/4"
-            />
+        <div className='md:col-span-3'>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search by Name or ID..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full md:w-1/2 px-4 py-2 pl-10 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
+              />
+              <svg 
+                className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
           </div>
 
           <div className="mb-4 flex justify-end col-span-2 relative">
-            <button
-              id="dropdownDefaultButton"
-              className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
-              type="button"
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-            >
-              Visibility
-              <svg
-                className="w-2.5 h-5.5 ms-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 6"
+          <button
+                className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-medium text-gray-800 ring-1 shadow-sm ring-gray-300 hover:bg-gray-50 transition-colors duration-200"
+                type="button"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
               >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 1 4 4 4-4"
-                />
-              </svg>
-            </button>
+                Columns
+                <ChevronDown className="w-4 h-4 ml-1" />
+              </button>
 
             <div
               id="dropdownContent"
