@@ -13,6 +13,7 @@ import TableRow from '@mui/material/TableRow';
 import { ArrowDown, ArrowUp, ChevronDown, LogIn, LogOut } from "lucide-react";
 import { useEffect, useState } from 'react';
 import Toast from 'typescript-toastify';
+import api from "../../utils/api";
 import Preloader from '../comps/preloader';
 import { formatTime, formatDate } from '@/utils/formatter';
 import Pusher from 'pusher-js';
@@ -39,7 +40,7 @@ function Row({ row, handleSave, visibleColumns }) {
         {visibleColumns.in && <TableCell align="center"><span className='px-2 py-1 font-semibold leading-tight rounded-md text-xs text-green-700 bg-green-100'>{formatTime(row.created_at)}</span></TableCell>}
         {visibleColumns.out && <TableCell align="center"><span className='px-2 py-1 font-semibold leading-tight rounded-md text-xs text-purple-700 bg-purple-100'>{formatTime(row.timeOut)}</span></TableCell>}
         {visibleColumns.hour && <TableCell align="center"><span className='text-xs'>{row.totalHours || "N/A"}</span></TableCell>}
-        {visibleColumns.rate && <TableCell align="center"><span className='px-2 py-1 font-semibold leading-tight rounded-md text-xs text-green-700 bg-green-100'>{row.totalRate || "N/A"}</span></TableCell>}
+        {visibleColumns.rate && <TableCell align="center"><span className='px-2 py-1 font-semibold leading-tight rounded-md text-xs text-green-700 bg-green-100'>{row.totalRate ? "₱ " + row.totalRate : "N/A"}</span></TableCell>}
         {visibleColumns.status && <TableCell align="center"><span className={`px-2 py-1 font-semibold leading-tight rounded-md text-xs ${(row.status == 'early') ? 'text-green-700 bg-green-100' : (row.status == 'early') ? 'text-blue-700 bg-green-100' : 'text-orange-700 bg-gray-100'}`}>{row.status}</span></TableCell>}
         {visibleColumns.date && <TableCell align="center"><span className='text-xs'>{formatDate(row.created_at)}</span></TableCell>}
       </TableRow>
@@ -49,12 +50,15 @@ function Row({ row, handleSave, visibleColumns }) {
 
 // Main Table Component
 export default function CollapsibleTable() {
+
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [loading, setLoading] = useState(false)
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
+
   const [visibleColumns, setVisibleColumns] = useState({
     id: true,
     in: true,
@@ -64,6 +68,7 @@ export default function CollapsibleTable() {
     status: true,
     date: true,
   });
+
 
   useEffect(() => {
     fetchAttendance().then(setData);
@@ -91,6 +96,9 @@ export default function CollapsibleTable() {
     };
   }, []);
 
+  useEffect(() => {
+    (data.length > 0) && setLoading(false);
+  }, [data]);
 
   const handleChangePage = (_event, newPage) => setPage(newPage);
 
@@ -133,9 +141,68 @@ export default function CollapsibleTable() {
     });
   }
 
+
+  const handleSave = (updatedData) => {
+    const updatedRows = data.map((row) =>
+      row.id === updatedData.id ? updatedData : row
+    );
+    setData(updatedRows);
+  };
+
+  // Sorting logic
+  const requestSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  // Function to get sorted data
+  const getSortedData = (dataToSort) => {
+    if (!sortConfig.key) return dataToSort;
+
+    return [...dataToSort].sort((a, b) => {
+      // Handle different data types
+      let aValue = a[sortConfig.key];
+      let bValue = b[sortConfig.key];
+
+      // Special cases for columns with more complex data
+      if (sortConfig.key === 'id') {
+        aValue = a.name ? a.name.toLowerCase() : '';
+        bValue = b.name ? b.name.toLowerCase() : '';
+      } else if (sortConfig.key === 'in' || sortConfig.key === 'out') {
+        // Since we have fixed values for demo, this just maintains order
+        return 0;
+      } else if (sortConfig.key === 'hour') {
+        // If hour values were dynamic, we'd extract them here
+        aValue = 490;
+        bValue = 490;
+      } else if (sortConfig.key === 'rate') {
+        aValue = 250.50;
+        bValue = 250.50;
+      } else if (sortConfig.key === 'status') {
+        aValue = 'pending';
+        bValue = 'pending';
+      } else if (sortConfig.key === 'date') {
+        aValue = new Date('2025-03-12');
+        bValue = new Date('2025-03-12');
+      }
+
+      if (aValue < bValue) {
+        return sortConfig.direction === 'ascending' ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return sortConfig.direction === 'ascending' ? 1 : -1;
+      }
+      return 0;
+    });
+  };
+
+  // Filter the data based on search term
   const filteredRows = data.filter((row) =>
     row.user?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    formatDate(row.created_at).toString().toLowerCase().includes(searchTerm.toLocaleLowerCase())
+    formatDate(row.created_at).toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Sort the filtered data
@@ -203,114 +270,107 @@ export default function CollapsibleTable() {
             </div>
           </div>
 
-
-          <div className="mb-4 flex justify-end col-span-2 relative">
-
-            <div>
-              <button
-                id="TimeInButton"
-                onClick={handleTimeIn}
-                className="inline-flex items-center justify-center gap-x-1 md:mr-1 rounded-md bg-green-400 sm:px-3 sm:py-3 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10"
-              >
-                <LogIn className="w-4 h-4" />
-                Time In
-              </button>
-
-            </div>
-            <div>
-              <button
-                id="TimeInButton"
-                onClick={handleTimeOut}
-                className="inline-flex items-center justify-center gap-x-1 md:mr-1 rounded-md bg-red-400 sm:px-3 sm:py-3 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10"
-              >
-                <LogOut className="w-4 h-4" />
-                Time Out
-              </button>
-            </div>
+          <div className="flex justify-end items-center gap-2 md:col-span-2">
             <button
-              id="dropdownDefaultButton"
-              className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50"
-              type="button"
-              onClick={() => setDropdownOpen(!dropdownOpen)}
+              onClick={handleTimeIn}
+              className="inline-flex items-center justify-center gap-x-1 px-3 py-2 rounded-md bg-green-500 hover:bg-green-600 text-white text-xs font-medium transition-colors duration-200"
             >
-              Visibility
-              <svg
-                className="w-2.5 h-5.5 ms-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 6"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 1 4 4 4-4"
-                />
-              </svg>
+              <LogIn className="w-4 h-4" />
+              Time In
             </button>
 
-
-            <div
-              className={`absolute top-full right-0 mt-1 z-10 bg-white rounded-lg shadow-lg border border-gray-200 w-48 transition-all duration-200 ease-in-out transform ${dropdownOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
-                }`}
+            <button
+              onClick={handleTimeOut}
+              className="inline-flex items-center justify-center gap-x-1 px-3 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white text-xs font-medium transition-colors duration-200"
             >
-              <div className="py-2">
-                {Object.keys(visibleColumns).map((col) => (
-                  <label
-                    key={col}
-                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={visibleColumns[col]}
-                      onChange={() => handleColumnToggle(col)}
-                      className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                    />
-                    <span className="ml-2">{columnLabels[col]}</span>
-                  </label>
-                ))}
+              <LogOut className="w-4 h-4" />
+              Time Out
+            </button>
+
+            <div className="relative">
+              <button
+                className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-medium text-gray-800 ring-1 shadow-sm ring-gray-300 hover:bg-gray-50 transition-colors duration-200"
+                type="button"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              >
+                Columns
+                <ChevronDown className="w-4 h-4 ml-1" />
+              </button>
+
+              <div
+                className={`absolute top-full right-0 mt-1 z-10 bg-white rounded-lg shadow-lg border border-gray-200 w-48 transition-all duration-200 ease-in-out transform ${dropdownOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+                  }`}
+              >
+                <div className="py-2">
+                  {Object.keys(visibleColumns).map((col) => (
+                    <label
+                      key={col}
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={visibleColumns[col]}
+                        onChange={() => handleColumnToggle(col)}
+                        className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                      />
+                      <span className="ml-2">{columnLabels[col]}</span>
+                    </label>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <TableContainer component={Paper} className='rounded-lg shadow-md overflow-hidden border border-gray-200'>
-        <Table>
-          <TableHead>
-            <TableRow>
-              {visibleColumns.id && <TableCell align="center">User Details</TableCell>}
-              {visibleColumns.in && <TableCell align="center">Time In</TableCell>}
-              {visibleColumns.out && <TableCell align='center'>Time Out</TableCell>}
-              {visibleColumns.hour && <TableCell align='center'>Total Hours</TableCell>}
-              {visibleColumns.rate && <TableCell align='center'>Total Rate</TableCell>}
-              {visibleColumns.status && <TableCell align='center'>Status</TableCell>}
-              {visibleColumns.date && <TableCell align='center'>Date</TableCell>}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {paginatedRows.map((row) => (
-              <Row key={row.id} row={row} visibleColumns={visibleColumns} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+        <TableContainer component={Paper} className='rounded-lg shadow-md overflow-hidden border border-gray-200'>
+          <Table>
+            <TableHead>
+              <TableRow className="bg-gray-50">
+                {Object.keys(visibleColumns).map(col =>
+                  visibleColumns[col] && (
+                    <TableCell
+                      key={col}
+                      align="center"
+                      className="font-medium text-gray-700 py-4 cursor-pointer hover:bg-gray-100 transition-colors duration-150"
+                      onClick={() => requestSort(col)}
+                    >
+                      <div className="flex items-center justify-center">
+                        {columnLabels[col]}
+                        {getSortDirectionIcon(col)}
+                      </div>
+                    </TableCell>
+                  )
+                )}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {paginatedRows.map((row) => (
+                <Row key={row.id} row={row} handleSave={handleSave} visibleColumns={visibleColumns} />
+              ))}
+              {paginatedRows.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={Object.values(visibleColumns).filter(Boolean).length} align="center" className="py-8 text-gray-500">
+                    No data found
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-      <div className="mt-4">
-        <TablePagination
-          rowsPerPageOptions={[6, 10, 25]}
-          component="div"
-          count={filteredRows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          className="text-sm"
-        />
-      </div>
-    </Box >
+        <div className="mt-4">
+          <TablePagination
+            rowsPerPageOptions={[6, 10, 25]}
+            component="div"
+            count={filteredRows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            className="text-sm"
+          />
+        </div>
+      </Box>
     </>
   );
 }
