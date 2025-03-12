@@ -16,6 +16,16 @@ class AttendanceController extends Controller
         return view('pages.attendance');
     }
 
+    public function retrieve() {
+        
+        $attendance = Attendance::with('user')->get();
+
+        return response()->json([
+            "status" => 1,
+            "attendance" => $attendance,
+        ]);
+    }
+
     public function timein(){
         $user = Auth::user();
         $timezone = new DateTimeZone(env('APP_TIMEZONE'));
