@@ -22,7 +22,7 @@
                         <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
                         </svg>
                     </button>
-                        
+
                     <div id="dropdownDots" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600">
                         <ul class="p-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-500" aria-labelledby="dropdownMenuIconButton">
                             <li>
@@ -98,7 +98,7 @@
                                 <td class="capitalize">{{ $user->role }}</td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
-                                <td>₱ {{ $user->rate }}</td>
+                                <td>₱ {{ $user->rate ?? 0 }}</td>
                                 <td>{{ $user->created_at }}</td>
                                 <td>{{ $user->updated_at }}</td>
                                 <td>

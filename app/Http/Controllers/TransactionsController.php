@@ -256,9 +256,13 @@ class TransactionsController extends Controller
         $userId = $user->id;
 
         if($user->role == 'admin'){
-            $transactions = Transactions::with('cashier')->get();
+            $transactions = Transactions::with(['cashier' => function ($query) {
+                $query->withTrashed(); // gets the cashier even if it is soft deleted
+            }])->get();
         }else{
-            $transactions = Transactions::with('cashier')
+            $transactions = Transactions::with(['cashier' => function ($query) {
+                $query->withTrashed();
+            }])
             ->where('cashier_id', $userId)
             ->get();
         }
@@ -276,7 +280,9 @@ class TransactionsController extends Controller
 
         $date = $request->date;
 
-        $transactions = Transactions::with('cashier')->whereDate('created_at', $date)->get();
+        $transactions = Transactions::with(['cashier' => function ($query) {
+            $query->withTrashed();
+        }])->whereDate('created_at', $date)->get();
 
         return response()->json([
             "status" => 1,

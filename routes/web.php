@@ -37,6 +37,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::middleware([CheckRole::class . ":admin,cashier"])->group(function () {
+
+        // ATTENDANCE
+        Route::prefix('attendance')->group(function () {
+            Route::get('/', [AttendanceController::class, 'index'])->name('attendance.index');
+            Route::get('/timeIn', [AttendanceController::class, 'timeIn'])->name("attendance.timeIn");
+            Route::get('/timeOut', [AttendanceController::class, 'timeOut'])->name("attendance.timeOut");
+
+        });
+
         // TRANSACTIONS
         Route::prefix('transaction')->group(function () {
             Route::get('/', [TransactionsController::class, 'index'])->name('transaction');
@@ -52,9 +61,6 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware([CheckRole::class . ":admin"])->group(function () {
-
-        // ATTENDANCE
-        Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
 
         // USERS
         Route::prefix('user')->group(function () {

@@ -28,7 +28,6 @@
                 <form class="p-4 md:p-2" method="POST" action="{{ route('admin.update', $user->id) }}">
                     @csrf
                     @method('PUT')
-
                     <div class="p-4 mb-4 md:mb-8 grid-cols-2">
                         <div class="col-span-2 flex space-x-4">
                             <div class="flex-1">
@@ -50,7 +49,6 @@
                                     placeholder="Enter New Rate" value="{{ $user->rate }}" required>
                             </div>
                         </div>
-
                         <div class="col-span-2 sm:col-span-1 mt-2">
                             <label for="name"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>

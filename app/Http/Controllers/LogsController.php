@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class LogsController extends Controller
 {
@@ -79,16 +80,16 @@ class LogsController extends Controller
     public function storeAttendance($userId, $category)
     {
         $user = User::find($userId);
-        $timezone = new DateTimeZone(env('APP_TIMEZONE'));
+        // $timezone = new DateTimeZone(env('APP_TIMEZONE'));
 
         // logout time
-        $logout = new DateTime('today', $timezone);
-        $logout->setTime(17, 0, 0);
+        // $logout = new DateTime('today', $timezone);
+        $logout = today()->setTime(17, 0, 0);
         // login time
-        $login = new DateTime('today', $timezone);
-        $login->setTime(8, 0, 0);
+        // $login = new DateTime('today', $timezone);
+        $login = today()->setTime(8, 0, 0);
 
-        $now = new DateTime('now', $timezone); // time now
+        $now = now(); // time now
         $totalHours = null;
 
         if (Logs::whereDate('created_at', $now->format('Y-m-d'))
@@ -118,7 +119,6 @@ class LogsController extends Controller
 
             } catch (\Exception $e) {
                 Log::error('Error fetching time-in log: ' . $e->getMessage());
-
                 return response()->json(['error' => 'Something went wrong while fetching the time-in log.'], 500);
             }
         }
