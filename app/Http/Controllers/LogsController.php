@@ -30,13 +30,16 @@ class LogsController extends Controller
             }]);
         }
          ])->get():
+         
          Logs::where('user_id', $user->id)->with(['user',
          'activityUser' => function($query) {
             $query->withTrashed();
          },
          'transaction' => function($query) {
-            $query->withTrashed();
-         }
+            $query->withTrashed()->with(['cashier' => function ($query) {
+                $query->withTrashed(); // Include soft-deleted cashiers
+            }]);
+        }
          ])->get();
 
         if ($request->wantsJson()) {
