@@ -15,7 +15,7 @@
         </div>
         <!-- Sun Icon -->
         <i id="sunIcon"
-            class=" fa-regular fa-sun absolute left-2 top-1/2 transform -translate-y-1/2 text-yellow-500 text-sm"></i>
+            class="fa-regular fa-sun absolute left-2 top-1/2 transform -translate-y-1/2 text-yellow-500 text-sm"></i>
         <!-- Moon Icon -->
         <i id="moonIcon"
             class="fa-regular fa-moon absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm hidden"></i>
@@ -27,6 +27,15 @@
     const sunIcon = document.getElementById('sunIcon');
     const moonIcon = document.getElementById('moonIcon');
     const toggleCircle = document.getElementById('toggleCircle');
+
+    // Check local storage for theme preference
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+        toggle.checked = true;
+        moonIcon.classList.remove('hidden');
+        sunIcon.classList.add('hidden');
+        toggleCircle.classList.add('translate-x-7');
+    }
 
     toggle.addEventListener('change', function() {
         if (this.checked) {
