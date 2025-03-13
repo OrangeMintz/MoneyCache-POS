@@ -1,8 +1,8 @@
 'use client';
 import LineChart from '@/components/ui/linechart';
 import PieChart from '@/components/ui/piechart';
-import { fetchLogs, fetchTotals, fetchTransactions, fetchUsers } from '@/utils/fetch';
-import { formatNumber, formatDate, formatTime } from '@/utils/formatter';
+import { fetchLogs, fetchTotals, fetchTransactions, fetchUsers, fetchTotalsToday } from '@/utils/fetch';
+import { formatNumber, formatDate, formatTime, getCurrentDate } from '@/utils/formatter';
 import * as lucideIcons from 'lucide-react';
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
@@ -15,26 +15,38 @@ export default function Home() {
     const [transactions, setTransactions] = useState([])
     const [users, setUsers] = useState([])
     const [totals, setTotal] = useState(null)
+    const [totalsToday, setTotalsToday] = useState(null)
     const [logs, setLogs] = useState([])
 
     const fetchDashboardData = async () => {
         try {
-            const [transactions, users, totals, logs] = await Promise.all([
+            const [transactions, users, totals, logs, today] = await Promise.all([
                 fetchTransactions(),
                 user?.role === "admin" ? fetchUsers() : Promise.resolve(null),
                 fetchTotals(),
                 fetchLogs(),
+                fetchTotalsToday(new Date().toISOString().split('T')[0])
             ]);
 
             setTransactions(transactions);
             if (user?.role === "admin") setUsers(users);
             setTotal(totals);
             setLogs(logs);
+            setTotalsToday(today);
         } catch (error) {
             console.error("Error retrieving dashboard data: ", error);
         }
     };
 
+    const currentMonth = getCurrentDate().slice(0, 7);
+
+    const filteredTransactionsMonth = transactions.filter(transaction => {
+        return new Date(transaction.created_at).toISOString().slice(0, 7) === currentMonth;
+    });
+
+    const filteredUsersToday = users.filter(user => {
+        return new Date(user.created_at).toISOString().slice(0, 7) === currentMonth;
+    });
 
     useEffect(() => {
         if (user) {
@@ -79,10 +91,10 @@ export default function Home() {
                     {/* Left side: 2x2 grid of cards (taking 2 columns on medium screens and above) */}
                     <div className="col-span-1 md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {[
-                            { title: 'Total Gross', value: (totals ? "₱ " + formatNumber(totals.gross) : ""), percentage: '59.3%', trend: 'up', extra: '35,000', color: 'primary', icon: 'BadgeDollarSign', bgColor: 'bg-blue-100' },
-                            { title: 'Total Net', value: (totals ? "₱ " + formatNumber(totals.net) : ""), percentage: '70.5%', trend: 'up', extra: '8,900', color: 'success', icon: 'CircleDollarSign', bgColor: 'bg-green-100' },
-                            { title: 'Total Transactions', value: ((transactions.length > 0) ? transactions.length : "0"), percentage: '27.4%', trend: 'down', extra: '1,943', color: 'warning', icon: 'ArrowRightLeft', bgColor: 'bg-yellow-100' },
-                            { title: 'Total Users', value: ((user?.role != 'admin') ? "Unavailable" : (users.length > 0) ? users.length : "0"), percentage: '27.4%', trend: 'down', extra: '$20,395', color: 'danger', icon: 'CircleUser', bgColor: 'bg-red-100' },
+                            { title: 'Total Gross', value: (totals ? "₱ " + formatNumber(totals.gross) : ""), percentage: '59.3%', trend: 'up', extra: (totalsToday ? "₱ " + formatNumber(totalsToday.gross) : ""), color: 'primary', icon: 'BadgeDollarSign', bgColor: 'bg-blue-100' },
+                            { title: 'Total Net', value: (totals ? "₱ " + formatNumber(totals.net) : ""), percentage: '70.5%', trend: 'up', extra: (totalsToday ? "₱ " + formatNumber(totalsToday.net) : ""), color: 'success', icon: 'CircleDollarSign', bgColor: 'bg-green-100' },
+                            { title: 'Total Transactions', value: ((transactions.length > 0) ? transactions.length : "0"), percentage: '27.4%', trend: 'down', extra: (transactions ? filteredTransactionsMonth.length + " transactions " : ""), color: 'warning', icon: 'ArrowRightLeft', bgColor: 'bg-yellow-100' },
+                            { title: 'Total Users', value: ((user?.role != 'admin') ? "Unavailable" : (users.length > 0) ? users.length : "0"), percentage: '27.4%', trend: 'down', extra: (transactions ? filteredUsersToday.length + " users " : ""), color: 'danger', icon: 'CircleUser', bgColor: 'bg-red-100' },
                         ].map((card, index) => {
                             // Dynamic import of icons from lucide-react
                             const IconComponent = lucideIcons[card.icon];

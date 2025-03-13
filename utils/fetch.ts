@@ -54,6 +54,23 @@ export const fetchTotals = async (): Promise<any[]> => {
     }
 }
 
+export const fetchTotalsToday = async (date: string): Promise<any[]> => {
+    try {
+        const token = localStorage.getItem('access_token');
+        const response = await api.post("/api/transactions/get-by-date/totals", { date: date }, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/json",
+            },
+        });
+
+        return response.data.totals.grand_total || [];
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
+    }
+}
+
 export const fetchLogs = async (): Promise<any[]> => {
     try {
         const token = localStorage.getItem('access_token');
