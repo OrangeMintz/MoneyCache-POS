@@ -20,17 +20,40 @@
         <span class="sr-only">Close menu</span>
     </button>
     <div class="py-4 overflow-y-auto">
-        <table id="logsTable" class="display" style="width:100%">
+      <table id="logsTable" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Action Taken</th>
+                <th>Activity Description</th>
+                <th>Log Type</th>
+                <th>Date & Time</th>
+            </tr>
+        </thead>
+
+      </table>
+        {{-- <table id="logsTable" class="display" style="width:100%">
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>Action Taken</th>
                     <th>Activity Description</th>
-                    <th>Date & Time</th>
                     <th>Log Type</th>
+                    <th>Date & Time</th>
                 </tr>
             </thead>
-            <tbody>
+            
+            <thead>
+              <tr>
+                  <th>Name</th>
+                  <th>Action Taken</th>
+                  <th>Activity Description</th>
+                  <th>Log Type</th>
+                  <th>Date & Time</th>
+              </tr>
+            </thead>
+             <tbody>
                 @foreach ($allLogs as $log)
                     <tr>
                         <td>{{ $log->user->name ?? 'Unknown' }}</td>
@@ -43,7 +66,7 @@
                 @endforeach
 
             </tbody>
-        </table>
+        </table> --}}
     </div>
 </div>
 
@@ -71,10 +94,85 @@
         overlay.addEventListener("click", closeDrawer);
 
         // Initialize Logs Table
-        new DataTable('#logsTable', {
-            // searching: false,
-            paging: false,
-            info: false
+        let logsTable = new DataTable('#logsTable', {
+            ajax: '/object.txt',
+            columns: [
+                {
+                    className: 'dt-control',
+                    orderable: false,
+                    data: null,
+                    defaultContent: ''
+                },
+                { data: 'name' },
+                { data: 'position' },
+                { data: 'office' },
+                { data: 'salary' },
+                { data: 'start_date' }
+
+            ],
+            order: [[1, 'asc']]
+        });
+
+        function format(d) {
+            // `d` is the original data object for the row
+            return (
+              `<div class="w-full bg-white dark:bg-gray-700 p-2 flex justify-evenly">
+                  <div class="w-full max-w-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-5">
+                      <h2 class="text-md font-semibold text-gray-900 dark:text-white mb-2">User details</h2>
+                      <div class="relative bg-gray-50 dark:bg-gray-700 dark:border-gray-600 p-4 rounded-lg border border-gray-200 not-italic grid grid-cols-2">
+                          <div class="text-sm space-y-1 text-gray-500 dark:text-gray-400 leading-loose hidden sm:block">
+                              Name <br />
+                              Email <br />
+                              Shift Time <br />
+                              Add
+                              
+                          </div>
+                          <div class="text-sm space-y-1 text-gray-900 dark:text-white font-medium leading-loose">
+                              Bonnie Green <br />
+                              name@flowbite.com <br />
+                              AM<br />
+                              here
+                          </div>
+
+                      </div>
+                  </div>
+
+                  <div class="w-full max-w-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-5">
+                      <h2 class="text-md font-semibold text-gray-900 dark:text-white mb-2">Transaction details</h2>
+                      <div class="relative bg-gray-50 dark:bg-gray-700 dark:border-gray-600 p-4 rounded-lg border border-gray-200 not-italic grid grid-cols-2">
+                          <div class="text-sm space-y-1 text-gray-500 dark:text-gray-400 leading-loose hidden sm:block">
+                              Name <br />
+                              Email <br />
+                              Shift Time <br />
+                              Add
+                              
+                          </div>
+                          <div class="text-sm space-y-1 text-gray-900 dark:text-white font-medium leading-loose">
+                              Bonnie Green <br />
+                              name@flowbite.com <br />
+                              AM<br />
+                              here
+                          </div>
+
+                      </div>
+                  </div>
+
+              </div>`
+            );
+        }
+        // Add event listener for opening and closing details
+        logsTable.on('click', 'td.dt-control', function (e) {
+            let tr = e.target.closest('tr');
+            let row = logsTable.row(tr);
+        
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+            }
+            else {
+                // Open this row
+                row.child(format(row.data())).show();
+            }
         });
     });
 </script>
