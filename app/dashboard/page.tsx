@@ -25,7 +25,7 @@ export default function Home() {
                 user?.role === "admin" ? fetchUsers() : Promise.resolve(null),
                 fetchTotals(),
                 fetchLogs(),
-                fetchTotalsToday(new Date().toISOString().split('T')[0])
+                user?.role === "admin" ? fetchTotalsToday(new Date().toISOString().split('T')[0]) : Promise.resolve(null),
             ]);
 
             setTransactions(transactions);
