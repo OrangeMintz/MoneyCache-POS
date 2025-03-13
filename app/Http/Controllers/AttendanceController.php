@@ -80,7 +80,7 @@ class AttendanceController extends Controller
         ]);
 
         event(new MyEvent("Clocked in!"));
-        (new LogsController)->storeAttendance($user->id,'timein');
+        (new LogsController)->storeAttendance($user->id,'Clocked In');
         $message = 'Clocked In Successfully!';
         if ($request->wantsJson()) {
             return response()->json(['status' => 'success', 'message' => $message], 200);
