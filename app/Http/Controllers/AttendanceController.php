@@ -92,8 +92,6 @@ class AttendanceController extends Controller
         ]);
     }
 
-
-
     public function timeOut(Request $request) {
         $user = Auth::user();
         if (!$user) {
@@ -111,17 +109,22 @@ class AttendanceController extends Controller
 
         if (!$attendance) {
             $message = 'You have not clocked in today or have already clocked out!';
-            if ($request->wantsJson()) {
-                return response()->json(['status' => 'error', 'message' => $message]);
-            }
-
-            return redirect()->back()->with([
-                'message' => $message,
-                'alert-type' => 'error',
-            ]);
+            return $request->wantsJson()
+                ? response()->json(['status' => 'error', 'message' => $message])
+                : redirect()->back()->with(['message' => $message, 'alert-type' => 'error']);
         }
 
         $timeIn = \Carbon\Carbon::parse($attendance->timeIn);
+
+        // Restrict timeout if less than 1 hour from timeIn
+        if ($now->diffInMinutes($timeIn) < 60) {
+            $message = 'You cannot clock out within an hour of clocking in!';
+            return $request->wantsJson()
+                ? response()->json(['status' => 'error', 'message' => $message], 400)
+                : redirect()->back()->with(['message' => $message, 'alert-type' => 'error']);
+        }
+
+        // Calculate total hours and rate
         $totalHours = $timeIn->diffInMinutes($now) / 60;
         $totalRate = $totalHours * $user->rate;
 
@@ -133,16 +136,13 @@ class AttendanceController extends Controller
         ]);
 
         event(new MyEvent("Clocked out!"));
-        (new LogsController)->storeAttendance($user->id,'timeout');
-        $message = 'Clocked Out Successfully!';
-        if ($request->wantsJson()) {
-            return response()->json(['status' => 'success', 'message' => $message], 200);
-        }
+        (new LogsController)->storeAttendance($user->id, 'timeout');
 
-        return redirect()->back()->with([
-            'message' => $message,
-            'alert-type' => 'success',
-        ]);
+        $message = 'Clocked Out Successfully!';
+        return $request->wantsJson()
+            ? response()->json(['status' => 'success', 'message' => $message], 200)
+            : redirect()->back()->with(['message' => $message, 'alert-type' => 'success']);
     }
+
 
 }
