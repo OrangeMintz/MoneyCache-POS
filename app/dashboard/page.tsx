@@ -20,7 +20,7 @@ export default function Home() {
 
     const fetchDashboardData = async () => {
         try {
-            const [transactions, users, totals, logs, today] = await Promise.all([
+            const [transactions, usersData, totals, logs, today] = await Promise.all([
                 fetchTransactions(),
                 user?.role === "admin" ? fetchUsers() : Promise.resolve(null),
                 fetchTotals(),
@@ -29,7 +29,7 @@ export default function Home() {
             ]);
 
             setTransactions(transactions);
-            if (user?.role === "admin") setUsers(users);
+            if (user?.role === "admin") setUsers(usersData.users);
             setTotal(totals);
             setLogs(logs);
             setTotalsToday(today);

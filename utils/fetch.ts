@@ -10,7 +10,10 @@ export const fetchUsers = async (): Promise<any[]> => {
             },
         });
 
-        return response.data.users.reverse() || [];
+        return {
+            users: response.data.users.reverse() || [],
+            deletedUsers: response.data.deleted_users.reverse() || [],
+        };
     } catch (error) {
         console.error("Error fetching data:", error);
         return [];

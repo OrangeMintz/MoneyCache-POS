@@ -1,7 +1,7 @@
 'use client';
 
 import { fetchAttendance, timeIn, timeOut } from '@/utils/fetch';
-import { formatDate, formatTime } from '@/utils/formatter';
+import { formatDate, formatTime, formatNumber } from '@/utils/formatter';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -39,7 +39,7 @@ function Row({ row, handleSave, visibleColumns }) {
         {visibleColumns.in && <TableCell align="center"><span className='px-2 py-1 font-semibold leading-tight rounded-md text-xs text-green-700 bg-green-100'>{formatTime(row.created_at)}</span></TableCell>}
         {visibleColumns.out && <TableCell align="center"><span className='px-2 py-1 font-semibold leading-tight rounded-md text-xs text-purple-700 bg-purple-100'>{formatTime(row.timeOut)}</span></TableCell>}
         {visibleColumns.hour && <TableCell align="center"><span className='text-xs'>{row.totalHours || "N/A"}</span></TableCell>}
-        {visibleColumns.rate && <TableCell align="center"><span className='px-2 py-1 font-semibold leading-tight rounded-md text-xs text-green-700 bg-green-100'>{row.totalRate ? "₱ " + row.totalRate : "N/A"}</span></TableCell>}
+        {visibleColumns.rate && <TableCell align="center"><span className='px-2 py-1 font-semibold leading-tight rounded-md text-xs text-green-700 bg-green-100'>{row.totalRate ? "₱ " + formatNumber(row.totalRate) : "N/A"}</span></TableCell>}
         {visibleColumns.status && <TableCell align="center"><span className={`px-2 py-1 font-semibold leading-tight rounded-md text-xs ${(row.status == 'Early') ? 'text-green-700 bg-green-100' : (row.status == 'On Time') ? 'text-blue-700 bg-green-100' : 'text-orange-700 bg-gray-100'}`}>{row.status}</span></TableCell>}
         {visibleColumns.date && <TableCell align="center"><span className='text-xs'>{formatDate(row.created_at)}</span></TableCell>}
       </TableRow>
