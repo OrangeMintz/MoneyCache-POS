@@ -1,4 +1,5 @@
 <x-app-layout>
+
     <div class="font-sans bg-gray-100 dark:bg-gray-800 dark:text-gray-100 p-6">
         <div class="bg-white dark:bg-gray-900 p-4 mb-4 grid gap-6">
             <div class="flex flex-col space-y-6 md:space-y-0 md:flex-row justify-between">
@@ -224,6 +225,24 @@
                             </ul>
                         </div>
                     </div>
+                    {{-- view more logs --}}
+                    <div class="flex justify-end mt-6 mr-6">
+                        <button type="button" data-drawer-target="drawer-navigation" 
+                        data-drawer-show="drawer-navigation" 
+                        aria-controls="drawer-navigation"
+                            class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
+                            View Details
+                            <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                            </svg>
+                        </button>
+
+                        @include('components.modals.logs')
+
+                    </div>
+
                 </div>
             </section>
         </div>
