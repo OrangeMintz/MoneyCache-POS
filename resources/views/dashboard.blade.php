@@ -9,11 +9,6 @@
                 <div class="mr-6">
                     <h1 class="title font-semibold text-[26px] mb-2">Dashboard</h1>
                 </div>
-                {{-- <div class="flex flex-wrap items-start justify-end -mb-3">
-                    <a href="{{route('attendance.index')}}" class="inline-flex px-5 py-3 text-white bg-MCGreen hover:bg-MCGreenHover focus:bg-MCGreenHover rounded-md ml-6 mb-3">
-                        Attendance Record
-                    </a>
-                </div> --}}
             </div>
             <section class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
                 <div class="flex items-center p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
