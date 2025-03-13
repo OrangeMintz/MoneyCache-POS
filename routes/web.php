@@ -11,15 +11,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\LogsController;
 use App\Http\Middleware\CheckRole;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/test', function() {
-    return view('pages.test');
-});
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

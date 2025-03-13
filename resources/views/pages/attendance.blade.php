@@ -94,10 +94,10 @@
     new DataTable('#attendanceTable', {
         order: [
             [5, 'desc']
-        ]
+        ],
+        searching: false,
+        paging: false,
+        info: false
     });
 
-    // searching: false,
-    // paging: false,
-    // info: false
 </script>
