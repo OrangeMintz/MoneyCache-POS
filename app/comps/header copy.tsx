@@ -14,7 +14,7 @@ export default function Navbar() {
     const pathname = usePathname();
     const [open, setOpen] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
-
+    const [isTimeIn, setIsTimeIn] = useState(true);
     const logout = async (event: React.FormEvent) => {
         event.preventDefault();
 
@@ -68,7 +68,7 @@ export default function Navbar() {
         };
     }, []);
 
-    const isActive = (path) =>{
+    const isActive = (path) => {
         return pathname === path;
     }
     return (
@@ -116,8 +116,19 @@ export default function Navbar() {
                             <Link
                                 href="/dashboard"
                                 className={`flex items-center p-3 rounded-md transition-all duration-200 
-                                    ${isActive('/dashboard') 
-                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
+                                    ${isActive('/dashboard')
+                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2'
+                                        : 'hover:bg-green-200 hover:translate-x-1'}`}
+                            >
+                                <span className="font-medium">Dashboard</span>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href="/transaction"
+                                className={`flex items-center p-3 rounded-md transition-all duration-200 
+                                    ${isActive('/transaction')
+                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2'
                                         : 'hover:bg-green-200 hover:translate-x-1'}`}
                             >
                                 <span className="font-medium">Transactions</span>
@@ -127,8 +138,7 @@ export default function Navbar() {
                             <Link
                                 href="/transactionlist"
                                 className={`flex items-center p-3 rounded-md transition-all duration-200
-                                    ${
-                                        isActive('/transactionlist')
+                                    ${isActive('/transactionlist')
                                         ? 'bg-green-200 border-1-4 border-green-600 pl-2'
                                         : 'hover:bg-green-200 hover:translate-x-1'
                                     }`}
@@ -140,8 +150,8 @@ export default function Navbar() {
                             <Link
                                 href="/user"
                                 className={`flex items-center p-3 rounded-md transition-all duration-200 
-                                    ${isActive('/user') 
-                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
+                                    ${isActive('/user')
+                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2'
                                         : 'hover:bg-green-200 hover:translate-x-1'}`}
                             >
                                 <span className={`font-medium ${isActive('/user') ? 'text-green-800' : ''}`}>Users</span>
@@ -149,13 +159,13 @@ export default function Navbar() {
                         </li>
                         <li>
                             <Link
-                                href="/Product"
+                                href="/logs"
                                 className={`flex items-center p-3 rounded-md transition-all duration-200 
-                                    ${isActive('/Product') 
-                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2' 
+                                    ${isActive('/logs')
+                                        ? 'bg-green-200 border-l-4 border-green-600 pl-2'
                                         : 'hover:bg-green-200 hover:translate-x-1'}`}
                             >
-                                <span className={`font-medium ${isActive('/Product') ? 'text-green-800' : ''}`}>Sheets</span>
+                                <span className={`font-medium ${isActive('/logs') ? 'text-green-800' : ''}`}>Logs</span>
                             </Link>
                         </li>
                     </ul>
@@ -214,30 +224,35 @@ export default function Navbar() {
                         <div className="hidden md:flex md:items-center md:justify-center flex-1 px-2">
                             <div className="flex space-x-1">
                                 <Link href="/dashboard">
-                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
-                                        isActive('/dashboard') 
-                                            ? 'bg-green-100 text-green-800' 
-                                            : 'text-black dark:text-gray-200 hover:text-green-300'
-                                    }`}>
+                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/dashboard')
+                                        ? 'bg-green-100 text-green-800'
+                                        : 'text-black dark:text-gray-200 hover:text-green-300'
+                                        }`}>
+                                        <span>Dashboard</span>
+                                    </button>
+                                </Link>
+                                <Link href="/transaction">
+                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/transaction')
+                                        ? 'bg-green-100 text-green-800'
+                                        : 'text-black dark:text-gray-200 hover:text-green-300'
+                                        }`}>
                                         <span>Transaction</span>
                                     </button>
                                 </Link>
                                 <Link href="/transactionlist">
-                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
-                                        isActive('/transactionlist') 
-                                            ? 'bg-green-100 text-green-800' 
-                                            : 'text-black dark:text-gray-200 hover:text-green-300'
-                                    }`}>
+                                    <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/transactionlist')
+                                        ? 'bg-green-100 text-green-800'
+                                        : 'text-black dark:text-gray-200 hover:text-green-300'
+                                        }`}>
                                         <span>Transaction List</span>
                                     </button>
                                 </Link>
                                 {user ? (user.role == 'admin' ?
                                     <Link href="/user">
-                                        <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
-                                        isActive('/user') 
-                                            ? 'bg-green-100 text-green-800' 
+                                        <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/user')
+                                            ? 'bg-green-100 text-green-800'
                                             : 'text-black dark:text-gray-200 hover:text-green-300'
-                                    }`}>
+                                            }`}>
                                             <span>Users</span>
                                         </button>
                                     </Link> : ""
@@ -245,12 +260,22 @@ export default function Navbar() {
 
                                 {user ? (user.role == 'admin' ?
                                     <Link href="/Product">
-                                        <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${
-                                        isActive('/Product') 
-                                            ? 'bg-green-100 text-green-800' 
+                                        <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/Product')
+                                            ? 'bg-green-100 text-green-800'
                                             : 'text-black dark:text-gray-200 hover:text-green-300'
-                                    }`}>
+                                            }`}>
                                             <span>Sheets</span>
+                                        </button>
+                                    </Link> : ""
+                                ) : ""}
+                               
+                                {user ? (user.role == 'admin' ?
+                                    <Link href="/logs">
+                                        <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/logs')
+                                            ? 'bg-green-100 text-green-800'
+                                            : 'text-black dark:text-gray-200 hover:text-green-300'
+                                            }`}>
+                                            <span>Logs</span>
                                         </button>
                                     </Link> : ""
                                 ) : ""}
@@ -259,35 +284,76 @@ export default function Navbar() {
                             </div>
                         </div>
 
-                        {/* User dropdown */}
                         <div className="flex items-center">
                             <div className="relative" ref={dropdownRef}>
                                 {/* Avatar button that triggers dropdown */}
-                                <div className="flex items-center justify-center">
-                                    <UserCircle
-                                        id="avatarButton"
-                                        onClick={toggleDropdown}
-                                        className="w-7 h-7 text-black cursor-pointer transition-all duration-300"
-                                    />
+                                <div className="flex items-center justify-center relative">
+                                    {/* Wrapper for the avatar and indicator */}
+                                    <div className="relative">
+                                        <UserCircle
+                                            id="avatarButton"
+                                            onClick={toggleDropdown}
+                                            className="w-7 h-7 text-black cursor-pointer transition-all duration-300"
+                                        />
+                                        {/* Indicator */}
+                                        <div
+                                            className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${isTimeIn ? 'bg-green-500' : 'bg-red-500'
+                                                }`}
+                                        ></div>
+                                    </div>
                                 </div>
 
                                 {/* Dropdown menu with animation */}
                                 <div
                                     id="userDropdown"
-                                    className={`absolute transform ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'} 
-                   transition-all duration-300 ease-in-out 
-                   right-0 md:right-1/2 md:translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50`}
+                                    className={`absolute transform ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+                                        } 
+                                            transition-all duration-300 ease-in-out 
+                                            right-0 md:right-1/2 md:translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50`}
                                 >
                                     <div className="px-4 py-3 text-sm text-gray-900 text-center">
-                                        <h1 className="font-medium">{user ? user.name + ` (${user.role})` : ""}</h1>
+                                        <div className="flex justify-center">
+                                            <h1 className="font-medium">{user ? user.name + ` (${user.role})` : ""}</h1>
+                                        </div>
                                         <p className="text-gray-500">{user ? user.email : ""}</p>
                                     </div>
+                                    <hr className="border-gray-200" />
+                                    <div className="py-1">
+                                    <Link href="/attendance">
+                                            <button
+                                                type='submit'
+                                                className="block w-full text-center px-4 py-2 text-sm text-gray-700 hover:text-white transition-colors duration-200 hover:bg-blue-600"
+                                            >
+                                                Attendance
+                                            </button>
+                                            </Link>
+                                    </div>
+                                    {/* Time out Section */}
+                                    <hr className="border-gray-200" />
+                                    <div className="py-2 flex items-center justify-center w-full space-x-4">
+                                        {/* Time Display on the Left */}
+                                        <h2 className="text-sm font-medium">{isTimeIn ? "Time in" : "Time out"}</h2>
+
+                                        {/* Toggle Switch on the Right */}
+                                        <label className="relative inline-flex items-center cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={isTimeIn} // Directly use isTimeIn for the checked state
+                                                onChange={() => setIsTimeIn(!isTimeIn)}
+                                                className="sr-only peer"
+                                            />
+                                            <div className={`w-11 h-6 rounded-full transition-colors ${isTimeIn ? 'bg-green-500 peer-focus:ring-green-300' : 'bg-red-500 peer-focus:ring-red-300'
+                                                } peer-focus:ring-4 dark:peer-focus:ring-opacity-50 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-5`}></div>
+                                        </label>
+                                    </div>
+
+                                    {/* Logout Section */}
                                     <hr className="border-gray-200" />
                                     <div className="py-1">
                                         <form onSubmit={logout}>
                                             <button
                                                 type='submit'
-                                                className="block w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+                                                className="block w-full text-center px-4 py-2 text-sm text-gray-700 hover:text-white transition-colors duration-200 hover:bg-red-600"
                                             >
                                                 Logout
                                             </button>
@@ -314,18 +380,39 @@ export default function Navbar() {
                 {/* Mobile menu */}
                 <div className={open ? 'block md:hidden' : 'hidden md:hidden'}>
                     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                        <Link href="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
+                        {user ? (user.role == 'admin' ?
+                            <Link href="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
+                                Dashboard
+                            </Link>
+                            : "") : ""}
+
+                        <Link href="/transactionlist" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
                             Transaction
                         </Link>
-                        <Link href="/transactionlist" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
+
+                        <Link href="/transaction" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
                             Transaction List
                         </Link>
-                        <Link href="/user" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
-                            Users
-                        </Link>
-                        <Link href="/Product" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
-                            Sheets
-                        </Link>
+                        {user ? (user.role == 'admin' ?
+                            <Link href="/user" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
+                                Users
+                            </Link>
+                            : "") : ""}
+
+                        {user ? (user.role == 'admin' ?
+                            <Link href="/Product" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
+                                Sheets
+                            </Link>
+                            : "") : ""}
+
+                             {user ? (user.role == 'admin' ?
+                            <Link href="/logs" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
+                                Logs
+                            </Link>
+                            : "") : ""}
+
+
+                        <h2 className='bg-gray-600'></h2>
                         <form onSubmit={logout}>
                             <button type="submit" className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
                                 Logout
