@@ -1,4 +1,3 @@
-
 @include('layouts.header')
 
 <main>
@@ -78,8 +77,8 @@
                         <div class="w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 py-4 md:py-6">
                             <div class="flex justify-between">
                                 <div>
-                                    <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">
-                                        {{ number_format($grandTotal ?? '0', 2) }}
+                                    <h5 class="leading-none text-3xl font-medium text-gray-900 dark:text-white pb-2">
+                                        ₱ {{ number_format($grandTotal ?? '0', 2) }}
                                     </h5>
                                     <p class="text-base font-normal text-gray-500 dark:text-gray-400">Income this month
                                     </p>
@@ -225,15 +224,14 @@
                     </div>
                     {{-- view more logs --}}
                     <div class="flex justify-end mt-6 mr-6">
-                        <button type="button" data-drawer-target="drawer-navigation" 
-                        data-drawer-show="drawer-navigation" 
-                        aria-controls="drawer-navigation"
+                        <button type="button" data-drawer-target="drawer-navigation"
+                            data-drawer-show="drawer-navigation" aria-controls="drawer-navigation"
                             class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
                             View Details
                             <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                <path stroke="currentColor" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 9 4-4-4-4" />
                             </svg>
                         </button>
 
@@ -246,6 +244,6 @@
         </div>
     </div>
 
-    
+
 </main>
 @include('layouts/footer')
