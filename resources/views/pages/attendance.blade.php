@@ -66,7 +66,11 @@
 
 <script>
   //DataTable
-  new DataTable('#attendanceTable');
+  new DataTable('#attendanceTable', {
+    // searching: false,
+    // paging: false,
+    // info: false
+  });
 </script>
 
 
