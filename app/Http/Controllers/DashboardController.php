@@ -15,13 +15,14 @@ class DashboardController extends Controller
     public function index()
     {
         $logs = $this->getRecentLogs(); // Use the new function
+        $allLogs = $this->getAllLogs(); // 
         $users = $this->getUsers();
         $transactions = $this->getTransactions();
         $grossTotal = $this->getTotalGrossSales();
         $netTotal = $this->getTotalNetSales();
         $grandTotal = $this->getGrandTotal();
 
-        return view('dashboard', compact('logs', 'users', 'transactions', 'grossTotal', 'netTotal','grandTotal'));
+        return view('dashboard', compact('logs', 'allLogs', 'users', 'transactions', 'grossTotal', 'netTotal','grandTotal'));
     }
 
     public function getUsers(){
@@ -101,6 +102,19 @@ class DashboardController extends Controller
             ->take(10)
             ->get();
     }
+
+    public function getAllLogs()
+    {
+        $user = Auth::user();
+
+        return Logs::with('user')
+            ->when($user->role === 'cashier', function ($query) use ($user) {
+                return $query->where('user_id', $user->id);
+            })
+            ->latest()
+            ->get();
+    }
+
 
     public function getGrandTotal()
     {

@@ -1,15 +1,13 @@
-<x-app-layout>
+@include('layouts.header')
+
+<main>
+
     <div class="font-sans bg-gray-100 dark:bg-gray-800 dark:text-gray-100 p-6">
         <div class="bg-white dark:bg-gray-900 p-4 mb-4 grid gap-6">
             <div class="flex flex-col space-y-6 md:space-y-0 md:flex-row justify-between">
                 <div class="mr-6">
                     <h1 class="title font-semibold text-[26px] mb-2">Dashboard</h1>
                 </div>
-                {{-- <div class="flex flex-wrap items-start justify-end -mb-3">
-                    <a href="{{route('attendance.index')}}" class="inline-flex px-5 py-3 text-white bg-MCGreen hover:bg-MCGreenHover focus:bg-MCGreenHover rounded-md ml-6 mb-3">
-                        Attendance Record
-                    </a>
-                </div> --}}
             </div>
             <section class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
                 <div class="flex items-center p-8 bg-white dark:bg-gray-800 shadow rounded-lg">
@@ -79,8 +77,8 @@
                         <div class="w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 py-4 md:py-6">
                             <div class="flex justify-between">
                                 <div>
-                                    <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">
-                                        {{ number_format($grandTotal ?? '0', 2) }}
+                                    <h5 class="leading-none text-3xl font-medium text-gray-900 dark:text-white pb-2">
+                                        ₱ {{ number_format($grandTotal ?? '0', 2) }}
                                     </h5>
                                     <p class="text-base font-normal text-gray-500 dark:text-gray-400">Income this month
                                     </p>
@@ -224,11 +222,28 @@
                             </ul>
                         </div>
                     </div>
+                    {{-- view more logs --}}
+                    <div class="flex justify-end mt-6 mr-6">
+                        <button type="button" data-drawer-target="drawer-navigation"
+                            data-drawer-show="drawer-navigation" aria-controls="drawer-navigation"
+                            class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
+                            View Details
+                            <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 9 4-4-4-4" />
+                            </svg>
+                        </button>
+
+                        @include('components.modals.logs')
+
+                    </div>
+
                 </div>
             </section>
         </div>
     </div>
 
-    @include('layouts/footer')
 
-</x-app-layout>
+</main>
+@include('layouts/footer')

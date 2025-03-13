@@ -100,7 +100,7 @@ class AttendanceController extends Controller
             return response()->json(['error' => 'No authenticated user!']);
         }
 
-        $now = now();
+        $now = now()->setTimezone(config('app.timezone'));
 
         // Get the latest attendance record for today
         $attendance = Attendance::where('user_id', $user->id)
@@ -116,7 +116,9 @@ class AttendanceController extends Controller
                 : redirect()->back()->with(['message' => $message, 'alert-type' => 'error']);
         }
 
-        $timeIn = \Carbon\Carbon::parse($attendance->timeIn);
+        // $timeIn = \Carbon\Carbon::parse($attendance->timeIn);
+        $timeIn = \Carbon\Carbon::parse($attendance->timeIn)->setTimezone(config('app.timezone'));
+
 
         // Restrict timeout if less than 1 hour from timeIn
         if (abs($now->diffInSeconds($timeIn)) < 60) {
