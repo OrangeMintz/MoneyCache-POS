@@ -26,6 +26,7 @@ export const fetchTransactions = async (): Promise<any[]> => {
                 Accept: "application/json",
             },
         });
+        console.log("transactions", response.data.transactions)
 
         return response.data.transactions.reverse() || [];
     } catch (error) {
@@ -44,6 +45,8 @@ export const fetchTotals = async (): Promise<any[]> => {
             },
         });
 
+        console.log("totals", response.data)
+
         return response.data || [];
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -61,6 +64,7 @@ export const fetchLogs = async (): Promise<any[]> => {
             },
         });
 
+        console.log("logs", response.data.logs)
         return response.data.logs.reverse() || [];
     } catch (error) {
         console.error('Error fetching data:', error);

@@ -2,7 +2,7 @@
 import LineChart from '@/components/ui/linechart';
 import PieChart from '@/components/ui/piechart';
 import { fetchLogs, fetchTotals, fetchTransactions, fetchUsers } from '@/utils/fetch';
-import { formatNumber } from '@/utils/formatter';
+import { formatNumber, formatDate, formatTime } from '@/utils/formatter';
 import * as lucideIcons from 'lucide-react';
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
@@ -79,10 +79,10 @@ export default function Home() {
                     {/* Left side: 2x2 grid of cards (taking 2 columns on medium screens and above) */}
                     <div className="col-span-1 md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {[
-                            { title: 'Total Gross', value: (totals ? "₱ " + formatNumber(totals.gross) : ""), percentage: '59.3%', trend: 'up', extra: '35,000', color: 'primary', icon: 'DollarSign', bgColor: 'bg-blue-100' },
-                            { title: 'Total Net', value: (totals ? "₱ " + formatNumber(totals.net) : ""), percentage: '70.5%', trend: 'up', extra: '8,900', color: 'success', icon: 'Euro', bgColor: 'bg-green-100' },
-                            { title: 'Total Transactions', value: ((transactions.length > 0) ? transactions.length : "0"), percentage: '27.4%', trend: 'down', extra: '1,943', color: 'warning', icon: 'BarChart', bgColor: 'bg-yellow-100' },
-                            { title: 'Total Users', value: ((users.length > 0) ? users.length : "0"), percentage: '27.4%', trend: 'down', extra: '$20,395', color: 'danger', icon: 'Users', bgColor: 'bg-red-100' },
+                            { title: 'Total Gross', value: (totals ? "₱ " + formatNumber(totals.gross) : ""), percentage: '59.3%', trend: 'up', extra: '35,000', color: 'primary', icon: 'BadgeDollarSign', bgColor: 'bg-blue-100' },
+                            { title: 'Total Net', value: (totals ? "₱ " + formatNumber(totals.net) : ""), percentage: '70.5%', trend: 'up', extra: '8,900', color: 'success', icon: 'CircleDollarSign', bgColor: 'bg-green-100' },
+                            { title: 'Total Transactions', value: ((transactions.length > 0) ? transactions.length : "0"), percentage: '27.4%', trend: 'down', extra: '1,943', color: 'warning', icon: 'ArrowRightLeft', bgColor: 'bg-yellow-100' },
+                            { title: 'Total Users', value: ((user?.role != 'admin') ? "Unavailable" : (users.length > 0) ? users.length : "0"), percentage: '27.4%', trend: 'down', extra: '$20,395', color: 'danger', icon: 'CircleUser', bgColor: 'bg-red-100' },
                         ].map((card, index) => {
                             // Dynamic import of icons from lucide-react
                             const IconComponent = lucideIcons[card.icon];
@@ -92,8 +92,8 @@ export default function Home() {
                                     <div className="flex justify-between items-center mb-2">
                                         <h6 className="text-sm text-gray-500">{card.title}</h6>
                                         {/* Icon with background */}
-                                        <div className={`p-2 rounded-full ${card.bgColor}`}>
-                                            {IconComponent && <IconComponent size={24} className={`text-${card.color}-500`} />}
+                                        <div className={`rounded-full ${card.bgColor}`}>
+                                            {IconComponent && <IconComponent size={24} className={`m-3 text-${card.color}-500`} />}
                                         </div>
                                     </div>
                                     <h4 className="text-xl md:text-2xl font-bold mb-3">
@@ -103,7 +103,7 @@ export default function Home() {
                                         </span>
                                     </h4>
                                     <p className="text-sm text-gray-500">
-                                        You made an extra <span className={`text-${card.color}-500`}>{card.extra}</span> this year
+                                        You made <span className={`text-${card.color}-500`}>{card.extra}</span> today
                                     </p>
                                 </div>
                             )
@@ -141,13 +141,9 @@ export default function Home() {
                                                 {/* Content */}
                                                 <div className="bg-gray-50 rounded-lg p-3 md:mr-5 shadow-sm">
                                                     <div className="flex justify-between mb-1">
-                                                        <span className="text-xs font-medium text-gray-900">{new Date(log.created_at).toISOString().split("T")[0]}</span>
+                                                        <span className="text-xs font-medium text-gray-900">{formatDate(log.created_at)}</span>
                                                         <span className="text-xs text-gray-500">
-                                                            {new Date(log.created_at).toLocaleTimeString("en-US", {
-                                                                hour: "2-digit",
-                                                                minute: "2-digit",
-                                                                hour12: true,
-                                                            })}
+                                                            {formatTime(log.created_at)}
                                                         </span>
                                                     </div>
                                                     <div className="mb-1">

@@ -60,7 +60,7 @@ export default function DenseTable() {
           }
         );
 
-        console.log("redbone", totals.data.totals)
+        console.log("redbone", transactions)
         setTotals(totals.data.totals);
         setTransactions(transactions);
       }
@@ -131,6 +131,10 @@ export default function DenseTable() {
   useEffect(() => {
     fetchTotals(localStorage.getItem('selected_date') || new Date().toISOString().split("T")[0]);
   }, []);
+
+  useEffect(() => {
+    console.log(transactions)
+  }, [transactions])
 
   if (loading) {
     return <Preloader />; // Show preloader while loading
