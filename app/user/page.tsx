@@ -360,6 +360,8 @@ export default function CollapsibleTable() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [addModalView, setAddModalView] = useState(false)
+  const [restoreView, setRestoreView] = useState(false)
+  const [ellipsisDropdownOpen, setEllipsisDropdownOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [loading, setLoading] = useState(true)
   const [visibleColumns, setVisibleColumns] = useState({
@@ -479,187 +481,264 @@ export default function CollapsibleTable() {
 
   return (
     <>
-      <Box className='bg-gray-100 m-6 p-6 rounded-md shadow-md'>
-        <h2 className="text-2xl font-semibold dark:text-white mb-3">User List</h2>
+<Box className='bg-gray-100 m-6 p-6 rounded-md shadow-md'>
+  <h2 className="text-2xl font-semibold dark:text-white mb-3">User List</h2>
 
-        <div className='grid grid-cols-5 flex'>
+  <div className='grid grid-cols-5 flex'>
+    <div className='col-span-3 '>
+      <input
+        type="text"
+        placeholder="Search by Date or Cashier..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className=" mb-4 text-sm p-2 border rounded w-1/4"
+      />
+    </div>
 
-          <div className='col-span-3 '>
-            <input
-              type="text"
-              placeholder="Search by Date or Cashier..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className=" mb-4 text-sm p-2 border rounded w-1/4"
-            />
-          </div>
+    <div className="mb-4 flex justify-end col-span-2 relative">
+      <button
+        className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-medium text-gray-800 ring-1 shadow-sm ring-gray-300 hover:bg-gray-50 transition-colors duration-200"
+        type="button"
+        onClick={() => setDropdownOpen(!dropdownOpen)}
+      >
+        Columns
+        <ChevronDown className="w-4 h-4 ml-1" />
+      </button>
 
-
-          <div className="mb-4 flex justify-end col-span-2 relative">
+      <div className="flex">
+        <button
+          id="AddModal"
+          className='inline-flex justify-center gap-x-1 md:ml-1 rounded-md bg-green-400 sm:px-3 sm:py-3 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10'
+          onClick={() => setAddModalView(true)}
+        >
+          Add User
+        </button>
+        
+        {/* Vertical Ellipsis Button */}
+        <div className="relative ml-1">
           <button
-                className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-medium text-gray-800 ring-1 shadow-sm ring-gray-300 hover:bg-gray-50 transition-colors duration-200"
-                type="button"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-              >
-                Columns
-                <ChevronDown className="w-4 h-4 ml-1" />
-              </button>
-
-
-            <div>
+            className="inline-flex justify-center items-center sm:py-3 sm:px-2 rounded-md bg-white text-gray-700 ring-1 shadow-xs ring-gray-300 hover:bg-gray-50"
+            onClick={() => setEllipsisDropdownOpen(!ellipsisDropdownOpen)}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+            </svg>
+          </button>
+          
+          <div
+            className={`absolute right-0 mt-1 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 transition-all duration-300 ease-in-out transform ${
+              ellipsisDropdownOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 hidden"
+            }`}
+          >
+            <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+              <li>
+                <button 
+                  className="block w-full px-4 py-2 text-center hover:bg-gray-100 dark:hover:bg-gray-600" 
+                  onClick={() => setRestoreView(true)}
+                >
+                  Archive Lists
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div
+        id="dropdownContent"
+        className={`overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-900 bg-opacity-50 ${addModalView ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 hidden"
+          }`}
+      >
+        <div className="relative p-4 md:p-6 w-full max-w-2xl max-h-full">
+          <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+              <h3 className="text-xl md:ml-7 font-semibold text-gray-900 dark:text-white">Add User</h3>
               <button
-                id="AddModal"
-                className='inline-flex justify-center gap-x-1 md:ml-1 rounded-md bg-green-400 sm:px-3 sm:py-3 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-10'
-                onClick={() => setAddModalView(true)}
+                type="button"
+                className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                onClick={() => setAddModalView(false)}
               >
-                Add User
+                <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                </svg>
+                <span className="sr-only">Close modal</span>
               </button>
             </div>
-           
-            <div
-              id="dropdownContent"
-              className={`overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-900 bg-opacity-50 ${addModalView ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 hidden"
-                }`}
-            >
-              <div className="relative p-4 md:p-6 w-full max-w-2xl max-h-full">
-                <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
-                  {/* Header */}
-                  <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                    <h3 className="text-xl md:ml-7 font-semibold text-gray-900 dark:text-white">Add User</h3>
-                    <button
-                      type="button"
-                      className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                      onClick={() => setAddModalView(false)}
-                    >
-                      <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+
+            {/* Add Form */}
+            <div className="md:p-7 space-y-4">
+              <form className="p-4 md:p-5" onSubmit={handleAddUserSubmit}>
+                <div className="md:mb-4">
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name:</label>
+                  <input
+                    onChange={handleAddInputChange}
+                    type="text"
+                    name="name"
+                    placeholder="Enter your name..."
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  />
+                </div>
+                <div className="md:mb-4">
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email:</label>
+                  <input
+                    onChange={handleAddInputChange}
+                    type="email"
+                    name="email"
+                    placeholder="Enter your email..."
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  />
+                </div>
+                <div className="md:mb-4">
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role:</label>
+                  <select onChange={handleAddInputChange}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="role">
+                    <option>Choose a role....</option>
+                    <option value="admin">Admin</option>
+                    <option value="cashier">Cashier</option>
+                  </select>
+                </div>
+
+                <div className="md:mb-4">
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rate:</label>
+                  <input
+                    onChange={handleAddInputChange}
+                    type="number"
+                    name="rate"
+                    placeholder="Enter their rate..."
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  />
+                </div>
+
+                {/* Buttons */}
+                <div className="flex justify-end mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
+                  <button
+                    type="submit"
+                    className="text-white bg-green-500 hover:opacity-80 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  >
+                    Add User
+                  </button>
+                  <button
+                    type="button"
+                    className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-gray-200 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                    onClick={() => setAddModalView()}
+                  >
+                    Decline
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+       {/* Restore */}
+       <div
+          id="dropdownContent"
+          className={`overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-900 bg-opacity-50 ${
+            restoreView ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 hidden"
+          }`}
+        >
+          <div className="relative p-4 md:p-6 w-full max-w-2xl max-h-full">
+            <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+              {/* Header */}
+              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                <h3 className="text-lg font-medium md:ml-1 text-gray-900 dark:text-white">Restore Users</h3>
+                <button
+                  type="button"
+                  className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  onClick={() => setRestoreView(false)}
+                >
+                  <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                  </svg>
+                  <span className="sr-only">Close modal</span>
+                </button>
+              </div>
+              
+              {/* Add Form */}
+              <div className="p-4 md:p-5">
+                {/* User Card */}
+                <div className="mb-4 bg-gray-50 dark:bg-gray-800 rounded-md">
+                  <div className="flex items-center justify-between p-4">
+                    {/* Left side - User info with icon */}
+                    <div className="flex items-center gap-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500 dark:text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                       </svg>
-                      <span className="sr-only">Close modal</span>
+                      <div>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">John Doe</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">johndoe@example.com</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-300">Administrator</p>
+                      </div>
+                    </div>
+                    
+                    {/* Right side - Restore button */}
+                    <button 
+                      className="px-3 py-1 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-gray-600 dark:text-gray-200 dark:border-gray-500 dark:hover:bg-gray-500"
+                    >
+                      Restore
                     </button>
-                  </div>
-
-                  {/* Add Form */}
-                  <div className="md:p-7 space-y-4">
-                    <form className="p-4 md:p-5" onSubmit={handleAddUserSubmit}>
-                      <div className="md:mb-4">
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name:</label>
-                        <input
-                          onChange={handleAddInputChange}
-                          type="text"
-                          name="name"
-                          placeholder="Enter your name..."
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        />
-                      </div>
-                      <div className="md:mb-4">
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email:</label>
-                        <input
-                          onChange={handleAddInputChange}
-                          type="email"
-                          name="email"
-                          placeholder="Enter your email..."
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        />
-                      </div>
-                      <div className="md:mb-4">
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role:</label>
-                        <select onChange={handleAddInputChange}
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="role">
-                          <option>Choose a role....</option>
-                          <option value="admin">Admin</option>
-                          <option value="cashier">Cashier</option>
-                        </select>
-                      </div>
-
-                      <div className="md:mb-4">
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rate:</label>
-                        <input
-                          onChange={handleAddInputChange}
-                          type="number"
-                          name="rate"
-                          placeholder="Enter their rate..."
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        />
-                      </div>
-
-                      {/* Buttons */}
-                      <div className="flex justify-end mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
-                        <button
-                          type="submit"
-                          className="text-white bg-green-500 hover:opacity-80 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        >
-                          Add User
-                        </button>
-                        <button
-                          type="button"
-                          className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-gray-200 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                          onClick={() => setAddModalView()}
-                        >
-                          Decline
-                        </button>
-                      </div>
-                    </form>
                   </div>
                 </div>
               </div>
             </div>
-
-
-            <div
-              id="dropdownContent"
-              className={`absolute top-full right-0 mt-1 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 sm:w-48 md:w-56 dark:bg-gray-700 transition-all duration-300 ease-in-out transform ${dropdownOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 hidden"
-                }`}
-            >
-              <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-                {Object.keys(visibleColumns).map((col) => (
-                  <li key={col}>
-                    <label className="flex items-center gap-1 text-sm px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={visibleColumns[col]}
-                        onChange={() => handleColumnToggle(col)}
-                        className="w-4 h-4"
-                      />
-                      <span className="ml-2 truncate">{col.charAt(0).toUpperCase() + col.slice(1)}</span>
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </div>
           </div>
         </div>
 
+      <div
+        id="dropdownContent"
+        className={`absolute top-full right-0 mt-1 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 sm:w-48 md:w-56 dark:bg-gray-700 transition-all duration-300 ease-in-out transform ${dropdownOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 hidden"
+          }`}
+      >
+        <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+          {Object.keys(visibleColumns).map((col) => (
+            <li key={col}>
+              <label className="flex items-center gap-1 text-sm px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={visibleColumns[col]}
+                  onChange={() => handleColumnToggle(col)}
+                  className="w-4 h-4"
+                />
+                <span className="ml-2 truncate">{col.charAt(0).toUpperCase() + col.slice(1)}</span>
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
 
-
-        <TableContainer component={Paper} className='p-7 pb-10'>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell />
-                {visibleColumns.id && <TableCell>ID</TableCell>}
-                {visibleColumns.name && <TableCell>Name</TableCell>}
-                {visibleColumns.email && <TableCell align='center'>Email</TableCell>}
-                {visibleColumns.role && <TableCell align='center'>Role</TableCell>}
-                {visibleColumns.actions && <TableCell align='center'>Actions</TableCell>}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {paginatedRows.map((row) => (
-                <Row key={row.id} row={row} handleSave={handleSave} visibleColumns={visibleColumns} />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[6, 10, 25]}
-          component="div"
-          count={filteredRows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Box>
+  <TableContainer component={Paper} className='p-7 pb-10'>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell />
+          {visibleColumns.id && <TableCell>ID</TableCell>}
+          {visibleColumns.name && <TableCell>Name</TableCell>}
+          {visibleColumns.email && <TableCell align='center'>Email</TableCell>}
+          {visibleColumns.role && <TableCell align='center'>Role</TableCell>}
+          {visibleColumns.actions && <TableCell align='center'>Actions</TableCell>}
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {paginatedRows.map((row) => (
+          <Row key={row.id} row={row} handleSave={handleSave} visibleColumns={visibleColumns} />
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer>
+  <TablePagination
+    rowsPerPageOptions={[6, 10, 25]}
+    component="div"
+    count={filteredRows.length}
+    rowsPerPage={rowsPerPage}
+    page={page}
+    onPageChange={handleChangePage}
+    onRowsPerPageChange={handleChangeRowsPerPage}
+  />
+</Box>
       <div className='z-50 border-t'>
       </div>
     </>

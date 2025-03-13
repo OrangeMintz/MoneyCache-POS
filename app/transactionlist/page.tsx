@@ -16,7 +16,8 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ClipboardCheck } from "lucide-react";
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import Toast from 'typescript-toastify';
 import api from "../../utils/api";
@@ -248,7 +249,7 @@ function Row({ row, handleSave, visibleColumns }) {
 
         </TableCell>
         {visibleColumns.id && <TableCell><span className='text-xs'>{row.id}</span></TableCell>}
-        {visibleColumns.cashier && <TableCell><span className='text-xs'>{row.cashier?.name || 'Unknown'}</span></TableCell>}
+        {visibleColumns.cashier && <TableCell align='center'><span className='text-xs'>{row.cashier?.name || 'Unknown'}</span></TableCell>}
         {visibleColumns.date && <TableCell align="center"><span className='text-xs'>{new Date(row.created_at).toISOString().split("T")[0]}</span></TableCell>}
         {visibleColumns.time && <TableCell align="center"><span className='text-xs'>{row.time}</span></TableCell>}
         {visibleColumns.trade && <TableCell align="center"><span className={`px-2 py-1 font-semibold leading-tight rounded-md text-xs ${(row.sub_total_trade > 5000) ? 'text-green-700 bg-green-100' : (row.sub_total_trade > 500 && row.sub_total_trade < 5000) ? 'text-orange-700 bg-gray-100' : 'text-red-700 bg-red-100'}`}> ₱ {formatNumber(row.sub_total_trade)} </span></TableCell>}
@@ -677,38 +678,48 @@ export default function CollapsibleTable() {
             </div>
           </div>
 
-          <div className="mb-4 flex justify-end col-span-2 relative">
+          <div className="mb-4 flex flex-wrap justify-end items-center gap-2 md:col-span-2 relative">
+            <Link href="/Product">
           <button
-                className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-xs font-medium text-gray-800 ring-1 shadow-sm ring-gray-300 hover:bg-gray-50 transition-colors duration-200"
-                type="button"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-              >
-                Columns
-                <ChevronDown className="w-4 h-4 ml-1" />
-              </button>
+            className="inline-flex items-center justify-center gap-x-1 rounded-md bg-blue-400 px-3 py-2 text-xs font-normal text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-opacity-50 transition-colors duration-200"
+          >
+            <ClipboardCheck className="w-4 h-4" />
+            View Records
+          </button>
+          </Link>
+          <button
+            className="inline-flex items-center justify-center gap-x-1 rounded-md bg-white px-3 py-2 text-xs font-medium text-gray-800 ring-1 shadow-sm ring-gray-300 hover:bg-gray-50 transition-colors duration-200"
+            type="button"
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+          >
+            Columns
+            <ChevronDown className="w-4 h-4 ml-1" />
+          </button>
 
-            <div
-              id="dropdownContent"
-              className={`absolute top-full right-0 mt-1 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 sm:w-48 md:w-56 dark:bg-gray-700 transition-all duration-300 ease-in-out transform ${dropdownOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 hidden"
-                }`}
-            >
-              <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-                {Object.keys(visibleColumns).map((col) => (
-                  <li key={col}>
-                    <label className="flex items-center gap-1 text-sm px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={visibleColumns[col]}
-                        onChange={() => handleColumnToggle(col)}
-                        className="w-4 h-4"
-                      />
-                      <span className="ml-2 truncate">{col.charAt(0).toUpperCase() + col.slice(1)}</span>
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div
+            id="dropdownContent"
+            className={`absolute top-full right-0 mt-1 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 sm:w-48 md:w-56 dark:bg-gray-700 transition-all duration-300 ease-in-out transform ${
+              dropdownOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 hidden"
+            }`}
+          >
+            <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+              {Object.keys(visibleColumns).map((col) => (
+                <li key={col}>
+                  <label className="flex items-center gap-1 text-sm px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={visibleColumns[col]}
+                      onChange={() => handleColumnToggle(col)}
+                      className="w-4 h-4"
+                    />
+                    <span className="ml-2 truncate">{col.charAt(0).toUpperCase() + col.slice(1)}</span>
+                  </label>
+                </li>
+              ))}
+            </ul>
           </div>
+        </div>
+
         </div>
 
 
@@ -719,7 +730,7 @@ export default function CollapsibleTable() {
               <TableRow>
                 <TableCell />
                 {visibleColumns.id && <TableCell>ID</TableCell>}
-                {visibleColumns.cashier && <TableCell>Cashier</TableCell>}
+                {visibleColumns.cashier && <TableCell align='center'>Cashier</TableCell>}
                 {visibleColumns.date && <TableCell align='center'>Date</TableCell>}
                 {visibleColumns.time && <TableCell align='center'>Time</TableCell>}
                 {visibleColumns.trade && <TableCell align='center'>Sub-Total Trade</TableCell>}

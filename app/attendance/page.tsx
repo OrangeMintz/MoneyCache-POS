@@ -1,6 +1,7 @@
 'use client';
 
 import { fetchAttendance, timeIn, timeOut } from '@/utils/fetch';
+import { formatDate, formatTime } from '@/utils/formatter';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -11,12 +12,10 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { ArrowDown, ArrowUp, ChevronDown, LogIn, LogOut } from "lucide-react";
+import Pusher from 'pusher-js';
 import { useEffect, useState } from 'react';
 import Toast from 'typescript-toastify';
-import api from "../../utils/api";
 import Preloader from '../comps/preloader';
-import { formatTime, formatDate } from '@/utils/formatter';
-import Pusher from 'pusher-js';
 
 // Row Component
 function Row({ row, handleSave, visibleColumns }) {
@@ -32,7 +31,7 @@ function Row({ row, handleSave, visibleColumns }) {
             <div className="flex flex-col items-center">
               <span className="font-medium">{row.user?.name || ''}</span>
               <span className="text-xs text-gray-500">{row.user?.email || ''}</span>
-              <span className="text-xs mt-0.5 px-2 py-0.5 bg-gray-100 rounded-full inline-block">{row.user?.id}</span> {/* default search value is id, i change ra by role */}
+              <span className="text-xs mt-0.5 px-2 py-0.5 bg-gray-100 rounded-full inline-block">{row.user?.id}</span>
 
             </div>
           </div>
