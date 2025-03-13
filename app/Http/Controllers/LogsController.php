@@ -17,13 +17,18 @@ class LogsController extends Controller
 
         $user = Auth::user();
 
-        $logs = $user->role == 'admin' ? Logs::with(['user',
+        $logs = $user->role == 'admin' ? Logs::with([
+        'user' => function($query) {
+            $query->withTrashed();
+        },
          'activityUser' => function($query) {
             $query->withTrashed();
          }, 
          'transaction' => function($query) {
-            $query->withTrashed();
-         }
+            $query->withTrashed()->with(['cashier' => function ($query) {
+                $query->withTrashed(); // Include soft-deleted cashiers
+            }]);
+        }
          ])->get():
          Logs::where('user_id', $user->id)->with(['user',
          'activityUser' => function($query) {
