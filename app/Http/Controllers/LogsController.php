@@ -20,7 +20,7 @@ class LogsController extends Controller
         $logs = $user->role == 'admin' ? Logs::with(['user',
          'activityUser' => function($query) {
             $query->withTrashed();
-         }, 
+         },
          'transaction' => function($query) {
             $query->withTrashed();
          }
@@ -28,7 +28,7 @@ class LogsController extends Controller
          Logs::where('user_id', $user->id)->with(['user',
          'activityUser' => function($query) {
             $query->withTrashed();
-         }, 
+         },
          'transaction' => function($query) {
             $query->withTrashed();
          }
@@ -95,7 +95,7 @@ class LogsController extends Controller
         if (Logs::whereDate('created_at', $now->format('Y-m-d'))
             ->where('category', $category) // Dynamically check for timein or timeout
             ->where('user_id', $userId)
-            ->exists()) { 
+            ->exists()) {
             return response()->json(['error' => 'Duplicate ' . $category . ' record found.'], 400);
         }
 
@@ -105,7 +105,7 @@ class LogsController extends Controller
                 ->where('category', 'timein') // Match category
                 ->where('user_id', $userId) // Match user_id
                 ->first();
-                
+
                 if(!$timein){
                     return response()->json(['error' => 'No timein record found.'], 500);
                 }
@@ -129,7 +129,7 @@ class LogsController extends Controller
             'activity_user_id' => null,
             'type' => 'attendance',
             'category' => $category,
-            'message' => ($category == 'timein') ? "logged in" : "logged out",
+            'message' => ($category == 'Clocked In') ? "logged in" : "logged out",
             'total_hours' => $totalHours,
         ]);
 

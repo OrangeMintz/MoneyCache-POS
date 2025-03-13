@@ -14,9 +14,9 @@
                         <i class="fas fa-clipboard-list"></i>
                     </a> --}}
                     <button data-modal-target="add-user-modal" data-modal-toggle="add-user-modal"
-                        class="block bg-emerald-700 hover:bg-emerald-800 rounded-lg text-white text-md text-center self-center px-3 md:px-6 py-2 my-2 mx-2">Add
+                        class="block bg-emerald-700 hover:bg-emerald-800 rounded-lg text-white text-center self-center md:px-6 py-2 my-2 mx-2">Add
                         User
-                        <i class="fas fa-user-plus"></i>
+                        <i class="fa-solid fa-user-plus"></i></i>
                     </button>
 
                     <!-- 3 Dots Dropdown -->
