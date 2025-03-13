@@ -21,7 +21,9 @@ class AttendanceController extends Controller
         $user = Auth::user();
 
         $attendance = $user->role == 'admin'
-            ? Attendance::with('user')->get()
+            ? Attendance::with(['user' => function ($query) {
+                $query->withTrashed(); // gets the cashier even if it is soft deleted
+            }])->get()
             : Attendance::where('user_id', $user->id)->with('user')->get();
 
         if ($request->wantsJson()) {
@@ -117,12 +119,13 @@ class AttendanceController extends Controller
         $timeIn = \Carbon\Carbon::parse($attendance->timeIn);
 
         // Restrict timeout if less than 1 hour from timeIn
-        if ($now->diffInMinutes($timeIn) < 60) {
-            $message = 'You cannot clock out within an hour of clocking in!';
+        if (abs($now->diffInSeconds($timeIn)) < 60) {
+            $message = 'You cannot clock out within a minute of clocking in!';
             return $request->wantsJson()
                 ? response()->json(['status' => 'error', 'message' => $message], 400)
                 : redirect()->back()->with(['message' => $message, 'alert-type' => 'error']);
         }
+        
 
         // Calculate total hours and rate
         $totalHours = $timeIn->diffInMinutes($now) / 60;
