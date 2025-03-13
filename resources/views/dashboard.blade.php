@@ -1,4 +1,7 @@
-<x-app-layout>
+
+@include('layouts.header')
+
+<main>
 
     <div class="font-sans bg-gray-100 dark:bg-gray-800 dark:text-gray-100 p-6">
         <div class="bg-white dark:bg-gray-900 p-4 mb-4 grid gap-6">
@@ -248,6 +251,6 @@
         </div>
     </div>
 
-    @include('layouts/footer')
-
-</x-app-layout>
+    
+</main>
+@include('layouts/footer')

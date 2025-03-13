@@ -18,7 +18,7 @@
             class="fa-regular fa-sun absolute left-2 top-1/2 transform -translate-y-1/2 text-yellow-500 text-sm"></i>
         <!-- Moon Icon -->
         <i id="moonIcon"
-            class="fa-regular fa-moon absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm hidden"></i>
+            class="fa-regular fa-moon absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm opacity-0"></i>
     </div>
 </label>
 
@@ -35,6 +35,8 @@
         moonIcon.classList.remove('hidden');
         sunIcon.classList.add('hidden');
         toggleCircle.classList.add('translate-x-7');
+        moonIcon.classList.remove('opacity-0');
+        sunIcon.classList.add('opacity-0');
     }
 
     toggle.addEventListener('change', function() {
@@ -44,12 +46,16 @@
             moonIcon.classList.remove('hidden');
             sunIcon.classList.add('hidden');
             toggleCircle.classList.add('translate-x-7');
+            moonIcon.classList.remove('opacity-0');
+            sunIcon.classList.add('opacity-0');
         } else {
             document.documentElement.classList.remove('dark');
             localStorage.setItem('theme', 'light');
             moonIcon.classList.add('hidden');
             sunIcon.classList.remove('hidden');
             toggleCircle.classList.remove('translate-x-7');
+            moonIcon.classList.add('opacity-0');
+            sunIcon.classList.remove('opacity-0');
         }
     });
 </script>
