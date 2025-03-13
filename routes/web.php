@@ -67,7 +67,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('admin.users');
             Route::put('/{id}', [UserController::class, 'update'])->name('admin.update');
             Route::delete('/{id}', [UserController::class, 'softDelete'])->name('admin.softDelete');
+            Route::post('/{id}', [UserController::class, 'restoreUser'])->name('admin.restoreUser');
             Route::post('/', [UserController::class, 'store'])->name('admin.post');
+
         });
 
         Route::prefix('sheets')->group(function () {

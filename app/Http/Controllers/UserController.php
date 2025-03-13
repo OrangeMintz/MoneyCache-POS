@@ -15,15 +15,18 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $users = User::all();
-        if($request->wantsJson()){
+        $users = User::all(); // Fetch all active users
+        $deletedUsers = User::onlyTrashed()->get(); // Fetch only soft-deleted users
+
+        if ($request->wantsJson()) {
             return response()->json([
                 "status" => "success",
-                "message" => "Here are your list of users my master admin!",
+                "message" => "Here are your list of users, my master admin!",
                 "users" => $users,
+                "deleted_users" => $deletedUsers, // Include soft-deleted users in the JSON response
             ]);
-        }else{
-            return view('pages.users', compact('users'));
+        } else {
+            return view('pages.users', compact('users', 'deletedUsers')); // Pass both active and deleted users to the view
         }
     }
 
@@ -138,4 +141,18 @@ class UserController extends Controller
         return redirect()->back()->with($notification);
     }
 
+    public function restoreUser(Request $request, string $id)
+    {
+        $user = User::onlyTrashed()->findOrFail($id);
+        $user->restore();
+        $userId = auth()->id();
+        (new LogsController)->storeUserLog($userId, $id, 'restore');
+
+        $message = 'User Restored Successfully!';
+        if ($request->wantsJson()) {
+            return response()->json(['status' => 'success', 'message' => $message], 200);
+        }
+        $notification = ['message' => $message, 'alert-type' => 'success'];
+        return redirect()->back()->with($notification);
+    }
 }
