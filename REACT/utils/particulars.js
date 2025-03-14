@@ -1,0 +1,30 @@
+'use client';
+export const particulars = [
+    { key: "cashier", label: "Cashier’s Name" },
+    { key: "cash", label: "Cash" },
+    { key: "check", label: "Check" },
+    { key: "bpi_ccard", label: "BPI Credit Card" },
+    { key: "bpi_dcard", label: "BPI Debit Card" },
+    { key: "metro_ccard", label: "Metro Credit Card" },
+    { key: "metro_dcard", label: "Metro Debit Card" },
+    { key: "paymaya", label: "Pay Maya" },
+    { key: "aub_ccard", label: "AUB Credit Card" },
+    { key: "gcash", label: "GCash" },
+    { key: "food_panda", label: "Food Panda" },
+    { key: "streetby", label: "StreetBy" },
+    { key: "grabfood", label: "Grab Food" },
+    { key: "gc_claimed_others", label: "GC Claimed (Others)" },
+    { key: "gc_claimed_own", label: "GC Claimed (Own)" },
+    { key: "sub_total_trade", label: "Sub Total Trade POS" },
+    { key: "mm_head", label: "MM-Head Office" },
+    { key: "mm_commissary", label: "MM-Commissary" },
+    { key: "mm_rm", label: "MM-RM" },
+    { key: "mm_dm", label: "MM-DM" },
+    { key: "mm_km", label: "MM-KM" },
+    { key: "food_charge", label: "Food Charge" },
+    { key: "sub_total_non_trade", label: "Sub Total Non-Trade POS" }, 
+    { key: "grand_total", label: "Grand Total POS" },
+    { key: "z_reading_pos", label: "Z Reading POS" },
+    { key: "over_pos", label: "Short/Over POS" } 
+  ];
+  
