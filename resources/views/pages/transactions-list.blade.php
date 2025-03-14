@@ -2,8 +2,8 @@
 @include('components.modals.edit')
 
 <main>
-    <div class="font-sans bg-gray-100 p-6">
-        <div class="bg-white p-4 mb-4">
+    <div class="font-sans bg-gray-100 dark:bg-gray-800 dark:text-gray-100 p-6">
+        <div class="bg-white dark:bg-gray-900 p-4 mb-4">
             <div class="card-header flex justify-between items-center">
                 <h5 class="title font-semibold text-[26px]">Manage Transactions</h5>
 
@@ -35,14 +35,14 @@
             </div>
         </div>
     </div>
-    <div style="background: rgb(238, 235, 235)"></div>
+    <div style="background: rgb(0, 235, 235)"></div>
 </main>
 @include('layouts.footer')
 
 <script>
     // Formatting function for row details - modify as you need
     function format(d) {
-        let details = `<div style="padding:10px 40px; background: rgb(238, 235, 235);">`;
+        let details = `<div style="padding:10px 40px; background: rgb(211, 211, 211); color: rgb(100, 100, 100)">`;
 
         let formatCurrency = (amount) => `₱${parseFloat(amount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}`;
 

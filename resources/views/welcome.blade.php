@@ -13,14 +13,18 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
+    {{-- Fontawesome --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
+    <script src="https://kit.fontawesome.com/da305c7c97.js" crossorigin="anonymous"></script>
+
     <!-- Styles / Scripts -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
 </head>
 
-<body class="font-sans antialiased dark:bg-black dark:text-white/50">
-    <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
+<body class="font-sans antialiased dark:bg-gray-900 dark:text-white/50">
+    <div class="bg-gray-50 text-black/50 dark:bg-gray-800 dark:text-white/50">
         <div
             class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
             <div class="relative w-full">
@@ -32,12 +36,17 @@
                                     <img src="{{ asset('img/LogoIcon.png') }}" alt="MoneyCache Logo"
                                         class="h-14 w-auto">
                                     <span
-                                        class="text-2xl font-semibold text-gray-900 hover:text-MCGreen duration-200">MoneyCache</span>
+                                        class="text-2xl font-semibold text-gray-900 dark:text-gray-100 hover:text-MCGreen duration-200">MoneyCache</span>
                                 </a>
                             </h1>
+
                             <div class="flex items-center lg:order-2">
                                 @if (Route::has('login'))
                                     <nav class="flex justify-end w-full lg:col-start-3">
+
+                                        <!-- Dark Mode Toggle Switch -->
+                                        @include('components.darkmode')
+
                                         @auth
                                             <a href="{{ url('/dashboard') }}"
                                                 class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-lg px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
@@ -83,7 +92,7 @@
                                 </p>
                                 <div
                                     class="flex flex-col md:flex-row gap-4 w-full md:w-auto justify-center md:justify-center lg:justify-start">
-                                    <a href="#"
+                                    <a href="{{ route('login') }}"
                                         class="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white rounded-lg bg-MCGreen hover:bg-MCGreenHover focus:ring-4 focus:ring-primary-300 dark:focus:ring-MCGreenHover w-full md:w-auto">
                                         Login
                                         <svg class="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20"
@@ -107,8 +116,8 @@
                     </section>
                 </div>
 
-                <main class="mt-6">
-                    <section class="bg-white dark:bg-gray-900">
+                <main class="">
+                    <section class="bg-white dark:bg-gray-900 dark:border dark:border-gray-700">
                         <div class="py-12 px-4 mx-auto max-w-screen-xl text-center lg:py-20 lg:px-12">
                             <h1
                                 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
@@ -148,7 +157,7 @@
                     </section>
 
                     {{-- Features --}}
-                    <section class=" dark:bg-gray-900">
+                    <section class="dark:bg-gray-900">
                         <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
                             <div class="max-w-screen-md mb-8 lg:mb-16">
                                 <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-[#3A3A3A] dark:text-white">
@@ -235,20 +244,18 @@
                     </section>
 
                     {{-- CTA --}}
-                    <section class="bg-[#1669B2] dark:bg-gray-900 py-10">
+                    <section class="bg-[#1669B2] dark:bg-[#1669B2] py-10 dark:text-white">
                         <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
                             <div class="mx-auto max-w-screen-sm text-center space-y-6">
-                                <h2
-                                    class="text-4xl tracking-tight font-extrabold leading-tight text-white dark:text-gray-900">
+                                <h2 class="text-4xl tracking-tight font-extrabold leading-tight text-white">
                                     Start your free trial today
                                 </h2>
                                 <p class="font-light text-TWHITE dark:text-gray-400 md:text-lg">
-                                    Try Flowbite Platform for 30 days. No credit card required.
+                                    Try MoneyCache POS for 30 days. No credit card required.
                                 </p>
                                 <a href="#"
                                     class="text-TWHITE bg-[#EE7601] hover:bg-[#ee7001ef] focus:ring-4
-                focus:ring-primary-300 font-bold rounded-3xl text-md px-8 py-5
-                dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none
+                focus:ring-primary-300 font-bold rounded-3xl text-md px-8 py-5 focus:outline-none
                 dark:focus:ring-primary-800 inline-block">
                                     Free trial for 30 days
                                 </a>
@@ -259,6 +266,8 @@
             </div>
         </div>
     </div>
+
+    <script src="{{ asset('js/darkmode.js') }}"></script>
 </body>
 
 <div class=" mt-10">

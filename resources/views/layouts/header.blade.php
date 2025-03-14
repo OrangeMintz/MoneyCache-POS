@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Transactions</title>
+    <title>{{ ucfirst(request()->segment(1) ?? 'Home') }}</title>
     {{-- favicon --}}
     <link rel="icon" type="image/png" href="{{ asset('img/LogoIcon.png') }}">
-    
-    @vite('resources/css/app.css')
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
         /* Styling for the layout to create 3 columns */
@@ -56,6 +56,7 @@
 
     {{-- fontawesome cdn --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
+    <script src="https://kit.fontawesome.com/da305c7c97.js" crossorigin="anonymous"></script>
 
     {{-- toaster cdn --}}
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
@@ -65,5 +66,5 @@
 
 </head>
 
-<body>
+<body class="dark:bg-gray-950">
     @include('layouts.navigation')

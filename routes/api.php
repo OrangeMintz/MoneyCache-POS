@@ -3,6 +3,8 @@
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LogsController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\TransactionsGrossTotalController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +27,18 @@ Route::middleware(['auth:api'])->group(function () {
 
         Route::prefix('transactions')->group(function () {
             Route::get('/', [TransactionsController::class, 'retrieve']);
+            Route::get('/totals', [TransactionsGrossTotalController::class, 'getOverallGrossNet']);
+        });
+
+        Route::prefix('logs')->group(function () {
+            Route::get('/', [LogsController::class, 'index']);
+            Route::get('/test', [LogsController::class, 'test']);
+        });
+
+        Route::prefix('attendance')->group(function () {
+            Route::get('/', [AttendanceController::class, 'retrieve']);
+            Route::get('/timein', [AttendanceController::class, 'timeIn']);
+            Route::get('/timeout', [AttendanceController::class, 'timeOut']);
         });
     });
 
@@ -38,7 +52,6 @@ Route::middleware(['auth:api'])->group(function () {
             Route::get('/net-all', [TransactionsGrossTotalController::class, 'netAll']);
             Route::post('/get-by-date', [TransactionsController::class, 'getByDate']);
             Route::post('/get-by-date/totals', [TransactionsGrossTotalController::class, 'getGrossNetByDate']);
-            Route::get('/totals', [TransactionsGrossTotalController::class, 'getOverallGrossNet']);
             Route::post('/csv', [CsvController::class, 'csv']);
             Route::get('/pdf', [PDFController::class, 'pdf']);
         });
@@ -48,9 +61,9 @@ Route::middleware(['auth:api'])->group(function () {
             Route::get('/', [UserController::class, 'index']);
             Route::post('/', [UserController::class, 'store']);
             Route::put('/{id}', [UserController::class, 'update']);
+            Route::post('/{id}', [UserController::class, 'restoreUser']);
             Route::delete('/{id}', [UserController::class, 'softDelete']);
         });
-
     });
 
 

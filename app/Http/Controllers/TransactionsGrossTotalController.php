@@ -7,6 +7,7 @@ use App\Models\Transactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionsGrossTotalController extends Controller
 {
@@ -149,9 +150,10 @@ class TransactionsGrossTotalController extends Controller
 
 public function getOverallGrossNet()
 {
+    $user = Auth::user();
     $particulars = Config::get('transactions.valid_columns'); // Get all transaction columns
     $fees = Config::get('transactions.fees');
-    $transactions = Transactions::with('cashier')->get();
+    $transactions = $user->role == 'admin' ? Transactions::with('cashier')->get() : Transactions::where('cashier_id', $user->id)->with('cashier')->get();
 
     $grossTotal = 0;
     $netTotal = 0;
@@ -163,9 +165,9 @@ public function getOverallGrossNet()
             $particular !== 'sub_total_non_trade' &&
             $particular !== 'grand_total'
         ) {
-                    $gross = Transactions::sum($particular);
+            $gross = $user->role == 'admin' ? Transactions::sum($particular) : Transactions::where('cashier_id', $user->id)->sum($particular);
             $compute = isset($fees[$particular]) ? 1 - ($fees[$particular] / 100) : 1;
-            $net = Transactions::sum(DB::raw("`$particular` * $compute"));
+            $net = $user->role == 'admin' ? Transactions::sum(DB::raw("`$particular` * $compute")) : Transactions::where('cashier_id', $user->id)->sum(DB::raw("`$particular` * $compute"));
         
             // Accumulate totals instead of overwriting
             $grossTotal += round($gross, 2);
@@ -177,7 +179,7 @@ public function getOverallGrossNet()
     return response()->json([
         "status" => 1,
         "gross" => round($grossTotal, 2),
-        "net" => round($netTotal, 2)
+        "net" => round($netTotal, 2),
     ]);
 }
 

@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.flow-root::-webkit-scrollbar {
+    width: 0px;
+    display: none;
+}
+
+.flow-root {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}

@@ -6,15 +6,27 @@ use App\Models\Transactions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Events\MyEvent;
 
 class TransactionsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    // public function index()
+    // {
+    //     return view('pages.transactions');
+    // }
+
     public function index()
     {
-        return view('pages.transactions');
+        $today = now()->toDateString(); // Get today's date
+        $takenTimes = Transactions::whereDate('created_at', $today)->pluck('time')->toArray(); // Fetch taken times
+
+        $allTimes = ['AM', 'MID', 'PM']; // Define all shift options
+        $availableTimes = array_diff($allTimes, $takenTimes); // Get available times
+
+        return view('pages.transactions', compact('availableTimes'));
     }
 
     public function list(Request $request)
@@ -94,7 +106,7 @@ class TransactionsController extends Controller
         $grand_total = $subtotal_trade + $subtotal_non_trade;
 
         // Store transaction
-        Transactions::create(array_merge($validated, [
+        $transaction = Transactions::create(array_merge($validated, [
             'sub_total_trade' => $subtotal_trade,
             'sub_total_non_trade' => $subtotal_non_trade,
             'grand_total' => $grand_total,
@@ -104,6 +116,11 @@ class TransactionsController extends Controller
             'message' => 'Added Successfully',
             'alert-type' => 'success',
         );
+
+        $userId = auth()->id();
+        (new LogsController)->storeTransactionLog($userId, $transaction->id, 'add');
+
+        event(new MyEvent("Transaction has been added!"));
 
         //redirects to transactions-list
         if ($request->wantsJson()) {
@@ -193,10 +210,15 @@ class TransactionsController extends Controller
             'grand_total' => $grand_total,
         ]));
 
+        $userId = auth()->id();
+        (new LogsController)->storeTransactionLog($userId, $transaction->id, 'update');
+
         $notification = array ( //toaster notif when updated
             'message' => 'Updated Successfully',
             'alert-type' => 'success',
         );
+
+        event(new MyEvent("Transaction has been updated!"));
 
         if ($request->wantsJson()) {
             return response()->json([
@@ -211,6 +233,11 @@ class TransactionsController extends Controller
     {
         $transaction = Transactions::findOrFail($id);
         $transaction->delete();
+
+        $userId = auth()->id();
+        (new LogsController)->storeTransactionLog($userId, $transaction->id, 'delete');
+
+        event(new MyEvent("Transaction has been deleted!"));
 
         if ($request->wantsJson()) {
             return response()->json([
@@ -229,9 +256,13 @@ class TransactionsController extends Controller
         $userId = $user->id;
 
         if($user->role == 'admin'){
-            $transactions = Transactions::with('cashier')->get();
+            $transactions = Transactions::with(['cashier' => function ($query) {
+                $query->withTrashed(); // gets the cashier even if it is soft deleted
+            }])->get();
         }else{
-            $transactions = Transactions::with('cashier')
+            $transactions = Transactions::with(['cashier' => function ($query) {
+                $query->withTrashed();
+            }])
             ->where('cashier_id', $userId)
             ->get();
         }
@@ -249,7 +280,9 @@ class TransactionsController extends Controller
 
         $date = $request->date;
 
-        $transactions = Transactions::with('cashier')->whereDate('created_at', $date)->get();
+        $transactions = Transactions::with(['cashier' => function ($query) {
+            $query->withTrashed();
+        }])->whereDate('created_at', $date)->get();
 
         return response()->json([
             "status" => 1,
@@ -295,6 +328,4 @@ class TransactionsController extends Controller
             "id" => $userId,
         ]);
     }
-
-
 }
