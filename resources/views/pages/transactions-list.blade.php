@@ -35,14 +35,14 @@
             </div>
         </div>
     </div>
-    <div style="background: rgb(238, 235, 235)"></div>
+    <div style="background: rgb(0, 235, 235)"></div>
 </main>
 @include('layouts.footer')
 
 <script>
     // Formatting function for row details - modify as you need
     function format(d) {
-        let details = `<div style="padding:10px 40px; background: rgb(238, 235, 235);">`;
+        let details = `<div style="padding:10px 40px; background: rgb(211, 211, 211); color: rgb(100, 100, 100)">`;
 
         let formatCurrency = (amount) => `₱${parseFloat(amount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}`;
 
