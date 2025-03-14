@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Log;
+use App\Events\MyEvent;
 
 class UserController extends Controller
 {
@@ -132,6 +133,7 @@ class UserController extends Controller
 
         $userId = auth()->id();
         (new LogsController)->storeUserLog($userId, $id, 'delete');
+        event(new MyEvent("User successfully deleted"));
 
         $message = 'User Deleted Successfully!';
         if ($request->wantsJson()) {
@@ -147,7 +149,7 @@ class UserController extends Controller
         $user->restore();
         $userId = auth()->id();
         (new LogsController)->storeUserLog($userId, $id, 'restore');
-
+        event(new MyEvent("User successfully restored"));
         $message = 'User Restored Successfully!';
         if ($request->wantsJson()) {
             return response()->json(['status' => 'success', 'message' => $message], 200);
