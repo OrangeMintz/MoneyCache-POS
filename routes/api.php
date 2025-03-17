@@ -9,6 +9,7 @@ use App\Http\Controllers\TransactionsGrossTotalController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CsvController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PDFController;
 use App\Http\Middleware\CheckRole;
 

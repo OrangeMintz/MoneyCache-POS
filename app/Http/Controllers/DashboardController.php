@@ -15,14 +15,13 @@ class DashboardController extends Controller
     public function index()
     {
         $logs = $this->getRecentLogs(); // Use the new function
-        $allLogs = $this->getAllLogs(); // 
         $users = $this->getUsers();
         $transactions = $this->getTransactions();
         $grossTotal = $this->getTotalGrossSales();
         $netTotal = $this->getTotalNetSales();
         $grandTotal = $this->getGrandTotal();
 
-        return view('dashboard', compact('logs', 'allLogs', 'users', 'transactions', 'grossTotal', 'netTotal','grandTotal'));
+        return view('dashboard', compact('logs', 'users', 'transactions', 'grossTotal', 'netTotal','grandTotal'));
     }
 
     public function getUsers(){
@@ -152,4 +151,20 @@ class DashboardController extends Controller
         ]);
     }
 
+
+    public function fetchLogs(Request $request)
+    {
+        $user = Auth::user();
+
+        $logsQuery = Logs::with(['user', 'transaction', 'activityUser'])
+            ->latest();
+
+        if ($user->role === 'cashier') {
+            $logsQuery->where('user_id', $user->id);
+        }
+
+        $logs = $logsQuery->get();
+
+        return response()->json(['data' => $logs]);
+    }
 }

@@ -1,3 +1,40 @@
+<style>
+    /* Ensure child rows expand properly */
+    /* Ensure child rows expand properly */
+    .child-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    /* Allow details-card to expand naturally */
+    .details-card {
+        flex: 1 1 auto;
+        /* Allow dynamic expansion */
+        max-width: 100%;
+        min-width: 280px;
+        /* Prevent overly narrow cards */
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        white-space: normal;
+    }
+
+    #logsTable td {
+        text-transform: capitalize;
+    }
+
+    /* Ensure even layout on larger screens */
+    @media (min-width: 768px) {
+        .details-card {
+            flex: 1 1 45%;
+            /* Allows each card to take half width but still dynamic */
+        }
+    }
+</style>
+
+
 <!-- Overlay Background -->
 <div id="drawer-overlay" class="fixed inset-0 bg-black opacity-50 hidden z-50"></div>
 
@@ -20,158 +57,153 @@
         <span class="sr-only">Close menu</span>
     </button>
     <div class="py-4 overflow-y-auto">
-      <table id="logsTable" class="display" style="width:100%">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Name</th>
-                <th>Action Taken</th>
-                <th>Activity Description</th>
-                <th>Log Type</th>
-                <th>Date & Time</th>
-            </tr>
-        </thead>
-
-      </table>
-        {{-- <table id="logsTable" class="display" style="width:100%">
+        <table id="logsTable" class="display" style="width:100%">
             <thead>
                 <tr>
+                    <th></th>
                     <th>Name</th>
-                    <th>Action Taken</th>
-                    <th>Activity Description</th>
                     <th>Log Type</th>
+                    <th>Action</th>
+                    <th>Activity Description</th>
                     <th>Date & Time</th>
                 </tr>
             </thead>
-            
-            <thead>
-              <tr>
-                  <th>Name</th>
-                  <th>Action Taken</th>
-                  <th>Activity Description</th>
-                  <th>Log Type</th>
-                  <th>Date & Time</th>
-              </tr>
-            </thead>
-             <tbody>
-                @foreach ($allLogs as $log)
-                    <tr>
-                        <td>{{ $log->user->name ?? 'Unknown' }}</td>
-                        <td>{{ $log->category }}</td>
-                        <td>{{ $log->message }}</td>
-                        <td>{{ $log->category }}</td>
-                        <td>{{ \Carbon\Carbon::parse($log->created_at)->setTimezone(config('app.timezone'))->format('Y-m-d g:i A') }}
-                        </td>
-                    </tr>
-                @endforeach
-
-            </tbody>
-        </table> --}}
+        </table>
     </div>
 </div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-
-        // <!-- JavaScript for Overlay -->
-        const drawer = document.getElementById("drawer-navigation");
-        const overlay = document.getElementById("drawer-overlay");
-        const openButton = document.querySelector("[data-drawer-show]");
-        const closeButton = document.querySelector("[data-drawer-hide]");
-
-        function openDrawer() {
-            drawer.classList.remove("-translate-x-full");
-            overlay.classList.remove("hidden");
-        }
-
-        function closeDrawer() {
-            drawer.classList.add("-translate-x-full");
-            overlay.classList.add("hidden");
-        }
-
-        openButton.addEventListener("click", openDrawer);
-        closeButton.addEventListener("click", closeDrawer);
-        overlay.addEventListener("click", closeDrawer);
-
-        // Initialize Logs Table
         let logsTable = new DataTable('#logsTable', {
-            ajax: '/object.txt',
-            columns: [
-                {
+            ajax: '/dashboard/logs/fetch',
+            columns: [{
                     className: 'dt-control',
                     orderable: false,
                     data: null,
                     defaultContent: ''
                 },
-                { data: 'name' },
-                { data: 'position' },
-                { data: 'office' },
-                { data: 'salary' },
-                { data: 'start_date' }
+                {
+                    data: 'user.name'
+                },
+                {
+                    data: 'category',
+                    render: function(data) {
+                        let colorClass = {
+                            'update': 'text-yellow-500',
+                            'delete': 'text-red-500',
+                            'add': 'text-green-500',
+                        } [data.toLowerCase()] || 'text-black'; // Default color
 
+                        return `<span class="${colorClass} text-sm">${data}</span>`;
+                    }
+                },
+                {
+                    data: 'message'
+                },
+                {
+                    data: 'type',
+                    render: function(data) {
+                        let bgClass = {
+                            'user': 'bg-blue-500',
+                            'transaction': 'bg-green-500',
+                            'attendance': 'bg-gray-500'
+                        } [data.toLowerCase()] || 'bg-gray-500';
+                        return `<span class="px-1 text-sm rounded-lg text-white ${bgClass}">${data}</span>`;
+                    }
+                },
+                {
+                    data: 'created_at',
+                    type: 'datetime', // Ensure DataTables recognizes it as a date
+                    render: function(data, type, row) {
+                        let date = new Date(data);
+                        if (type === 'display') {
+                            return date.toLocaleString('en-US', {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                second: '2-digit',
+                                hour12: true
+                            }).replace(',', '');
+                        }
+                        return date.getTime(); // Return timestamp for correct sorting
+                    }
+                }
             ],
-            order: [[1, 'asc']]
+            order: [
+                [5, 'desc']
+            ]
         });
 
         function format(d) {
-            // `d` is the original data object for the row
-            return (
-              `<div class="w-full bg-white dark:bg-gray-700 p-2 flex justify-evenly">
-                  <div class="w-full max-w-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-5">
-                      <h2 class="text-md font-semibold text-gray-900 dark:text-white mb-2">User details</h2>
-                      <div class="relative bg-gray-50 dark:bg-gray-700 dark:border-gray-600 p-4 rounded-lg border border-gray-200 not-italic grid grid-cols-2">
-                          <div class="text-sm space-y-1 text-gray-500 dark:text-gray-400 leading-loose hidden sm:block">
-                              Name <br />
-                              Email <br />
-                              Shift Time <br />
-                              Add
-                              
-                          </div>
-                          <div class="text-sm space-y-1 text-gray-900 dark:text-white font-medium leading-loose">
-                              Bonnie Green <br />
-                              name@flowbite.com <br />
-                              AM<br />
-                              here
-                          </div>
+            return `
+            <div class="child-row">
+                <div class="details-card bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-5">
+                    <h2 class="text-md font-semibold text-gray-900 dark:text-white mb-2">User Details</h2>
+                    <div class="relative bg-gray-50 dark:bg-gray-700 dark:border-gray-600 p-4 rounded-lg border border-gray-200 grid grid-cols-2">
+                        <div class="text-sm space-y-1 text-gray-500 dark:text-gray-400 leading-loose hidden sm:block">
+                            Name <br> Email <br> Role
+                        </div>
+                        <div class="text-sm space-y-1 text-gray-900 dark:text-white font-medium normal-case leading-loose">
+                            ${d.user.name} <br>
+                            ${d.user.email} <br>
+                            ${d.user.role}
+                        </div>
+                    </div>
+                </div>
 
-                      </div>
-                  </div>
-
-                  <div class="w-full max-w-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-5">
-                      <h2 class="text-md font-semibold text-gray-900 dark:text-white mb-2">Transaction details</h2>
-                      <div class="relative bg-gray-50 dark:bg-gray-700 dark:border-gray-600 p-4 rounded-lg border border-gray-200 not-italic grid grid-cols-2">
-                          <div class="text-sm space-y-1 text-gray-500 dark:text-gray-400 leading-loose hidden sm:block">
-                              Name <br />
-                              Email <br />
-                              Shift Time <br />
-                              Add
-                              
-                          </div>
-                          <div class="text-sm space-y-1 text-gray-900 dark:text-white font-medium leading-loose">
-                              Bonnie Green <br />
-                              name@flowbite.com <br />
-                              AM<br />
-                              here
-                          </div>
-
-                      </div>
-                  </div>
-
-              </div>`
-            );
+                <div class="details-card bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-5">
+                    <h2 class="text-md font-semibold text-gray-900 dark:text-white mb-2">
+                        ${d.type.toLowerCase() === 'attendance' ? 'Attendance Details' : d.type.toLowerCase() === 'transaction' ? 'Transaction Details' : 'Activity User Details'}
+                    </h2>
+                    <div class="relative bg-gray-50 dark:bg-gray-700 dark:border-gray-600 p-4 rounded-lg border border-gray-200 grid grid-cols-2">
+                        <div class="text-sm space-y-1 text-gray-500 dark:text-gray-400 leading-loose hidden sm:block">
+                            ${getFieldLabels(d)}
+                        </div>
+                        <div class="text-sm space-y-1 text-gray-900 dark:text-white font-medium leading-loose normal-case">
+                            ${getFieldValues(d)}
+                        </div>
+                    </div>
+                </div>
+            </div>`;
         }
-        // Add event listener for opening and closing details
-        logsTable.on('click', 'td.dt-control', function (e) {
-            let tr = e.target.closest('tr');
-            let row = logsTable.row(tr);
-        
-            if (row.child.isShown()) {
-                // This row is already open - close it
-                row.child.hide();
+
+        function getFieldLabels(d) {
+            if (d.type.toLowerCase() === 'user') {
+                return 'Name <br> Email <br> Rate <br> Role';
+            } else if (d.type.toLowerCase() === 'transaction') {
+                return 'Sub Total Trade <br> Sub Total Non-trade <br> Grand Total <br> Shift';
+            } else if (d.type.toLowerCase() === 'attendance') {
+                return 'Action <br> Activity <br> Time';
             }
-            else {
-                // Open this row
+            return '';
+        }
+
+        function getFieldValues(d) {
+            if (d.type.toLowerCase() === 'user' && d.activity_user) {
+                return `${d.activity_user.name} <br> ${d.activity_user.email} <br> ${d.activity_user.rate} <br> ${d.activity_user.role}`;
+            } else if (d.type.toLowerCase() === 'transaction' && d.transaction) {
+                return `${d.transaction.sub_total_trade} <br> ${d.transaction.sub_total_non_trade} <br> ${d.transaction.grand_total} <br> ${d.transaction.time}`;
+            } else if (d.type.toLowerCase() === 'attendance') {
+                return `${d.category} <br> ${d.message} <br> ${new Date(d.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}`;
+            }
+            return '';
+        }
+
+        document.querySelector("#logsTable tbody").addEventListener("click", function(e) {
+            let td = e.target.closest("td.dt-control");
+            if (!td) return;
+
+            let tr = td.closest("tr");
+            let row = logsTable.row(tr);
+
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.classList.remove("details-expanded");
+            } else {
                 row.child(format(row.data())).show();
+                tr.classList.add("details-expanded");
             }
         });
     });

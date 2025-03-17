@@ -24,6 +24,7 @@
                             <th>Time out</th>
                             <th>Status</th>
                             <th>Date</th>
+                            <th>Date</th>
                             <th>Details</th>
                         </tr>
                     </thead>
@@ -33,16 +34,13 @@
                                 <td>{{ $record->user->name }}</td>
                                 <td class="capitalize">{{ $record->user->role }}</td>
                                 <td>
-                                    <span
-                                        class="font-medium text-sm px-2 py-1 rounded-xl uppercase text-white bg-indigo-300 inline-block">
+                                    <span class="text-sm px-2 py-1 rounded-xl uppercase  inline-block">
                                         {{ \Carbon\Carbon::parse($record->timeIn)->format('g:i A') }}
                                     </span>
                                 </td>
                                 <td>
-                                    <span
-                                        class="font-medium text-sm px-2 py-1 rounded-xl uppercase inline-block
-                                        {{ $record->timeOut ? 'text-white bg-orange-300' : 'text-gray-500' }}">
-                                        {{ $record->timeOut ? \Carbon\Carbon::parse($record->timeOut)->format('g:i A') : '---' }}
+                                    <span class="text-sm px-2 py-1 rounded-xl uppercase  inline-block">
+                                        {{ \Carbon\Carbon::parse($record->timeOut)->format('g:i A') }}
                                     </span>
                                 </td>
                                 <td>
@@ -54,7 +52,10 @@
                                         {{ ucfirst($record->status) }}
                                     </span>
                                 </td>
+                                <td style="display: none;">{{ \Carbon\Carbon::parse($record->created_at)->timestamp }}
+                                </td>
                                 <td>{{ \Carbon\Carbon::parse($record->created_at)->format('l j, Y') }}</td>
+
                                 <td>
                                     <button data-popover-target="view-details-{{ $record->id }}" type="button"
                                         class="cursor-default px-3 py-1 text-blue-500 hover:text-blue-600">View Rate
@@ -93,11 +94,15 @@
     //DataTable
     new DataTable('#attendanceTable', {
         order: [
-            [5, 'desc']
+            [5, 'desc'] // Change 5 to the correct column index (hidden timestamp column)
+        ],
+        columnDefs: [{
+                targets: 5,
+                visible: false
+            } // Hide the timestamp column
         ],
         searching: false,
         paging: false,
         info: false
     });
-
 </script>

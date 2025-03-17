@@ -18,16 +18,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
+        // Route::get('/logs/fetch', [DashboardController::class, 'fetchLogs'])->name('logs.fetch');
+
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/sales-data', [DashboardController::class, 'getSalesData']);
 
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/sales-data', [DashboardController::class, 'getSalesData']);
+        Route::get('/logs/fetch', [DashboardController::class, 'fetchLogs'])->name('logs.fetch');
+    });
 
     // PROFILE MANAGEMENT
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
