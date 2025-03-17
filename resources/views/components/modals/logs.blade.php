@@ -136,6 +136,8 @@
             ]
         });
 
+        let userPlaceholderImage = "{{ asset('img/user.png') }}";
+
         function format(d) {
             return `
             <div class="child-row">
@@ -157,7 +159,12 @@
                     <h2 class="text-md font-semibold text-gray-900 dark:text-white mb-2">
                         ${d.type.toLowerCase() === 'attendance' ? 'Attendance Details' : d.type.toLowerCase() === 'transaction' ? 'Transaction Details' : 'Activity User Details'}
                     </h2>
-                    <div class="relative bg-gray-50 dark:bg-gray-700 dark:border-gray-600 p-4 rounded-lg border border-gray-200 grid grid-cols-2">
+                    <div class="relative bg-gray-50 dark:bg-gray-700 dark:border-gray-600 p-4 rounded-lg border border-gray-200 ${d.type.toLowerCase() === 'attendance' ? 'grid grid-cols-3' : 'grid grid-cols-2'}">
+                        ${d.type.toLowerCase() === 'attendance' ? `
+                        <!-- User Image Column -->
+                        <div class="flex justify-start items-center">
+                            <img src="${d.user.profilePicture ? d.user.profilePicture : userPlaceholderImage}" alt="User Profile" class="w-3/5 rounded-full border-2 border-gray-300 shadow-sm">
+                        </div>` : ''}
                         <div class="text-sm space-y-1 text-gray-500 dark:text-gray-400 leading-loose hidden sm:block">
                             ${getFieldLabels(d)}
                         </div>

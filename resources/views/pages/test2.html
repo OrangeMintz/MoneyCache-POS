@@ -6,54 +6,77 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <title>Document</title>
+      <style>
+    /* Ensure child rows expand properly */
+    /* Ensure child rows expand properly */
+    .child-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    /* Allow details-card to expand naturally */
+    .details-card {
+        flex: 1 1 auto;
+        /* Allow dynamic expansion */
+        max-width: 100%;
+        min-width: 280px;
+        /* Prevent overly narrow cards */
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        white-space: normal;
+    }
+
+    #logsTable td {
+        text-transform: capitalize;
+    }
+
+    /* Ensure even layout on larger screens */
+    @media (min-width: 768px) {
+        .details-card {
+            flex: 1 1 45%;
+            /* Allows each card to take half width but still dynamic */
+        }
+    }
+</style>
   </head>
   <body>
     
+    <div class="child-row">
+      <div class="details-card bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-5">
+          <h2 class="text-md font-semibold text-gray-900 dark:text-white mb-2">User Details</h2>
+          <div class="relative bg-gray-50 dark:bg-gray-700 dark:border-gray-600 p-4 rounded-lg border border-gray-200 grid grid-cols-2">
+              <div class="text-sm space-y-1 text-gray-500 dark:text-gray-400 leading-loose hidden sm:block">
+                  Name <br> Email <br> Role
+              </div>
+              <div class="text-sm space-y-1 text-gray-900 dark:text-white font-medium normal-case leading-loose">
+                  ${d.user.name} <br>
+                  ${d.user.email} <br>
+                  ${d.user.role}
+              </div>
+          </div>
+      </div>
+      <div class="details-card bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-5">
+          <h2 class="text-md font-semibold text-gray-900 dark:text-white mb-2">User Details</h2>
+          <div class="relative bg-gray-50 dark:bg-gray-700 dark:border-gray-600 p-4 rounded-lg border border-gray-200 grid grid-cols-3">
+            <div class="flex justify-start items-center">
+              <img src="../../../public/img/user.png" alt="User Profile" class="w-3/5 rounded-full border-2 border-gray-300 shadow-sm">
+            </div>
+              <div class="text-sm space-y-1 text-gray-500 dark:text-gray-400 leading-loose hidden sm:block">
+                  Name <br> Email <br> Role
+              </div>
+              <div class="text-sm space-y-1 text-gray-900 dark:text-white font-medium normal-case leading-loose">
+                  ${d.user.name} <br>
+                  ${d.user.email} <br>
+                  ${d.user.role}
+              </div>
 
-  <div class="w-full bg-gray-700 p-2 flex justify-evenly">
+          </div>
+      </div>
 
-
-  <div class="w-full max-w-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-5">
-    <h2 class="text-md font-semibold text-gray-900 dark:text-white mb-2">User details</h2>
-    <div class="relative bg-gray-50 dark:bg-gray-700 dark:border-gray-600 p-4 rounded-lg border border-gray-200 not-italic grid grid-cols-2">
-        <div class="text-sm space-y-1 text-gray-500 dark:text-gray-400 leading-loose hidden sm:block">
-            Name <br />
-            Email <br />
-            Shift Time <br />
-            Add
-            
-        </div>
-        <div class="text-sm space-y-1 text-gray-900 dark:text-white font-medium leading-loose">
-            Bonnie Green <br />
-            name@flowbite.com <br />
-            AM<br />
-            here
-        </div>
-
-    </div>
   </div>
-
-  <div class="w-full max-w-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-5">
-    <h2 class="text-md font-semibold text-gray-900 dark:text-white mb-2">Transaction details</h2>
-    <div class="relative bg-gray-50 dark:bg-gray-700 dark:border-gray-600 p-4 rounded-lg border border-gray-200 not-italic grid grid-cols-2">
-        <div class="text-sm space-y-1 text-gray-500 dark:text-gray-400 leading-loose hidden sm:block">
-            Name <br />
-            Email <br />
-            Shift Time <br />
-            Add
-            
-        </div>
-        <div class="text-sm space-y-1 text-gray-900 dark:text-white font-medium leading-loose">
-            Bonnie Green <br />
-            name@flowbite.com <br />
-            AM<br />
-            here
-        </div>
-
-    </div>
-  </div>
-
-</div>
 
 </body>
 </html>
