@@ -42,7 +42,7 @@
 <script>
     // Formatting function for row details - modify as you need
     function format(d) {
-        let details = `<div style="padding:10px 40px; background: rgb(211, 211, 211); color: rgb(100, 100, 100)">`;
+        let details = `<div class="px-3 py-4 bg-white dark:bg-gray-800 dark:text-white">`;
 
         let formatCurrency = (amount) => `₱${parseFloat(amount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}`;
 

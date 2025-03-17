@@ -1,4 +1,5 @@
 @include('layouts.header')
+@include('components.modals.camera')
 
 <main>
     <div class="font-sans bg-gray-100 dark:bg-gray-800 dark:text-gray-100 p-6">
@@ -7,12 +8,20 @@
                 <div class="flex justify-between items-center mb-2">
                     <h5 class="title font-semibold text-[26px]">Attendance Record</h5>
                     <div class="flex justify-center space-x-3">
-                        <a id="timeIn" href="{{ route('attendance.timeIn') }}"
+                        <!-- Capture button -->
+                        <button id="capture-button" data-modal-target="capture-modal"   data-modal-toggle="capture-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                                Time in
+                        </button>
+                          
+                        {{-- <a id="timeIn" href="{{ route('attendance.timeIn') }}"
                             class="w-28 text-center px-2 py-2 text-sm rounded-lg bg-green-100 dark:bg-green-300 text-green-700 dark:text-green-900 hover:bg-green-200">
-                            <i class="fa-solid fa-right-to-bracket"></i> Time in</a>
+                            <i class="fa-solid fa-right-to-bracket"></i> Time in
+                        </a> --}}
+
                         <a id="timeOut" href="{{ route('attendance.timeOut') }}"
                             class="w-28 text-center px-2 text-sm py-2 rounded-lg bg-red-100 dark:bg-red-300 text-red-700 dark:text-red-900 hover:bg-red-200">
-                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Time Out</a>
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Time Out
+                        </a>
                     </div>
                 </div>
                 <table id="attendanceTable" class="display" style="width:100%">
@@ -57,7 +66,7 @@
                                 <td>{{ \Carbon\Carbon::parse($record->created_at)->format('l j, Y') }}</td>
 
                                 <td>
-                                    <button data-popover-target="view-details-{{ $record->id }}" type="button"
+                                    {{-- <button data-popover-target="view-details-{{ $record->id }}" type="button"
                                         class="cursor-default px-3 py-1 text-blue-500 hover:text-blue-600">View Rate
                                     </button>
 
@@ -77,7 +86,44 @@
                                             </p>
                                         </div>
                                         <div data-popper-arrow></div>
+                                    </div> --}}
+                                    
+                                    <button data-popover-target="view-details-{{ $record->id }}" type="button"
+                                        class="cursor-default px-3 py-1 text-blue-500 hover:text-blue-600">View Details
+                                    </button>
+
+                                    <div data-popover id="view-details-{{ $record->id }}" role="tooltip" class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-xs opacity-0 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600">
+                                        <div class="p-3">
+                                            <div class="flex items-center justify-between mb-2">
+                                                <a href="#">
+                                                    <img class="w-1/2 h-auto mx-auto rounded-full" src="{{asset('img/user.png')}}" alt="Jese Leos">
+                                                </a>
+                                            </div>
+                                            <p class="text-center text-base font-semibold leading-none text-gray-900 dark:text-white">
+                                                {{$record->user->name}}
+                                            </p>
+                                            <p class="text-center mb-3 text-sm font-normal">
+                                                {{$record->user->email}}
+                                            </p>
+
+                                            <ul class="text-sm space-y-2">
+                                                <li class="me-2">
+                                                    <p>
+                                                        <span class="font-medium text-gray-900 dark:text-white">Total Rating: </span>
+                                                        <span>{{ $record->totalRating ?? 0 }}</span>
+                                                    </p>
+                                                </li>
+                                                <li>
+                                                    <p>
+                                                        <span class="font-medium text-gray-900 dark:text-white">Total Hours: </span>
+                                                        <span>{{ $record->totalHours ?? 0 }}</span>
+                                                    </p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div data-popper-arrow></div>
                                     </div>
+
                                 </td>
                             </tr>
                         @endforeach
@@ -106,3 +152,4 @@
         info: false
     });
 </script>
+
