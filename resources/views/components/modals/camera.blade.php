@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let selfieDataInput = document.getElementById("selfie-data"); // Hidden input for image
     let stream = null; // To store camera stream
 
-    // 📸 **Start Camera**
+    // **Start Camera**
     function startCamera() {
         if (stream) return; // Prevent multiple camera activations
 
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    // 📷 **Capture Image**
+    // **Capture Image**
     captureBtn.addEventListener("click", function () {
         let context = canvas.getContext("2d");
         canvas.width = video.videoWidth;
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
         retakeBtn.classList.remove("hidden");
     });
 
-    // 🔄 **Retake Image**
+    // **Retake Image**
     retakeBtn.addEventListener("click", function () {
         selfieDataInput.value = ""; // Clear old image
         video.classList.remove("hidden"); // Show video
@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
         retakeBtn.classList.add("hidden"); // Hide Retake button
     });
 
-    // ✅ **Submit Image**
+    // **Submit Image**
     submitBtn.addEventListener("click", function () {
         if (!selfieDataInput.value) {
             alert("Please capture a selfie first!");
@@ -120,11 +120,13 @@ document.addEventListener("DOMContentLoaded", function () {
         setTimeout(() => {
             alert("Simulated: Time in recorded successfully!");
             closeCamera();
-
+            // document.getElementById("capture-modal").classList.add("hidden"); // Close modal
+            submitBtn.textContent = "Submit Time In";
+            submitBtn.disabled = false;
         }, 1000);
     });
 
-    // ❌ **Stop Camera**
+    // **Stop Camera**
     function closeCamera() {
         if (stream) {
             stream.getTracks().forEach(track => track.stop()); // Stop camera
@@ -132,13 +134,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // 🔒 **Close Modal**
+    // **Close Modal**
     closeModal.addEventListener("click", function () {
         closeCamera();
         document.getElementById("capture-modal").classList.add("hidden");
     });
 
-    // 📂 **Open Modal and Start Camera**
+    // **Open Modal and Start Camera**
     document.getElementById("capture-button").addEventListener("click", function () {
         document.getElementById("capture-modal").classList.remove("hidden");
         startCamera();

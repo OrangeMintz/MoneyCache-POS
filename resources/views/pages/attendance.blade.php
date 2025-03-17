@@ -65,7 +65,7 @@
                                 </td>
                                 <td>{{ \Carbon\Carbon::parse($record->created_at)->format('l j, Y') }}</td>
                                 <td>
-                                    <button data-popover-target="view-details-{{ $record->id }}" type="button"
+                                    {{-- <button data-popover-target="view-details-{{ $record->id }}" type="button"
                                         class="cursor-default px-3 py-1 text-blue-500 hover:text-blue-600">View Rate
                                     </button>
 
@@ -85,7 +85,44 @@
                                             </p>
                                         </div>
                                         <div data-popper-arrow></div>
+                                    </div> --}}
+                                    
+                                    <button data-popover-target="view-details-{{ $record->id }}" type="button"
+                                        class="cursor-default px-3 py-1 text-blue-500 hover:text-blue-600">View Details
+                                    </button>
+
+                                    <div data-popover id="view-details-{{ $record->id }}" role="tooltip" class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-xs opacity-0 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600">
+                                        <div class="p-3">
+                                            <div class="flex items-center justify-between mb-2">
+                                                <a href="#">
+                                                    <img class="w-1/2 h-auto mx-auto rounded-full" src="{{asset('img/user.png')}}" alt="Jese Leos">
+                                                </a>
+                                            </div>
+                                            <p class="text-center text-base font-semibold leading-none text-gray-900 dark:text-white">
+                                                {{$record->user->name}}
+                                            </p>
+                                            <p class="text-center mb-3 text-sm font-normal">
+                                                {{$record->user->email}}
+                                            </p>
+
+                                            <ul class="text-sm space-y-2">
+                                                <li class="me-2">
+                                                    <p>
+                                                        <span class="font-medium text-gray-900 dark:text-white">Total Rating: </span>
+                                                        <span>{{ $record->totalRating ?? 0 }}</span>
+                                                    </p>
+                                                </li>
+                                                <li>
+                                                    <p>
+                                                        <span class="font-medium text-gray-900 dark:text-white">Total Hours: </span>
+                                                        <span>{{ $record->totalHours ?? 0 }}</span>
+                                                    </p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div data-popper-arrow></div>
                                     </div>
+
                                 </td>
                             </tr>
                         @endforeach
