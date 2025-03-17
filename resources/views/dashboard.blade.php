@@ -190,6 +190,7 @@
                                             @if ($log->category === 'add') text-green-600
                                             @elseif ($log->category === 'update') text-blue-600
                                             @elseif ($log->category === 'delete') text-red-500
+                                            @elseif ($log->category === 'restore') text-yellow-500
                                             @else text-gray-500 @endif">
                                                             {{ ucfirst($log->category) }}
                                                         </span>

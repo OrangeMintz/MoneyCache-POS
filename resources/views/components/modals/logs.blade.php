@@ -89,9 +89,11 @@
                     data: 'category',
                     render: function(data) {
                         let colorClass = {
-                            'update': 'text-yellow-500',
+                            'update': 'text-blue-500',
                             'delete': 'text-red-500',
                             'add': 'text-green-500',
+                            'restore': 'text-yellow-500',
+
                         } [data.toLowerCase()] || 'text-black'; // Default color
 
                         return `<span class="${colorClass} text-sm">${data}</span>`;
