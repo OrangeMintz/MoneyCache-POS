@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ ucfirst(request()->segment(1) ?? 'Home') }}</title>
     {{-- favicon --}}
     <link rel="icon" type="image/png" href="{{ asset('img/LogoIcon.png') }}">
@@ -67,4 +68,15 @@
 </head>
 
 <body class="dark:bg-gray-950">
-    @include('layouts.navigation')
+    @include('layouts.navigation');
+
+    @include('components.modals.lock');
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (sessionStorage.getItem("locked") === "true") {
+                document.getElementById("lockscreen").classList.remove("hidden");
+            }
+        });
+    </script>
