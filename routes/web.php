@@ -18,6 +18,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
@@ -25,7 +27,6 @@ Route::get('/', function () {
 
 
 Route::middleware('auth')->group(function () {
-
 
     Route::prefix('dashboard')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -40,6 +41,10 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware([CheckRole::class . ":admin,cashier"])->group(function () {
 
+        Route::get('/lock', function () {
+            return view('pages.lock');
+        });
+        
         // ATTENDANCE
         Route::prefix('attendance')->group(function () {
             Route::get('/', [AttendanceController::class, 'index'])->name('attendance.index');
