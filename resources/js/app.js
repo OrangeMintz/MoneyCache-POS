@@ -35,6 +35,7 @@ document.getElementById("unlock-form").addEventListener("submit", function (e) {
     e.preventDefault();
 
     let password = document.getElementById("password").value;
+    let errorContainer = document.querySelector("#password-error"); // Add an error message container
 
     fetch("/unlock", {
         method: "POST",
@@ -44,12 +45,14 @@ document.getElementById("unlock-form").addEventListener("submit", function (e) {
         },
         body: JSON.stringify({ password: password })
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                sessionStorage.removeItem("locked"); // Remove lock state
+        .then(response => response.json().then(data => ({ status: response.status, body: data })))
+        .then(result => {
+            if (result.status === 200) {
+                sessionStorage.removeItem("locked"); // Unlock screen
                 document.getElementById("lockscreen").classList.add("hidden");
+                errorContainer.textContent = ""; // Clear error
+            } else {
+                errorContainer.textContent = result.body.message; // Show error message
             }
         })
-        .catch(error => console.error("Error:", error));
 });
