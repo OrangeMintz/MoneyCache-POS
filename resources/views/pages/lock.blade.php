@@ -13,8 +13,12 @@
 
         <form class="space-y-4">
             <div>
-                <label for="password" class="block text-sm font-medium">Enter Password</label>
-                <input type="password" id="password" class="w-full p-3 text-gray-900 rounded-lg bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Password">
+                <label for="password"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                <input type="password" name="password" id="password" placeholder=" "
+                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required="">
+            <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
             <button type="submit" class="w-full p-3 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700">
                 Unlock
