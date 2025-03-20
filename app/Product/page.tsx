@@ -150,13 +150,6 @@ export default function DenseTable() {
                 CSV
               </button>
             </form>
-
-            <form onSubmit={downloadPdf}>
-              <button type="submit" className="text-xs ml-2 h-10 bg-red-500 hover:bg-red-300 text-white font-semibold py-2 px-6 border  rounded shadow">
-                PDF
-              </button>
-            </form>
-
             <div className="w-full">
               <input value={date} type="date" name="bpi_dcard" className="w-15 text-xs h-10 ml-2 p-2 border border-gray-300 rounded-md" step="0.01" onChange={handleDateChange} />
             </div>

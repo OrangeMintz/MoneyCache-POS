@@ -38,14 +38,14 @@ export default function Home() {
         }
     };
 
-    const currentMonth = getCurrentDate().slice(0, 7);
+    const currentDay = getCurrentDate().slice(8, 10);
 
     const filteredTransactionsMonth = transactions.filter(transaction => {
-        return new Date(transaction.created_at).toISOString().slice(0, 7) === currentMonth;
+        return new Date(transaction.created_at).toISOString().slice(0, 7) === currentDay;
     });
 
     const filteredUsersToday = users.filter(user => {
-        return new Date(user.created_at).toISOString().slice(0, 7) === currentMonth;
+        return new Date(user.created_at).toISOString().slice(0, 7) === currentDay;
     });
 
     useEffect(() => {

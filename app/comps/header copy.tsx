@@ -268,7 +268,7 @@ export default function Navbar() {
                                         </button>
                                     </Link> : ""
                                 ) : ""}
-                               
+
                                 {user ? (user.role == 'admin' ?
                                     <Link href="/logs">
                                         <button className={`inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md focus:outline-none ${isActive('/logs')
@@ -319,14 +319,14 @@ export default function Navbar() {
                                     </div>
                                     <hr className="border-gray-200" />
                                     <div className="py-1">
-                                    <Link href="/attendance">
+                                        <Link href="/attendance">
                                             <button
                                                 type='submit'
                                                 className="block w-full text-center px-4 py-2 text-sm text-gray-700 hover:text-white transition-colors duration-200 hover:bg-blue-600"
                                             >
                                                 Attendance
                                             </button>
-                                            </Link>
+                                        </Link>
                                     </div>
                                     {/* Time out Section */}
                                     <hr className="border-gray-200" />
@@ -405,7 +405,7 @@ export default function Navbar() {
                             </Link>
                             : "") : ""}
 
-                             {user ? (user.role == 'admin' ?
+                        {user ? (user.role == 'admin' ?
                             <Link href="/logs" className="block px-3 py-2 rounded-md text-base font-medium text-black hover:text-green-300 dark:text-gray-200">
                                 Logs
                             </Link>
