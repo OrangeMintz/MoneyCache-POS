@@ -10,7 +10,7 @@ class InactivityLock
 {
     public function handle(Request $request, Closure $next)
     {
-        $timeout = 5 * 60; // 5 minutes
+        $timeout = 5 * 60 * 1000; // 5 minutes
 
         // Allow /lock and /unlock routes to be accessed freely
         if ($request->is('lock') || $request->is('unlock')) {

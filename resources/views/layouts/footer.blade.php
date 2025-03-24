@@ -122,14 +122,15 @@
         }
     @endif
 </script>
+@vite('resources/js/lockscreen.js')
 {{-- end of toaster for update notif --}}
 
 {{-- darkmode script  --}}
-<script src="{{asset('js/darkmode.js')}}"></script>
+<script src="{{ asset('js/darkmode.js') }}"></script>
 
 {{-- cdn of apex chart from the dashboard & flowbite for dropdown functionality in there --}}
 <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.46.0/dist/apexcharts.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
 
 {{-- chart script --}}
-<script src="{{asset('js/chart.js')}}"></script>
+<script src="{{ asset('js/chart.js') }}"></script>
