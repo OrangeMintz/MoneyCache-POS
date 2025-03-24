@@ -8,7 +8,7 @@
         </a>
     </h1>
 
-    <!-- Navigation Menu (Desktop & Mobile) -->
+    <!-- Navigatiofn Menu (Desktop & Mobile) -->
     <div class="flex-grow flex items-center justify-end md:justify-center">
         <!-- Hamburger Button (Mobile) -->
         <button id="menuToggle" class="md:hidden text-gray-700 focus:outline-none">
@@ -37,7 +37,7 @@
             <a href="{{ route('transactions') }}"
                 class="p-4 block md:inline border-b-2 duration-200 cursor-pointer
                     {{ request()->routeIs('transactions') ? 'border-MCGreen text-MCGreen' : 'border-transparent hover:border-MCGreen hover:text-MCGreen' }}">
-                Transaction List
+                Sales
             </a>
         </nav>
     </div>
