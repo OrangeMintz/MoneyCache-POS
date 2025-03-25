@@ -1,6 +1,11 @@
 <?php
 
 use Illuminate\Support\Str;
+// use PDO;
+
+$url = env('DB_URL');
+$parsed = parse_url($url);
+parse_str($parsed['query'] ?? '', $queryParams);
 
 return [
 
@@ -82,7 +87,7 @@ return [
             ]) : [],
         ],
 
-        'pgsql' => [
+          'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DB_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
@@ -94,6 +99,7 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
             'search_path' => 'public',
+            'schema'   => 'moneycache',
             'sslmode' => 'prefer',
         ],
 
