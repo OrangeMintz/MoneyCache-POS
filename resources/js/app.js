@@ -8,7 +8,8 @@ Alpine.start();
 
 
 // LOCK SCREEN
-let inactivityTime = 1 * 5 * 1000; // 5 seconds for testing
+// let inactivityTime = 1 * 5 * 1000; // 5 seconds for testing
+let inactivityTime = 1 * 120 * 1000; // 
 let timer;
 
 function resetTimer() {
