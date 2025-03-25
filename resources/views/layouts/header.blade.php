@@ -67,11 +67,14 @@
 
 </head>
 
+<!-- Spinner (Initially Visible) -->
+<div id="spinner" class="flex justify-center items-center h-screen">
+    @include('components.spinner')
+</div>
 <body class="dark:bg-gray-950">
-    @include('layouts.navigation');
+    @include('layouts.navigation')
 
-    @include('components.modals.lock');
-
+    @include('components.modals.lock')
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -79,4 +82,9 @@
                 document.getElementById("lockscreen").classList.remove("hidden");
             }
         });
+
+        window.onload = function () {
+            document.getElementById('spinner').style.display = 'none';
+        };
+
     </script>
