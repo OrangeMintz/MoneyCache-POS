@@ -3,16 +3,19 @@
 import axios from "axios";
 import Image from 'next/image';
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
   const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setLoading(true)
 
     try {
       const response = await axios.post("http://127.0.0.1:8000/oauth/token", {
@@ -34,18 +37,23 @@ export default function Home() {
       localStorage.setItem("access_token", accessToken);
       localStorage.setItem("refresh_token", refreshToken);
 
+      setLoading(false)
       router.push('/dashboard')
     } catch (err: any) {
       console.error("Login Error:", err.response?.data || err.message);
 
       if (err.response) {
+        setLoading(false)
         setError(err.response.data.message);
       } else if (err.request) {
+        setLoading(false)
         setError("No response from server. Check API.");
       } else {
+        setLoading(false)
         setError("Something went wrong. Try again.");
       }
     } finally {
+      setLoading(false)
       console.log("asdhdsjas")
     }
   }
@@ -92,7 +100,10 @@ export default function Home() {
                 <a href="/forgot-password" className="text-sm ml-2 text-primary-600 hover:underline dark:text-primary-500">Forgot password?</a>
               </div>
 
-              <button type="submit" className="w-full bg-gray-800 text-white bg-primary-600 border border-black hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
+              <button disabled={loading} type="submit" className="w-full bg-gray-800 text-white bg-primary-600 border border-black hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                {loading ?
+                  <span><Loader2 className="animate-spin mx-auto text-white" /></span> : <span>Sign in</span>}
+              </button>
             </form>
           </div>
         </div>

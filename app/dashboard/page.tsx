@@ -1,7 +1,7 @@
 'use client';
 import LineChart from '@/components/ui/linechart';
 import PieChart from '@/components/ui/piechart';
-import { fetchLogs, fetchTotals, fetchTransactions, fetchUsers, fetchTotalsToday } from '@/utils/fetch';
+import { fetchLogs, fetchTotals, fetchTransactions, fetchUsers, fetchTotalsToday, fetchDashboard } from '@/utils/fetch';
 import { formatNumber, formatDate, formatTime, getCurrentDate } from '@/utils/formatter';
 import * as lucideIcons from 'lucide-react';
 import Script from 'next/script';
@@ -20,19 +20,16 @@ export default function Home() {
 
     const fetchDashboardData = async () => {
         try {
-            const [transactions, usersData, totals, logs, today] = await Promise.all([
-                fetchTransactions(),
-                user?.role === "admin" ? fetchUsers() : Promise.resolve(null),
-                fetchTotals(),
-                fetchLogs(),
-                user?.role === "admin" ? fetchTotalsToday(new Date().toISOString().split('T')[0]) : Promise.resolve(null),
-            ]);
 
-            setTransactions(transactions);
-            if (user?.role === "admin") setUsers(usersData.users);
-            setTotal(totals);
-            setLogs(logs);
-            setTotalsToday(today);
+            // Get Dashboard data
+            const dashboard = await fetchDashboard(new Date().toISOString().split('T')[0])
+
+            // Set dashboard data
+            setTransactions(dashboard.transactions);
+            setTotal(dashboard.totals)
+            setTotalsToday(dashboard.totals_today)
+            setLogs(dashboard.logs)
+            setUsers(dashboard.users.active_users)
         } catch (error) {
             console.error("Error retrieving dashboard data: ", error);
         }

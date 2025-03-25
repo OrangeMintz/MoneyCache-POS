@@ -59,22 +59,22 @@ export default function CollapsibleTable() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [loading, setLoading] = useState(false)
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
-    const webcamRef = useRef<Webcam>(null);
-    const [isCameraOpen, setIsCameraOpen] = useState(false);
-    const [capturedImage, setCapturedImage] = useState<string | null>(null);
-  
-    const handleCapture = (e) => {
-      e.preventDefault(); 
-      if (webcamRef.current) {
-        const imageSrc = webcamRef.current.getScreenshot();
-        setCapturedImage(imageSrc);
-      }
-    };
+  const webcamRef = useRef<Webcam>(null);
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
-    const handleCloseCamera = () => {
-      setIsCameraOpen(false);
-      setCapturedImage(null); // This will clear the captured image
-    };
+  const handleCapture = (e) => {
+    e.preventDefault();
+    if (webcamRef.current) {
+      const imageSrc = webcamRef.current.getScreenshot();
+      setCapturedImage(imageSrc);
+    }
+  };
+
+  const handleCloseCamera = () => {
+    setIsCameraOpen(false);
+    setCapturedImage(null); // This will clear the captured image
+  };
   const [visibleColumns, setVisibleColumns] = useState({
     id: true,
     in: true,
@@ -288,16 +288,16 @@ export default function CollapsibleTable() {
 
           <div className="flex justify-end items-center gap-2 md:col-span-2">
 
-        <button
-            onClick={() => {
-              setIsCameraOpen(true);
-              setCapturedImage(null); // Reset any previously captured image
-            }}
-            className="inline-flex items-center justify-center gap-x-1 px-3 py-2 rounded-md bg-green-500 hover:bg-green-600 text-white text-xs font-medium transition-colors duration-200"
-          >
-            <LogIn className="w-4 h-4" />
-            Time In
-          </button>
+            <button
+              onClick={() => {
+                setIsCameraOpen(true);
+                setCapturedImage(null); // Reset any previously captured image
+              }}
+              className="inline-flex items-center justify-center gap-x-1 px-3 py-2 rounded-md bg-green-500 hover:bg-green-600 text-white text-xs font-medium transition-colors duration-200"
+            >
+              <LogIn className="w-4 h-4" />
+              Time In
+            </button>
             {/* this is a Time in button */}
             <button
               onClick={handleTimeOut}
@@ -318,108 +318,107 @@ export default function CollapsibleTable() {
 
 
               <div
-          id="dropdownContent"
-          className={`overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-900 bg-opacity-50 ${
-            isCameraOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 hidden"
-          }`}
-        >
-          <div className="relative p-4 md:p-6 w-full max-w-2xl max-h-full">
-            <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
-              {/* Header */}
-              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-  {/* Remove the md:ml-1 class and add text-center w-full */}
-  <h3 className="text-lg font-medium text-gray-900 dark:text-white text-center w-full">MoneyCash Deez Nuts</h3>
-                <button
-                  type="button"
-                  className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                  onClick={() => setIsCameraOpen(false)}
-                >
-                  <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                  </svg>
-                  <span className="sr-only">Close modal</span>
-                </button>
-              </div>
-              
-              {/* Add Form */}
-              <div className="p-4 md:p-5">
-  {/* User Card */}
-  <div className="mb-4 bg-gray-50 dark:bg-gray-800 rounded-md">
-    <div className="flex items-center justify-between p-4">
-      {/* Left side - User info with icon */}
-      <form className="flex flex-col items-center justify-center w-full max-w-md mx-auto py-8">
-        <div className="flex flex-col items-center w-full gap-8">
-          {isCameraOpen && !capturedImage && (
-            <div className="relative w-80 h-80 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg flex justify-center items-center">
-              <Webcam
-                ref={webcamRef}
-                screenshotFormat="image/png"
-                className="absolute min-w-full min-h-full object-cover"
-                width={320}
-                height={320}
-              />
-            </div>
-          )}
-
-          {isCameraOpen && !capturedImage && (
-            <div className="flex items-center space-x-4 w-full justify-center">
-              <button
-                type="button"
-                onClick={handleCapture}
-                className="px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg text-lg font-medium shadow-md transition-all duration-200 flex items-center"
+                id="dropdownContent"
+                className={`overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-900 bg-opacity-50 ${isCameraOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 hidden"
+                  }`}
               >
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                </svg>
-                Capture Image
-              </button>
-            </div>
-          )}
+                <div className="relative p-4 md:p-6 w-full max-w-2xl max-h-full">
+                  <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                    {/* Header */}
+                    <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                      {/* Remove the md:ml-1 class and add text-center w-full */}
+                      <h3 className="text-lg font-medium text-gray-900 dark:text-white text-center w-full">Selfie Attendance</h3>
+                      <button
+                        type="button"
+                        className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        onClick={() => setIsCameraOpen(false)}
+                      >
+                        <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                          <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span className="sr-only">Close modal</span>
+                      </button>
+                    </div>
 
-          {capturedImage && (
-            <div className="mt-2 flex flex-col items-center bg-gray-50 p-6 rounded-xl shadow-md w-full">
-              <p className="text-xl font-semibold text-gray-800 mb-4">Captured Image</p>
-              <div className="w-80 h-80 rounded-full overflow-hidden border-4 border-green-500 shadow-lg flex justify-center items-center">
-                <Image src={capturedImage} alt="Captured" width={320} height={320} className="w-full h-full object-cover" />
+                    {/* Add Form */}
+                    <div className="p-4 md:p-5">
+                      {/* User Card */}
+                      <div className="mb-4 bg-gray-50 dark:bg-gray-800 rounded-md">
+                        <div className="flex items-center justify-between p-4">
+                          {/* Left side - User info with icon */}
+                          <form className="flex flex-col items-center justify-center w-full max-w-md mx-auto py-8">
+                            <div className="flex flex-col items-center w-full gap-8">
+                              {isCameraOpen && !capturedImage && (
+                                <div className="relative w-80 h-80 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg flex justify-center items-center">
+                                  <Webcam
+                                    ref={webcamRef}
+                                    screenshotFormat="image/png"
+                                    className="absolute min-w-full min-h-full object-cover"
+                                    width={320}
+                                    height={320}
+                                  />
+                                </div>
+                              )}
+
+                              {isCameraOpen && !capturedImage && (
+                                <div className="flex items-center space-x-4 w-full justify-center">
+                                  <button
+                                    type="button"
+                                    onClick={handleCapture}
+                                    className="px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg text-lg font-medium shadow-md transition-all duration-200 flex items-center"
+                                  >
+                                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    Capture Image
+                                  </button>
+                                </div>
+                              )}
+
+                              {capturedImage && (
+                                <div className="mt-2 flex flex-col items-center bg-gray-50 p-6 rounded-xl shadow-md w-full">
+                                  <p className="text-xl font-semibold text-gray-800 mb-4">Captured Image</p>
+                                  <div className="w-80 h-80 rounded-full overflow-hidden border-4 border-green-500 shadow-lg flex justify-center items-center">
+                                    <Image src={capturedImage} alt="Captured" width={320} height={320} className="w-full h-full object-cover" />
+                                  </div>
+
+                                  <div className="mt-6 flex justify-center">
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setCapturedImage(null);
+                                      }}
+                                      className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg mr-3 transition-colors duration-200"
+                                    >
+                                      Retake
+                                    </button>
+
+                                    <button
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        handleTimeIn(e);
+                                        // Close the modal and reset the captured image
+                                        setIsCameraOpen(false);
+                                        setCapturedImage(null);
+                                      }}
+                                      className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 flex items-center"
+                                    >
+                                      <LogIn className="w-4 h-4 mr-2" />
+                                      Submit
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              
-              <div className="mt-6 flex justify-center">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCapturedImage(null);
-                  }}
-                  className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg mr-3 transition-colors duration-200"
-                >
-                  Retake
-                </button>
-                
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleTimeIn(e);
-                    // Close the modal and reset the captured image
-                    setIsCameraOpen(false);
-                    setCapturedImage(null);
-                  }}
-                  className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 flex items-center"
-                >
-                  <LogIn className="w-4 h-4 mr-2" />
-                  Submit
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-            </div>
-          </div>
-        </div>
 
 
               <div
