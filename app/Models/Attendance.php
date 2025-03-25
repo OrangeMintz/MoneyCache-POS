@@ -15,6 +15,7 @@ class Attendance extends Model
         'timeOut',
         'totalHours',
         'totalRate',
+        'photo',
         'status',
     ];
 
