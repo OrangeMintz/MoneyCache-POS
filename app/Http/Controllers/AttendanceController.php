@@ -10,6 +10,7 @@ use App\Events\MyEvent;
 use DateTime;
 use DateTimeZone;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Facades\Log;
 
 class AttendanceController extends Controller
 {
@@ -161,7 +162,7 @@ class AttendanceController extends Controller
             ]);
         }
 
-        Attendance::create([
+        $attendance = Attendance::create([
             'user_id' => $user->id,
             'timeIn' => $now,
             'timeOut' => null,
@@ -172,7 +173,7 @@ class AttendanceController extends Controller
         ]);
 
         event(new MyEvent("Clocked in!"));
-        (new LogsController)->storeAttendance($user->id, 'Clocked In');
+        (new LogsController)->storeAttendance($user->id, 'Clocked In' ,$attendance->id);
         $message = 'Clocked In Successfully!';
         if ($request->wantsJson()) {
             return response()->json(['status' => 'success', 'message' => $message], 200);

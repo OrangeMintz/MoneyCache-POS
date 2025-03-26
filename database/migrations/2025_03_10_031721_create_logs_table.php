@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('transaction_id')->nullable()->constrained('transactions')->onDelete('cascade');
             $table->foreignId('activity_user_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('attendance_id')->nullable()->constrained('attendances')->onDelete('cascade');
             $table->string('type');
             $table->string('category');
             $table->string('message');
