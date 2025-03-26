@@ -38,7 +38,65 @@ class AttendanceController extends Controller
             ]);
         }
 
-        return $attendance; // Return the collection for use in `compact()`
+        return $attendance;
+    }
+
+        public function timeIn(Request $request) {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['error' => 'No authenticated user!'], 400);
+        }
+
+        $now = now();
+        $login = today()->setTime(8, 0);
+        $earlyThreshold = $login->copy()->subMinutes(20);
+
+        // Check if the user has already clocked in today
+        $alreadyClockedIn = Attendance::where('user_id', $user->id)
+            ->whereDate('timeIn', today())
+            ->exists();
+
+        if ($alreadyClockedIn) {
+            $message = 'You have already clocked in today!';
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => $message]);
+            }
+
+            return redirect()->back()->with([
+                'message' => $message,
+                'alert-type' => 'error',
+            ]);
+        }
+
+        // Determine status
+        if ($now >= $login) {
+            $status = 'Late';
+        } elseif ($now >= $earlyThreshold) {
+            $status = 'On-time';
+        } else {
+            $status = 'Early';
+        }
+
+        Attendance::create([
+            'user_id' => $user->id,
+            'timeIn' => $now,
+            'timeOut' => null,
+            'totalHours' => null,
+            'totalRate' => null,
+            'status' => $status,
+        ]);
+
+        event(new MyEvent("Clocked in!"));
+        (new LogsController)->storeAttendance($user->id,'Clocked In');
+        $message = 'Clocked In Successfully!';
+        if ($request->wantsJson()) {
+            return response()->json(['status' => 'success', 'message' => $message], 200);
+        }
+
+        return redirect()->back()->with([
+            'message' => $message,
+            'alert-type' => 'success',
+        ]);
     }
 
     public function timeOut(Request $request) {
@@ -95,104 +153,6 @@ class AttendanceController extends Controller
             ? response()->json(['status' => 'success', 'message' => $message], 200)
             : redirect()->back()->with(['message' => $message, 'alert-type' => 'success']);
     }
-
-
-        // public function timeIn(Request $request) {
-    //     $user = Auth::user();
-    //     if (!$user) {
-    //         return response()->json(['error' => 'No authenticated user!'], 400);
-    //     }
-
-    //     $now = now();
-    //     $login = today()->setTime(8, 0);
-    //     $earlyThreshold = $login->copy()->subMinutes(20);
-
-    //     // Check if the user has already clocked in today
-    //     $alreadyClockedIn = Attendance::where('user_id', $user->id)
-    //         ->whereDate('timeIn', today())
-    //         ->exists();
-
-        // if ($alreadyClockedIn) {
-        //     $message = 'You have already clocked in today!';
-        //     if ($request->wantsJson()) {
-        //         return response()->json(['status' => 'error', 'message' => $message]);
-        //     }
-
-        //     return redirect()->back()->with([
-        //         'message' => $message,
-        //         'alert-type' => 'error',
-        //     ]);
-        // }
-
-    //     // Determine status
-    //     if ($now >= $login) {
-    //         $status = 'Late';
-    //     } elseif ($now >= $earlyThreshold) {
-    //         $status = 'On-time';
-    //     } else {
-    //         $status = 'Early';
-    //     }
-
-    //     Attendance::create([
-    //         'user_id' => $user->id,
-    //         'timeIn' => $now,
-    //         'timeOut' => null,
-    //         'totalHours' => null,
-    //         'totalRate' => null,
-    //         'status' => $status,
-    //     ]);
-
-        // event(new MyEvent("Clocked in!"));
-        // (new LogsController)->storeAttendance($user->id,'Clocked In');
-        // $message = 'Clocked In Successfully!';
-        // if ($request->wantsJson()) {
-        //     return response()->json(['status' => 'success', 'message' => $message], 200);
-        // }
-
-        // return redirect()->back()->with([
-        //     'message' => $message,
-        //     'alert-type' => 'success',
-        // ]);
-    // }
-
-    // public function timeIn(Request $request)
-    // {
-    //     $user = Auth::user();
-    //     if (!$user) {
-    //         return response()->json(['error' => 'No authenticated user!'], 400);
-    //     }
-
-    //     $now = now();
-    //     $login = today()->setTime(8, 0);
-    //     $earlyThreshold = $login->copy()->subMinutes(20);
-
-    //     // Check if the user has already clocked in today
-    //     $alreadyClockedIn = Attendance::where('user_id', $user->id)
-    //         ->whereDate('timeIn', today())
-    //         ->exists();
-
-    //     if ($alreadyClockedIn) {
-    //         return response()->json(['status' => 'error', 'message' => 'You have already clocked in today!']);
-    //     }
-
-    //     $status = ($now >= $login) ? 'Late' : (($now >= $earlyThreshold) ? 'On-time' : 'Early');
-
-    //     $attendance = Attendance::create([
-    //         'user_id' => $user->id,
-    //         'timeIn' => $now,
-    //         'timeOut' => null,
-    //         'totalHours' => null,
-    //         'totalRate' => null,
-    //         'status' => $status,
-    //         'photo' => null, // Initially null, will be updated later
-    //     ]);
-
-    //     event(new MyEvent("Clocked in!"));
-    //     (new LogsController)->storeAttendance($user->id, 'Clocked In');
-
-    //     return $attendance; // Return the created attendance record
-    // }
-
 
     public function saveClockInPhoto(Request $request)
     {

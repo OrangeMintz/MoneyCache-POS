@@ -46,7 +46,7 @@ Route::middleware([InactivityLock::class])->group(function () {
                 Route::get('/timeIn', [AttendanceController::class, 'attendance'])->name("attendance.timeIn");
                 Route::get('/timeOut', [AttendanceController::class, 'timeOut'])->name("attendance.timeOut");
                 Route::post('/capture', [AttendanceController::class, 'saveClockInPhoto'])->name("attendance.capture");
-                Route::post('/clockIn', [AttendanceController::class, 'attendance'])->name("attendance.shit");
+                Route::post('/clockIn', [AttendanceController::class, 'attendance'])->name("attendance.clockIn");
             });
 
             // TRANSACTIONS

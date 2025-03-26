@@ -57,7 +57,7 @@
                     Submit Time In
                 </button>
 
-                <form id="time-in-form" action="{{ route('attendance.shit') }}" method="POST">
+                <form id="time-in-form" action="{{ route('attendance.clockIn') }}" method="POST">
                     @csrf
                     <input type="hidden" id="selfie-data" name="selfie_data">
                     <button type="submit"
