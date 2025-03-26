@@ -1,16 +1,3 @@
-<style>
-
-  .animated-mc {
-      animation: fadeInOut 0.6s infinite; /* 2s duration, infinite loop */
-  }
-
-  @keyframes fadeInOut {
-      0%, 100% { opacity: 0; }  /* Start & End with invisible */
-      50% { opacity: 1; }       /* Fully visible at 50% of animation */
-  }
-
-</style>
-
 <div id="loader" class="flex justify-center items-center h-screen">
 
   <div class="text-center">

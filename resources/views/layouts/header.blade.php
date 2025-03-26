@@ -45,6 +45,18 @@
                 -moz-appearance: textfield;
             }
         }
+
+        
+        /* pre-loader animation  */
+        .animated-mc {
+            animation: fadeInOut 0.6s infinite; /* 2s duration, infinite loop */
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }  /* Start & End with invisible */
+            50% { opacity: 1; }       /* Fully visible at 50% of animation */
+        }
+
     </style>
 
     {{-- datatable css --}}
