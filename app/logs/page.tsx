@@ -132,6 +132,30 @@ function Row({ row, handleSave, visibleColumns }) {
                       </div>
                     </div>
                   </div>}
+
+                {(row.type == 'attendance') &&
+                  <div className='flex gap-10'>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: 15 }} className=''>
+                      <div className={`w-12 h-12 rounded-full ${(row.attendance?.status == 'Early') ? 'bg-green-600' : (row.attendance?.status == 'On Time') ? 'bg-yellow-600' : 'bg-red-600'} flex justify-center items-center text-white font-bold mr-4`}>
+                        {row.attendance?.id ? row.attendance?.id : "?"}
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 'bold' }}>Status: {row.attendance?.status || 'Unknown'}</div>
+                        <div style={{ fontSize: '0.85rem', color: '#666' }}>Date: {formatDate(row?.created_at) || 'Unknown'}</div>
+                        <div style={{ fontSize: '0.8rem', display: 'flex', gap: 10, marginTop: 5 }}>
+                          <span className="text-[10px]">Attendance #{row.attendance?.id}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: 15 }}>
+                      <img src={row.attendance?.photo} alt="" />
+                    </div>
+                  </div>
+
+
+
+                }
               </Box>
             </div>
           </Collapse>
@@ -183,7 +207,8 @@ export default function CollapsibleTable() {
 
   const filteredRows = data.filter((row) =>
     row.cashier?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    new Date(row.created_at).toISOString().split("T")[0].includes(searchTerm.toLocaleLowerCase())
+    new Date(row.created_at).toISOString().split("T")[0].includes(searchTerm.toLocaleLowerCase()) ||
+    row.type?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const paginatedRows = filteredRows.slice(

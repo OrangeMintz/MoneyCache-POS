@@ -61,7 +61,7 @@ export default function CollapsibleTable() {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
   const webcamRef = useRef<Webcam>(null);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
-  const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [capturedImage, setCapturedImage] = useState<File | null>(null);
 
   const handleCapture = (e) => {
     e.preventDefault();
@@ -125,7 +125,12 @@ export default function CollapsibleTable() {
 
   const handleTimeIn = async (event: React.FormEvent) => {
     event.preventDefault()
-    const res = await timeIn()
+
+    if (!capturedImage) {
+      alert("Please conduct selfie attendance")
+    }
+
+    const res = await timeIn(capturedImage)
 
     new Toast({
       position: "bottom-right",
@@ -396,13 +401,14 @@ export default function CollapsibleTable() {
 
                                     <button
                                       type="button"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        handleTimeIn(e);
-                                        // Close the modal and reset the captured image
-                                        setIsCameraOpen(false);
-                                        setCapturedImage(null);
-                                      }}
+                                      // onClick={(e) => {
+                                      //   e.preventDefault();
+                                      //   handleTimeIn(e);
+                                      //   // Close the modal and reset the captured image
+                                      //   setIsCameraOpen(false);
+                                      //   setCapturedImage(null);
+                                      // }}
+                                      onClick={handleTimeIn}
                                       className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 flex items-center"
                                     >
                                       <LogIn className="w-4 h-4 mr-2" />
