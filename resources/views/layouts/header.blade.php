@@ -67,11 +67,11 @@
 
 </head>
 
-<!-- Spinner (Initially Visible) -->
-<div id="spinner" class="flex justify-center items-center h-screen">
-    @include('components.spinner')
-</div>
+
 <body class="dark:bg-gray-950">
+
+    @include('components.loader')
+
     @include('layouts.navigation')
 
     @include('components.modals.lock')
@@ -82,9 +82,5 @@
                 document.getElementById("lockscreen").classList.remove("hidden");
             }
         });
-
-        window.onload = function () {
-            document.getElementById('spinner').style.display = 'none';
-        };
 
     </script>

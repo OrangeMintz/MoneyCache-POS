@@ -24,6 +24,9 @@
 </head>
 
 <body class="font-sans antialiased dark:bg-gray-900 dark:text-white/50">
+
+    @include('components.loader')
+
     <div class="bg-gray-50 text-black/50 dark:bg-gray-800 dark:text-white/50">
         <div
             class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
