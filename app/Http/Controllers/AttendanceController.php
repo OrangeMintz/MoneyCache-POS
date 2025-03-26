@@ -10,6 +10,7 @@ use App\Events\MyEvent;
 use DateTime;
 use DateTimeZone;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Facades\Log;
 
 class AttendanceController extends Controller
 {
@@ -37,8 +38,75 @@ class AttendanceController extends Controller
         return $attendance;
     }
 
-    public function timeIn(Request $request) {
+    // public function timeIn(Request $request) {
+    //     $request->validate([
+    //         'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    //     ]);
 
+    //     $user = Auth::user();
+    //     if (!$user) {
+    //         return response()->json(['error' => 'No authenticated user!'], 400);
+    //     }
+
+    //     $now = now();
+    //     $login = today()->setTime(8, 0);
+    //     $earlyThreshold = $login->copy()->subMinutes(20);
+
+    //     // Check if the user has already clocked in today
+    //     $alreadyClockedIn = Attendance::where('user_id', $user->id)
+    //         ->whereDate('timeIn', today())
+    //         ->exists();
+
+    //     if ($alreadyClockedIn) {
+    //         $message = 'You have already clocked in today!';
+    //         if ($request->wantsJson()) {
+    //             return response()->json(['status' => 'error', 'message' => $message]);
+    //         }
+
+    //         return redirect()->back()->with([
+    //             'message' => $message,
+    //             'alert-type' => 'error',
+    //         ]);
+    //     }
+
+    //     // Determine status
+    //     if ($now >= $login) {
+    //         $status = 'Late';
+    //     } elseif ($now >= $earlyThreshold) {
+    //         $status = 'On-time';
+    //     } else {
+    //         $status = 'Early';
+    //     }
+
+    //      // Upload image to Cloudinary
+    //      $uploadedImage = Cloudinary::uploadApi()->upload($request->file('image')->getRealPath());
+    //      $uploadedImageUrl = $uploadedImage['secure_url'];
+
+    //     Attendance::create([
+    //         'user_id' => $user->id,
+    //         'timeIn' => $now,
+    //         'timeOut' => null,
+    //         'totalHours' => null,
+    //         'totalRate' => null,
+    //         'status' => $status,
+    //         'photo' => $uploadedImageUrl,
+    //     ]);
+
+    //     event(new MyEvent("Clocked in!"));
+    //     (new LogsController)->storeAttendance($user->id,'Clocked In');
+    //     $message = 'Clocked In Successfully!';
+    //     if ($request->wantsJson()) {
+    //         return response()->json(['status' => 'success', 'message' => $message], 200);
+    //     }
+
+    //     return redirect()->back()->with([
+    //         'message' => $message,
+    //         'alert-type' => 'success',
+    //     ]);
+    // }
+
+    // MODIFIED
+    public function timeIn(Request $request) {
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -60,7 +128,7 @@ class AttendanceController extends Controller
         if ($alreadyClockedIn) {
             $message = 'You have already clocked in today!';
             if ($request->wantsJson()) {
-                return response()->json(['status' => 'error', 'message' => $message]);
+                return response()->json(['status' => 'error', 'message' => $message], 400);
             }
 
             return redirect()->back()->with([
@@ -78,11 +146,23 @@ class AttendanceController extends Controller
             $status = 'Early';
         }
 
-         // Upload image to Cloudinary
-         $uploadedImage = Cloudinary::uploadApi()->upload($request->file('image')->getRealPath());
-         $uploadedImageUrl = $uploadedImage['secure_url'];
+        // Upload image to Cloudinary
+        if ($request->hasFile('image')) {
+            $uploadedImage = Cloudinary::uploadApi()->upload($request->file('image')->getRealPath());
+            $uploadedImageUrl = $uploadedImage['secure_url'];
+        } else {
+            $message = 'Image upload failed!';
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => $message]);
+            }
 
-        Attendance::create([
+            return redirect()->back()->with([
+                'message' => $message,
+                'alert-type' => 'error',
+            ]);
+        }
+
+        $attendance = Attendance::create([
             'user_id' => $user->id,
             'timeIn' => $now,
             'timeOut' => null,
@@ -93,12 +173,11 @@ class AttendanceController extends Controller
         ]);
 
         event(new MyEvent("Clocked in!"));
-        (new LogsController)->storeAttendance($user->id,'Clocked In');
+        (new LogsController)->storeAttendance($user->id, 'Clocked In' ,$attendance->id);
         $message = 'Clocked In Successfully!';
         if ($request->wantsJson()) {
             return response()->json(['status' => 'success', 'message' => $message], 200);
         }
-
         return redirect()->back()->with([
             'message' => $message,
             'alert-type' => 'success',
@@ -160,16 +239,14 @@ class AttendanceController extends Controller
             : redirect()->back()->with(['message' => $message, 'alert-type' => 'success']);
     }
 
-    // public function test(Request $request){
-    //     $request->validate([
-    //         'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-    //     ]);
-    
-    //     // Upload image to Cloudinary
-    //     $uploadedImage = Cloudinary::uploadApi()->upload($request->file('image')->getRealPath());
-    //     $uploadedImageUrl = $uploadedImage['secure_url'];
-    //     return response()->json(['url' => $uploadedImageUrl]);
-    // }
+    public function test(Request $request){
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-
+        // Upload image to Cloudinary
+        $uploadedImage = Cloudinary::uploadApi()->upload($request->file('image')->getRealPath());
+        $uploadedImageUrl = $uploadedImage['secure_url'];
+        return response()->json(['url' => $uploadedImageUrl]);
+    }
 }

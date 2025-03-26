@@ -18,6 +18,7 @@ class Logs extends Model
         'user_id',
         'transaction_id',
         'activity_user_id',
+        'attendance_id',
         'type',
         'category',
         'message',
@@ -46,5 +47,13 @@ class Logs extends Model
     public function activityUser()
     {
         return $this->belongsTo(User::class, 'activity_user_id');
+    }
+
+    /**
+     * Get the attendance related to this log (if any).
+     */
+    public function attendance()
+    {
+        return $this->belongsTo(Attendance::class, 'attendance_id');
     }
 }

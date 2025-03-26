@@ -21,7 +21,7 @@ class DashboardController extends Controller
         $grossTotal = $this->getTotalGrossSales();
         $netTotal = $this->getTotalNetSales();
         $grandTotal = $this->getGrandTotal();
-        
+
         return view('dashboard', compact('logs', 'users', 'transactions', 'grossTotal', 'netTotal','grandTotal'));
     }
 
@@ -152,12 +152,11 @@ class DashboardController extends Controller
         ]);
     }
 
-
     public function fetchLogs(Request $request)
     {
         $user = Auth::user();
 
-        $logsQuery = Logs::with(['user', 'transaction', 'activityUser'])
+        $logsQuery = Logs::with(['user', 'transaction', 'activityUser', 'attendance'])
             ->latest();
 
         if ($user->role === 'cashier') {
@@ -240,12 +239,12 @@ class DashboardController extends Controller
                 $gross = $user->role == 'admin' ? Transactions::sum($particular) : Transactions::where('cashier_id', $user->id)->sum($particular);
                 $compute = isset($fees[$particular]) ? 1 - ($fees[$particular] / 100) : 1;
                 $net = $user->role == 'admin' ? Transactions::sum(DB::raw("`$particular` * $compute")) : Transactions::where('cashier_id', $user->id)->sum(DB::raw("`$particular` * $compute"));
-            
+
                 // Accumulate totals instead of overwriting
                 $grossTotal += round($gross, 2);
                 $netTotal += round($net, 2);
             }
-            
+
         }
 
         return [
@@ -261,12 +260,12 @@ class DashboardController extends Controller
         $grossToday = 0;
         $netToday = 0;
         $totalByParticular = [];
-    
+
         foreach ($particulars as $particular) {
             $gross = Transactions::whereDate('created_at', $date)->sum($particular);
             $compute = isset($fees[$particular]) ? 1 - ($fees[$particular] / 100) : 1;
             $net = Transactions::whereDate('created_at', $date)->sum(DB::raw("`$particular` * $compute"));
-    
+
             $totalByParticular[$particular] = [
                 'gross' => round($gross, 2),
                 'net' => round($net, 2)
@@ -277,7 +276,7 @@ class DashboardController extends Controller
             $grossToday += $total['gross'];
             $netToday += $total['net'];
         }
-    
+
         return [
             "date" => $date,
             "gross" => $grossToday,
@@ -302,7 +301,7 @@ class DashboardController extends Controller
             }]);
         }
          ])->get():
-        
+
         // Logs for cashier user
         Logs::where('user_id', $user->id)->with(['user',
          'activityUser' => function($query) {

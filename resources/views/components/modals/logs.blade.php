@@ -165,7 +165,7 @@
                         ${d.type.toLowerCase() === 'attendance' ? `
                         <!-- User Image Column -->
                         <div class="flex justify-start items-center">
-                            <img src="${d.user.profilePicture ? d.user.profilePicture : userPlaceholderImage}" alt="User Profile" class="w-3/5 rounded-full border-2 border-gray-300 shadow-sm">
+                            <img src="${d.attendance.photo ? d.attendance.photo : userPlaceholderImage}" alt="Attendance Photo" class="w-24 h-24 object-cover rounded-full border-2 border-gray-300 shadow-sm">
                         </div>` : ''}
                         <div class="text-sm space-y-1 text-gray-500 dark:text-gray-400 leading-loose hidden sm:block">
                             ${getFieldLabels(d)}
