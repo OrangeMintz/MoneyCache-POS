@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('timeOut')->nullable();
             $table->decimal('totalHours', 5, 2)->default(0)->nullable();
             $table->decimal('totalRate', 10, 2)->default(0)->nullable();
-            $table->string('photo')->nullable(); // Add this field for image path
+            $table->string('photo')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
         });
