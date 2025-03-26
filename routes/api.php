@@ -42,8 +42,7 @@ Route::middleware(['auth:api'])->group(function () {
 
         Route::prefix('attendance')->group(function () {
             Route::get('/', [AttendanceController::class, 'retrieve']);
-            Route::get('/timein', [AttendanceController::class, 'timeIn']);
-            Route::post('/timein', [AttendanceController::class, 'test']);
+            Route::post('/timein', [AttendanceController::class, 'timeIn']);
             Route::get('/timeout', [AttendanceController::class, 'timeOut']);
         });
     });

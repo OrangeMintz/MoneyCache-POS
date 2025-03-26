@@ -37,7 +37,12 @@ class AttendanceController extends Controller
         return $attendance;
     }
 
-        public function timeIn(Request $request) {
+    public function timeIn(Request $request) {
+
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
         $user = Auth::user();
         if (!$user) {
             return response()->json(['error' => 'No authenticated user!'], 400);
@@ -73,6 +78,10 @@ class AttendanceController extends Controller
             $status = 'Early';
         }
 
+         // Upload image to Cloudinary
+         $uploadedImage = Cloudinary::uploadApi()->upload($request->file('image')->getRealPath());
+         $uploadedImageUrl = $uploadedImage['secure_url'];
+
         Attendance::create([
             'user_id' => $user->id,
             'timeIn' => $now,
@@ -80,6 +89,7 @@ class AttendanceController extends Controller
             'totalHours' => null,
             'totalRate' => null,
             'status' => $status,
+            'photo' => $uploadedImageUrl,
         ]);
 
         event(new MyEvent("Clocked in!"));
@@ -150,16 +160,16 @@ class AttendanceController extends Controller
             : redirect()->back()->with(['message' => $message, 'alert-type' => 'success']);
     }
 
-    public function test(Request $request){
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+    // public function test(Request $request){
+    //     $request->validate([
+    //         'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    //     ]);
     
-        // Upload image to Cloudinary
-        $uploadedImage = Cloudinary::uploadApi()->upload($request->file('image')->getRealPath());
-        $uploadedImageUrl = $uploadedImage['secure_url'];
-        return response()->json(['url' => $uploadedImageUrl]);
-    }
+    //     // Upload image to Cloudinary
+    //     $uploadedImage = Cloudinary::uploadApi()->upload($request->file('image')->getRealPath());
+    //     $uploadedImageUrl = $uploadedImage['secure_url'];
+    //     return response()->json(['url' => $uploadedImageUrl]);
+    // }
 
 
 }
