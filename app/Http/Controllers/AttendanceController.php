@@ -9,11 +9,7 @@ use App\Models\Attendance;
 use App\Events\MyEvent;
 use DateTime;
 use DateTimeZone;
-
-//
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Carbon\Carbon;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class AttendanceController extends Controller
 {
@@ -154,91 +150,16 @@ class AttendanceController extends Controller
             : redirect()->back()->with(['message' => $message, 'alert-type' => 'success']);
     }
 
-    public function saveClockInPhoto(Request $request)
-    {
+    public function test(Request $request){
         $request->validate([
-            'selfie_data' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
-        $imageData = str_replace(['data:image/png;base64,', ' '], ['', '+'], $request->input('selfie_data'));
-        $image = base64_decode($imageData);
-
-        if ($image === false) {
-            return response()->json(['error' => 'Invalid image data'], 400);
-        }
-
-        $uniqueName = now()->format('Y-m-d') . '-' . Str::random(10) . '.png';
-        $path = "clocksphoto/{$uniqueName}";
-
-        Storage::disk('public')->put($path, $image);
-
-        return $path; // Return path so it can be used later
+    
+        // Upload image to Cloudinary
+        $uploadedImage = Cloudinary::uploadApi()->upload($request->file('image')->getRealPath());
+        $uploadedImageUrl = $uploadedImage['secure_url'];
+        return response()->json(['url' => $uploadedImageUrl]);
     }
 
-    public function attendance(Request $request)
-    {
-        $user = Auth::user();
-        if (!$user) {
-            return response()->json(['error' => 'No authenticated user!'], 400);
-        }
 
-        $now = now();
-        $login = today()->setTime(8, 0);
-        $earlyThreshold = $login->copy()->subMinutes(20);
-
-        // Check if the user has already clocked in today
-        $alreadyClockedIn = Attendance::where('user_id', $user->id)
-            ->whereDate('timeIn', today())
-            ->exists();
-
-                if ($alreadyClockedIn) {
-            $message = 'You have already clocked in today!';
-            if ($request->wantsJson()) {
-                return response()->json(['status' => 'error', 'message' => $message]);
-            }
-
-            return redirect()->back()->with([
-                'message' => $message,
-                'alert-type' => 'error',
-            ]);
-        }
-
-        $status = ($now >= $login) ? 'Late' : (($now >= $earlyThreshold) ? 'On-time' : 'Early');
-
-        // Save the clock-in photo and get the path
-        $photoPath = $this->saveClockInPhoto($request);
-
-        // Create the attendance record
-        $attendance = Attendance::create([
-            'user_id' => $user->id,
-            'timeIn' => $now,
-            'timeOut' => null,
-            'totalHours' => null,
-            'totalRate' => null,
-            'status' => $status,
-            'photo' => $photoPath,
-        ]);
-
-        // event(new MyEvent("Clocked in!"));
-        // (new LogsController)->storeAttendance($user->id, 'Clocked In');
-
-        event(new MyEvent("Clocked in!"));
-        (new LogsController)->storeAttendance($user->id,'Clocked In');
-        $message = 'Clocked In Successfully!';
-        if ($request->wantsJson()) {
-            return response()->json(['status' => 'success', 'message' => $message], 200);
-        }
-
-        return redirect()->back()->with([
-            'message' => $message,
-            'alert-type' => 'success',
-        ]);
-
-        // return response()->json([
-        //     'status' => 'success',
-        //     'message' => 'Clocked in successfully with photo!',
-        //     'photo_url' => asset('storage/' . $photoPath),
-        //     'attendance' => $attendance,
-        // ]);
-    }
 }

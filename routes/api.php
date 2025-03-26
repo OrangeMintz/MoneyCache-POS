@@ -36,9 +36,14 @@ Route::middleware(['auth:api'])->group(function () {
             Route::get('/test', [LogsController::class, 'test']);
         });
 
+        Route::prefix('dashboard')->group(function () {
+            Route::post('/', [DashboardController::class, 'dashboardApi']);
+        });
+
         Route::prefix('attendance')->group(function () {
             Route::get('/', [AttendanceController::class, 'retrieve']);
             Route::get('/timein', [AttendanceController::class, 'timeIn']);
+            Route::post('/timein', [AttendanceController::class, 'test']);
             Route::get('/timeout', [AttendanceController::class, 'timeOut']);
         });
     });

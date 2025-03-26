@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 
 class DashboardController extends Controller
 {
@@ -20,7 +21,7 @@ class DashboardController extends Controller
         $grossTotal = $this->getTotalGrossSales();
         $netTotal = $this->getTotalNetSales();
         $grandTotal = $this->getGrandTotal();
-
+        
         return view('dashboard', compact('logs', 'users', 'transactions', 'grossTotal', 'netTotal','grandTotal'));
     }
 
@@ -166,5 +167,154 @@ class DashboardController extends Controller
         $logs = $logsQuery->get();
 
         return response()->json(['data' => $logs]);
+    }
+
+    public function dashboardApi(Request $request){
+
+        $request->validate([
+            'date' => 'required|date'
+        ]);
+
+        $transactions = $this->getTransactionsApi();
+        $users = $this->getUsersApi();
+        $totals = $this->getTotalsApi();
+        $logs = $this->getLogsApi();
+        $totalsToday = $this->getTotalsTodayApi($request->date);
+
+        return response()->json([
+                "transactions" => $transactions,
+                "users" => $users,
+                "totals" => $totals,
+                "logs" => $logs,
+                "totals_today" => $totalsToday,
+            ]);
+    }
+
+    public function getTransactionsApi(){
+        $transactions = '';
+        $user = Auth::user();
+        $userId = $user->id;
+
+        if($user->role == 'admin'){
+            $transactions = Transactions::with(['cashier' => function ($query) {
+                $query->withTrashed(); // gets the cashier even if it is soft deleted
+            }])->get();
+        }else{
+            $transactions = Transactions::with(['cashier' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->where('cashier_id', $userId)
+            ->get();
+        }
+
+        return $transactions;
+    }
+
+    public function getUsersApi(){
+
+        $user = Auth::user();
+        $users = User::all(); // Fetch all active users
+        $deletedUsers = User::onlyTrashed()->get(); // Fetch only soft-deleted users
+        return [
+            "active_users" => $user->role == 'admin' ? $users : null,
+            "deleted_users" => $user->role == 'admin' ? $deletedUsers : null
+        ];
+    }
+
+    public function getTotalsApi(){
+        $user = Auth::user();
+        $particulars = Config::get('transactions.valid_columns'); // Get all transaction columns
+        $fees = Config::get('transactions.fees');
+        $transactions = $user->role == 'admin' ? Transactions::with('cashier')->get() : Transactions::where('cashier_id', $user->id)->with('cashier')->get();
+
+        $grossTotal = 0;
+        $netTotal = 0;
+
+        foreach ($particulars as $particular) {
+
+            if (
+                $particular !== 'sub_total_trade' &&
+                $particular !== 'sub_total_non_trade' &&
+                $particular !== 'grand_total'
+            ) {
+                $gross = $user->role == 'admin' ? Transactions::sum($particular) : Transactions::where('cashier_id', $user->id)->sum($particular);
+                $compute = isset($fees[$particular]) ? 1 - ($fees[$particular] / 100) : 1;
+                $net = $user->role == 'admin' ? Transactions::sum(DB::raw("`$particular` * $compute")) : Transactions::where('cashier_id', $user->id)->sum(DB::raw("`$particular` * $compute"));
+            
+                // Accumulate totals instead of overwriting
+                $grossTotal += round($gross, 2);
+                $netTotal += round($net, 2);
+            }
+            
+        }
+
+        return [
+            "gross" => round($grossTotal, 2),
+            "net" => round($netTotal, 2),
+        ];
+    }
+
+    public function getTotalsTodayApi($date){
+        // $date = $request->input('date');
+        $particulars = Config::get('transactions.valid_columns');
+        $fees = Config::get('transactions.fees');
+        $grossToday = 0;
+        $netToday = 0;
+        $totalByParticular = [];
+    
+        foreach ($particulars as $particular) {
+            $gross = Transactions::whereDate('created_at', $date)->sum($particular);
+            $compute = isset($fees[$particular]) ? 1 - ($fees[$particular] / 100) : 1;
+            $net = Transactions::whereDate('created_at', $date)->sum(DB::raw("`$particular` * $compute"));
+    
+            $totalByParticular[$particular] = [
+                'gross' => round($gross, 2),
+                'net' => round($net, 2)
+            ];
+        }
+
+        foreach ($totalByParticular as $total) {
+            $grossToday += $total['gross'];
+            $netToday += $total['net'];
+        }
+    
+        return [
+            "date" => $date,
+            "gross" => $grossToday,
+            "net" => $netToday,
+        ];
+    }
+
+    public function getLogsApi(){
+        $user = Auth::user();
+
+        // Logs for admin user
+        $logs = $user->role == 'admin' ? Logs::with([
+        'user' => function($query) {
+            $query->withTrashed();
+        },
+         'activityUser' => function($query) {
+            $query->withTrashed();
+         },
+         'transaction' => function($query) {
+            $query->withTrashed()->with(['cashier' => function ($query) {
+                $query->withTrashed(); // Include soft-deleted cashiers
+            }]);
+        }
+         ])->get():
+        
+        // Logs for cashier user
+        Logs::where('user_id', $user->id)->with(['user',
+         'activityUser' => function($query) {
+            $query->withTrashed();
+         },
+         'transaction' => function($query) {
+            $query->withTrashed()->with(['cashier' => function ($query) {
+                $query->withTrashed(); // Include soft-deleted cashiers
+            }]);
+        }
+         ])->get();
+
+        return $logs;
     }
 }
