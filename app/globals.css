@@ -59,6 +59,8 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
   }
 }
 
@@ -398,6 +400,8 @@ table.dataTable tbody td.dt-body-nowrap {
   --dt-column-ordering-alpha: 0.019;
   --dt-row-selected-stripe-alpha: 0.923;
   --dt-row-selected-column-ordering-alpha: 0.919;
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
 }
 
 /*

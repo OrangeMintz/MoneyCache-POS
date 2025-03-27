@@ -1,5 +1,6 @@
 'use client';
 
+import Butt from '@/components/ui/toggle-butt';
 import { useAppContext } from '@/context/AppContext';
 import axios from 'axios';
 import { UserCircle } from 'lucide-react';
@@ -74,7 +75,7 @@ export default function Navbar() {
     return (
         <>
             <div
-                className={`fixed inset-0 bg-black/30 backdrop-blur-sm transition-opacity duration-300 ease-in-out z-40 ${sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                className={`fixed inset-0 z-50 bg-black/30 backdrop-blur-sm transition-opacity duration-300 ease-in-out z-40 ${sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
                     }`}
                 onClick={() => setSidebarOpen(false)}
             ></div>
@@ -182,7 +183,7 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {user && (<nav className="dark:bg-gray-800 bg-gradient-to-r py-3 from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 text-black border-b  shadow-md sticky top-0 z-50 top-0 w-full">
+            {user && (<nav className="dark:bg-gray-800 bg-gradient-to-r py-3 from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 text-black border-b  shadow-md sticky top-0 z-20 w-full">
                 <div className="mx-auto sm:px-6 lg:px-1 max-w-7xl">
                     <div className="flex justify-between items-center h-16">
                         {/* Logo and sidebar toggle */}
@@ -289,11 +290,15 @@ export default function Navbar() {
                                         </button>
                                     </Link> : ""
                                 ) : ""}
+                                 <button className='bg-blue-600'></button>
                             </div>
                         </div>
 
-                        {/* Enhanced user profile section */}
-                        <div className="flex items-center">
+                        <hr className="border-gray-200  dark:border-gray-700" />
+                                    <div className="py-1 ml-2">
+                                       <Butt />
+                                    </div>
+                        <div className="flex items-center ">
                             <div className="relative" ref={dropdownRef}>
                                 {/* Avatar button with improved animation */}
                                 <div className="flex items-center justify-center relative">
@@ -328,6 +333,18 @@ export default function Navbar() {
                                     </div>
                                     <hr className="border-gray-200 dark:border-gray-700" />
                                     <div className="py-1">
+                                        <Link href="/profile">
+                                            <button
+                                                type='submit'
+                                                className="block w-full text-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-white transition-colors duration-200 hover:bg-green-600 dark:hover:bg-blue-700"
+                                            >
+                                                Profile
+                                            </button>
+                                        </Link>
+                                    </div>
+                                   
+                                    <hr className="border-gray-200 dark:border-gray-700" />
+                                    <div className="py-1">
                                         <Link href="/attendance">
                                             <button
                                                 type='submit'
@@ -337,6 +354,7 @@ export default function Navbar() {
                                             </button>
                                         </Link>
                                     </div>
+                                    
                                     {/* Time out Section with improved design */}
                                     <hr className="border-gray-200 dark:border-gray-700" />
 

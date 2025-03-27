@@ -1,7 +1,7 @@
 'use client';
 
 import { fetchAttendance, timeIn, timeOut } from '@/utils/fetch';
-import { formatDate, formatTime, formatNumber } from '@/utils/formatter';
+import { formatDate, formatNumber, formatTime } from '@/utils/formatter';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';

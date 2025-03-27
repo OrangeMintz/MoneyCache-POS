@@ -16,10 +16,10 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { ChevronDown } from "lucide-react";
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { formatNumber, formatDate, formatTime } from "../../utils/formatter";
+import { formatDate, formatNumber, formatTime } from "../../utils/formatter";
 import Preloader from '../comps/preloader';
-
 // Row Component
 function Row({ row, handleSave, visibleColumns }) {
   const [open, setOpen] = useState(false);
@@ -82,7 +82,6 @@ function Row({ row, handleSave, visibleColumns }) {
                 </div>
               </Box>
 
-              {/* Sub Total Non Trade */}
               <Box style={{ paddingBottom: 10, paddingTop: 0 }} className="col-span-1">
                 <Typography variant="h6">
                   {(row.type) == 'user' ? (
@@ -134,24 +133,58 @@ function Row({ row, handleSave, visibleColumns }) {
                   </div>}
 
                 {(row.type == 'attendance') &&
-                  <div className='flex gap-10'>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: 15 }} className=''>
-                      <div className={`w-12 h-12 rounded-full ${(row.attendance?.status == 'Early') ? 'bg-green-600' : (row.attendance?.status == 'On Time') ? 'bg-yellow-600' : 'bg-red-600'} flex justify-center items-center text-white font-bold mr-4`}>
-                        {row.attendance?.id ? row.attendance?.id : "?"}
-                      </div>
-                      <div>
-                        <div style={{ fontWeight: 'bold' }}>Status: {row.attendance?.status || 'Unknown'}</div>
-                        <div style={{ fontSize: '0.85rem', color: '#666' }}>Date: {formatDate(row?.created_at) || 'Unknown'}</div>
-                        <div style={{ fontSize: '0.8rem', display: 'flex', gap: 10, marginTop: 5 }}>
-                          <span className="text-[10px]">Attendance #{row.attendance?.id}</span>
-                        </div>
-                      </div>
-                    </div>
+           <div className="flex gap-10">
+           <div
+             style={{ display: "flex", alignItems: "center", marginBottom: 15 }}
+             className="relative"
+           >
+             <div
+               className={`w-12 h-12 rounded-full ${
+                 row.attendance?.status == "Early"
+                   ? "bg-green-600"
+                   : row.attendance?.status == "On Time"
+                   ? "bg-yellow-600"
+                   : "bg-red-600"
+               } flex justify-center items-center text-white font-bold mr-4`}
+             >
+               {row.attendance?.id ? row.attendance?.id : "?"}
+             </div>
+             <div>
+               <div style={{ fontWeight: "bold" }}>
+                 Status: {row.attendance?.status || "Unknown"}
+               </div>
+               <div style={{ fontSize: "0.85rem", color: "#666" }}>
+                 Date: {formatDate(row?.created_at) || "Unknown"}
+               </div>
+               <div
+                 style={{ fontSize: "0.8rem", display: "flex", gap: 10, marginTop: 5 }}
+               >
+                 <span className="text-[10px]">Attendance #{row.attendance?.id}</span>
+               </div>
+         
+               {row.attendance?.photo && (
+                 <div className="relative inline-block group">
+                   <span className="text-[10px] text-blue-600 hover:text-blue-800 cursor-pointer transition-colors duration-200">
+                     View Details
+                   </span>
+                   {/* Image Tooltip - Ensure this is positioned correctly */}
+                   <div className="absolute z-5 left-1/2 -translate-y-1/2  lg:mb-8 w-[350px] hidden group-hover:flex justify-end">
+                     <div className="bg-white p-1 rounded-md shadow-lg border border-gray-200">
+                       <Image
+                         src={row.attendance.photo}
+                         alt="Attendance Photo"
+                         width={200}
+                         height={200}
+                         className="object-cover rounded-md"
+                       />
+                     </div>
+                   </div>
+                 </div>
+               )}
+             </div>
+           </div>
+         </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: 15 }}>
-                      <img src={row.attendance?.photo} alt="" />
-                    </div>
-                  </div>
 
 
 

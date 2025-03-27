@@ -1,8 +1,9 @@
 import Navbar from '@/app/comps/header';
-import type { AppProps } from "next/app";
+import { ThemeProvider } from '@/components/theme-provider';
+import { AppProvider } from '@/context/AppContext';
+import type { AppProps } from 'next/app';
 import { useRouter } from "next/router";
 import "../styles/globals.css";
-import { AppProvider } from '@/context/AppContext';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -13,16 +14,21 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+    
       <AppProvider>
         {showHeader && (
           <header>
             <Navbar />
           </header>
         )}
+          <ThemeProvider>
         <main>
           <Component {...pageProps} />
         </main>
+      </ThemeProvider>
+
       </AppProvider>
+
     </>
   );
 }

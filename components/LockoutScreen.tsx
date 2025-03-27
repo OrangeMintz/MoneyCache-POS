@@ -13,7 +13,6 @@ export default function LockoutScreen({ onPinSubmit }: LockoutScreenProps) {
   
   const handleUnlock = (): void => {
     if (pin === DEFAULT_PIN) {
-      // Reset the activity timer when unlocking
       updateLastActivity();
       onPinSubmit(pin);
     } else {
@@ -23,13 +22,13 @@ export default function LockoutScreen({ onPinSubmit }: LockoutScreenProps) {
   };
   
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-5">
       <div className="p-8 bg-white rounded-lg shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold text-center mb-6">System Locked</h1>
         
         <div className="mb-6">
           <Image
-            src="/images/imeds.gif" // Place your image in the public folder
+            src="/images/imeds.gif"
             alt="System Locked"
             width={400}
             height={300}
