@@ -21,9 +21,24 @@
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
+    
+    <style>
+        /* pre-loader animation  */
+        .animated-mc {
+            animation: fadeInOut 0.6s infinite; /* 2s duration, infinite loop */
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }  /* Start & End with invisible */
+            50% { opacity: 1; }       /* Fully visible at 50% of animation */
+        }
+    </style>
 </head>
 
 <body class="font-sans antialiased dark:bg-gray-900 dark:text-white/50">
+
+    @include('components.loader')
+
     <div class="bg-gray-50 text-black/50 dark:bg-gray-800 dark:text-white/50">
         <div
             class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">

@@ -5,16 +5,21 @@ use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LogsController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\TransactionsGrossTotalController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CsvController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\LockController;
 use App\Http\Middleware\CheckRole;
 
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/user', [AuthController::class, 'getUser']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/unlock', [LockController::class, 'unlock']);
+    Route::put('/password', [PasswordController::class, 'update']);
 
     // Shared routes for admin and cashier
     Route::middleware([CheckRole::class . ":admin,cashier"])->group(function () {
@@ -35,9 +40,13 @@ Route::middleware(['auth:api'])->group(function () {
             Route::get('/test', [LogsController::class, 'test']);
         });
 
+        Route::prefix('dashboard')->group(function () {
+            Route::post('/', [DashboardController::class, 'dashboardApi']);
+        });
+
         Route::prefix('attendance')->group(function () {
             Route::get('/', [AttendanceController::class, 'retrieve']);
-            Route::get('/timein', [AttendanceController::class, 'timeIn']);
+            Route::post('/timein', [AttendanceController::class, 'timeIn']);
             Route::get('/timeout', [AttendanceController::class, 'timeOut']);
         });
     });

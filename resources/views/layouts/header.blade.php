@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ ucfirst(request()->segment(1) ?? 'Home') }}</title>
     {{-- favicon --}}
     <link rel="icon" type="image/png" href="{{ asset('img/LogoIcon.png') }}">
@@ -44,6 +45,18 @@
                 -moz-appearance: textfield;
             }
         }
+
+        
+        /* pre-loader animation  */
+        .animated-mc {
+            animation: fadeInOut 0.6s infinite; /* 2s duration, infinite loop */
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }  /* Start & End with invisible */
+            50% { opacity: 1; }       /* Fully visible at 50% of animation */
+        }
+
     </style>
 
     {{-- datatable css --}}
@@ -66,5 +79,20 @@
 
 </head>
 
+
 <body class="dark:bg-gray-950">
+
+    @include('components.loader')
+
     @include('layouts.navigation')
+
+    @include('components.modals.lock')
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (sessionStorage.getItem("locked") === "true") {
+                document.getElementById("lockscreen").classList.remove("hidden");
+            }
+        });
+
+    </script>

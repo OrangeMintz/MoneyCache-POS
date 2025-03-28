@@ -21,6 +21,7 @@ class LogsController extends Controller
         'user' => function($query) {
             $query->withTrashed();
         },
+        'attendance',
          'activityUser' => function($query) {
             $query->withTrashed();
          },
@@ -30,7 +31,7 @@ class LogsController extends Controller
             }]);
         }
          ])->get():
-         
+
          Logs::where('user_id', $user->id)->with(['user',
          'activityUser' => function($query) {
             $query->withTrashed();
@@ -85,7 +86,7 @@ class LogsController extends Controller
         ]);
     }
 
-    public function storeAttendance($userId, $category)
+    public function storeAttendance($userId, $category, $attendanceId)
     {
         $user = User::find($userId);
         // $timezone = new DateTimeZone(env('APP_TIMEZONE'));
@@ -131,10 +132,11 @@ class LogsController extends Controller
             }
         }
 
-        Logs::create([
+        $log = Logs::create([
             'user_id' => $userId,
             'transaction_id' =>  null,
             'activity_user_id' => null,
+            'attendance_id' => $attendanceId,
             'type' => 'attendance',
             'category' => $category,
             'message' => ($category == 'Clocked In') ? "logged in" : "logged out",
