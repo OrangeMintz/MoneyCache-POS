@@ -1,10 +1,10 @@
 'use client';
 import Preloader from "@/app/comps/preloader";
 import { useAppContext } from "@/context/AppContext";
+import { resetPassword } from "@/utils/fetch";
 import Image from 'next/image';
 import { useEffect, useRef, useState } from "react";
 import Toast from 'typescript-toastify';
-import { resetPassword } from "@/utils/fetch";
 
 export default function CashierForm() {
     const { user, globalFunction } = useAppContext()
@@ -23,9 +23,11 @@ export default function CashierForm() {
     const [profileData, setProfileData] = useState({
         firstName: 'Ramon Paulo',
         lastName: 'Caumban',
-        avatar: '/images/r.JPG'
+        avatar: '/images/h.png'
     });
+    const [tempProfileData, setTempProfileData] = useState({ ...profileData });
     const [avatarPreview, setAvatarPreview] = useState(profileData.avatar);
+    const [tempAvatarPreview, setTempAvatarPreview] = useState(profileData.avatar);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Delete account modal state
@@ -66,22 +68,31 @@ export default function CashierForm() {
             const reader = new FileReader();
             reader.onloadend = () => {
                 const imageUrl = reader.result as string;
-                setAvatarPreview(imageUrl);
-                // Update the profile data with the new image
-                setProfileData(prev => ({
-                    ...prev,
-                    avatar: imageUrl
-                }));
+                setTempAvatarPreview(imageUrl);
             };
             reader.readAsDataURL(file);
         }
     };
 
+    // Open Edit Modal and reset temporary data
+    const openEditModal = () => {
+        setTempProfileData({ ...profileData });
+        setTempAvatarPreview(profileData.avatar);
+        setShowEditModal(true);
+    };
+
     // Handle profile edit form submission
     const handleProfileSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        // Update the actual profile data with the temporary data
+        setProfileData({
+            firstName: tempProfileData.firstName,
+            lastName: tempProfileData.lastName,
+            avatar: tempAvatarPreview
+        });
+        
         // Here you would typically send the updated profile data to your API
-        console.log('Profile updated:', profileData);
+        console.log('Profile updated:', tempProfileData);
         setShowEditModal(false);
         new Toast({
             position: "bottom-right",
@@ -195,7 +206,7 @@ export default function CashierForm() {
                                     onClick={() => fileInputRef.current?.click()}
                                 >
                                     <Image
-                                        src={avatarPreview}
+                                        src={tempAvatarPreview}
                                         alt="Profile"
                                         width={128}
                                         height={128}
@@ -224,8 +235,8 @@ export default function CashierForm() {
                                 <input
                                     type="text"
                                     className="w-full px-3 py-2 border rounded-md"
-                                    value={profileData.firstName}
-                                    onChange={(e) => setProfileData({ ...profileData, firstName: e.target.value })}
+                                    value={tempProfileData.firstName}
+                                    onChange={(e) => setTempProfileData({ ...tempProfileData, firstName: e.target.value })}
                                     required
                                 />
                             </div>
@@ -236,8 +247,8 @@ export default function CashierForm() {
                                 <input
                                     type="text"
                                     className="w-full px-3 py-2 border rounded-md"
-                                    value={profileData.lastName}
-                                    onChange={(e) => setProfileData({ ...profileData, lastName: e.target.value })}
+                                    value={tempProfileData.lastName}
+                                    onChange={(e) => setTempProfileData({ ...tempProfileData, lastName: e.target.value })}
                                     required
                                 />
                             </div>
@@ -349,7 +360,7 @@ export default function CashierForm() {
                                                 </div>
                                                 <button
                                                     className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-                                                    onClick={() => setShowEditModal(true)}
+                                                    onClick={openEditModal}
                                                 >
                                                     Edit
                                                 </button>
