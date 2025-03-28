@@ -31,7 +31,7 @@ class LogsController extends Controller
             }]);
         }
          ])->get():
-         
+
          Logs::where('user_id', $user->id)->with(['user',
          'activityUser' => function($query) {
             $query->withTrashed();
@@ -142,7 +142,7 @@ class LogsController extends Controller
             'message' => ($category == 'Clocked In') ? "logged in" : "logged out",
             'total_hours' => $totalHours,
         ]);
-        
+
         return response()->json([
                 'status' => 1,
                 'category' => $category,

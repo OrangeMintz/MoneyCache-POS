@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MyEvent;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -44,7 +45,21 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        $notification = array ( //toaster notif when updated
+            'message' => 'Profile updated successfully',
+            'alert-type' => 'success',
+        );
+
+        event(new MyEvent("Profile updated successfully!"));
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Profile updated successfully'
+            ]);
+        }else{
+            return redirect()->back()->with($notification);
+        }
     }
 
     /**
