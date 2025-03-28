@@ -11,7 +11,7 @@
     <!-- Navigatiofn Menu (Desktop & Mobile) -->
     <div class="flex-grow flex items-center justify-end md:justify-center">
         <!-- Hamburger Button (Mobile) -->
-        <button id="menuToggle" class="md:hidden text-gray-700 focus:outline-none">
+        <button id="menuToggle" class="md:hidden sm:mr-0 mr-8 text-gray-700 focus:outline-none">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
@@ -21,7 +21,7 @@
 
         <!-- Navigation Links -->
         <nav id="navMenu"
-            class="hidden md:flex flex-col md:flex-row absolute md:relative top-full left-0 w-full md:w-auto bg-white md:bg-transparent shadow-md md:shadow-none md:space-x-6 p-4 md:p-0">
+            class="hidden md:flex flex-col md:flex-row absolute md:relative top-full left-0 w-full md:w-auto bg-white dark:bg-gray-900 md:bg-transparent shadow-md md:shadow-none md:space-x-6 p-4 md:p-0">
             @if (auth()->user()->role === 'admin')
                 <a href="{{ route('admin.users') }}"
                     class="p-4 block md:inline border-b-2 duration-200 cursor-pointer
@@ -48,7 +48,7 @@
         @include('components.darkmode')
 
         <img id="avatarButton" type="button" class="w-10 h-10 rounded-full cursor-pointer"
-            src="{{ asset('img/LogoIcon.png') }}" alt="User dropdown">
+            src="{{ auth()->user()->photo }}" alt="User dropdown">
 
         <!-- Dropdown Menu -->
         <div id="userDropdown"

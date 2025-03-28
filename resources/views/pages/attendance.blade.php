@@ -68,10 +68,10 @@
                                     <div data-popover id="view-details-{{ $record->id }}" role="tooltip"
                                         class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-xs opacity-0 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600">
                                         <div class="p-3">
-                                            <div class="flex items-center justify-between mb-2">
-                                                <a href="#">
-                                                    <img class="w-1/2 h-auto mx-auto rounded-full"
-                                                        src="{{ $record->photo }}" alt="Jese Leos">
+                                            <div class="flex items-center justify-center mb-2">
+                                                <a href="{{ $record->photo }}">
+                                                    <img class="w-40 h-40 object-cover mx-auto rounded-full"
+                                                        src="{{ $record->photo }}">
                                                 </a>
                                             </div>
                                             <p
