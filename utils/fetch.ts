@@ -182,10 +182,18 @@ export const timeOut = async (): Promise<any[]> => {
     }
 }
 
-export const resetPassword = async (formdata: FormData): Promise<any[]> => {
+export const resetPassword = async (current_password: string, password: string, password_confirmation: string): Promise<any[]> => {
     try {
         const token = localStorage.getItem('access_token');
-        const response = await api.put("/api/password", formdata, {
+
+        const body = {
+            current_password: current_password,
+            password: password,
+            password_confirmation: password_confirmation
+        }
+
+        console.log(body)
+        const response = await api.put("/api/password", body, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 Accept: "application/json",
@@ -195,8 +203,7 @@ export const resetPassword = async (formdata: FormData): Promise<any[]> => {
         console.log(response.data)
         return response.data
     } catch (error) {
-        console.error('Error fetching data:', error);
-        return [];
+        return { status: 0, message: error.response.data.message };
     }
 }
 
