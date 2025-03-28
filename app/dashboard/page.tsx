@@ -25,10 +25,10 @@ export default function Home() {
             const dashboard = await fetchDashboard(new Date().toISOString().split('T')[0])
 
             // Set dashboard data
-            setTransactions(dashboard.transactions);
+            setTransactions(dashboard.transactions.reverse());
             setTotal(dashboard.totals)
             setTotalsToday(dashboard.totals_today)
-            setLogs(dashboard.logs)
+            setLogs(dashboard.logs.reverse())
             setUsers(dashboard.users.active_users)
         } catch (error) {
             console.error("Error retrieving dashboard data: ", error);
