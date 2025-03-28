@@ -70,7 +70,7 @@
                                         <div class="p-3">
                                             <div class="flex items-center justify-center mb-2">
                                                 <a href="{{ $record->photo }}">
-                                                    <img class="w-24 h-24 object-cover mx-auto rounded-full"
+                                                    <img class="w-40 h-40 object-cover mx-auto rounded-full"
                                                         src="{{ $record->photo }}">
                                                 </a>
                                             </div>
