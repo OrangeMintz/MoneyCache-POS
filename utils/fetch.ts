@@ -207,3 +207,26 @@ export const resetPassword = async (current_password: string, password: string, 
     }
 }
 
+// export const profile = async (image: File): Promise<any[]> => {
+//     try {
+//         const token = localStorage.getItem('access_token');
+
+//         const file = base64ToFile(image, "attendance.png");
+//         const formData = new FormData();
+//         formData.append("image", file)
+
+//         const response = await api.post("/api/attendance/timein", formData, {
+//             headers: {
+//                 Authorization: `Bearer ${token}`,
+//                 Accept: "application/json",
+//             },
+//         });
+
+//         console.log(response.data)
+//         return response.data;
+//     } catch (error) {
+//         console.error('Error fetching data:', error);
+//         return [];
+//     }
+// }
+

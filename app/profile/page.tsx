@@ -9,6 +9,7 @@ import Toast from 'typescript-toastify';
 export default function CashierForm() {
     const { user, globalFunction } = useAppContext()
     const [loading, setLoading] = useState(true)
+
     const [formData, setFormData] = useState({
         current_password: null,
         password: null,
@@ -34,8 +35,14 @@ export default function CashierForm() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deletePassword, setDeletePassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-
+    const [storeImage, setStoredImage] = useState<File | null>(null);
     const [disable, setDisable] = useState(false);
+
+    const [isChangePhotoHovered, setIsChangePhotoHovered] = useState(false);
+    const [isCancelHovered, setIsCancelHovered] = useState(false);
+    const [isSaveHovered, setIsSaveHovered] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [formChanged, setFormChanged] = useState(false);
 
     useEffect(() => {
         if (user) {
@@ -69,6 +76,7 @@ export default function CashierForm() {
             reader.onloadend = () => {
                 const imageUrl = reader.result as string;
                 setTempAvatarPreview(imageUrl);
+                setFormChanged(true);
             };
             reader.readAsDataURL(file);
         }
@@ -79,32 +87,55 @@ export default function CashierForm() {
         setTempProfileData({ ...profileData });
         setTempAvatarPreview(profileData.avatar);
         setShowEditModal(true);
+        setFormChanged(false);
+    };
+
+    // Track changes in the form fields
+    const handleProfileFieldChange = (field: string, value: string) => {
+        setTempProfileData(prev => {
+            const updated = { ...prev, [field]: value };
+            // Check if any field is different from original
+            const hasChanged = 
+                updated.firstName !== profileData.firstName || 
+                updated.lastName !== profileData.lastName || 
+                tempAvatarPreview !== profileData.avatar;
+            
+            setFormChanged(hasChanged);
+            return updated;
+        });
     };
 
     // Handle profile edit form submission
     const handleProfileSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Update the actual profile data with the temporary data
-        setProfileData({
-            firstName: tempProfileData.firstName,
-            lastName: tempProfileData.lastName,
-            avatar: tempAvatarPreview
-        });
+        setIsSubmitting(true);
         
-        // Here you would typically send the updated profile data to your API
-        console.log('Profile updated:', tempProfileData);
-        setShowEditModal(false);
-        new Toast({
-            position: "bottom-right",
-            toastMsg: "Profile updated successfully!",
-            autoCloseTime: 2000,
-            canClose: true,
-            showProgress: true,
-            pauseOnHover: true,
-            pauseOnFocusLoss: true,
-            type: "success",
-            theme: 'dark',
-        });
+        // Simulate API call with timeout
+        setTimeout(() => {
+            // Update the actual profile data with the temporary data
+            setProfileData({
+                firstName: tempProfileData.firstName,
+                lastName: tempProfileData.lastName,
+                avatar: tempAvatarPreview
+            });
+            
+            // Here you would typically send the updated profile data to your API
+            console.log('Profile updated:', tempProfileData);
+            setShowEditModal(false);
+            setIsSubmitting(false);
+            
+            new Toast({
+                position: "bottom-right",
+                toastMsg: "Profile updated successfully!",
+                autoCloseTime: 2000,
+                canClose: true,
+                showProgress: true,
+                pauseOnHover: true,
+                pauseOnFocusLoss: true,
+                type: "success",
+                theme: 'dark',
+            });
+        }, 800); // Simulate network delay
     };
 
     // Handle delete account confirmation
@@ -202,8 +233,12 @@ export default function CashierForm() {
                         <form onSubmit={handleProfileSubmit}>
                             <div className="flex flex-col items-center mb-4">
                                 <div
-                                    className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden cursor-pointer mb-2"
+                                    className={`w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden cursor-pointer mb-2 ${
+                                        isChangePhotoHovered ? 'ring-2 ring-blue-500' : ''
+                                    }`}
                                     onClick={() => fileInputRef.current?.click()}
+                                    onMouseEnter={() => setIsChangePhotoHovered(true)}
+                                    onMouseLeave={() => setIsChangePhotoHovered(false)}
                                 >
                                     <Image
                                         src={tempAvatarPreview}
@@ -222,8 +257,10 @@ export default function CashierForm() {
                                 />
                                 <button
                                     type="button"
-                                    className="text-blue-500 text-sm"
+                                    className={`text-sm ${isChangePhotoHovered ? 'text-blue-700' : 'text-blue-500'}`}
                                     onClick={() => fileInputRef.current?.click()}
+                                    onMouseEnter={() => setIsChangePhotoHovered(true)}
+                                    onMouseLeave={() => setIsChangePhotoHovered(false)}
                                 >
                                     Change Photo
                                 </button>
@@ -236,7 +273,7 @@ export default function CashierForm() {
                                     type="text"
                                     className="w-full px-3 py-2 border rounded-md"
                                     value={tempProfileData.firstName}
-                                    onChange={(e) => setTempProfileData({ ...tempProfileData, firstName: e.target.value })}
+                                    onChange={(e) => handleProfileFieldChange('firstName', e.target.value)}
                                     required
                                 />
                             </div>
@@ -248,23 +285,39 @@ export default function CashierForm() {
                                     type="text"
                                     className="w-full px-3 py-2 border rounded-md"
                                     value={tempProfileData.lastName}
-                                    onChange={(e) => setTempProfileData({ ...tempProfileData, lastName: e.target.value })}
+                                    onChange={(e) => handleProfileFieldChange('lastName', e.target.value)}
                                     required
                                 />
                             </div>
                             <div className="flex justify-end gap-2">
                                 <button
                                     type="button"
-                                    className="px-4 py-2 border rounded-md"
+                                    className={`px-4 py-2 border rounded-md transition-colors ${
+                                        isCancelHovered ? 'bg-gray-100' : 'bg-white'
+                                    }`}
                                     onClick={() => setShowEditModal(false)}
+                                    onMouseEnter={() => setIsCancelHovered(true)}
+                                    onMouseLeave={() => setIsCancelHovered(false)}
+                                    disabled={isSubmitting}
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                                    className={`px-4 py-2 rounded-md transition-colors ${
+                                        isSubmitting 
+                                            ? 'bg-blue-400 text-white cursor-not-allowed' 
+                                            : formChanged
+                                                ? isSaveHovered 
+                                                    ? 'bg-blue-600 text-white' 
+                                                    : 'bg-blue-500 text-white' 
+                                                : 'bg-blue-300 text-white cursor-not-allowed'
+                                    }`}
+                                    disabled={!formChanged || isSubmitting}
+                                    onMouseEnter={() => setIsSaveHovered(true)}
+                                    onMouseLeave={() => setIsSaveHovered(false)}
                                 >
-                                    Save Changes
+                                    {isSubmitting ? 'Saving...' : 'Save Changes'}
                                 </button>
                             </div>
                         </form>
