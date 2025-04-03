@@ -5,6 +5,7 @@ use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LogsController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\TransactionsGrossTotalController;
 use Illuminate\Http\Request;
@@ -42,6 +43,11 @@ Route::middleware(['auth:api'])->group(function () {
 
         Route::prefix('dashboard')->group(function () {
             Route::post('/', [DashboardController::class, 'dashboardApi']);
+        });
+
+        Route::prefix('profile')->group(function () {
+            Route::post('/update', [ProfileController::class, 'updateApi']);
+            Route::delete('/', [ProfileController::class, 'destroy']);
         });
 
         Route::prefix('attendance')->group(function () {
