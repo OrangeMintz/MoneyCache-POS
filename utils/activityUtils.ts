@@ -35,3 +35,4 @@ export function clearLockState(): void {
   sessionStorage.removeItem(SESSION_LOCKED_KEY);
   updateLastActivity();
 }
+

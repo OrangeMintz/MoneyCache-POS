@@ -207,26 +207,30 @@ export const resetPassword = async (current_password: string, password: string, 
     }
 }
 
-// export const profile = async (image: File): Promise<any[]> => {
-//     try {
-//         const token = localStorage.getItem('access_token');
+export const profileUpdate = async (image: File, name: string, email: string): Promise<any[]> => {
+    try {
+        const token = localStorage.getItem('access_token');
 
-//         const file = base64ToFile(image, "attendance.png");
-//         const formData = new FormData();
-//         formData.append("image", file)
+        // const file = base64ToFile(image, "attendance.png");
+        const formData = new FormData();
+        if (image) {
+            formData.append("profile_image", image)
+        }
+        formData.append("name", name)
+        formData.append("email", email)
 
-//         const response = await api.post("/api/attendance/timein", formData, {
-//             headers: {
-//                 Authorization: `Bearer ${token}`,
-//                 Accept: "application/json",
-//             },
-//         });
+        const response = await api.post("/api/profile/update", formData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/json",
+            },
+        });
 
-//         console.log(response.data)
-//         return response.data;
-//     } catch (error) {
-//         console.error('Error fetching data:', error);
-//         return [];
-//     }
-// }
+        console.log(response.data)
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
+    }
+}
 

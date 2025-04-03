@@ -1,10 +1,11 @@
 'use client';
 import Preloader from "@/app/comps/preloader";
 import { useAppContext } from "@/context/AppContext";
-import { resetPassword } from "@/utils/fetch";
+import { resetPassword, profileUpdate } from "@/utils/fetch";
 import Image from 'next/image';
 import { useEffect, useRef, useState } from "react";
 import Toast from 'typescript-toastify';
+import axios from 'axios';
 
 export default function CashierForm() {
     const { user, globalFunction } = useAppContext()
@@ -22,12 +23,11 @@ export default function CashierForm() {
     // Profile edit modal state
     const [showEditModal, setShowEditModal] = useState(false);
     const [profileData, setProfileData] = useState({
-        firstName: 'Ramon Paulo',
-        lastName: 'Caumban',
+        name: "",
+        email: "",
         avatar: '/images/h.png'
     });
     const [tempProfileData, setTempProfileData] = useState({ ...profileData });
-    const [avatarPreview, setAvatarPreview] = useState(profileData.avatar);
     const [tempAvatarPreview, setTempAvatarPreview] = useState(profileData.avatar);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -46,6 +46,17 @@ export default function CashierForm() {
 
     useEffect(() => {
         if (user) {
+            setProfileData({
+                name: user.name || "",
+                email: user.email || "",
+                avatar: user.photo || "/images/h.png"
+            });
+            setTempProfileData({
+                name: user.name || "",
+                email: user.email || "",
+                avatar: user.photo || "/images/h.png"
+            });
+            setTempAvatarPreview(user.photo || "/images/h.png");
             setLoading(false)
         }
     }, [user])
@@ -71,14 +82,10 @@ export default function CashierForm() {
     // Handle avatar image change
     const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const imageUrl = reader.result as string;
-                setTempAvatarPreview(imageUrl);
-                setFormChanged(true);
-            };
-            reader.readAsDataURL(file);
+        if (e.target.files && e.target.files[0]) {
+            setStoredImage(e.target.files[0]);
+            setTempAvatarPreview(URL.createObjectURL(e.target.files[0]));
+            setFormChanged(true);
         }
     };
 
@@ -95,47 +102,53 @@ export default function CashierForm() {
         setTempProfileData(prev => {
             const updated = { ...prev, [field]: value };
             // Check if any field is different from original
-            const hasChanged = 
-                updated.firstName !== profileData.firstName || 
-                updated.lastName !== profileData.lastName || 
+            const hasChanged =
+                updated.name !== profileData.name ||
+                updated.email !== profileData.email ||
                 tempAvatarPreview !== profileData.avatar;
-            
+
             setFormChanged(hasChanged);
             return updated;
         });
     };
 
     // Handle profile edit form submission
-    const handleProfileSubmit = (e: React.FormEvent) => {
+    const handleProfileSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        
-        // Simulate API call with timeout
-        setTimeout(() => {
-            // Update the actual profile data with the temporary data
-            setProfileData({
-                firstName: tempProfileData.firstName,
-                lastName: tempProfileData.lastName,
-                avatar: tempAvatarPreview
-            });
-            
-            // Here you would typically send the updated profile data to your API
-            console.log('Profile updated:', tempProfileData);
-            setShowEditModal(false);
-            setIsSubmitting(false);
-            
-            new Toast({
-                position: "bottom-right",
-                toastMsg: "Profile updated successfully!",
-                autoCloseTime: 2000,
-                canClose: true,
-                showProgress: true,
-                pauseOnHover: true,
-                pauseOnFocusLoss: true,
-                type: "success",
-                theme: 'dark',
-            });
-        }, 800); // Simulate network delay
+
+        try {
+            const response = await profileUpdate(storeImage, tempProfileData.name, tempProfileData.email)
+
+            if (response.status == 'success') {
+                new Toast({
+                    position: "bottom-right",
+                    toastMsg: "Profile updated successfully!",
+                    onClose: () => { window.location.href = "/profile"; },
+                    autoCloseTime: 1500,
+                    canClose: true,
+                    showProgress: true,
+                    pauseOnHover: true,
+                    pauseOnFocusLoss: true,
+                    type: "success",
+                    theme: 'dark',
+                });
+            } else {
+                new Toast({
+                    position: "bottom-right",
+                    toastMsg: response.message,
+                    autoCloseTime: 1500,
+                    canClose: true,
+                    showProgress: true,
+                    pauseOnHover: true,
+                    pauseOnFocusLoss: true,
+                    type: "error",
+                    theme: 'dark',
+                });
+            }
+        } catch (error) {
+            console.error("Update error:", error);
+        }
     };
 
     // Handle delete account confirmation
@@ -233,9 +246,8 @@ export default function CashierForm() {
                         <form onSubmit={handleProfileSubmit}>
                             <div className="flex flex-col items-center mb-4">
                                 <div
-                                    className={`w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden cursor-pointer mb-2 ${
-                                        isChangePhotoHovered ? 'ring-2 ring-blue-500' : ''
-                                    }`}
+                                    className={`w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden cursor-pointer mb-2 ${isChangePhotoHovered ? 'ring-2 ring-blue-500' : ''
+                                        }`}
                                     onClick={() => fileInputRef.current?.click()}
                                     onMouseEnter={() => setIsChangePhotoHovered(true)}
                                     onMouseLeave={() => setIsChangePhotoHovered(false)}
@@ -267,34 +279,33 @@ export default function CashierForm() {
                             </div>
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    First Name
+                                    Name
                                 </label>
                                 <input
                                     type="text"
                                     className="w-full px-3 py-2 border rounded-md"
-                                    value={tempProfileData.firstName}
-                                    onChange={(e) => handleProfileFieldChange('firstName', e.target.value)}
+                                    value={tempProfileData?.name}
+                                    onChange={(e) => handleProfileFieldChange('name', e.target.value)}
                                     required
                                 />
                             </div>
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Last Name
+                                    Email
                                 </label>
                                 <input
-                                    type="text"
+                                    type="email"
                                     className="w-full px-3 py-2 border rounded-md"
-                                    value={tempProfileData.lastName}
-                                    onChange={(e) => handleProfileFieldChange('lastName', e.target.value)}
+                                    value={tempProfileData?.email}
+                                    onChange={(e) => handleProfileFieldChange('email', e.target.value)}
                                     required
                                 />
                             </div>
                             <div className="flex justify-end gap-2">
                                 <button
                                     type="button"
-                                    className={`px-4 py-2 border rounded-md transition-colors ${
-                                        isCancelHovered ? 'bg-gray-100' : 'bg-white'
-                                    }`}
+                                    className={`px-4 py-2 border rounded-md transition-colors ${isCancelHovered ? 'bg-gray-100' : 'bg-white'
+                                        }`}
                                     onClick={() => setShowEditModal(false)}
                                     onMouseEnter={() => setIsCancelHovered(true)}
                                     onMouseLeave={() => setIsCancelHovered(false)}
@@ -304,15 +315,14 @@ export default function CashierForm() {
                                 </button>
                                 <button
                                     type="submit"
-                                    className={`px-4 py-2 rounded-md transition-colors ${
-                                        isSubmitting 
-                                            ? 'bg-blue-400 text-white cursor-not-allowed' 
-                                            : formChanged
-                                                ? isSaveHovered 
-                                                    ? 'bg-blue-600 text-white' 
-                                                    : 'bg-blue-500 text-white' 
-                                                : 'bg-blue-300 text-white cursor-not-allowed'
-                                    }`}
+                                    className={`px-4 py-2 rounded-md transition-colors ${isSubmitting
+                                        ? 'bg-blue-400 text-white cursor-not-allowed'
+                                        : formChanged
+                                            ? isSaveHovered
+                                                ? 'bg-blue-600 text-white'
+                                                : 'bg-blue-500 text-white'
+                                            : 'bg-blue-300 text-white cursor-not-allowed'
+                                        }`}
                                     disabled={!formChanged || isSubmitting}
                                     onMouseEnter={() => setIsSaveHovered(true)}
                                     onMouseLeave={() => setIsSaveHovered(false)}
@@ -397,7 +407,7 @@ export default function CashierForm() {
                                         <div className="flex items-center space-x-6">
                                             <div className="w-48 h-48 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
                                                 <Image
-                                                    src={profileData.avatar}
+                                                    src={user?.photo || profileData.avatar}
                                                     alt="Profile"
                                                     width={50}
                                                     height={192}
@@ -408,8 +418,8 @@ export default function CashierForm() {
                                             </div>
                                             <div className="flex-grow space-y-4">
                                                 <div>
-                                                    <h3 className="text-xl font-bold">{profileData.firstName} {profileData.lastName}</h3>
-                                                    <p className="text-gray-600">Web Developer</p>
+                                                    <h3 className="text-xl font-bold">{user?.name}</h3>
+                                                    <p className="text-gray-600">{user?.role.charAt(0).toUpperCase()}{user?.role.slice(1)}</p>
                                                 </div>
                                                 <button
                                                     className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
