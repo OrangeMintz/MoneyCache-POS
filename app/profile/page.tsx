@@ -409,8 +409,8 @@ export default function CashierForm() {
                                                 <Image
                                                     src={user?.photo || profileData.avatar}
                                                     alt="Profile"
-                                                    width={50}
-                                                    height={192}
+                                                    width={100}
+                                                    height={100}
                                                     className="w-full h-full object-cover rounded-full"
                                                     priority
                                                     quality={90}
