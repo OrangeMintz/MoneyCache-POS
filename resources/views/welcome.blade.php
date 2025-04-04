@@ -32,6 +32,11 @@
             0%, 100% { opacity: 0; }  /* Start & End with invisible */
             50% { opacity: 1; }       /* Fully visible at 50% of animation */
         }
+
+        *::selection {
+            background-color: #22c55e; /* Tailwind green-500 */
+            color: white;
+  }
     </style>
 </head>
 
