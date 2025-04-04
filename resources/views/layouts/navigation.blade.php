@@ -48,7 +48,7 @@
         @include('components.darkmode')
 
         <img id="avatarButton" type="button" class="w-10 h-10 rounded-full cursor-pointer"
-            src="{{ auth()->user()->photo }}" alt="User dropdown">
+        src="{{ optional(auth()->user())->photo ?: asset('img/user.png') }}" alt="User dropdown">
 
         <!-- Dropdown Menu -->
         <div id="userDropdown"
