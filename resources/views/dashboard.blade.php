@@ -68,77 +68,53 @@
             </section>
             <section class="grid md:grid-cols-3 xl:grid-cols-3 md:grid-rows-2 xl:grid-flow-col gap-6">
 
-                {{-- chart --}}
-                <div
-                    class="flex flex-col row-span-3 md:col-span-2 md:row-span-2 bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-8">
+                {{-- chart section--}}
+                <div class="flex flex-col row-span-3 md:col-span-2 md:row-span-2 bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-8">
+                    <div class="flex justify-between">
+                        <h5 class="text-xl pt-1 font-bold leading-none text-gray-900 dark:text-white">Grand Total</h5>
+                        
+                        {{-- actual and predicted button tabs --}}
+                        <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+                            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
+                                <li class="me-2" role="presentation">
+                                    <button class="inline-block p-4 pt-0 border-b-2 rounded-t-lg" id="profile-tab" data-tabs-target="#actual" type="button" role="tab" aria-controls="profile" aria-selected="false">Actual</button>
+                                </li>
+                                <li class="me-2" role="presentation">
+                                    <button class="inline-block p-4 pt-0 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="dashboard-tab" data-tabs-target="#predicted" type="button" role="tab" aria-controls="dashboard" aria-selected="false">Predicted</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    {{-- tabs content --}}
+                    <div id="default-tab-content">
+                        <div class="hidden bg-white rounded-lg shadow-sm dark:bg-gray-800" id="actual" role="tabpanel" aria-labelledby="actual-tab">
+                            {{-- content for this tab (actual) --}}
+                            <h5 class="leading-none text-3xl font-medium text-gray-900 dark:text-white pb-2">
+                                ₱ {{ number_format($grandTotal ?? '0', 2) }}
+                            </h5>
+                            <p class="text-base font-normal text-gray-500 dark:text-gray-400">Income this month
+                            </p>
+                                <div id="area-chart"></div>
+                        </div>
+                        <div class="hidden bg-white rounded-lg shadow-sm dark:bg-gray-800" id="predicted" role="tabpanel" aria-labelledby="predicted-tab">
+                        {{-- content for this tab (predicted) --}}
+                        <h5 class="leading-none text-3xl font-medium text-gray-900 dark:text-white pb-2">
+                            ₱ {{ number_format($grandTotal ?? '0', 2) }}
+                            </h5>
+                            <p class="text-base font-normal text-gray-500 dark:text-gray-400">Income this month
+                            </p>
+                            <div class="w-full h-[275.6px] bg-blue-200 text-center">Predicted</div>
+                            {{-- <div id="area-chart"></div> --}}
+                        </div>
+                    </div>
 
-                    <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Grand Total</h5>
                     <div class="flex-grow">
                         <div class="w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 py-4 md:py-6">
-                            <div class="flex justify-between">
-                                <div>
-                                    <h5 class="leading-none text-3xl font-medium text-gray-900 dark:text-white pb-2">
-                                        ₱ {{ number_format($grandTotal ?? '0', 2) }}
-                                    </h5>
-                                    <p class="text-base font-normal text-gray-500 dark:text-gray-400">Income this month
-                                    </p>
-                                </div>
-                                {{-- <div
-                                    class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 dark:text-green-500 text-center">
-                                    12%
-                                    <svg class="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                        fill="none" viewBox="0 0 10 14">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
-                                    </svg>
-                                </div> --}}
-                            </div>
-                            <div id="area-chart"></div>
+                            
                             <div
                                 class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
                                 <div class="flex justify-end items-center pt-5">
-                                    <!-- Button -->
-                                    {{-- <button id="dropdownDefaultButton" data-dropdown-toggle="lastDaysdropdown"
-                                        data-dropdown-placement="bottom"
-                                        class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-white"
-                                        type="button">
-                                        Last 7 days
-                                        <svg class="w-2.5 m-2.5 ms-1.5" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="m1 1 4 4 4-4" />
-                                        </svg>
-                                    </button> --}}
-                                    <!-- Dropdown menu -->
-                                    <div id="lastDaysdropdown"
-                                        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
-                                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
-                                            aria-labelledby="dropdownDefaultButton">
-                                            <li>
-                                                <a href="#"
-                                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Yesterday</a>
-                                            </li>
-                                            <li>
-                                                <a href="#"
-                                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Today</a>
-                                            </li>
-                                            <li>
-                                                <a href="#"
-                                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last
-                                                    7 days</a>
-                                            </li>
-                                            <li>
-                                                <a href="#"
-                                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last
-                                                    30 days</a>
-                                            </li>
-                                            <li>
-                                                <a href="#"
-                                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last
-                                                    90 days</a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                         
                                     @if (auth()->user()->role === 'admin')
                                         <a href="{{ route('transactions.sheet', ['date' => now()->format('Y-m-d')]) }}"
                                             class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
@@ -155,7 +131,7 @@
                         </div>
                     </div>
                 </div>
-                {{-- recent logs --}}
+                {{-- recent Activites Section --}}
                 <div class="row-span-2  md:col-span-1 bg-white dark:bg-gray-800 shadow rounded-lg">
                     <div
                         class="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
@@ -227,7 +203,7 @@
                     <div class="flex justify-end mt-6 mr-6">
                         <button type="button" data-drawer-target="drawer-navigation"
                             data-drawer-show="drawer-navigation" aria-controls="drawer-navigation"
-                            class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
+                            class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3">
                             View Details
                             <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
