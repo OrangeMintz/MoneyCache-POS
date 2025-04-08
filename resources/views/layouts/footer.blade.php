@@ -133,4 +133,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
 
 {{-- chart script --}}
-<script src="{{ asset('js/chart.js') }}"></script>
+<script src="{{ asset('js/actual-chart.js') }}"></script>
+<script src="{{ asset('js/predict-chart.js') }}"></script>

@@ -103,8 +103,7 @@
                             </h5>
                             <p class="text-base font-normal text-gray-500 dark:text-gray-400">Income this month
                             </p>
-                            <div class="w-full h-[275.6px] bg-blue-200 text-center">Predicted</div>
-                            {{-- <div id="area-chart"></div> --}}
+                            <div id="predicted-chart"></div>
                         </div>
                     </div>
 

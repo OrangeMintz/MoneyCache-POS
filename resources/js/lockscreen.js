@@ -44,7 +44,8 @@ document.getElementById("unlock-form").addEventListener("submit", function (e) {
                 document.getElementById("lockscreen").classList.add("hidden");
                 errorContainer.textContent = ""; // Clear error
             } else {
-                errorContainer.textContent = result.body.message; // Show error message
+                errorContainer.textContent = result.body.message; // Show error 
+                document.getElementById("password").value = ""; // Clear input field
             }
         })
 });

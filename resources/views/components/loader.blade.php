@@ -1,5 +1,5 @@
-<div id="loader" class="flex justify-center items-center h-screen">
-
+<div id="loader" class="fixed inset-0 z-50 flex justify-center items-center h-screen bg-white dark:bg-gray-900">
+  {{-- <div id="loader" class="fixed inset-0 z-50 flex justify-center items-center bg-white dark:bg-gray-900"> --}}
   <div class="text-center">
     <div role="status">
       <img src="{{asset('img/LogoIcon.png')}}" class="animated-mc inline w-20 h-20 text-gray-200 dark:text-gray-600 fill-blue-600"alt="">

@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(data => {
             let options = {
                 chart: {
-                    height: "130%",
+                    height: "150%",
                     maxWidth: "20%",
                     type: "area",
                     fontFamily: "Inter, sans-serif",
